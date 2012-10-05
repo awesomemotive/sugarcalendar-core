@@ -33,6 +33,7 @@ A full version of this plugin with additional features is [available for purchas
 = Languages =
 
 Sugar Event Calendar Lite has been translated into:
+
 * English
 * German
 * French

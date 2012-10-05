@@ -1,0 +1,341 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Sugar Event Calendar\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-04 09:09-0600\n"
+"PO-Revision-Date: 2012-07-04 22:10+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;_n\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-SearchPath-1: ../includes\n"
+
+#: ../includes/calendar.php:62
+msgid "Go"
+msgstr "Kör"
+
+#: ../includes/calendar.php:100
+msgid "Previous"
+msgstr "Tidigare"
+
+#: ../includes/calendar.php:108
+msgid "Next"
+msgstr "Nästa"
+
+#: ../includes/event-display.php:33
+msgid "Date:"
+msgstr "Datum:"
+
+#: ../includes/event-display.php:35
+msgid "Time:"
+msgstr "Tid:"
+
+#: ../includes/event-display.php:36
+msgid "to"
+msgstr "till"
+
+#: ../includes/functions.php:17
+msgid "Sunday"
+msgstr "Söndag"
+
+#: ../includes/functions.php:18
+msgid "Monday"
+msgstr "Måndag"
+
+#: ../includes/functions.php:19
+msgid "Tuesday"
+msgstr "Tisdag"
+
+#: ../includes/functions.php:20
+msgid "Wednesday"
+msgstr "Onsdag"
+
+#: ../includes/functions.php:21
+msgid "Thursday"
+msgstr "Torsdag"
+
+#: ../includes/functions.php:22
+msgid "Friday"
+msgstr "Fredag"
+
+#: ../includes/functions.php:23
+msgid "Saturday"
+msgstr "Lördag"
+
+#: ../includes/functions.php:27
+#: ../includes/functions.php:33
+msgid "S"
+msgstr "S"
+
+#: ../includes/functions.php:28
+msgid "M"
+msgstr "M"
+
+#: ../includes/functions.php:29
+#: ../includes/functions.php:31
+msgid "T"
+msgstr "T"
+
+#: ../includes/functions.php:30
+msgid "W"
+msgstr "O"
+
+#: ../includes/functions.php:32
+msgid "F"
+msgstr "F"
+
+#: ../includes/list-table-columns.php:16
+msgid "Title"
+msgstr "Titel"
+
+#: ../includes/list-table-columns.php:17
+#: ../includes/meta-boxes.php:47
+msgid "Event Date"
+msgstr "Händelse Datum"
+
+#: ../includes/list-table-columns.php:18
+msgid "Time"
+msgstr "Tid"
+
+#: ../includes/list-table-columns.php:19
+#: ../includes/taxonomies.php:26
+msgid "Categories"
+msgstr "Kategorier"
+
+#: ../includes/list-table-columns.php:20
+msgid "Created"
+msgstr "Skapad"
+
+#: ../includes/list-table-columns.php:141
+msgid "Show all categories"
+msgstr "Visa alla Kategorier"
+
+#: ../includes/meta-boxes.php:21
+msgid "Event Details"
+msgstr "Händelse Detaljer"
+
+#: ../includes/meta-boxes.php:52
+msgid "This is the first day that this event occurs"
+msgstr "Detta är första dagen händelsen kommer inträffa"
+
+#: ../includes/meta-boxes.php:59
+msgid "Event Time"
+msgstr "Händelse Tid"
+
+#: ../includes/meta-boxes.php:77
+#: ../includes/meta-boxes.php:85
+msgid "AM"
+msgstr "F.M"
+
+#: ../includes/meta-boxes.php:78
+#: ../includes/meta-boxes.php:86
+msgid "PM"
+msgstr "E.M"
+
+#: ../includes/meta-boxes.php:80
+msgid "to:"
+msgstr "till:"
+
+#: ../includes/meta-boxes.php:94
+msgid "Recurring"
+msgstr "Återkommande"
+
+#: ../includes/meta-boxes.php:100
+msgid "Not Recurring"
+msgstr "Ej Återkommande"
+
+#: ../includes/meta-boxes.php:101
+msgid "Every Week"
+msgstr "Varje Vecka"
+
+#: ../includes/meta-boxes.php:102
+msgid "Every Month"
+msgstr "Varje Månad"
+
+#: ../includes/meta-boxes.php:103
+msgid "Every Year"
+msgstr "Varje År"
+
+#: ../includes/post-types.php:16
+#: ../includes/post-types.php:28
+msgid "Events"
+msgstr "Händelser"
+
+#: ../includes/post-types.php:17
+msgid "Event"
+msgstr "Händelse"
+
+#: ../includes/post-types.php:18
+msgid "Add New"
+msgstr "Lägg till ny"
+
+#: ../includes/post-types.php:19
+msgid "Add New Event"
+msgstr "Lägg till ny Händelse"
+
+#: ../includes/post-types.php:20
+msgid "Edit Event"
+msgstr "Ändra Händelse"
+
+#: ../includes/post-types.php:21
+msgid "New Event"
+msgstr "Ny Händelse"
+
+#: ../includes/post-types.php:22
+msgid "All Events"
+msgstr "Alla Händelser"
+
+#: ../includes/post-types.php:23
+msgid "View Event"
+msgstr "Visa Händelse"
+
+#: ../includes/post-types.php:24
+msgid "Search Events"
+msgstr "Sök Händelser"
+
+#: ../includes/post-types.php:25
+msgid "No Events found"
+msgstr "Inga Händelser Funna"
+
+#: ../includes/post-types.php:26
+msgid "No Events found in Trash"
+msgstr "Inga Händelser Funna i Papperskorgen"
+
+#: ../includes/taxonomies.php:18
+msgid "Search Categories"
+msgstr "Sök Kategorier"
+
+#: ../includes/taxonomies.php:19
+msgid "All Categories"
+msgstr "Alla Kategorier"
+
+#: ../includes/taxonomies.php:20
+msgid "Parent Category"
+msgstr "Förälder Kategori"
+
+#: ../includes/taxonomies.php:21
+msgid "Parent Category:"
+msgstr "Förälder Kategori"
+
+#: ../includes/taxonomies.php:22
+msgid "Edit Category"
+msgstr "Ändra Kategori"
+
+#: ../includes/taxonomies.php:23
+msgid "Update Category"
+msgstr "Uppdatera Kategori"
+
+#: ../includes/taxonomies.php:24
+msgid "Add New Category"
+msgstr "Lägg till ny Kategori"
+
+#: ../includes/taxonomies.php:25
+msgid "New Category Name"
+msgstr "Nytt Kategori Namn"
+
+#: ../includes/widgets.php:21
+msgid "Event Calendar"
+msgstr "Händelse Kalender"
+
+#: ../includes/widgets.php:21
+msgid "Displays an events widget"
+msgstr "Visar Händelser Widget "
+
+#: ../includes/widgets.php:66
+#: ../includes/widgets.php:159
+#: ../includes/widgets.php:255
+#: ../includes/widgets.php:325
+msgid "Title:"
+msgstr "Titel:"
+
+#: ../includes/widgets.php:72
+msgid "Small"
+msgstr "Liten"
+
+#: ../includes/widgets.php:73
+msgid "Large"
+msgstr "Stor"
+
+#: ../includes/widgets.php:75
+msgid "Calendar Size"
+msgstr "Kalender Storlek"
+
+#: ../includes/widgets.php:79
+#: ../includes/widgets.php:165
+#: ../includes/widgets.php:173
+msgid "All"
+msgstr "Alla"
+
+#: ../includes/widgets.php:89
+#: ../includes/widgets.php:183
+msgid "Event Category"
+msgstr "Händelse Kategori"
+
+#: ../includes/widgets.php:111
+msgid "Events List"
+msgstr "Händelselista"
+
+#: ../includes/widgets.php:111
+msgid "Displays upcoming/past events in a list view"
+msgstr "Visar kommande/tidigare händelser i en listvy"
+
+#: ../includes/widgets.php:166
+msgid "Upcoming"
+msgstr "Kommande"
+
+#: ../includes/widgets.php:167
+msgid "Past"
+msgstr "Tidigare"
+
+#: ../includes/widgets.php:169
+msgid "Past or Upcoming"
+msgstr "Tidigare eller Kommande"
+
+#: ../includes/widgets.php:188
+msgid "Number to show"
+msgstr "Nummer att visa"
+
+#: ../includes/widgets.php:210
+msgid "Event Categories"
+msgstr "Händelse Kategorier"
+
+#: ../includes/widgets.php:210
+msgid "Display the event categories"
+msgstr "Visa händelse kategorier"
+
+#: ../includes/widgets.php:279
+msgid "Event Filter"
+msgstr "Händelse Filter"
+
+#: ../includes/widgets.php:279
+msgid "Filtering controls for upcoming and past events display. Use only on /events archive."
+msgstr "Filtreringskontrollerna för kommande och tidigare evenemang display. Använd endast på /evenemang arkiv."
+
+#: ../includes/widgets.php:296
+msgid "View all events"
+msgstr "Visa alla händelser"
+
+#: ../includes/widgets.php:297
+msgid "View upcoming events"
+msgstr "Visa kommande händelser"
+
+#: ../includes/widgets.php:298
+msgid "View past events"
+msgstr "Visa tidigare händelser"
+
+#: ../includes/widgets.php:300
+msgid "Order:"
+msgstr "Ordning:"
+
+#: ../includes/widgets.php:301
+msgid "ASC"
+msgstr "ASC"
+
+#: ../includes/widgets.php:303
+msgid "DESC"
+msgstr "DESC"
+

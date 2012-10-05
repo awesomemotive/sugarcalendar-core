@@ -1,0 +1,344 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Sugar Event Calendar\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-04 09:09-0600\n"
+"PO-Revision-Date: 2012-07-06 22:35+0100\n"
+"Last-Translator: Luka <lup2talo@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;_n\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Language: Serbian\n"
+"X-Poedit-Country: YUGOSLAVIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-SearchPath-1: ../includes\n"
+
+#: ../includes/calendar.php:62
+msgid "Go"
+msgstr "Kreni"
+
+#: ../includes/calendar.php:100
+msgid "Previous"
+msgstr "Prethodno"
+
+#: ../includes/calendar.php:108
+msgid "Next"
+msgstr "Sledece"
+
+#: ../includes/event-display.php:33
+msgid "Date:"
+msgstr "Datum:"
+
+#: ../includes/event-display.php:35
+msgid "Time:"
+msgstr "Vreme:"
+
+#: ../includes/event-display.php:36
+msgid "to"
+msgstr "ka"
+
+#: ../includes/functions.php:17
+msgid "Sunday"
+msgstr "Nedelja"
+
+#: ../includes/functions.php:18
+msgid "Monday"
+msgstr "Ponedeljak"
+
+#: ../includes/functions.php:19
+msgid "Tuesday"
+msgstr "Utorak"
+
+#: ../includes/functions.php:20
+msgid "Wednesday"
+msgstr "Sreda"
+
+#: ../includes/functions.php:21
+msgid "Thursday"
+msgstr "Četvrtak"
+
+#: ../includes/functions.php:22
+msgid "Friday"
+msgstr "Petak"
+
+#: ../includes/functions.php:23
+msgid "Saturday"
+msgstr "Subota"
+
+#: ../includes/functions.php:27
+#: ../includes/functions.php:33
+msgid "S"
+msgstr "S"
+
+#: ../includes/functions.php:28
+msgid "M"
+msgstr "M"
+
+#: ../includes/functions.php:29
+#: ../includes/functions.php:31
+msgid "T"
+msgstr "T"
+
+#: ../includes/functions.php:30
+msgid "W"
+msgstr "W"
+
+#: ../includes/functions.php:32
+msgid "F"
+msgstr "F"
+
+#: ../includes/list-table-columns.php:16
+msgid "Title"
+msgstr "Naslov"
+
+#: ../includes/list-table-columns.php:17
+#: ../includes/meta-boxes.php:47
+msgid "Event Date"
+msgstr "Datum Događaja"
+
+#: ../includes/list-table-columns.php:18
+msgid "Time"
+msgstr "Vreme"
+
+#: ../includes/list-table-columns.php:19
+#: ../includes/taxonomies.php:26
+msgid "Categories"
+msgstr "Kategorije"
+
+#: ../includes/list-table-columns.php:20
+msgid "Created"
+msgstr "Napravljeno"
+
+#: ../includes/list-table-columns.php:141
+msgid "Show all categories"
+msgstr "Prikaži sve kategorije"
+
+#: ../includes/meta-boxes.php:21
+msgid "Event Details"
+msgstr "Detalji Događaja"
+
+#: ../includes/meta-boxes.php:52
+msgid "This is the first day that this event occurs"
+msgstr "Ovo je prvi dan kada se ovaj događaj dešava"
+
+#: ../includes/meta-boxes.php:59
+msgid "Event Time"
+msgstr "Vreme Događaja"
+
+#: ../includes/meta-boxes.php:77
+#: ../includes/meta-boxes.php:85
+msgid "AM"
+msgstr "AM"
+
+#: ../includes/meta-boxes.php:78
+#: ../includes/meta-boxes.php:86
+msgid "PM"
+msgstr "PM"
+
+#: ../includes/meta-boxes.php:80
+msgid "to:"
+msgstr "ka:"
+
+#: ../includes/meta-boxes.php:94
+msgid "Recurring"
+msgstr "Ponavljanje"
+
+#: ../includes/meta-boxes.php:100
+msgid "Not Recurring"
+msgstr "Bez Ponavljanja"
+
+#: ../includes/meta-boxes.php:101
+msgid "Every Week"
+msgstr "Svake Nedelje"
+
+#: ../includes/meta-boxes.php:102
+msgid "Every Month"
+msgstr "Svakog Meseca"
+
+#: ../includes/meta-boxes.php:103
+msgid "Every Year"
+msgstr "Svake godine"
+
+#: ../includes/post-types.php:16
+#: ../includes/post-types.php:28
+msgid "Events"
+msgstr "Dogadjaji"
+
+#: ../includes/post-types.php:17
+msgid "Event"
+msgstr "Dogadjaj"
+
+#: ../includes/post-types.php:18
+msgid "Add New"
+msgstr "Dodaj Novi"
+
+#: ../includes/post-types.php:19
+msgid "Add New Event"
+msgstr "Dodaj novi Događaj"
+
+#: ../includes/post-types.php:20
+msgid "Edit Event"
+msgstr "Promeni Događaj"
+
+#: ../includes/post-types.php:21
+msgid "New Event"
+msgstr "Novi Događaj"
+
+#: ../includes/post-types.php:22
+msgid "All Events"
+msgstr "Svi Događaji"
+
+#: ../includes/post-types.php:23
+msgid "View Event"
+msgstr "Pogledaj Događaj"
+
+#: ../includes/post-types.php:24
+msgid "Search Events"
+msgstr "Traži Događaj"
+
+#: ../includes/post-types.php:25
+msgid "No Events found"
+msgstr "Nema Pronađenih Događaja"
+
+#: ../includes/post-types.php:26
+msgid "No Events found in Trash"
+msgstr "Nema Pronađenih događaja u Kanti"
+
+#: ../includes/taxonomies.php:18
+msgid "Search Categories"
+msgstr "Pretraži Kategorije"
+
+#: ../includes/taxonomies.php:19
+msgid "All Categories"
+msgstr "Sve Kategorije"
+
+#: ../includes/taxonomies.php:20
+msgid "Parent Category"
+msgstr "Roditeljska Kategorija"
+
+#: ../includes/taxonomies.php:21
+msgid "Parent Category:"
+msgstr "Roditeljska Kategorija"
+
+#: ../includes/taxonomies.php:22
+msgid "Edit Category"
+msgstr "Promeni Kategoriju"
+
+#: ../includes/taxonomies.php:23
+msgid "Update Category"
+msgstr "Osveži Kategoriju"
+
+#: ../includes/taxonomies.php:24
+msgid "Add New Category"
+msgstr "Dodaj Novu Kategoriju"
+
+#: ../includes/taxonomies.php:25
+msgid "New Category Name"
+msgstr "Ime Nove Kategorije"
+
+#: ../includes/widgets.php:21
+msgid "Event Calendar"
+msgstr "Kalendar događaja"
+
+#: ../includes/widgets.php:21
+msgid "Displays an events widget"
+msgstr "Prikazuje vidžet dogadjaja"
+
+#: ../includes/widgets.php:66
+#: ../includes/widgets.php:159
+#: ../includes/widgets.php:255
+#: ../includes/widgets.php:325
+msgid "Title:"
+msgstr "Naslov:"
+
+#: ../includes/widgets.php:72
+msgid "Small"
+msgstr "Malo"
+
+#: ../includes/widgets.php:73
+msgid "Large"
+msgstr "Veliko"
+
+#: ../includes/widgets.php:75
+msgid "Calendar Size"
+msgstr "Veličina Kalendara"
+
+#: ../includes/widgets.php:79
+#: ../includes/widgets.php:165
+#: ../includes/widgets.php:173
+msgid "All"
+msgstr "Svi"
+
+#: ../includes/widgets.php:89
+#: ../includes/widgets.php:183
+msgid "Event Category"
+msgstr "Kategorija Kalendara"
+
+#: ../includes/widgets.php:111
+msgid "Events List"
+msgstr "Lista Događaja"
+
+#: ../includes/widgets.php:111
+msgid "Displays upcoming/past events in a list view"
+msgstr "Prikazuje buduće/prošle događaje u listi"
+
+#: ../includes/widgets.php:166
+msgid "Upcoming"
+msgstr "Budući"
+
+#: ../includes/widgets.php:167
+msgid "Past"
+msgstr "Prošli"
+
+#: ../includes/widgets.php:169
+msgid "Past or Upcoming"
+msgstr "Prošli ili Budući"
+
+#: ../includes/widgets.php:188
+msgid "Number to show"
+msgstr "Broj prikaza"
+
+#: ../includes/widgets.php:210
+msgid "Event Categories"
+msgstr "Kategorije Događaja"
+
+#: ../includes/widgets.php:210
+msgid "Display the event categories"
+msgstr "Prikaži kategorije događaja"
+
+#: ../includes/widgets.php:279
+msgid "Event Filter"
+msgstr "Filter Događaja"
+
+#: ../includes/widgets.php:279
+msgid "Filtering controls for upcoming and past events display. Use only on /events archive."
+msgstr "Komande za filtriranje za buduće i prošle prikaze događaja. Koristiti samo u arhivi događaja"
+
+#: ../includes/widgets.php:296
+msgid "View all events"
+msgstr "Prikaži sve događaje"
+
+#: ../includes/widgets.php:297
+msgid "View upcoming events"
+msgstr "Pogledaj buduće događaje"
+
+#: ../includes/widgets.php:298
+msgid "View past events"
+msgstr "Pogledaj prošle događaje"
+
+#: ../includes/widgets.php:300
+msgid "Order:"
+msgstr "Raspored:"
+
+#: ../includes/widgets.php:301
+msgid "ASC"
+msgstr "Rastuće"
+
+#: ../includes/widgets.php:303
+msgid "DESC"
+msgstr "Opadajuće"
+

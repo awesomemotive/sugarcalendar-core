@@ -1,0 +1,509 @@
+# This German Language File: Copyright (C) 2012 by David Decker of deckerweb.de & genesisthemes.de
+# This file is distributed under the same license as the Sugar Event Calendar Plugin package.
+#
+# Weitere deutsche Sprachdateien fuer WordPress-Plugins und -Themes sind hier zu finden:
+# --> http://deckerweb.de/sprachdateien/
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Sugar Events Calendar for WordPress v1.1.6\n"
+"Report-Msgid-Bugs-To: http://pippinsplugins.com/sugar-event-calendar-wordpress/\n"
+"POT-Creation-Date: 2012-09-21 00:27:50+0100\n"
+"PO-Revision-Date: 2012-09-21 01:33+0100\n"
+"Last-Translator: David Decker <deckerweb.mobil@googlemail.com>\n"
+"Language-Team: DECKERWEB <deckerweb.mobil@googlemail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-Basepath: .\n"
+"X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#@ pippin_sc
+#: includes/calendar.php:71
+msgid "Go"
+msgstr "Los"
+
+#@ pippin_sc
+#: includes/calendar.php:110
+msgid "Previous"
+msgstr "Zur&uuml;ck"
+
+#@ pippin_sc
+#: includes/calendar.php:121
+msgid "Next"
+msgstr "Vor"
+
+#@ pippin_sc
+#: includes/event-display.php:36
+#: includes/functions.php:476
+msgid "Date:"
+msgstr "Datum:"
+
+#@ pippin_sc
+#: includes/event-display.php:39
+msgid "Time:"
+msgstr "Zeit:"
+
+#@ pippin_sc
+#: includes/event-display.php:40
+msgid "to"
+msgstr "bis"
+
+#@ pippin_sc
+#: includes/functions.php:17
+msgid "Sunday"
+msgstr "Sonntag"
+
+#@ pippin_sc
+#: includes/functions.php:18
+msgid "Monday"
+msgstr "Montag"
+
+#@ pippin_sc
+#: includes/functions.php:19
+msgid "Tuesday"
+msgstr "Dienstag"
+
+#@ pippin_sc
+#: includes/functions.php:20
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+#@ pippin_sc
+#: includes/functions.php:21
+msgid "Thursday"
+msgstr "Donnerstag"
+
+#@ pippin_sc
+#: includes/functions.php:22
+msgid "Friday"
+msgstr "Freitag"
+
+#@ pippin_sc
+#: includes/functions.php:23
+msgid "Saturday"
+msgstr "Samstag"
+
+#@ pippin_sc
+#: includes/list-table-columns.php:16
+msgid "Title"
+msgstr "Titel"
+
+#@ pippin_sc
+#: includes/list-table-columns.php:17
+#: includes/meta-boxes.php:47
+msgid "Event Date"
+msgstr "Veranstaltungsdatum"
+
+#@ pippin_sc
+#: includes/list-table-columns.php:18
+msgid "Time"
+msgstr "Zeit"
+
+#@ pippin_sc
+#: includes/list-table-columns.php:19
+#: includes/taxonomies.php:26
+msgid "Categories"
+msgstr "Kategorien"
+
+#@ pippin_sc
+#: includes/list-table-columns.php:20
+msgid "Created"
+msgstr "Erstellt"
+
+#@ pippin_sc
+#: includes/list-table-columns.php:141
+msgid "Show all categories"
+msgstr "Alle Kategorien anzeigen"
+
+#@ pippin_sc
+#: includes/meta-boxes.php:21
+msgid "Event Details"
+msgstr "Veranstaltungsdetails"
+
+#@ pippin_sc
+#: includes/meta-boxes.php:53
+msgid "This is the first day that this event occurs"
+msgstr "Dies ist der erste Tag der Veranstaltung"
+
+#@ pippin_sc
+#: includes/meta-boxes.php:60
+msgid "Event Time"
+msgstr "Veranstaltungszeit"
+
+#@ pippin_sc
+#: includes/meta-boxes.php:78
+#: includes/meta-boxes.php:86
+msgid "AM"
+msgstr "vorm."
+
+#@ pippin_sc
+#: includes/meta-boxes.php:79
+#: includes/meta-boxes.php:87
+msgid "PM"
+msgstr "nachm."
+
+#@ pippin_sc
+#: includes/meta-boxes.php:81
+msgid "to:"
+msgstr "bis:"
+
+#@ pippin_sc
+#: includes/meta-boxes.php:95
+msgid "Recurring"
+msgstr "Wiederkehrend"
+
+#@ pippin_sc
+#: includes/meta-boxes.php:101
+msgid "Not Recurring"
+msgstr "Nicht wiederkehrend"
+
+#@ pippin_sc
+#: includes/meta-boxes.php:102
+msgid "Every Week"
+msgstr "Jede Woche"
+
+#@ pippin_sc
+#: includes/meta-boxes.php:103
+msgid "Every Month"
+msgstr "Jeden Monat"
+
+#@ pippin_sc
+#: includes/meta-boxes.php:104
+msgid "Every Year"
+msgstr "Jedes Jahr"
+
+#@ pippin_sc
+#: includes/post-types.php:16
+#: includes/post-types.php:28
+msgid "Events"
+msgstr "Veranstaltungen"
+
+#@ pippin_sc
+#: includes/post-types.php:17
+msgid "Event"
+msgstr "Veranstaltung"
+
+#@ pippin_sc
+#: includes/post-types.php:18
+msgid "Add New"
+msgstr "Neue Veranstaltung"
+
+#@ pippin_sc
+#: includes/post-types.php:19
+msgid "Add New Event"
+msgstr "Neue Veranstaltung"
+
+#@ pippin_sc
+#: includes/post-types.php:20
+msgid "Edit Event"
+msgstr "Veranstaltung bearbeiten"
+
+#@ pippin_sc
+#: includes/post-types.php:21
+msgid "New Event"
+msgstr "Neue Veranstaltung"
+
+#@ pippin_sc
+#: includes/post-types.php:22
+msgid "All Events"
+msgstr "Alle Veranstaltungen"
+
+#@ pippin_sc
+#: includes/post-types.php:23
+msgid "View Event"
+msgstr "Veranstaltung anzeigen"
+
+#@ pippin_sc
+#: includes/post-types.php:24
+msgid "Search Events"
+msgstr "Veranstaltungen durchsuchen"
+
+#@ pippin_sc
+#: includes/post-types.php:25
+msgid "No Events found"
+msgstr "Keine Veranstaltungen gefunden"
+
+#@ pippin_sc
+#: includes/post-types.php:26
+msgid "No Events found in Trash"
+msgstr "Keine Veranstaltungen im Papierkorb"
+
+#@ pippin_sc
+#: includes/taxonomies.php:18
+msgid "Search Categories"
+msgstr "Kategorien durchsuchen"
+
+#@ pippin_sc
+#: includes/taxonomies.php:19
+msgid "All Categories"
+msgstr "Alle Kategorien"
+
+#@ pippin_sc
+#: includes/taxonomies.php:20
+msgid "Parent Category"
+msgstr "&Uuml;bergeordnete Kategorie"
+
+#@ pippin_sc
+#: includes/taxonomies.php:21
+msgid "Parent Category:"
+msgstr "&Uuml;bergeordnete Kategorie"
+
+#@ pippin_sc
+#: includes/taxonomies.php:22
+msgid "Edit Category"
+msgstr "Kategorie bearbeiten"
+
+#@ pippin_sc
+#: includes/taxonomies.php:23
+msgid "Update Category"
+msgstr "Kategorie aktualisieren"
+
+#@ pippin_sc
+#: includes/taxonomies.php:24
+msgid "Add New Category"
+msgstr "Kategorie hinzuf&uuml;gen"
+
+#@ pippin_sc
+#: includes/taxonomies.php:25
+msgid "New Category Name"
+msgstr "Neuer Kategoriename"
+
+#@ pippin_sc
+#: includes/widgets.php:21
+msgid "Event Calendar"
+msgstr "Veranstaltungskalender"
+
+#@ pippin_sc
+#: includes/widgets.php:21
+msgid "Displays an events widget"
+msgstr "Zeigt ein Veranstaltungswidget"
+
+#@ pippin_sc
+#: includes/widgets.php:66
+#: includes/widgets.php:159
+#: includes/widgets.php:255
+#: includes/widgets.php:325
+msgid "Title:"
+msgstr "Titel:"
+
+#@ pippin_sc
+#: includes/widgets.php:72
+msgid "Small"
+msgstr "Klein"
+
+#@ pippin_sc
+#: includes/widgets.php:73
+msgid "Large"
+msgstr "Groß"
+
+#@ pippin_sc
+#: includes/widgets.php:75
+msgid "Calendar Size"
+msgstr "Kalendergr&ouml;ße"
+
+#@ pippin_sc
+#: includes/widgets.php:79
+#: includes/widgets.php:165
+#: includes/widgets.php:173
+msgid "All"
+msgstr "Alle"
+
+#@ pippin_sc
+#: includes/widgets.php:89
+#: includes/widgets.php:183
+msgid "Event Category"
+msgstr "Veranstaltungskategorie"
+
+#@ pippin_sc
+#: includes/widgets.php:111
+msgid "Events List"
+msgstr "Veranstaltungsliste"
+
+#@ pippin_sc
+#: includes/widgets.php:111
+msgid "Displays upcoming/past events in a list view"
+msgstr "Zeigt kommende und zur&uuml;ckliegende Veranstaltungen in einer Liste an"
+
+#@ pippin_sc
+#: includes/widgets.php:166
+msgid "Upcoming"
+msgstr "Kommende"
+
+#@ pippin_sc
+#: includes/widgets.php:167
+msgid "Past"
+msgstr "Vergangene"
+
+#@ pippin_sc
+#: includes/widgets.php:169
+msgid "Past or Upcoming"
+msgstr "Vergangene oder Kommende"
+
+#@ pippin_sc
+#: includes/widgets.php:188
+msgid "Number to show"
+msgstr "Anzahl"
+
+#@ pippin_sc
+#: includes/widgets.php:210
+msgid "Event Categories"
+msgstr "Veranstaltungskategorien"
+
+#@ pippin_sc
+#: includes/widgets.php:210
+msgid "Display the event categories"
+msgstr "Veranstaltungskategorien"
+
+#@ pippin_sc
+#: includes/widgets.php:279
+msgid "Event Filter"
+msgstr "Veranstaltungsfilter"
+
+#@ pippin_sc
+#: includes/widgets.php:279
+msgid "Filtering controls for upcoming and past events display. Use only on /events archive."
+msgstr "Filterung der Einstellungen f&uuml;r kommende und vergangene Veranstaltungen. Bitte nur im Veranstaltungsarchiv verwenden."
+
+#@ pippin_sc
+#: includes/widgets.php:296
+msgid "View all events"
+msgstr "Alle Veranstaltungen anzeigen"
+
+#@ pippin_sc
+#: includes/widgets.php:297
+msgid "View upcoming events"
+msgstr "Kommende Veranstaltungen"
+
+#@ pippin_sc
+#: includes/widgets.php:298
+msgid "View past events"
+msgstr " Zurückliegende Veranstaltungen"
+
+#@ pippin_sc
+#: includes/widgets.php:300
+msgid "Order:"
+msgstr "Sortierung:"
+
+#@ pippin_sc
+#: includes/widgets.php:301
+msgid "ASC"
+msgstr "Aufst."
+
+#@ pippin_sc
+#: includes/widgets.php:303
+msgid "DESC"
+msgstr "Abst."
+
+#@ pippin_sc
+#: includes/functions.php:27
+msgid "Sun"
+msgstr "So"
+
+#@ pippin_sc
+#: includes/functions.php:28
+msgid "Mon"
+msgstr "Mo"
+
+#@ pippin_sc
+#: includes/functions.php:29
+msgid "Tue"
+msgstr "Di"
+
+#@ pippin_sc
+#: includes/functions.php:30
+msgid "Wed"
+msgstr "Mi"
+
+#@ pippin_sc
+#: includes/functions.php:31
+msgid "Thr"
+msgstr "Do"
+
+#@ pippin_sc
+#: includes/functions.php:32
+msgid "Fri"
+msgstr "Fr"
+
+#@ pippin_sc
+#: includes/functions.php:33
+msgid "Sat"
+msgstr "Sa"
+
+#@ pippin_sc
+#: includes/functions.php:482
+#, php-format
+msgid "Every %s"
+msgstr "Jede %s"
+
+#@ pippin_sc
+#: includes/functions.php:488
+#, php-format
+msgid "Every month on the %s"
+msgstr "Jeden Monat am %s"
+
+#@ pippin_sc
+#: includes/functions.php:494
+#, php-format
+msgid "Every year on the %s of %s"
+msgstr "Jedes Jahr am %s von %s"
+
+#@ pippin_sc
+#: includes/taxonomies.php:16
+msgctxt "taxonomy general name"
+msgid "Categories"
+msgstr "Kategorien"
+
+#@ pippin_sc
+#: includes/taxonomies.php:17
+msgctxt "taxonomy singular name"
+msgid "Category"
+msgstr "Kategorie"
+
+#@ pippin_sc
+#: includes/functions.php:212
+msgid "M"
+msgstr "M"
+
+#@ pippin_sc
+#. translators: plugin header field 'Name'
+#: sugar-calendar.php:0
+msgid "Sugar Events Calendar for WordPress"
+msgstr "Sugar Veranstaltungskalender für WordPress"
+
+#@ pippin_sc
+#. translators: plugin header field 'PluginURI'
+#: sugar-calendar.php:0
+msgid "http://pippinsplugins.com/sugar-calendar-wordpress"
+msgstr "http://pippinsplugins.com/sugar-calendar-wordpress"
+
+#@ pippin_sc
+#. translators: plugin header field 'Description'
+#: sugar-calendar.php:0
+msgid "A sweet, simple Event Calendar for WordPress"
+msgstr "Ein einfacher und eleganter Veranstaltungskalender für WordPress."
+
+#@ pippin_sc
+#. translators: plugin header field 'Author'
+#: sugar-calendar.php:0
+msgid "Pippin Williamson"
+msgstr "Pippin Williamson"
+
+#@ pippin_sc
+#. translators: plugin header field 'AuthorURI'
+#: sugar-calendar.php:0
+msgid "http://pippinsplugins.com"
+msgstr "http://pippinsplugins.com"
+
+#@ pippin_sc
+#. translators: plugin header field 'Version'
+#: sugar-calendar.php:0
+msgid "1.1.6"
+msgstr "1.1.6"
+

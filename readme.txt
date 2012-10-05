@@ -39,6 +39,8 @@ Sugar Event Calendar Lite has been translated into:
 * Serbian
 * Swedish
 
+[Follow this plugin on Github](https://github.com/pippinsplugins/Sugar-Event-Calendar-Lite).
+
 == Installation ==
 
 1. Upload the 'sugar-calendar-lite' folder to the '/wp-content/plugins/'' directory

@@ -49,6 +49,13 @@ Sugar Event Calendar Lite has been translated into:
 4. Display the calendar on any page with [sc_events_calendar]
 5. View the archive of events at _yoursite.com/events_
 
+== Screenshots ==
+
+1. Event calendar
+2. Single event display
+3. Event list in admin
+4. Event configuration
+
 == Frequently Asked Questions ==
 
 = Can I have recurring events? =

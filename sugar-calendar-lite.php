@@ -5,7 +5,7 @@ Plugin URI: http://pippinsplugins.com/sugar-calendar-lite
 Description: A sweet, simple Event Calendar for WordPress
 Author: Pippin Williamson
 Author URI: http://pippinsplugins.com
-Version: 1.0
+Version: 1.0.1
 Text Domain: pippin_sc
 Domain Path: /languages/
 */

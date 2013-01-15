@@ -7,7 +7,7 @@ Donate link: http://pippinsplugins.com/support-the-site
 Tags: event calendar, events, simple, events calendar, calendar, Pippin Williamson, Pippin's Plugins
 Requires at least: 3.2
 Tested up to: 3.5
-Stable tag: 1.0
+Stable tag: 1.0.1
 
 A sweet, simple event calendar plugin. Create your events and show them on a simple calendar. That's it.
 
@@ -74,11 +74,12 @@ I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-cal
 
 == Changelog ==
 
-= 1.0 =
+= 1.0.1 =
 
-First release of lite version.
+* Fixed a display issue with some months
+* Fixed a javascript error
+* Fixed an issue with child elements when loading the calendar via ajax
 
-== Upgrade Notice ==
 
 = 1.0 =
 

@@ -6,7 +6,6 @@ jQuery(document).ready(function($) {
 		var data = $(this).serialize();
 	    $.post(sc_vars.ajaxurl, data, function (response) {
 	   		$('#' + calendar).html(response);
-			scResizeCal();
 	 	}).done(function() {
 	 		document.body.style.cursor = 'default';
 	 	});

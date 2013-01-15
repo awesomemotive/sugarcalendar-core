@@ -2,23 +2,23 @@
 
 /**
 * Sets up the HTML, including forms, around the calendar
-*	
+*
 */
 
 function sc_get_events_calendar( $year_override = null ) {
-	ob_start(); 
-	
+	ob_start();
+
 	do_action('sc_before_calendar');
 	?>
 	<div id="sc_events_calendar_<?php echo uniqid(); ?>" class="sc_events_calendar">
 		<div id="sc_events_calendar_head">
-			<?php 
+			<?php
 			$time = current_time('timestamp');
-		
+
 			// default month and year
 			$today_month = date('n', $time);
 			$today_year = date('Y', $time);
-		
+
 			// check for posted month/year
 			if( isset( $_POST['sc_nonce'] ) && wp_verify_nonce( $_POST['sc_nonce'], 'sc_calendar_nonce' ) ) {
 				$today_month 	= absint( $_POST['sc_month'] );
@@ -30,7 +30,7 @@ function sc_get_events_calendar( $year_override = null ) {
 					$today_year = $current_month == 12 ? $today_year + 1 : $today_year;
 				}
 			}
-			
+
 			if( !is_null( $year_override ) )
 				$today_year = absint( $year_override );
 
@@ -49,17 +49,17 @@ function sc_get_events_calendar( $year_override = null ) {
 				12 => sc_month_num_to_name(12)
 			);
 			?>
-			
+
 			<form id="sc_event_select" class="sc_events_form" method="POST" action="#sc_events_calendar_<?php echo uniqid(); ?>">
-				<select name="sc_month">			  
-				  <?php 
-				  foreach( $months as $key => $month ) {			  	
+				<select name="sc_month">
+				  <?php
+				  foreach( $months as $key => $month ) {
 				  	echo '<option value="' . absint( $key ) . '" ' . selected( $key, $today_month, false ) . '>'. esc_attr( $month ) .'</option>';
 				  }
 				  ?>
-				</select>			
+				</select>
 				<select name="sc_year">
-					<?php 		
+					<?php
 					$start_year = date('Y') - 1;
 					$end_year = $start_year + 5;
 					$years = range($start_year, $end_year, 1);
@@ -72,7 +72,7 @@ function sc_get_events_calendar( $year_override = null ) {
 				<input type="hidden" name="action" value="sc_load_calendar"/>
 				<input name="sc_nonce" type="hidden" value="<?php echo wp_create_nonce('sc_calendar_nonce') ?>" />
 			</form>
-			
+
 			<h2 id="sc_calendar_title"><?php echo esc_html( $months[$today_month] . ' ' . $today_year ); ?></h2>
 			<?php echo sc_calendar_next_prev( $today_month, $today_year ); ?>
 		</div><!--end #sc_events_calendar_head-->
@@ -88,11 +88,11 @@ function sc_get_events_calendar( $year_override = null ) {
 function sc_calendar_next_prev( $today_month, $today_year ) {
 	?>
 	<div id="sc_event_nav_wrap">
-		<?php 
+		<?php
 			$next_month = $today_month + 1;
 			$next_month = $next_month > 12 ? 1 : $next_month;
 			$next_year 	= $next_month > 12 ? $today_year + 1 : $today_year;
-	
+
 			$prev_month = $today_month - 1;
 			$prev_month = $prev_month < 1 ? 12 : $prev_month;
 			$prev_year 	= $prev_month < 1 ? $today_year - 1 : $today_year;

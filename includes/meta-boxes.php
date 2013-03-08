@@ -142,10 +142,10 @@ function sc_meta_box_save($post_id) {
 	$end_am_pm 		= sanitize_text_field( $_POST['sc_event_end_time_am_pm']);
 	$recurring		= isset($_POST['sc_event_recurring']) ? $_POST['sc_event_recurring'] : '';
 	
-	if( $am_pm == 'pm' && $hour < 12 )
-		$hour += 12;
-	elseif( $am_pm == 'am' && $hour >= 12 )
-		$hour -= 12;
+	if( $am_pm == 'pm' && $hours < 12 )
+		$hours += 12;
+	elseif( $am_pm == 'am' && $hours >= 12 )
+		$hours -= 12;
 	
 	$day 	= date( 'd', strtotime( $date ) );
 	$month 	= date( 'm', strtotime( $date ) );

@@ -20,10 +20,10 @@ function sc_get_events_calendar( $year_override = null ) {
 			$today_year = date('Y', $time);
 
 			// check for posted month/year
-			if( isset( $_POST['sc_nonce'] ) && wp_verify_nonce( $_POST['sc_nonce'], 'sc_calendar_nonce' ) ) {
-				$today_month 	= absint( $_POST['sc_month'] );
-				$today_year 	= absint( $_POST['sc_year'] );
-				$current_month 	= absint( $_POST['sc_current_month'] );
+			if(isset($_POST['sc_nonce']) && wp_verify_nonce($_POST['sc_nonce'], 'sc_calendar_nonce')) {
+				$today_month 	= isset( $_POST['sc_month'] )         ? absint( $_POST['sc_month'] )         : date( 'n' );
+				$today_year 	= isset( $_POST['sc_year'] )          ? absint( $_POST['sc_year'] )          : date( 'Y' );
+				$current_month 	= isset( $_POST['sc_current_month'] ) ? absint( $_POST['sc_current_month'] ) : date( 'n' );
 				if( isset( $_POST['sc_prev'] ) ) {
 					$today_year = $current_month == 1 ? $today_year - 1 : $today_year;
 				} elseif( isset( $_POST['sc_next'] ) ) {

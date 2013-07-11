@@ -1,0 +1,357 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Sugar Event Calendar\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-08-07 12:36-0600\n"
+"PO-Revision-Date: 2013-04-21 00:18-0000\n"
+"Last-Translator: Emilia <office@code2prog.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;_n\n"
+"X-Poedit-Basepath: .\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-SearchPath-1: ../includes\n"
+
+#: ../includes/meta-boxes.php:21
+msgid "Event Details"
+msgstr "Szczegóły Wydarzenia"
+
+#: ../includes/meta-boxes.php:47 ../includes/list-table-columns.php:17
+msgid "Event Date"
+msgstr "Data wydarzenia"
+
+#: ../includes/meta-boxes.php:53
+msgid "This is the first day that this event occurs"
+msgstr "To jest pierwszy raz kiedy wydarzenie występuje"
+
+#: ../includes/meta-boxes.php:60
+msgid "Event Time"
+msgstr "Godzina Wydarzenia"
+
+#: ../includes/meta-boxes.php:78 ../includes/meta-boxes.php:86
+msgid "AM"
+msgstr "Rano"
+
+#: ../includes/meta-boxes.php:79 ../includes/meta-boxes.php:87
+msgid "PM"
+msgstr "Po Południu"
+
+#: ../includes/meta-boxes.php:81
+msgid "to:"
+msgstr "do:"
+
+#: ../includes/meta-boxes.php:95
+msgid "Recurring"
+msgstr "Powtarzający się"
+
+#: ../includes/meta-boxes.php:101
+msgid "Not Recurring"
+msgstr "Nie powtarzający się"
+
+#: ../includes/meta-boxes.php:102
+msgid "Every Week"
+msgstr "Co tydzień"
+
+#: ../includes/meta-boxes.php:103
+msgid "Every Month"
+msgstr "Co miesiąc"
+
+#: ../includes/meta-boxes.php:104
+msgid "Every Year"
+msgstr "Co rok"
+
+#: ../includes/widgets.php:21
+msgid "Event Calendar"
+msgstr "Kalendarz wydarzeń"
+
+#: ../includes/widgets.php:21
+msgid "Displays an events widget"
+msgstr "Wyświetla widget wydarzeń"
+
+#: ../includes/widgets.php:66 ../includes/widgets.php:159
+#: ../includes/widgets.php:255 ../includes/widgets.php:325
+msgid "Title:"
+msgstr "Nazwa:"
+
+#: ../includes/widgets.php:72
+msgid "Small"
+msgstr "Mały"
+
+#: ../includes/widgets.php:73
+msgid "Large"
+msgstr "Wielki"
+
+#: ../includes/widgets.php:75
+msgid "Calendar Size"
+msgstr "Rozmiar kalendarza"
+
+#: ../includes/widgets.php:79 ../includes/widgets.php:165
+#: ../includes/widgets.php:173
+msgid "All"
+msgstr "Wszystkie"
+
+#: ../includes/widgets.php:89 ../includes/widgets.php:183
+msgid "Event Category"
+msgstr "Kategoria wydarzenia"
+
+#: ../includes/widgets.php:111
+msgid "Events List"
+msgstr "Lista wydarzeń"
+
+#: ../includes/widgets.php:111
+msgid "Displays upcoming/past events in a list view"
+msgstr "Wyświetla nadchodzące/przeszłe wydarzenia jako listę"
+
+#: ../includes/widgets.php:166
+msgid "Upcoming"
+msgstr "Nadchodzące"
+
+#: ../includes/widgets.php:167
+msgid "Past"
+msgstr "Poprzednie"
+
+#: ../includes/widgets.php:169
+msgid "Past or Upcoming"
+msgstr "Przeszłe lub nadchodzące"
+
+#: ../includes/widgets.php:188
+msgid "Number to show"
+msgstr "Ilość do pokazania"
+
+#: ../includes/widgets.php:210
+msgid "Event Categories"
+msgstr "Kategorie Wydarzenia"
+
+#: ../includes/widgets.php:210
+msgid "Display the event categories"
+msgstr "Wyświetl kategorie wydarzeń"
+
+#: ../includes/widgets.php:279
+msgid "Event Filter"
+msgstr "Filter wydarzeń"
+
+#: ../includes/widgets.php:279
+msgid ""
+"Filtering controls for upcoming and past events display. Use only on /events "
+"archive."
+msgstr ""
+"Ustawienia filtrowania nadchodzących i przeszłych wydarzeń. Użyj tylko dla "
+"archiwum wydarzeń."
+
+#: ../includes/widgets.php:296
+msgid "View all events"
+msgstr "Zobacz wszystkie wydarzenia"
+
+#: ../includes/widgets.php:297
+msgid "View upcoming events"
+msgstr "Zobacz nadchodzące wydarzenia"
+
+#: ../includes/widgets.php:298
+msgid "View past events"
+msgstr "Zobacz przeszłe wydarzenia"
+
+#: ../includes/widgets.php:300
+msgid "Order:"
+msgstr "Kolejność:"
+
+#: ../includes/widgets.php:301
+msgid "ASC"
+msgstr "Rosnąco"
+
+#: ../includes/widgets.php:303
+msgid "DESC"
+msgstr "Malejąco"
+
+#: ../includes/list-table-columns.php:16
+msgid "Title"
+msgstr "Nazwa"
+
+#: ../includes/list-table-columns.php:18
+msgid "Time"
+msgstr "Godzina"
+
+#: ../includes/list-table-columns.php:19 ../includes/taxonomies.php:26
+msgid "Categories"
+msgstr "Kategorie"
+
+#: ../includes/list-table-columns.php:20
+msgid "Created"
+msgstr "Utworzone"
+
+#: ../includes/list-table-columns.php:141
+msgid "Show all categories"
+msgstr "Pokaż wszystkie kategorie"
+
+#: ../includes/event-display.php:36 ../includes/functions.php:465
+msgid "Date:"
+msgstr "Data:"
+
+#: ../includes/event-display.php:39
+msgid "Time:"
+msgstr "Czas:"
+
+#: ../includes/event-display.php:40
+msgid "to"
+msgstr "do"
+
+#: ../includes/taxonomies.php:18
+msgid "Search Categories"
+msgstr "Kategorie wyszukiwania"
+
+#: ../includes/taxonomies.php:19
+msgid "All Categories"
+msgstr "Wszystkie kategorie"
+
+#: ../includes/taxonomies.php:20
+msgid "Parent Category"
+msgstr "Kategoria Główna"
+
+#: ../includes/taxonomies.php:21
+msgid "Parent Category:"
+msgstr "Kategoria Główna:"
+
+#: ../includes/taxonomies.php:22
+msgid "Edit Category"
+msgstr "Edytuj Kategorię"
+
+#: ../includes/taxonomies.php:23
+msgid "Update Category"
+msgstr "Aktualizuj Kategorię"
+
+#: ../includes/taxonomies.php:24
+msgid "Add New Category"
+msgstr "Dodaj nową kategorię"
+
+#: ../includes/taxonomies.php:25
+msgid "New Category Name"
+msgstr "Nazwa nowej kategorii"
+
+#: ../includes/post-types.php:16 ../includes/post-types.php:28
+msgid "Events"
+msgstr "Wydarzenia"
+
+#: ../includes/post-types.php:17
+msgid "Event"
+msgstr "Wydarzenie"
+
+#: ../includes/post-types.php:18
+msgid "Add New"
+msgstr "Dodaj nowe"
+
+#: ../includes/post-types.php:19
+msgid "Add New Event"
+msgstr "Dodaj nowe wydarzenie"
+
+#: ../includes/post-types.php:20
+msgid "Edit Event"
+msgstr "Edytuj wydarzenie"
+
+#: ../includes/post-types.php:21
+msgid "New Event"
+msgstr "Nowe wydarzenie"
+
+#: ../includes/post-types.php:22
+msgid "All Events"
+msgstr "Wszystkie wydarzenia"
+
+#: ../includes/post-types.php:23
+msgid "View Event"
+msgstr "Zobacz wydarzenie"
+
+#: ../includes/post-types.php:24
+msgid "Search Events"
+msgstr "Szukaj wydarzenia"
+
+#: ../includes/post-types.php:25
+msgid "No Events found"
+msgstr "Nie znaleziono wydarzeń"
+
+#: ../includes/post-types.php:26
+msgid "No Events found in Trash"
+msgstr "Nie ma wydarzeń w koszu"
+
+#: ../includes/calendar.php:62
+msgid "Go"
+msgstr "Dalej"
+
+#: ../includes/calendar.php:100
+msgid "Previous"
+msgstr "Poprzednie"
+
+#: ../includes/calendar.php:108
+msgid "Next"
+msgstr "Następne"
+
+#: ../includes/functions.php:17
+msgid "Sunday"
+msgstr "Niedziela"
+
+#: ../includes/functions.php:18
+msgid "Monday"
+msgstr "Poniedziałek"
+
+#: ../includes/functions.php:19
+msgid "Tuesday"
+msgstr "Wtorek"
+
+#: ../includes/functions.php:20
+msgid "Wednesday"
+msgstr "Środa"
+
+#: ../includes/functions.php:21
+msgid "Thursday"
+msgstr "Czwartek"
+
+#: ../includes/functions.php:22
+msgid "Friday"
+msgstr "Piątek"
+
+#: ../includes/functions.php:23
+msgid "Saturday"
+msgstr "Sobota"
+
+#: ../includes/functions.php:27
+msgid "Sun"
+msgstr "Niedz"
+
+#: ../includes/functions.php:28
+msgid "Mon"
+msgstr "Pon"
+
+#: ../includes/functions.php:29
+msgid "Tue"
+msgstr "Wt"
+
+#: ../includes/functions.php:30
+msgid "Wed"
+msgstr "Śr"
+
+#: ../includes/functions.php:31
+msgid "Thr"
+msgstr "Czw"
+
+#: ../includes/functions.php:32
+msgid "Fri"
+msgstr "Pt"
+
+#: ../includes/functions.php:33
+msgid "Sat"
+msgstr "So"
+
+#: ../includes/functions.php:471
+#, php-format
+msgid "Every %s"
+msgstr "Co %s"
+
+#: ../includes/functions.php:477
+#, php-format
+msgid "Every month on the %s"
+msgstr "Każdego miesiąca w %s"
+
+#: ../includes/functions.php:483
+#, php-format
+msgid "Every year on the %s of %s"
+msgstr "Co roku w %s w %s"

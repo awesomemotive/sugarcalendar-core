@@ -40,8 +40,8 @@ function sc_draw_calendar( $month, $year ){
 
 	//days and weeks vars now
 	$running_day = date( 'w', mktime( 0, 0, 0, $month, 1, $year ) );
-	//if( $week_start_day == 1 )
-	//	$running_day--;
+	if ( $week_start_day == 1 )
+		$running_day = ( $running_day > 0 ) ? $running_day - 1 : 6;
 	$days_in_month = date( 't', mktime( 0, 0, 0, $month, 1, $year ) );
 	$days_in_this_week = 1;
 	$day_counter = 0;

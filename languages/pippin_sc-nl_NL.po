@@ -2,201 +2,203 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Event Calendar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-07 12:36-0600\n"
-"PO-Revision-Date: 2012-08-19 11:19-0500\n"
+"POT-Creation-Date: 2012-11-14 12:04-0600\n"
+"PO-Revision-Date: 2014-03-18 09:26+0100\n"
 "Last-Translator: Pippin Williamson <pippin@pippinsplugins.com>\n"
-"Language-Team: \n"
-"Language: \n"
+"Language-Team: ComBron Communicatie <combron@combron.nl>\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: __;_e;_n\n"
 "X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.6.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ..\n"
 "X-Poedit-SearchPath-1: ../includes\n"
 
 #: ../includes/meta-boxes.php:21
 msgid "Event Details"
-msgstr ""
+msgstr "Over het evenement"
 
-#: ../includes/meta-boxes.php:47
-#: ../includes/list-table-columns.php:17
+#: ../includes/meta-boxes.php:47 ../includes/list-table-columns.php:17
 msgid "Event Date"
-msgstr ""
+msgstr "Datum evenement"
 
 #: ../includes/meta-boxes.php:53
 msgid "This is the first day that this event occurs"
-msgstr ""
+msgstr "Dit is de eerste dag van het evenement"
 
 #: ../includes/meta-boxes.php:60
 msgid "Event Time"
-msgstr ""
+msgstr "Tijdstip"
 
-#: ../includes/meta-boxes.php:78
-#: ../includes/meta-boxes.php:86
+#: ../includes/meta-boxes.php:78 ../includes/meta-boxes.php:86
 msgid "AM"
-msgstr ""
+msgstr "a.m."
 
-#: ../includes/meta-boxes.php:79
-#: ../includes/meta-boxes.php:87
+#: ../includes/meta-boxes.php:79 ../includes/meta-boxes.php:87
 msgid "PM"
-msgstr ""
+msgstr "p.m."
 
 #: ../includes/meta-boxes.php:81
 msgid "to:"
-msgstr "tot"
+msgstr "tot:"
 
 #: ../includes/meta-boxes.php:95
 msgid "Recurring"
-msgstr ""
+msgstr "Terugkerend"
 
 #: ../includes/meta-boxes.php:101
 msgid "Not Recurring"
-msgstr ""
+msgstr "Zonder herhaling"
 
 #: ../includes/meta-boxes.php:102
 msgid "Every Week"
-msgstr ""
+msgstr "Iedere week"
 
 #: ../includes/meta-boxes.php:103
 msgid "Every Month"
-msgstr ""
+msgstr "Iedere maand"
 
 #: ../includes/meta-boxes.php:104
 msgid "Every Year"
-msgstr ""
+msgstr "Ieder jaar"
+
+#: ../includes/meta-boxes.php:114
+msgid "Recur until:"
+msgstr "Herhalen tot:"
 
 #: ../includes/widgets.php:21
 msgid "Event Calendar"
-msgstr ""
+msgstr "Evenementenkalender"
 
 #: ../includes/widgets.php:21
 msgid "Displays an events widget"
-msgstr ""
+msgstr "Toont een evenementenwidget"
 
-#: ../includes/widgets.php:66
-#: ../includes/widgets.php:159
-#: ../includes/widgets.php:255
-#: ../includes/widgets.php:325
+#: ../includes/widgets.php:66 ../includes/widgets.php:159
+#: ../includes/widgets.php:255 ../includes/widgets.php:325
 msgid "Title:"
-msgstr ""
+msgstr "Titel:"
 
 #: ../includes/widgets.php:72
 msgid "Small"
-msgstr ""
+msgstr "Klein"
 
 #: ../includes/widgets.php:73
 msgid "Large"
-msgstr ""
+msgstr "Groot"
 
 #: ../includes/widgets.php:75
 msgid "Calendar Size"
-msgstr ""
+msgstr "Formaat kalender"
 
-#: ../includes/widgets.php:79
-#: ../includes/widgets.php:165
+#: ../includes/widgets.php:79 ../includes/widgets.php:165
 #: ../includes/widgets.php:173
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
-#: ../includes/widgets.php:89
-#: ../includes/widgets.php:183
+#: ../includes/widgets.php:89 ../includes/widgets.php:183
 msgid "Event Category"
-msgstr ""
+msgstr "Categorie evenement"
 
 #: ../includes/widgets.php:111
 msgid "Events List"
-msgstr ""
+msgstr "Lijst met evenementen"
 
 #: ../includes/widgets.php:111
 msgid "Displays upcoming/past events in a list view"
-msgstr ""
+msgstr "Toont de komende/voorbije evenementen in een lijst"
 
 #: ../includes/widgets.php:166
 msgid "Upcoming"
-msgstr ""
+msgstr "Binnenkort"
 
 #: ../includes/widgets.php:167
 msgid "Past"
-msgstr ""
+msgstr "Verleden"
 
 #: ../includes/widgets.php:169
 msgid "Past or Upcoming"
-msgstr ""
+msgstr "Verleden of toekomst"
 
 #: ../includes/widgets.php:188
 msgid "Number to show"
-msgstr ""
+msgstr "Aantal te tonen evenementen"
 
 #: ../includes/widgets.php:210
 msgid "Event Categories"
-msgstr ""
+msgstr "Evenementencategorieën"
 
 #: ../includes/widgets.php:210
 msgid "Display the event categories"
-msgstr ""
+msgstr "Toon de evenementencategorieën"
 
 #: ../includes/widgets.php:279
 msgid "Event Filter"
-msgstr ""
+msgstr "Evenementenfilter"
 
 #: ../includes/widgets.php:279
-msgid "Filtering controls for upcoming and past events display. Use only on /events archive."
+msgid ""
+"Filtering controls for upcoming and past events display. Use only on /events "
+"archive."
 msgstr ""
+"Filtert de instellingen voor toekomstige en voorbije evenementen die getoond "
+"worden. Alleen gebruiken bij /evenementenoverzicht."
 
 #: ../includes/widgets.php:296
 msgid "View all events"
-msgstr ""
+msgstr "Bekijk alle evenementen"
 
 #: ../includes/widgets.php:297
 msgid "View upcoming events"
-msgstr ""
+msgstr "Bekijk alle komende evenementen"
 
 #: ../includes/widgets.php:298
 msgid "View past events"
-msgstr ""
+msgstr "Toon alle voorbije evenementen"
 
 #: ../includes/widgets.php:300
 msgid "Order:"
-msgstr ""
+msgstr "Volgorde:"
 
 #: ../includes/widgets.php:301
 msgid "ASC"
-msgstr ""
+msgstr "Oplopend"
 
 #: ../includes/widgets.php:303
 msgid "DESC"
-msgstr ""
+msgstr "Aflopend"
 
 #: ../includes/list-table-columns.php:16
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: ../includes/list-table-columns.php:18
 msgid "Time"
-msgstr ""
+msgstr "Tijd"
 
-#: ../includes/list-table-columns.php:19
-#: ../includes/taxonomies.php:26
+#: ../includes/list-table-columns.php:19 ../includes/taxonomies.php:26
 msgid "Categories"
-msgstr ""
+msgstr "Categorieën"
 
 #: ../includes/list-table-columns.php:20
 msgid "Created"
-msgstr ""
+msgstr "Gemaakt op"
 
-#: ../includes/list-table-columns.php:141
+#: ../includes/list-table-columns.php:139
 msgid "Show all categories"
-msgstr ""
+msgstr "Toon alle categorieën"
 
-#: ../includes/event-display.php:36
-#: ../includes/functions.php:465
+#: ../includes/event-display.php:36 ../includes/functions.php:527
 msgid "Date:"
-msgstr "Dag"
+msgstr "Datum:"
 
 #: ../includes/event-display.php:39
 msgid "Time:"
-msgstr ""
+msgstr "Tijd:"
 
 #: ../includes/event-display.php:40
 msgid "to"
@@ -204,92 +206,91 @@ msgstr "tot"
 
 #: ../includes/taxonomies.php:18
 msgid "Search Categories"
-msgstr ""
+msgstr "Zoek categorieën"
 
 #: ../includes/taxonomies.php:19
 msgid "All Categories"
-msgstr ""
+msgstr "Alle categorieën"
 
 #: ../includes/taxonomies.php:20
 msgid "Parent Category"
-msgstr ""
+msgstr "Hogere categorie"
 
 #: ../includes/taxonomies.php:21
 msgid "Parent Category:"
-msgstr ""
+msgstr "Hogere categorie:"
 
 #: ../includes/taxonomies.php:22
 msgid "Edit Category"
-msgstr ""
+msgstr "Categorie aanpassen"
 
 #: ../includes/taxonomies.php:23
 msgid "Update Category"
-msgstr ""
+msgstr "Categorie bijwerken"
 
 #: ../includes/taxonomies.php:24
 msgid "Add New Category"
-msgstr ""
+msgstr "Categorie toevoegen"
 
 #: ../includes/taxonomies.php:25
 msgid "New Category Name"
-msgstr ""
+msgstr "Nieuwe categorienaam"
 
-#: ../includes/post-types.php:16
-#: ../includes/post-types.php:28
+#: ../includes/post-types.php:16 ../includes/post-types.php:28
 msgid "Events"
-msgstr ""
+msgstr "Evenementen"
 
 #: ../includes/post-types.php:17
 msgid "Event"
-msgstr ""
+msgstr "Evenement"
 
 #: ../includes/post-types.php:18
 msgid "Add New"
-msgstr ""
+msgstr "Nieuwe toevoegen"
 
 #: ../includes/post-types.php:19
 msgid "Add New Event"
-msgstr ""
+msgstr "Nieuw evenement toevoegen"
 
 #: ../includes/post-types.php:20
 msgid "Edit Event"
-msgstr ""
+msgstr "Evenement aanpassen"
 
 #: ../includes/post-types.php:21
 msgid "New Event"
-msgstr ""
+msgstr "Nieuw evenement"
 
 #: ../includes/post-types.php:22
 msgid "All Events"
-msgstr ""
+msgstr "Alle evenementen"
 
 #: ../includes/post-types.php:23
 msgid "View Event"
-msgstr ""
+msgstr "Evenement bekijken"
 
 #: ../includes/post-types.php:24
 msgid "Search Events"
-msgstr ""
+msgstr "Evenement zoeken"
 
 #: ../includes/post-types.php:25
 msgid "No Events found"
-msgstr ""
+msgstr "Geen evenementen gevonden"
 
 #: ../includes/post-types.php:26
 msgid "No Events found in Trash"
-msgstr ""
+msgstr "Geen evenementen gevonden in de prullenbak"
 
-#: ../includes/calendar.php:62
+#: ../includes/calendar.php:71
 msgid "Go"
-msgstr ""
+msgstr "Gaan!"
 
-#: ../includes/calendar.php:100
+#: ../includes/calendar.php:110
 msgid "Previous"
-msgstr ""
+msgstr "Vorige"
 
-#: ../includes/calendar.php:108
+#: ../includes/calendar.php:121
 msgid "Next"
-msgstr ""
+msgstr "Volgende"
 
 #: ../includes/functions.php:17
 msgid "Sunday"
@@ -321,44 +322,62 @@ msgstr "Zaterdag"
 
 #: ../includes/functions.php:27
 msgid "Sun"
-msgstr ""
+msgstr "Zo"
 
 #: ../includes/functions.php:28
 msgid "Mon"
-msgstr ""
+msgstr "Ma"
 
 #: ../includes/functions.php:29
 msgid "Tue"
-msgstr ""
+msgstr "Di"
 
 #: ../includes/functions.php:30
 msgid "Wed"
-msgstr ""
+msgstr "Wo"
 
 #: ../includes/functions.php:31
 msgid "Thr"
-msgstr ""
+msgstr "Do"
 
 #: ../includes/functions.php:32
 msgid "Fri"
-msgstr ""
+msgstr "Vr"
 
 #: ../includes/functions.php:33
 msgid "Sat"
-msgstr ""
+msgstr "Za"
 
-#: ../includes/functions.php:471
+#: ../includes/functions.php:214
+msgid "M"
+msgstr "M"
+
+#: ../includes/functions.php:535
+#, php-format
+msgid "Every %s until %s"
+msgstr "Elke %s tot %s"
+
+#: ../includes/functions.php:541
+#, php-format
+msgid "Every month on the %s until %s"
+msgstr "Iedere maand op de %s tot %s"
+
+#: ../includes/functions.php:547
+#, php-format
+msgid "Every year on the %s of %s until %s"
+msgstr "Ieder jaar op de %s van %s tot %s"
+
+#: ../includes/functions.php:559
 #, php-format
 msgid "Every %s"
-msgstr ""
+msgstr "Elke %s"
 
-#: ../includes/functions.php:477
+#: ../includes/functions.php:565
 #, php-format
 msgid "Every month on the %s"
-msgstr ""
+msgstr "Iedere maand op de %s"
 
-#: ../includes/functions.php:483
+#: ../includes/functions.php:571
 #, php-format
 msgid "Every year on the %s of %s"
-msgstr ""
-
+msgstr "Ieder jaar op de %s van %s"

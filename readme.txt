@@ -74,6 +74,10 @@ I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-cal
 
 == Changelog ==
 
+= Development =
+
+* Update to use dashicons
+
 = 1.0.3 =
 
 * Fixed a bug with Week Start Day being set to Monday

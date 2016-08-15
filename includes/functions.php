@@ -144,7 +144,7 @@ function sc_draw_calendar( $month, $year ){
 	endfor;
 
 	//finish the rest of the days in the week
-	if( $days_in_this_week < 8 ):
+	if( $days_in_this_week > 1 && $days_in_this_week < 8 ):
 		for( $x = 1; $x <= ( 8 - $days_in_this_week ); $x++ ):
 		  $calendar.= '<td class="calendar-day-np" valign="top"><div class="sc_day_div"></div></td>';
 		endfor;

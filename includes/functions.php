@@ -4,14 +4,13 @@
 * Build Calendar for Event post type
 *
 * Credits : http://davidwalsh.name/php-calendar
-*			https://responsivedesign.is/patterns/calendar
 *
 */
 
 function sc_draw_calendar( $month, $year ){
 
-	//begin calendar div
-	$calendar = "\n<div id=\"calendar\">\n";
+	//start draw table
+	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar">';
 
 	$day_names = array(
 		0 => __('Sunday', 'pippin_sc'),
@@ -33,11 +32,11 @@ function sc_draw_calendar( $month, $year ){
 		$day_names[] = $end_day;
 	}
 
-	$calendar .= "\t\t\t\t<ul class=\"calendar-day-head\">\n";
+	$calendar.= '<tr class="calendar-row">';
 		for( $i = 0; $i <= 6; $i++ ) {
-			$calendar .= "\t\t\t\t\t<li>" . $day_names[$i] . "</li>\n";
+			$calendar .= '<th class="calendar-day-head">' . $day_names[$i] .'</th>';
 		}
-	$calendar .= "\t\t\t\t</ul>\n";
+	$calendar .= '</tr>';
 
 	//days and weeks vars now
 	$running_day = date( 'w', mktime( 0, 0, 0, $month, 1, $year ) );
@@ -55,12 +54,12 @@ function sc_draw_calendar( $month, $year ){
 	$today_year = date('Y', $time);
 
 	//row for week one */
-	$calendar .= "\t\t\t\t<ul class=\"calendar-row\">\n";
+	$calendar.= '<tr class="calendar-row">';
 
 	//print "blank" days until the first of the current week
 	for($x = 0; $x < $running_day; $x++):
 
-		$calendar .= "\t\t\t\t\t<li class=\"calendar-day calendar-day-np\"></li>\n";
+		$calendar.= '<td class="calendar-day-np" valign="top"></td>';
 		$days_in_this_week++;
 
 	endfor;
@@ -70,10 +69,10 @@ function sc_draw_calendar( $month, $year ){
 
 		$today = ( $today_day == $list_day && $today_month == $month && $today_year == $year ) ? 'today' : '';
 
-		$cal_day = "\t\t\t\t\t<li class=\"calendar-day " . $today . $category_string . "\">\n";
+		$cal_day = '<td class="calendar-day '. $today .'" valign="top"><div class="sc_day_div">';
 
 		// add in the day numbering
-		$cal_day .= "\t\t\t\t\t\t<div class=\"day-number day-" . $list_day . '">'.$list_day."</div>\n";
+		$cal_day .= '<div class="day-number">'.$list_day.'</div>';
 
 		$args = array(
 			'numberposts' => -1,
@@ -116,7 +115,7 @@ function sc_draw_calendar( $month, $year ){
 				$evt_month 	== $month &&
 				$evt_year 	== $year
 			) {
-				$cal_event .= "\t\t\t\t\t\t<div class=\"event\" itemscope itemtype=\"http://schema.org/Event\"><meta itemprop=\"startDate\" content=\""; $epoch = get_post_meta($id, 'sc_event_date_time'); $link .= date('Y-m-d', $epoch[0]) . '"><div class="event-desc"><a itemprop="url" href="' . get_permalink($id) . '"><span itemprop="name">' . esc_html(get_the_title($id)) . "</span></a></div></div>\n";
+				$cal_event .= '<a href="'. get_permalink($id) .'">'. get_the_title($id) .'</a><br/>';
 			}
 
 		endforeach;
@@ -125,14 +124,14 @@ function sc_draw_calendar( $month, $year ){
 
 		$calendar.= $cal_event ? $cal_event : '';
 
-		$calendar .= "\t\t\t\t\t</li>\n";
+		$calendar.= '</div></td>';
 
 		if($running_day == 6):
 
-			$calendar .= "\t\t\t\t</ul>\n";
+			$calendar.= '</tr>';
 
 			if( ( $day_counter + 1 ) != $days_in_month ):
-				$calendar .= "\t\t\t\t<ul class=\"calendar-row\">\n";
+				$calendar .= '<tr class="calendar-row">';
 			endif;
 
 			$running_day = -1;
@@ -147,19 +146,19 @@ function sc_draw_calendar( $month, $year ){
 	//finish the rest of the days in the week
 	if( $days_in_this_week < 8 ):
 		for( $x = 1; $x <= ( 8 - $days_in_this_week ); $x++ ):
-		  $calendar .= "\t\t\t\t\t<li class=\"calendar-day calendar-day-np\"></li>\n";
+		  $calendar.= '<td class="calendar-day-np" valign="top"><div class="sc_day_div"></div></td>';
 		endfor;
 	endif;
 
 	wp_reset_postdata();
 
 	//final row
-	$calendar .= "\t\t\t\t</ul>\n";
+	$calendar.= '</tr>';
 
-	//close the div
-	$calendar .= '</div>';
+	//end the table
+	$calendar.= '</table>';
 
-	//all done, return the completed calendar
+	//all done, return the completed table
 	return $calendar;
 }
 

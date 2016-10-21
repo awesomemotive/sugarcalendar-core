@@ -7,158 +7,267 @@
 *
 */
 
-function sc_draw_calendar( $month, $year ){
+function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
 
-	//start draw table
-	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar">';
+	// Layout conditional 1
+	if($size == 'responsive') {
+		$calendar = "<div id=\"calendar\" class=\"responsive\">\n";
+	} else {
+		$calendar = '<table cellpadding="0" cellspacing="0" class="calendar">';
+	}
 
-	$day_names = array(
-		0 => __('Sunday', 'pippin_sc'),
-		1 => __('Monday', 'pippin_sc'),
-		2 => __('Tuesday', 'pippin_sc'),
-		3 => __('Wednesday', 'pippin_sc'),
-		4 => __('Thursday', 'pippin_sc'),
-		5 => __('Friday', 'pippin_sc'),
-		6 => __('Saturday', 'pippin_sc')
+	$day_names_large = array(
+		0 => __( 'Sunday', 'pippin_sc' ),
+		1 => __( 'Monday', 'pippin_sc' ),
+		2 => __( 'Tuesday', 'pippin_sc' ),
+		3 => __( 'Wednesday', 'pippin_sc' ),
+		4 => __( 'Thursday', 'pippin_sc' ),
+		5 => __( 'Friday', 'pippin_sc' ),
+		6 => __( 'Saturday', 'pippin_sc' )
 	);
 
-	$week_start_day = get_option( 'start_of_week' );
+	$day_names_small = array(
+		0 => __( 'Sun', 'pippin_sc' ),
+		1 => __( 'Mon', 'pippin_sc' ),
+		2 => __( 'Tue', 'pippin_sc' ),
+		3 => __( 'Wed', 'pippin_sc' ),
+		4 => __( 'Thr', 'pippin_sc' ),
+		5 => __( 'Fri', 'pippin_sc' ),
+		6 => __( 'Sat', 'pippin_sc' )
+	);
+
+	$week_start_day = sc_get_week_start_day();
+
+	$day_names = $size == 'small' ? $day_names_small : $day_names_large;
 
 	// adjust day names for sites with Monday set as the start day
-	if( $week_start_day == 1 ) {
+	if ( $week_start_day == 1 ) {
 		$end_day = $day_names[0];
 		$start_day = $day_names[1];
-		array_shift($day_names);
+		array_shift( $day_names );
 		$day_names[] = $end_day;
 	}
 
-	$calendar.= '<tr class="calendar-row">';
-		for( $i = 0; $i <= 6; $i++ ) {
+	if ( $size == 'small' ) {
+		foreach ( $day_names as $key => $day ) {
+			$day_names[ $key ] = substr( $day, 0, 1 );
+		}
+	}
+
+	// Layout conditional 2
+	if($size == 'responsive') {
+		$calendar .= "\t\t\t\t<ul class=\"calendar-day-head\">\n";
+		for ( $i = 0; $i <= 6; $i++ ) {
+			$calendar .= "\t\t\t\t\t<li>" . $day_names[$i] . "</li>\n";
+		}
+		$calendar .= "\t\t\t\t</ul>\n";
+	} else {
+		$calendar.= '<tr class="calendar-row">';
+		for ( $i = 0; $i <= 6; $i++ ) {
 			$calendar .= '<th class="calendar-day-head">' . $day_names[$i] .'</th>';
 		}
-	$calendar .= '</tr>';
+		$calendar .= '</tr>';
+	}
 
 	//days and weeks vars now
 	$running_day = date( 'w', mktime( 0, 0, 0, $month, 1, $year ) );
 	if ( $week_start_day == 1 )
 		$running_day = ( $running_day > 0 ) ? $running_day - 1 : 6;
-	$days_in_month = date( 't', mktime( 0, 0, 0, $month, 1, $year ) );
-	$days_in_this_week = 1;
-	$day_counter = 0;
-	$dates_array = array();
+		$days_in_month = date( 't', mktime( 0, 0, 0, $month, 1, $year ) );
+		$days_in_this_week = 1;
+		$day_counter = 0;
+		$dates_array = array();
 
-	//get today's date
-	$time = current_time('timestamp');
-	$today_day = date('j', $time);
-	$today_month = date('m', $time);
-	$today_year = date('Y', $time);
+		//get today's date
+		$time = current_time( 'timestamp' );
+		$today_day = date( 'j', $time );
+		$today_month = date( 'm', $time );
+		$today_year = date( 'Y', $time );
 
-	//row for week one */
-	$calendar.= '<tr class="calendar-row">';
+		//row for week one */
+		// Layout conditional 3
+		if($size == 'responsive') {
+			$calendar .= "\t\t\t\t<ul class=\"calendar-row\">\n";
+		} else {
+			$calendar .= '<tr class="calendar-row">';
+		}
 
-	//print "blank" days until the first of the current week
-	for($x = 0; $x < $running_day; $x++):
+		//print "blank" days until the first of the current week
+		for ( $x = 0; $x < $running_day; $x++ ):
+			// Layout conditional 4
+			if($size == 'responsive') {
+				$calendar .= "\t\t\t\t\t<li class=\"calendar-day calendar-day-np\"></li>\n";
+			} else {
+				$calendar .= '<td class="calendar-day-np" valign="top"></td>';
+			}
+			$days_in_this_week++;
 
-		$calendar.= '<td class="calendar-day-np" valign="top"></td>';
-		$days_in_this_week++;
+		endfor;
 
-	endfor;
+		//keep going with days
+		for ( $list_day = 1; $list_day <= $days_in_month; $list_day++ ) :
 
-	//keep going with days
-	for($list_day = 1; $list_day <= $days_in_month; $list_day++):
+			$today = ( $today_day == $list_day && $today_month == $month && $today_year == $year ) ? 'today' : '';
 
-		$today = ( $today_day == $list_day && $today_month == $month && $today_year == $year ) ? 'today' : '';
+			$args = array(
+				'numberposts' 	=> -1,
+				'post_type' 	=> 'sc_event',
+				'post_status' 	=> 'publish',
+				'orderby' 		=> 'meta_value_num',
+				'order' 		=> 'asc',
+				'meta_query'    => array(
+					'relation'  => 'AND',
+					array(
+						'key'   => 'sc_event_date',
+						'value' => mktime( 0, 0, 0, $month, $list_day, $year ),
+						'compare'=>'<=',
+					),
+					array(
+						'key'   => 'sc_event_end_date',
+						'value' => mktime( 0, 0, 0, $month, $list_day, $year ),
+						'compare'=>'>=',
+					),
+				),
+			);
 
-		$cal_day = '<td class="calendar-day '. $today .'" valign="top"><div class="sc_day_div">';
-
-		// add in the day numbering
-		$cal_day .= '<div class="day-number">'.$list_day.'</div>';
-
-		$args = array(
-			'numberposts' => -1,
-			'post_type' => 'sc_event',
-			'post_status' => 'publish',
-			'meta_key' => 'sc_event_date_time',
-			'orderby' => 'meta_value_num',
-			'order' => 'asc',
-			'meta_value' => mktime(0, 0, 0, $month, $list_day, $year),
-			'meta_compare' => '>='
-		);
-
-		$events = get_posts( apply_filters( 'sc_calendar_query_args', $args ) );
-
-		$cal_event = '';
-
-		$shown_events = array();
-
-		foreach ($events as $event) : setup_postdata( $event );
-
-			$id = $event->ID;
-
-			$shown_events[] = $id;
-
-			//timestamp for start date
-			$timestamp = get_post_meta($id, 'sc_event_date_time', true);
-
-			//define start date
-			$evt_day 	= date( 'j', $timestamp );
-			$evt_month 	= date( 'n', $timestamp );
-			$evt_year 	= date( 'Y', $timestamp );
-
-			//max days in the event's month
-			$last_day = date( 't', mktime( 0, 0, 0, $evt_month, 1, $evt_year ) );
-
-			//we check if any events exists on current iteration
-			//if yes, return the link to event
-			if(
-				$evt_day 	== $list_day &&
-				$evt_month 	== $month &&
-				$evt_year 	== $year
-			) {
-				$cal_event .= '<a href="'. get_permalink($id) .'">'. get_the_title($id) .'</a><br/>';
+			if ( !is_null( $category ) ) {
+				$args['sc_event_category'] = $category;
 			}
 
-		endforeach;
+			$events = get_posts( apply_filters( 'sc_calendar_query_args', $args ) );
 
-		$calendar .= $cal_day;
+			$cal_event = '';
 
-		$calendar.= $cal_event ? $cal_event : '';
+			$categories = array();
 
-		$calendar.= '</div></td>';
+			$shown_events = array();
 
-		if($running_day == 6):
+			$recurring_timestamp = mktime( 0, 0, 0, $month, $list_day, $year );
 
-			$calendar.= '</tr>';
+			foreach ( $events as $event ) :
 
-			if( ( $day_counter + 1 ) != $days_in_month ):
-				$calendar .= '<tr class="calendar-row">';
+				$id = $event->ID;
+
+				$shown_events[] = $id;
+				// Layout conditional 4
+				if($size == 'responsive') {
+					$link = "\t\t\t\t\t\t<div class=\"event\" itemscope itemtype=\"http://schema.org/Event\"><meta itemprop=\"startDate\" content=\"";
+					$epoch = get_post_meta($id, 'sc_event_date_time');
+					$link .= date('Y-m-d', $epoch[0]) . '"><div class="event-desc"><a itemprop="url" href="' . get_permalink($id) . '"><span itemprop="name">' . esc_html(get_the_title($id)) . "</span></a></div></div>\n";
+				} elseif ( $size == 'small' ) {
+					$link = '<a href="'. get_permalink( $id ) .'" title="' . esc_html( get_the_title( $id ) ) . '">&bull;</a>';
+				} else {
+					$link = '<a href="'. get_permalink( $id ) .'">'. esc_html( get_the_title( $id ) )  .'</a><br/>';
+				}
+
+				$cal_event .= apply_filters( 'sc_event_calendar_link', $link, $id, $size );
+
+					// collect event categories for css classes
+					$event_categories = wp_get_object_terms( $id, 'sc_event_category', array( 'fields' => 'slugs' ) );
+					if ( ! empty( $event_categories ) ) {
+						if ( ! is_wp_error( $event_categories ) ) {
+							foreach( $event_categories as $slug ) {
+								$categories[] = $slug;
+							}
+						}
+					}
+
+					// Layout conditional 5
+					if ( $size == 'responsive' ) {
+						$link = "\t\t\t\t\t\t<div class=\"event\" itemscope itemtype=\"http://schema.org/Event\"><meta itemprop=\"startDate\" content=\"";
+						$epoch = get_post_meta($id, 'sc_event_date_time');
+						$link .= date('Y-m-d', $epoch[0]) . '"><div class="event-desc"><a itemprop="url" href="' . get_permalink($id) . '"><span itemprop="name">' . esc_html(get_the_title($id)) . "</span></a></div></div>\n";
+					} elseif ( $size == 'small' ) {
+						$link = '<a href="'. get_permalink( $id ) .'" title="' . esc_html( get_the_title( $id ) ) . '">&bull;</a>';
+					} else {
+						$link = '<a href="'. get_permalink( $id ) .'">'. esc_html( get_the_title( $id ) )  .'</a><br/>';
+					}
+
+			endforeach;
+
+			$recurring_timestamp = mktime( 0, 0, 0, $month, $list_day, $year );
+
+			$cal_event .= sc_show_recurring_events( $recurring_timestamp, $size, $category, $shown_events );
+
+			$categories = array_unique( $categories );
+			$category_string = ' ' . implode( ' ', $categories );
+
+			// Layout conditional 6
+			if($size == 'responsive') {
+				$cal_day = "\t\t\t\t\t<li class=\"calendar-day " . $today . $category_string . "\">\n";
+			} else {
+				$cal_day = '<td class="calendar-day '. $today . $category_string .'" valign="top"><div class="sc_day_div">';
+			}
+
+			// add in the day numbering
+			// Layout conditional 7
+			if($size == 'responsive') {
+				$cal_day .= "\t\t\t\t\t\t<div class=\"day-number day-" . $list_day . '">'.$list_day."</div>\n";
+			} else {
+				$cal_day .= '<div class="day-number day-' . $list_day . '">'.$list_day.'</div>';
+			}
+
+			$calendar .= $cal_day;
+
+			$calendar .= $cal_event ? $cal_event : '';
+
+			// Layout conditional 8
+			if($size == 'responsive') {
+				$calendar .= "\t\t\t\t\t</li>\n";
+			} else {
+				$calendar .= '</div></td>';
+			}
+
+			if ( $running_day == 6 ):
+
+				if ( ( $list_day < $days_in_month ) ) {
+
+					// Layout conditional 9
+					if($size == 'responsive') {
+						$calendar .= "\t\t\t\t</ul>\n";
+						$calendar .= "\t\t\t\t<ul class=\"calendar-row\">\n";
+					} else {
+						$calendar.= '</tr>';
+						$calendar .= '<tr class="calendar-row">';
+					}
+					$running_day = -1;
+					$days_in_this_week = 0;
+				}
+
 			endif;
 
-			$running_day = -1;
-			$days_in_this_week = 0;
+			$days_in_this_week++; $running_day++; $day_counter++;
 
-		endif;
-
-		$days_in_this_week++; $running_day++; $day_counter++;
-
-	endfor;
-
-	//finish the rest of the days in the week
-	if( $days_in_this_week < 8 ):
-		for( $x = 1; $x <= ( 8 - $days_in_this_week ); $x++ ):
-		  $calendar.= '<td class="calendar-day-np" valign="top"><div class="sc_day_div"></div></td>';
 		endfor;
-	endif;
+
+		//finish the rest of the days in the week
+		if ( $days_in_this_week < 8 ):
+			for ( $x = 1; $x <= ( 8 - $days_in_this_week ); $x++ ):
+				// Layout conditional 10
+				if($size == 'responsive') {
+					$calendar .= "\t\t\t\t\t<li class=\"calendar-day calendar-day-np\"></li>\n";
+				} else {
+					$calendar .= '<td class="calendar-day-np" valign="top"><div class="sc_day_div"></div></td>';
+				}
+			endfor;
+		endif;
 
 	wp_reset_postdata();
 
-	//final row
-	$calendar.= '</tr>';
+	// Layout conditonal 11
+	if($size == 'responsive') {
+		// close list
+		$calendar .= "\t\t\t\t</ul>\n";
+		// close div
+		$calendar .= '</div>';
+	} else {
+		//final row
+		$calendar.= '</tr>';
+		//end the table
+		$calendar.= '</table>';
+	}
 
-	//end the table
-	$calendar.= '</table>';
-
-	//all done, return the completed table
+	//all done, return the completed calendar
 	return $calendar;
 }
 

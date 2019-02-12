@@ -1,0 +1,71 @@
+/* Title Styles
+-------------------------------------------------------------- */
+
+body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
+	display: none;
+}
+
+
+/* Toggle Styles
+-------------------------------------------------------------- */
+
+.sc-toggle {
+	position: relative;
+	display: inline-block;
+	overflow: visible;
+}
+
+.sc-toggle input[type="checkbox"] {
+	display: inline-block;
+	vertical-align: middle;
+	position: relative;
+	margin: 0;
+	padding: 0;
+	width: 42px;
+	height: 24px;
+	background-color: #ccc;
+	-webkit-transition: .4s;
+	transition: .4s;
+	border-radius: 34px;
+	box-shadow: none;
+	border: none;
+}
+
+.sc-toggle .label {
+	display: inline-block;
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+.sc-toggle input[type="checkbox"]:before {
+	position: absolute;
+	content: "";
+	height: 18px;
+	width: 18px;
+	left: 3px;
+	bottom: 3px;
+	background-color: white;
+	-webkit-transition: .4s;
+	transition: .4s;
+	border-radius: 50%;
+}
+
+.sc-toggle input[type="checkbox"]:checked {
+	background-color: #00a0d2;
+}
+
+.sc-toggle input[type="checkbox"]:active,
+.sc-toggle input[type="checkbox"]:focus {
+	outline: auto 3px -webkit-focus-ring-color;
+}
+
+.sc-toggle input[type="checkbox"]:checked:before {
+	-webkit-transform: translateX(22px);
+	-ms-transform: translateX(22px);
+	transform: translateX(22px);
+}
+
+.sc-toggle input + .label,
+.sc-toggle .label + input {
+	margin-left: 5px;
+}

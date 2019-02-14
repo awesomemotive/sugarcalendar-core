@@ -12,7 +12,7 @@ A sweet, simple event calendar plugin. Create your events and show them on a sim
 
 == Description ==
 
-Most event calendar plugins are either way too simple, or extremely overly complex and bloated. Sugar Event Calendar is designed to be simple, light weight, and provide just the major features you need for event management.
+Most event calendar plugins are either way too simple, or extremely overly complex and bloated. Sugar Calendar is designed to be simple, light weight, and provide just the major features you need for event management.
 
 = Features =
 
@@ -24,14 +24,17 @@ Most event calendar plugins are either way too simple, or extremely overly compl
 * Easily Set Event Start and End Time
 * A short code for showing the calendar of events
 * Events Archive, Listed by Date of Occurrence
+* Large and small calendar views
+* Event categories
+* Widgets for displaying calendars and event filters
 
 = Extended Features =
 
-A full version of this plugin with additional features is [available for purchase](https://sugarcalendar.com). It includes recurring events, large and small calendar views, event categories, widgets for displaying calendars and event filters, and more.
+The full version of this plugin is [available for purchase](https://sugarcalendar.com), and adds a simple recurring events feature.
 
 = Languages =
 
-Sugar Event Calendar Lite has been translated into:
+Sugar Calendar Lite has been translated into:
 
 * English
 * German
@@ -64,7 +67,7 @@ The [non-lite version](https://sugarcalendar.com/) has recurring options for wee
 
 = Can I display Google Maps with my Events? =
 
-Yes, there is a [free add-on plugin](http://wordpress.org/extend/plugins/simple-google-maps-short-code/) for showing maps. This add-on works with both lite and full versions of Sugar Event Calendar.
+Yes, there is a [free add-on plugin](http://wordpress.org/extend/plugins/simple-google-maps-short-code/) for showing maps. This add-on works with both lite and full versions of Sugar Calendar.
 
 = Can I have event registration forms? =
 

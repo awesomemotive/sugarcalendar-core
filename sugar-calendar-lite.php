@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Sugar Events Calendar for WordPress
+Plugin Name: Sugar Calendar (Lite)
 Plugin URI:  https://sugarcalendar.com
 Description: A sweet, simple Event Calendar for WordPress
 Author:      Sandhills Development, LLC

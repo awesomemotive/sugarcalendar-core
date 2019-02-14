@@ -6,18 +6,17 @@
  * Registers the custom taxonomies.
  *
  * @access      private
- * @since       1.0 
+ * @since       1.0.0
  * @return      void
 */
-
 function sc_setup_event_taxonomies() {
 
 	$category_labels = array(
-		'name' 			=> _x( 'Categories', 'taxonomy general name', 'pippin_sc' ),
+		'name' => _x( 'Categories', 'taxonomy general name', 'pippin_sc' ),
 		'singular_name' => _x( 'Category', 'taxonomy singular name', 'pippin_sc' ),
-		'search_items' 	=>  __( 'Search Categories', 'pippin_sc'  ),
-		'all_items' 	=> __( 'All Categories', 'pippin_sc'  ),
-		'parent_item' 	=> __( 'Parent Category', 'pippin_sc'  ),
+		'search_items' =>  __( 'Search Categories', 'pippin_sc'  ),
+		'all_items' => __( 'All Categories', 'pippin_sc'  ),
+		'parent_item' => __( 'Parent Category', 'pippin_sc'  ),
 		'parent_item_colon' => __( 'Parent Category:', 'pippin_sc'  ),
 		'edit_item' => __( 'Edit Category', 'pippin_sc'  ), 
 		'update_item' => __( 'Update Category', 'pippin_sc'  ),

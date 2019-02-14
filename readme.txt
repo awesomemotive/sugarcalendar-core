@@ -1,13 +1,12 @@
-=== Sugar Events Calendar Lite ===
+=== Sugar Calendar (Lite) ===
 Author: Pippin Williamson
 Contributors: mordauk
-Author URI: http://pippinsplugins.com
-Plugin URI: http://pippinsplugins.com/sugar-calendar-lite
-Donate link: http://pippinsplugins.com/support-the-site
+Author URI: https://sandhillsdev.com
+Plugin URI: https://sugarcalendar.com
 Tags: event calendar, events, simple, events calendar, calendar, Pippin Williamson, Pippin's Plugins
-Requires at least: 4.0
-Tested up to: 4.8
-Stable tag: 1.0.6
+Requires at least: 4.6
+Tested up to: 5.0
+Stable tag: 1.6.8
 
 A sweet, simple event calendar plugin. Create your events and show them on a simple calendar. That's it.
 
@@ -28,7 +27,7 @@ Most event calendar plugins are either way too simple, or extremely overly compl
 
 = Extended Features =
 
-A full version of this plugin with additional features is [available for purchase](http://pippinsplugins.com/sugar-event-calendar-wordpress/). It includes recurring events, large and small calendar views, event categories, widgets for displaying calendars and event filters, and more.
+A full version of this plugin with additional features is [available for purchase](https://sugarcalendar.com). It includes recurring events, large and small calendar views, event categories, widgets for displaying calendars and event filters, and more.
 
 = Languages =
 
@@ -40,7 +39,7 @@ Sugar Event Calendar Lite has been translated into:
 * Serbian
 * Swedish
 
-[Follow this plugin on Github](https://github.com/pippinsplugins/Sugar-Event-Calendar-Lite).
+[Follow this plugin on Github](https://github.com/sugarcalendar/Sugar-Event-Calendar-Lite).
 
 == Installation ==
 
@@ -61,7 +60,7 @@ Sugar Event Calendar Lite has been translated into:
 
 = Can I have recurring events? =
 
-The [non-lite version](http://pippinsplugins.com/sugar-event-calendar-wordpress/) has recurring options for weekly, monthly, and yearly events.
+The [non-lite version](https://sugarcalendar.com/) has recurring options for weekly, monthly, and yearly events.
 
 = Can I display Google Maps with my Events? =
 
@@ -76,9 +75,17 @@ I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-cal
 
 = Development =
 
-* Update to use dashicons
+* New features from Standard!
 
-= 1.0.6 =
+= 1.6.8 =
+
+* Added categories taxonomy (from Standard)
+* Added widgets (from Standard)
+* Added end-time (from Standard)
+* Added settings page (from Standard)
+* Added feed support (from Standard)
+* Added license key & beta opt-in (from Standard)
+* Minor tweaks to plugin naming & verbiage
 
 * Updated sc_before_event_content action  and sc_after_event_content action to run on archive pages as well as singular event pages.
 
@@ -105,7 +112,6 @@ I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-cal
 * Fixed a display issue with some months
 * Fixed a javascript error
 * Fixed an issue with child elements when loading the calendar via ajax
-
 
 = 1.0 =
 

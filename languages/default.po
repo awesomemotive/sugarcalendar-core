@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Event Calendar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-07 12:36-0600\n"
-"PO-Revision-Date: 2012-08-07 12:36-0600\n"
+"POT-Creation-Date: 2012-11-14 12:04-0600\n"
+"PO-Revision-Date: 2012-11-14 12:04-0600\n"
 "Last-Translator: Pippin Williamson <pippin@pippinsplugins.com>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -64,6 +64,10 @@ msgstr ""
 
 #: ../includes/meta-boxes.php:104
 msgid "Every Year"
+msgstr ""
+
+#: ../includes/meta-boxes.php:114
+msgid "Recur until:"
 msgstr ""
 
 #: ../includes/widgets.php:21
@@ -185,12 +189,12 @@ msgstr ""
 msgid "Created"
 msgstr ""
 
-#: ../includes/list-table-columns.php:141
+#: ../includes/list-table-columns.php:139
 msgid "Show all categories"
 msgstr ""
 
 #: ../includes/event-display.php:36
-#: ../includes/functions.php:465
+#: ../includes/functions.php:527
 msgid "Date:"
 msgstr ""
 
@@ -279,15 +283,15 @@ msgstr ""
 msgid "No Events found in Trash"
 msgstr ""
 
-#: ../includes/calendar.php:62
+#: ../includes/calendar.php:71
 msgid "Go"
 msgstr ""
 
-#: ../includes/calendar.php:100
+#: ../includes/calendar.php:110
 msgid "Previous"
 msgstr ""
 
-#: ../includes/calendar.php:108
+#: ../includes/calendar.php:121
 msgid "Next"
 msgstr ""
 
@@ -347,17 +351,36 @@ msgstr ""
 msgid "Sat"
 msgstr ""
 
-#: ../includes/functions.php:471
+#: ../includes/functions.php:214
+msgid "M"
+msgstr ""
+
+#: ../includes/functions.php:535
+#, php-format
+msgid "Every %s until %s"
+msgstr ""
+
+#: ../includes/functions.php:541
+#, php-format
+msgid "Every month on the %s until %s"
+msgstr ""
+
+#: ../includes/functions.php:547
+#, php-format
+msgid "Every year on the %s of %s until %s"
+msgstr ""
+
+#: ../includes/functions.php:559
 #, php-format
 msgid "Every %s"
 msgstr ""
 
-#: ../includes/functions.php:477
+#: ../includes/functions.php:565
 #, php-format
 msgid "Every month on the %s"
 msgstr ""
 
-#: ../includes/functions.php:483
+#: ../includes/functions.php:571
 #, php-format
 msgid "Every year on the %s of %s"
 msgstr ""

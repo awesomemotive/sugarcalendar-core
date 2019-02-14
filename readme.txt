@@ -5,9 +5,9 @@ Author URI: http://pippinsplugins.com
 Plugin URI: http://pippinsplugins.com/sugar-calendar-lite
 Donate link: http://pippinsplugins.com/support-the-site
 Tags: event calendar, events, simple, events calendar, calendar, Pippin Williamson, Pippin's Plugins
-Requires at least: 3.2
-Tested up to: 4.1
-Stable tag: 1.0.5
+Requires at least: 4.0
+Tested up to: 4.8
+Stable tag: 1.0.6
 
 A sweet, simple event calendar plugin. Create your events and show them on a simple calendar. That's it.
 
@@ -77,6 +77,10 @@ I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-cal
 = Development =
 
 * Update to use dashicons
+
+= 1.0.6 =
+
+* Updated sc_before_event_content action  and sc_after_event_content action to run on archive pages as well as singular event pages.
 
 = 1.0.5 =
 

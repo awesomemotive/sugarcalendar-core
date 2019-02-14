@@ -1,0 +1,527 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Sugar Events Calendar for WordPress v1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2012-12-19 00:22:04+0000\n"
+"Last-Translator: surbma <peter@surbma.hu>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Language: Hungarian\n"
+"X-Poedit-Country: HUNGARY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: includes/calendar.php:71
+#@ pippin_sc
+msgid "Go"
+msgstr "Ugrás"
+
+#: includes/calendar.php:110
+#@ pippin_sc
+msgid "Previous"
+msgstr "Előző"
+
+#: includes/calendar.php:121
+#@ pippin_sc
+msgid "Next"
+msgstr "Következő"
+
+#: includes/event-display.php:36
+#: includes/functions.php:527
+#@ pippin_sc
+msgid "Date:"
+msgstr "Dátum:"
+
+#: includes/event-display.php:39
+#@ pippin_sc
+msgid "Time:"
+msgstr "Időpont:"
+
+#: includes/event-display.php:40
+#@ pippin_sc
+msgid "to"
+msgstr "-"
+
+#: includes/functions.php:17
+#@ pippin_sc
+msgid "Sunday"
+msgstr "Vasárnap"
+
+#: includes/functions.php:18
+#@ pippin_sc
+msgid "Monday"
+msgstr "Hétfő"
+
+#: includes/functions.php:19
+#@ pippin_sc
+msgid "Tuesday"
+msgstr "Kedd"
+
+#: includes/functions.php:20
+#@ pippin_sc
+msgid "Wednesday"
+msgstr "Szerda"
+
+#: includes/functions.php:21
+#@ pippin_sc
+msgid "Thursday"
+msgstr "Csütörtök"
+
+#: includes/functions.php:22
+#@ pippin_sc
+msgid "Friday"
+msgstr "Péntek"
+
+#: includes/functions.php:23
+#@ pippin_sc
+msgid "Saturday"
+msgstr "Szombat"
+
+#: includes/functions.php:27
+#@ pippin_sc
+msgid "Sun"
+msgstr "Vas"
+
+#: includes/functions.php:28
+#@ pippin_sc
+msgid "Mon"
+msgstr "Hé"
+
+#: includes/functions.php:29
+#@ pippin_sc
+msgid "Tue"
+msgstr "Ke"
+
+#: includes/functions.php:30
+#@ pippin_sc
+msgid "Wed"
+msgstr "Sze"
+
+#: includes/functions.php:31
+#@ pippin_sc
+msgid "Thr"
+msgstr "Csü"
+
+#: includes/functions.php:32
+#@ pippin_sc
+msgid "Fri"
+msgstr "Pé"
+
+#: includes/functions.php:33
+#@ pippin_sc
+msgid "Sat"
+msgstr "Szo"
+
+#: includes/functions.php:214
+#@ pippin_sc
+msgid "M"
+msgstr ""
+
+#: includes/functions.php:535
+#, php-format
+#@ pippin_sc
+msgid "Every %s until %s"
+msgstr "Minden %s (%s-ig)"
+
+#: includes/functions.php:541
+#, php-format
+#@ pippin_sc
+msgid "Every month on the %s until %s"
+msgstr "Minden hónap %s napja (%s-ig)"
+
+#: includes/functions.php:547
+#, php-format
+#@ pippin_sc
+msgid "Every year on the %s of %s until %s"
+msgstr "Minden év %s %s napja (%s-ig)"
+
+#: includes/functions.php:559
+#, php-format
+#@ pippin_sc
+msgid "Every %s"
+msgstr "Minden %s"
+
+#: includes/functions.php:565
+#, php-format
+#@ pippin_sc
+msgid "Every month on the %s"
+msgstr "Minden hónap %s napja"
+
+#: includes/functions.php:571
+#, php-format
+#@ pippin_sc
+msgid "Every year on the %s of %s"
+msgstr "Minden év %s %s napja"
+
+#: includes/list-table-columns.php:16
+#@ pippin_sc
+msgid "Title"
+msgstr "Cím"
+
+#: includes/list-table-columns.php:17
+#: includes/meta-boxes.php:47
+#@ pippin_sc
+msgid "Event Date"
+msgstr "Dátum"
+
+#: includes/list-table-columns.php:18
+#@ pippin_sc
+msgid "Time"
+msgstr "Időpont"
+
+#: includes/list-table-columns.php:19
+#: includes/taxonomies.php:26
+#@ pippin_sc
+msgid "Categories"
+msgstr "Kategóriák"
+
+#: includes/list-table-columns.php:20
+#@ pippin_sc
+msgid "Created"
+msgstr "Létrehozva"
+
+#: includes/list-table-columns.php:139
+#@ pippin_sc
+msgid "Show all categories"
+msgstr "Összes kategória megjelenítése"
+
+#: includes/meta-boxes.php:21
+#@ pippin_sc
+msgid "Event Details"
+msgstr "Esemény adatok"
+
+#: includes/meta-boxes.php:53
+#@ pippin_sc
+msgid "This is the first day that this event occurs"
+msgstr "Az esemény első napja"
+
+#: includes/meta-boxes.php:60
+#@ pippin_sc
+msgid "Event Time"
+msgstr "Időpont"
+
+#: includes/meta-boxes.php:78
+#: includes/meta-boxes.php:86
+#@ pippin_sc
+msgid "AM"
+msgstr "DE"
+
+#: includes/meta-boxes.php:79
+#: includes/meta-boxes.php:87
+#@ pippin_sc
+msgid "PM"
+msgstr "DU"
+
+#: includes/meta-boxes.php:81
+#@ pippin_sc
+msgid "to:"
+msgstr "vége:"
+
+#: includes/meta-boxes.php:95
+#@ pippin_sc
+msgid "Recurring"
+msgstr "Ismétlődés"
+
+#: includes/meta-boxes.php:101
+#@ pippin_sc
+msgid "Not Recurring"
+msgstr "Nem ismétlődő"
+
+#: includes/meta-boxes.php:102
+#@ pippin_sc
+msgid "Every Week"
+msgstr "Minden héten"
+
+#: includes/meta-boxes.php:103
+#@ pippin_sc
+msgid "Every Month"
+msgstr "Minden hónapban"
+
+#: includes/meta-boxes.php:104
+#@ pippin_sc
+msgid "Every Year"
+msgstr "Minden évben"
+
+#: includes/meta-boxes.php:114
+#@ pippin_sc
+msgid "Recur until:"
+msgstr "Ismétlődés vége:"
+
+#: includes/post-types.php:16
+#: includes/post-types.php:28
+#@ pippin_sc
+msgid "Events"
+msgstr "Események"
+
+#: includes/post-types.php:17
+#@ pippin_sc
+msgid "Event"
+msgstr "Esemény"
+
+#: includes/post-types.php:18
+#@ pippin_sc
+msgid "Add New"
+msgstr "Új hozzáadása"
+
+#: includes/post-types.php:19
+#@ pippin_sc
+msgid "Add New Event"
+msgstr "Új esemény hozzáadása"
+
+#: includes/post-types.php:20
+#@ pippin_sc
+msgid "Edit Event"
+msgstr "Esemény szerkesztése"
+
+#: includes/post-types.php:21
+#@ pippin_sc
+msgid "New Event"
+msgstr "Új esemény"
+
+#: includes/post-types.php:22
+#@ pippin_sc
+msgid "All Events"
+msgstr "Összes esemény"
+
+#: includes/post-types.php:23
+#@ pippin_sc
+msgid "View Event"
+msgstr "Esemény megtekintése"
+
+#: includes/post-types.php:24
+#@ pippin_sc
+msgid "Search Events"
+msgstr "Események keresése"
+
+#: includes/post-types.php:25
+#@ pippin_sc
+msgid "No Events found"
+msgstr "Nincs találat"
+
+#: includes/post-types.php:26
+#@ pippin_sc
+msgid "No Events found in Trash"
+msgstr "Nincs találat a lomtárban"
+
+#: includes/taxonomies.php:16
+#@ pippin_sc
+msgctxt "taxonomy general name"
+msgid "Categories"
+msgstr "Esemény kategóriák"
+
+#: includes/taxonomies.php:17
+#@ pippin_sc
+msgctxt "taxonomy singular name"
+msgid "Category"
+msgstr "Esemény kategória"
+
+#: includes/taxonomies.php:18
+#@ pippin_sc
+msgid "Search Categories"
+msgstr "Kategóriák keresése"
+
+#: includes/taxonomies.php:19
+#@ pippin_sc
+msgid "All Categories"
+msgstr "Összes kategória"
+
+#: includes/taxonomies.php:20
+#@ pippin_sc
+msgid "Parent Category"
+msgstr "Szülő kategória"
+
+#: includes/taxonomies.php:21
+#@ pippin_sc
+msgid "Parent Category:"
+msgstr "Szülő kategória:"
+
+#: includes/taxonomies.php:22
+#@ pippin_sc
+msgid "Edit Category"
+msgstr "Kategória szerkesztése"
+
+#: includes/taxonomies.php:23
+#@ pippin_sc
+msgid "Update Category"
+msgstr "Kategória frissítése"
+
+#: includes/taxonomies.php:24
+#@ pippin_sc
+msgid "Add New Category"
+msgstr "Új kategória hozzáadása"
+
+#: includes/taxonomies.php:25
+#@ pippin_sc
+msgid "New Category Name"
+msgstr "Új kategória neve"
+
+#: includes/widgets.php:21
+#@ pippin_sc
+msgid "Event Calendar"
+msgstr "Esemény naptár"
+
+#: includes/widgets.php:21
+#@ pippin_sc
+msgid "Displays an events widget"
+msgstr "Esemény naptár megjelenítése"
+
+#: includes/widgets.php:66
+#: includes/widgets.php:159
+#: includes/widgets.php:255
+#: includes/widgets.php:325
+#@ pippin_sc
+msgid "Title:"
+msgstr "Cím:"
+
+#: includes/widgets.php:72
+#@ pippin_sc
+msgid "Small"
+msgstr "Kicsi"
+
+#: includes/widgets.php:73
+#@ pippin_sc
+msgid "Large"
+msgstr "Nagy"
+
+#: includes/widgets.php:75
+#@ pippin_sc
+msgid "Calendar Size"
+msgstr "Naptár mérete"
+
+#: includes/widgets.php:79
+#: includes/widgets.php:165
+#: includes/widgets.php:173
+#@ pippin_sc
+msgid "All"
+msgstr "Mind"
+
+#: includes/widgets.php:89
+#: includes/widgets.php:183
+#@ pippin_sc
+msgid "Event Category"
+msgstr "Esemény kategória"
+
+#: includes/widgets.php:111
+#@ pippin_sc
+msgid "Events List"
+msgstr "Esemény lista"
+
+#: includes/widgets.php:111
+#@ pippin_sc
+msgid "Displays upcoming/past events in a list view"
+msgstr "Események megjelenítése lista nézetben"
+
+#: includes/widgets.php:166
+#@ pippin_sc
+msgid "Upcoming"
+msgstr "Közelgő"
+
+#: includes/widgets.php:167
+#@ pippin_sc
+msgid "Past"
+msgstr "Elmúlt"
+
+#: includes/widgets.php:169
+#@ pippin_sc
+msgid "Past or Upcoming"
+msgstr "Elmúlt vagy közelgő"
+
+#: includes/widgets.php:188
+#@ pippin_sc
+msgid "Number to show"
+msgstr "Darabszám"
+
+#: includes/widgets.php:210
+#@ pippin_sc
+msgid "Event Categories"
+msgstr "Esemény kategóriák"
+
+#: includes/widgets.php:210
+#@ pippin_sc
+msgid "Display the event categories"
+msgstr "Esemény kategóriák megjelenítése"
+
+#: includes/widgets.php:279
+#@ pippin_sc
+msgid "Event Filter"
+msgstr "Esemény szűrés"
+
+#: includes/widgets.php:279
+#@ pippin_sc
+msgid "Filtering controls for upcoming and past events display. Use only on /events archive."
+msgstr "Szűrő beállítások a közelgő és elmúlt események megjelenítéséhez. Csak az esemény archívum oldalon lehet használni."
+
+#: includes/widgets.php:296
+#@ pippin_sc
+msgid "View all events"
+msgstr "Minden esemény megjelenítése"
+
+#: includes/widgets.php:297
+#@ pippin_sc
+msgid "View upcoming events"
+msgstr "Közelgő események megjelenítése"
+
+#: includes/widgets.php:298
+#@ pippin_sc
+msgid "View past events"
+msgstr "Elmúlt események megjelenítése"
+
+#: includes/widgets.php:300
+#@ pippin_sc
+msgid "Order:"
+msgstr "Sorrend:"
+
+#: includes/widgets.php:301
+#@ pippin_sc
+msgid "ASC"
+msgstr "Növekvő"
+
+#: includes/widgets.php:303
+#@ pippin_sc
+msgid "DESC"
+msgstr "Csökkenő"
+
+#. translators: plugin header field 'Name'
+#: sugar-calendar.php:0
+#@ pippin_sc
+msgid "Sugar Events Calendar for WordPress"
+msgstr "Sugar Events Calendar for WordPress"
+
+#. translators: plugin header field 'PluginURI'
+#: sugar-calendar.php:0
+#@ pippin_sc
+msgid "http://pippinsplugins.com/sugar-calendar-wordpress"
+msgstr "http://pippinsplugins.com/sugar-calendar-wordpress"
+
+#. translators: plugin header field 'Description'
+#: sugar-calendar.php:0
+#@ pippin_sc
+msgid "A sweet, simple Event Calendar for WordPress"
+msgstr "Egy édes, egyszerű esemény kezelő WordPress-hez"
+
+#. translators: plugin header field 'Author'
+#: sugar-calendar.php:0
+#@ pippin_sc
+msgid "Pippin Williamson"
+msgstr "Pippin Williamson"
+
+#. translators: plugin header field 'AuthorURI'
+#: sugar-calendar.php:0
+#@ pippin_sc
+msgid "http://pippinsplugins.com"
+msgstr "http://pippinsplugins.com"
+
+#. translators: plugin header field 'Version'
+#: sugar-calendar.php:0
+#@ pippin_sc
+msgid "1.2"
+msgstr ""
+

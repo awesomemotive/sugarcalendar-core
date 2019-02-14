@@ -1,0 +1,284 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Sugar Events Calendar Lite for WordPress v1.0.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-04 09:09-0600\n"
+"PO-Revision-Date: 2014-06-11 02:37:46+0000\n"
+"Last-Translator: Luka <lup2talo@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%100/10==1 ? 2 : n%10==1 ? 0 : (n+9)%10>3 ? 2 : 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: Serbian\n"
+"X-Poedit-Country: YUGOSLAVIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Textdomain-Support: yes"
+
+#: includes/calendar.php:71
+#@ pippin_sc
+msgid "Go"
+msgstr "Otvori"
+
+#: includes/calendar.php:104
+#@ pippin_sc
+msgid "Previous"
+msgstr "Prethodno"
+
+#: includes/calendar.php:113
+#@ pippin_sc
+msgid "Next"
+msgstr "Slijedeće"
+
+#: includes/event-display.php:33
+#@ pippin_sc
+msgid "Date:"
+msgstr "Datum:"
+
+#: includes/event-display.php:35
+#@ pippin_sc
+msgid "Time:"
+msgstr "Vrijeme:"
+
+#: includes/event-display.php:36
+#@ pippin_sc
+msgid "to"
+msgstr "do"
+
+#: includes/functions.php:16
+#@ pippin_sc
+msgid "Sunday"
+msgstr "Nedjelja"
+
+#: includes/functions.php:17
+#@ pippin_sc
+msgid "Monday"
+msgstr "Ponedjeljak"
+
+#: includes/functions.php:18
+#@ pippin_sc
+msgid "Tuesday"
+msgstr "Utorak"
+
+#: includes/functions.php:19
+#@ pippin_sc
+msgid "Wednesday"
+msgstr "Srijeda"
+
+#: includes/functions.php:20
+#@ pippin_sc
+msgid "Thursday"
+msgstr "Četvrtak"
+
+#: includes/functions.php:21
+#@ pippin_sc
+msgid "Friday"
+msgstr "Petak"
+
+#: includes/functions.php:22
+#@ pippin_sc
+msgid "Saturday"
+msgstr "Subota"
+
+#: includes/list-table-columns.php:16
+#@ pippin_sc
+msgid "Title"
+msgstr "Naslov"
+
+#: includes/list-table-columns.php:17
+#: includes/meta-boxes.php:47
+#@ pippin_sc
+msgid "Event Date"
+msgstr "Datum Događaja"
+
+#: includes/list-table-columns.php:18
+#@ pippin_sc
+msgid "Time"
+msgstr "Vrijeme"
+
+#: includes/taxonomies.php:26
+#@ pippin_sc
+msgid "Categories"
+msgstr "Kategorije"
+
+#: includes/list-table-columns.php:19
+#@ pippin_sc
+msgid "Created"
+msgstr "Kreirano"
+
+#: includes/meta-boxes.php:21
+#@ pippin_sc
+msgid "Event Details"
+msgstr "Detalji događaja"
+
+#: includes/meta-boxes.php:58
+#@ pippin_sc
+msgid "Event Time"
+msgstr "Vrijeme događaja"
+
+#: includes/meta-boxes.php:76
+#: includes/meta-boxes.php:84
+#@ pippin_sc
+msgid "AM"
+msgstr "AM"
+
+#: includes/meta-boxes.php:77
+#: includes/meta-boxes.php:85
+#@ pippin_sc
+msgid "PM"
+msgstr "PM"
+
+#: includes/meta-boxes.php:79
+#@ pippin_sc
+msgid "to:"
+msgstr "do:"
+
+#: includes/post-types.php:16
+#: includes/post-types.php:28
+#@ pippin_sc
+msgid "Events"
+msgstr "Događaji"
+
+#: includes/post-types.php:17
+#@ pippin_sc
+msgid "Event"
+msgstr "Događaj"
+
+#: includes/post-types.php:18
+#@ pippin_sc
+msgid "Add New"
+msgstr "Dodaj novi"
+
+#: includes/post-types.php:19
+#@ pippin_sc
+msgid "Add New Event"
+msgstr "Dodaj novi događaj"
+
+#: includes/post-types.php:20
+#@ pippin_sc
+msgid "Edit Event"
+msgstr "Ažuriraj događaj"
+
+#: includes/post-types.php:21
+#@ pippin_sc
+msgid "New Event"
+msgstr "Novi događaj"
+
+#: includes/post-types.php:22
+#@ pippin_sc
+msgid "All Events"
+msgstr "Svi događaji"
+
+#: includes/post-types.php:23
+#@ pippin_sc
+msgid "View Event"
+msgstr "Pogledaj događaj"
+
+#: includes/post-types.php:24
+#@ pippin_sc
+msgid "Search Events"
+msgstr "Traži događaj"
+
+#: includes/post-types.php:25
+#@ pippin_sc
+msgid "No Events found"
+msgstr "Nema pronađenih događaja"
+
+#: includes/post-types.php:26
+#@ pippin_sc
+msgid "No Events found in Trash"
+msgstr "Nema pronađenih događaja u smeću"
+
+#: includes/taxonomies.php:18
+#@ pippin_sc
+msgid "Search Categories"
+msgstr "Pretraži kategorije"
+
+#: includes/taxonomies.php:19
+#@ pippin_sc
+msgid "All Categories"
+msgstr "Sve kategorije"
+
+#: includes/taxonomies.php:20
+#@ pippin_sc
+msgid "Parent Category"
+msgstr "Nadređena kategorija"
+
+#: includes/taxonomies.php:21
+#@ pippin_sc
+msgid "Parent Category:"
+msgstr "Nadređena Kategorija"
+
+#: includes/taxonomies.php:22
+#@ pippin_sc
+msgid "Edit Category"
+msgstr "Ažuriraj kategoriju"
+
+#: includes/taxonomies.php:23
+#@ pippin_sc
+msgid "Update Category"
+msgstr "Osvježi kategoriju"
+
+#: includes/taxonomies.php:24
+#@ pippin_sc
+msgid "Add New Category"
+msgstr "Dodaj Novu Kategoriju"
+
+#: includes/taxonomies.php:25
+#@ pippin_sc
+msgid "New Category Name"
+msgstr "Ime Nove Kategorije"
+
+#: includes/taxonomies.php:16
+#@ pippin_sc
+msgctxt "taxonomy general name"
+msgid "Categories"
+msgstr "Kategorije"
+
+#: includes/taxonomies.php:17
+#@ pippin_sc
+msgctxt "taxonomy singular name"
+msgid "Category"
+msgstr "Kategorija"
+
+#. translators: plugin header field 'Name'
+#: sugar-calendar-lite.php:0
+#@ pippin_sc
+msgid "Sugar Events Calendar Lite for WordPress"
+msgstr "Sugar Events Kalendar Lite za WordPress"
+
+#. translators: plugin header field 'PluginURI'
+#: sugar-calendar-lite.php:0
+#@ pippin_sc
+msgid "http://pippinsplugins.com/sugar-calendar-lite"
+msgstr "http://pippinsplugins.com/sugar-calendar-lite"
+
+#. translators: plugin header field 'Description'
+#: sugar-calendar-lite.php:0
+#@ pippin_sc
+msgid "A sweet, simple Event Calendar for WordPress"
+msgstr "Slatki, jednostavni kalendar događaja za Wordpress"
+
+#. translators: plugin header field 'Author'
+#: sugar-calendar-lite.php:0
+#@ pippin_sc
+msgid "Pippin Williamson"
+msgstr "Pippin Williamson"
+
+#. translators: plugin header field 'AuthorURI'
+#: sugar-calendar-lite.php:0
+#@ pippin_sc
+msgid "http://pippinsplugins.com"
+msgstr "http://pippinsplugins.com"
+
+#. translators: plugin header field 'Version'
+#: sugar-calendar-lite.php:0
+#@ pippin_sc
+msgid "1.0.3"
+msgstr "1.0.3"
+

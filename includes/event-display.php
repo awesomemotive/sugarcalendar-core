@@ -14,7 +14,7 @@
 
 function sc_event_content_hooks($content) {
 	global $post;
-	if($post->post_type == 'sc_event' && is_singular() && is_main_query()) {
+	if( is_singular( 'sc_event' ) || is_post_type_archive( 'sc_event' ) || is_tax( 'sc_event_category' ) && is_main_query() ) {
 		ob_start();
 			do_action('sc_before_event_content', $post->ID);
 			echo $content;
@@ -24,6 +24,7 @@ function sc_event_content_hooks($content) {
 	return $content;
 }
 add_filter('the_content', 'sc_event_content_hooks');
+add_filter('the_excerpt', 'sc_event_content_hooks');
 
 function sc_add_event_details($event_id) {
 	ob_start(); ?>

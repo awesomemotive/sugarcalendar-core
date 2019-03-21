@@ -4,9 +4,9 @@ Contributors: mordauk
 Author URI: https://sandhillsdev.com
 Plugin URI: https://sugarcalendar.com
 Tags: event calendar, events, simple, events calendar, calendar, Pippin Williamson, Pippin's Plugins
-Requires at least: 4.6
-Tested up to: 5.0
-Stable tag: 1.6.8
+Requires at least: 5.0
+Tested up to: 5.1
+Stable tag: 2.0.0
 
 A sweet, simple event calendar plugin. Create your events and show them on a simple calendar. That's it.
 
@@ -17,6 +17,7 @@ Most event calendar plugins are either way too simple, or extremely overly compl
 = Features =
 
 * Simple Event Management
+* Beautiful Admin Interface
 * Ajax Enabled Calendar View
 * Events Custom Post Type
 * Simple Event Configuration
@@ -63,7 +64,7 @@ Sugar Calendar Lite has been translated into:
 
 = Can I have recurring events? =
 
-The [non-lite version](https://sugarcalendar.com/) has recurring options for weekly, monthly, and yearly events.
+The [non-lite version](https://sugarcalendar.com/) has recurring options for daily, weekly, monthly, and yearly events.
 
 = Can I display Google Maps with my Events? =
 
@@ -80,6 +81,21 @@ I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-cal
 
 * New features from Standard!
 
+= 2.0.0 =
+
+March 21, 2019
+
+* New: admin area month/week/day/list modes
+* New: admin area Event editing experience
+* New: admin area Calendar Colors
+* New: admin area Settings screen
+* New: admin area preferences (saved per-user)
+* New: daily recurring events
+* Fixed: start of week feature works on all days
+* Improved: performance all-around, thanks to custom database storage
+* Improved: date/time formatting for calendar-specific markup
+* Improved: license key contents now hidden for added security
+
 = 1.6.8 =
 
 * Added categories taxonomy (from Standard)
@@ -89,7 +105,6 @@ I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-cal
 * Added feed support (from Standard)
 * Added license key & beta opt-in (from Standard)
 * Minor tweaks to plugin naming & verbiage
-
 * Updated sc_before_event_content action  and sc_after_event_content action to run on archive pages as well as singular event pages.
 
 = 1.0.5 =

@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * Sugar Calendar Legacy Theme Hooks.
+ *
+ * @since 1.0.0
+ */
+
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
+
+// Always Add Shortcodes
+add_action( 'init', 'sc_add_shortcodes' );
+
+// Always Add Widgets
+add_action( 'widgets_init', 'sc_register_widgets' );
+add_filter( 'widget_text',  'do_shortcode' );
+
+// Front-end Hooks
+if ( ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) || wp_doing_ajax() ) {
+
+	// Load front-end scripts
+	add_action( 'wp_enqueue_scripts', 'sc_load_front_end_scripts' );
+
+	// Load calendar via AJAX
+	add_action( 'wp_ajax_sc_load_calendar',        'sc_load_calendar_via_ajax' );
+	add_action( 'wp_ajax_nopriv_sc_load_calendar', 'sc_load_calendar_via_ajax' );
+
+	// Content hooks
+	add_filter( 'the_content', 'sc_event_content_hooks' );
+	add_filter( 'the_excerpt', 'sc_event_content_hooks' );
+
+	// Event Details
+	add_action( 'sc_before_event_content', 'sc_add_event_details' );
+}

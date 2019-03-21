@@ -1,0 +1,42 @@
+/* Submenu Nav
+-------------------------------------------------------------- */
+
+/* Secondary Separators */
+#adminmenu ul > li:not(:last-child) a[href^="admin.php?page=sugar-calendar"]:after,
+#adminmenu ul > li:not(:last-child) a[href^="post-new.php?post_type=sc_event"]:after
+{
+	display: block;
+	border-bottom: 1px solid rgba(255,255,255,0.2);
+	height: 14px;
+	margin: 0 -13px;
+	content: '';
+}
+
+#adminmenu ul > li:last-child a[href^="admin.php?page=sc-addons"]:before
+{
+	display: block;
+	border-top: 1px solid rgba(255,255,255,0.2);
+	height: 14px;
+	margin: 0 -13px;
+	content: '';
+}
+
+/* Hide Parent Arrow */
+ul#adminmenu #toplevel_page_sugar-calendar a.wp-has-current-submenu:after
+{
+	display: none;
+}
+
+/* Show Submenu Arrow */
+ul#adminmenu #toplevel_page_sugar-calendar ul.wp-submenu li.current a:before
+{
+	left: 0;
+	border: solid 8px transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-left-color: #f1f1f1;
+	margin-top: 2px;
+}

@@ -6,7 +6,7 @@ Plugin URI: https://sugarcalendar.com
 Tags: event calendar, events, simple, events calendar, calendar, Pippin Williamson, Pippin's Plugins
 Requires at least: 5.0
 Tested up to: 5.1
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 
 A sweet, simple event calendar plugin. Create your events and show them on a simple calendar. That's it.
 
@@ -80,6 +80,14 @@ I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-cal
 = Development =
 
 * New features from Standard!
+
+= 2.0.1 =
+
+April 10, 2019
+
+* Fixed: Multi-day events not showing on the calendar
+* Fixed: Fatal PHP error when events are set to recur daily
+* Fixed: Weekly recurring events shown incorrectly in month view
 
 = 2.0.0 =
 

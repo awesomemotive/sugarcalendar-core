@@ -233,7 +233,7 @@ final class Event extends Row {
 
 			// Week
 			case 'week' :
-				$format = 'w';
+				$format = 'W';
 				break;
 
 			// Month
@@ -252,6 +252,321 @@ final class Event extends Row {
 	}
 
 	/**
+	 * Does an event overlap a specific start & end time?
+	 *
+	 * This check includes recurrence.
+	 *
+	 * @since 2.0.1
+	 *
+	 * @param int    $start Unix timestamp
+	 * @param int    $end   Unix timestamp
+	 * @param string $mode  day|week|month|year
+	 *
+	 * @return bool
+	 */
+	public function overlaps( $start = '', $end = '', $mode = 'month' ) {
+
+		// Default return value
+		$retval = false;
+
+		// Bail if start or end are empty
+		if ( empty( $start ) || empty( $end ) ) {
+			return $retval;
+		}
+
+		// Define the boundary parameters
+		$boundaries = array(
+			'start'         => $start,
+			'end'           => $end,
+			'start_year'    => date_i18n( 'Y', $start ),
+			'start_month'   => date_i18n( 'm', $start ),
+			'start_day'     => date_i18n( 'd', $start ),
+			'start_dow'     => date_i18n( 'w', $start ),
+			'start_doy'     => date_i18n( 'z', $start ),
+			'start_woy'     => date_i18n( 'W', $start ),
+			'start_hour'    => date_i18n( 'H', $start ),
+			'start_minutes' => date_i18n( 'i', $start ),
+			'start_seconds' => date_i18n( 's', $start ),
+			'end_year'      => date_i18n( 'Y', $end ),
+			'end_month'     => date_i18n( 'm', $end ),
+			'end_day'       => date_i18n( 'd', $end ),
+			'end_dow'       => date_i18n( 'w', $end ),
+			'end_doy'       => date_i18n( 'z', $end ),
+			'end_woy'       => date_i18n( 'W', $end ),
+			'end_hour'      => date_i18n( 'H', $end ),
+			'end_minutes'   => date_i18n( 'i', $end ),
+			'end_seconds'   => date_i18n( 's', $end )
+		);
+
+		// Turn datetimes to timestamps for easier comparisons
+		$item_start = $this->start_date( 'U' );
+		$item_end   = $this->end_date( 'U' );
+		$recur_end  = $this->is_empty_date( $this->recurrence_end )
+			? false
+			: $this->format_date( 'U', $this->recurrence_end );
+
+		// Break it down
+		$item_month     = $this->start_date( 'm' );
+		$item_day       = $this->start_date( 'd' );
+		$item_dow       = $this->start_date( 'w' );
+		$item_woy       = $this->start_date( 'W' );
+		$item_hour      = $this->start_date( 'H' );
+
+		// Break it down
+		$item_end_month = $this->end_date( 'm' );
+		$item_end_day   = $this->end_date( 'd' );
+		$item_end_dow   = $this->end_date( 'w' );
+		$item_end_woy   = $this->end_date( 'W' );
+		$item_end_hour  = $this->end_date( 'H' );
+
+		// Bail if recurring ended after cell start (inclusive of last cell)
+		if ( ! empty( $this->recurrence ) && ! empty( $recur_end ) && ( $start > $recur_end ) ) {
+			return $retval;
+		}
+
+		// Boundary fits inside current cell
+		if ( ( $item_end <= $end ) && ( $item_start >= $start ) ) {
+			$retval = true;
+
+		// Boundary fits outside current cell
+		} elseif ( ( $item_end >= $start ) && ( $item_start <= $end ) ) {
+			$retval = true;
+
+		// Boundary does not fit, so must be recurring
+		} elseif ( ! empty( $this->recurrence ) ) {
+			$multi_year  = $this->is_multi( 'year'  );
+			$multi_month = $this->is_multi( 'month' );
+			$multi_week  = $this->is_multi( 'week'  );
+			$multi_day   = $this->is_multi( 'day'   ); // Not used (yet)
+
+			// Daily recurring
+			if ( 'daily' === $this->recurrence ) {
+
+				// Month mode
+				if ( ( 'month' === $mode ) && ( $item_start <= $end ) ) {
+					$retval = true;
+
+				// Week mode
+				} elseif ( ( 'week' === $mode ) && ( $item_hour <= $boundaries['end_hour' ] ) && ( $item_end_hour >= $boundaries['start_hour' ] ) ) {
+					$retval = true;
+
+				// Day mode
+				} elseif ( ( 'day' === $mode ) && ( $item_hour <= $boundaries['end_hour' ] ) && ( $item_end_hour >= $boundaries['start_hour' ] ) ) {
+					$retval = true;
+				}
+
+			// Weekly recurring
+			} elseif ( 'weekly' === $this->recurrence ) {
+
+				if (
+
+						// Same week
+						(
+							( false === $multi_week )
+							&&
+							(
+								// Starts before end
+								( $item_dow <= $boundaries['end_dow'] )
+
+								&&
+
+								// Ends before start
+								( $item_end_dow >= $boundaries['start_dow'] )
+
+								&&
+
+								// Same start month
+								( $item_hour <= $boundaries['end_hour'] )
+
+								&&
+
+								// Same end month
+								( $item_end_hour >= $boundaries['start_hour'] )
+
+								&&
+
+								// Not earlier week
+								( $item_woy <= $boundaries['start_woy'] )
+
+								&&
+
+								// Not earlier week
+								( $item_end_woy <= $boundaries['end_woy'] )
+							)
+						)
+
+						||
+
+						// Different weeks
+						(
+							( true === $multi_week )
+							&&
+							(
+								// Before start & end
+								(
+									( $item_dow <= $boundaries['start_dow'] )
+									&&
+									( $item_end_dow <= $boundaries['end_dow'] )
+									&&
+									( $item_hour <= $boundaries['end_hour'] )
+								)
+
+								||
+
+								// After end & start
+								(
+									( $item_dow >= $boundaries['end_dow'] )
+									&&
+									( $item_end_dow >= $boundaries['start_dow'] )
+									&&
+									( $item_end_hour >= $boundaries['end_hour'] )
+								)
+							)
+						)
+					) {
+					$retval = true;
+				}
+
+			// Monthly recurring
+			} elseif ( 'monthly' === $this->recurrence ) {
+
+				if (
+						// Same month
+						(
+							( false === $multi_month )
+							&&
+							(
+								// Starts before end
+								( $item_day <= $boundaries['end_day'] )
+
+								&&
+
+								// Ends before start
+								( $item_end_day >= $boundaries['start_day'] )
+							)
+						)
+
+						||
+
+						// Different months
+						(
+							( true === $multi_month )
+							&&
+							(
+								// Before start & end
+								(
+									( $item_day <= $boundaries['start_day'] )
+									&&
+									( $item_end_day <= $boundaries['end_day'] )
+								)
+
+								||
+
+								// After end & start
+								(
+									( $item_day >= $boundaries['end_day'] )
+									&&
+									( $item_end_day >= $boundaries['start_day'] )
+								)
+							)
+						)
+					) {
+					$retval = true;
+				}
+
+			// Yearly recurring
+			} elseif ( 'yearly' === $this->recurrence ) {
+
+				if (
+
+						// Same year
+						(
+							( false === $multi_year )
+							&&
+							(
+								// Starts before end
+								( $item_day <= $boundaries['end_day'] )
+
+								&&
+
+								// Ends before start
+								( $item_end_day >= $boundaries['start_day'] )
+
+								&&
+
+								// Same start month
+								( $item_month === $boundaries['start_month'] )
+
+								&&
+
+								// Same end month
+								( $item_end_month === $boundaries['end_month'] )
+							)
+						)
+
+						||
+
+						// Different years
+						(
+							( true === $multi_year )
+							&&
+							(
+								// Before start & end
+								(
+									( $item_day <= $boundaries['start_day'] )
+									&&
+									( $item_end_day <= $boundaries['end_day'] )
+									&&
+									( $item_month === $boundaries['start_month'] )
+								)
+
+								||
+
+								// After end & start
+								(
+									( $item_day >= $boundaries['end_day'] )
+									&&
+									( $item_end_day >= $boundaries['start_day'] )
+									&&
+									( $item_end_month === $boundaries['end_month'] )
+								)
+							)
+						)
+
+						||
+
+						// Different months
+						(
+							( true === $multi_month )
+							&&
+							(
+								// Before start & end
+								(
+									( $item_month === $boundaries['start_month'] )
+									&&
+									( $item_day === $boundaries['start_day'] )
+								)
+
+								||
+
+								// After end & start
+								(
+									( $item_end_month === $boundaries['end_month'] )
+									&&
+									( $item_end_day === $boundaries['end_day'] )
+								)
+							)
+						)
+					) {
+					$retval = true;
+				}
+			}
+		}
+
+		return (bool) $retval;
+	}
+
+	/**
 	 * Return if a datetime value is "empty" or "0000-00-00 00:00:00".
 	 *
 	 * @since 2.0.0
@@ -261,7 +576,17 @@ final class Event extends Row {
 	 * @return boolean
 	 */
 	public function is_empty_date( $datetime = '' ) {
-		return empty( $datetime ) || ( '0000-00-00 00:00:00' === $this->format_date( 'Y-m-d H:i:s', $datetime ) );
+
+		// Define the empty date
+		$value = '0000-00-00 00:00:00';
+
+		// Compare the various empties
+		$empty     = empty( $datetime );
+		$default   = ( $value === $datetime );
+		$formatted = ( $value === $this->format_date( 'Y-m-d H:i:s', $datetime ) );
+
+		// Return the conditions
+		return $empty || $default || $formatted;
 	}
 
 	/**

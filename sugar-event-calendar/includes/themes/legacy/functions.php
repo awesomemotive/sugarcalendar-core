@@ -35,7 +35,7 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 	// Boundaries
 	$view_start  = "{$year}-{$month}-01 00:00:00";
 	$month_start = mysql2date( 'U', $view_start );
-	$month_end   = strtotime( '+1 month -1second', $month_start );
+	$month_end   = strtotime( '+1 month -1 second', $month_start );
 	$view_end    = date_i18n( 'Y-m-d H:i:s', $month_end );
 
 	// Prime the events
@@ -67,7 +67,7 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 }
 
 /**
- * Return if an event belongs in a day
+ * Return if an event overlaps a day, month, and year combination
  *
  * @since 2.0.0
  *
@@ -80,262 +80,12 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
  */
 function sc_is_event_for_day( $event, $day = '01', $month = '01', $year = '1970' ) {
 
-	// Default return value
-	$retval = false;
-
 	// Make start & end
 	$start = strtotime( date( 'Y-m-d H:i:s', mktime( '00', '00', '00', $month, $day, $year ) ) );
 	$end   = strtotime( date( 'Y-m-d H:i:s', mktime( '23', '59', '59', $month, $day, $year ) ) );
 
-	// Get the current cell
-	$current_cell = array(
-		'start'         => $start,
-		'end'           => $end,
-		'start_year'    => date_i18n( 'Y', $start ),
-		'start_month'   => date_i18n( 'm', $start ),
-		'start_day'     => date_i18n( 'd', $start ),
-		'start_dow'     => date_i18n( 'w', $start ),
-		'start_doy'     => date_i18n( 'z', $start ),
-		'start_hour'    => date_i18n( 'H', $start ),
-		'start_minutes' => date_i18n( 'i', $start ),
-		'start_seconds' => date_i18n( 's', $start ),
-		'end_year'      => date_i18n( 'Y', $end ),
-		'end_month'     => date_i18n( 'm', $end ),
-		'end_day'       => date_i18n( 'd', $end ),
-		'end_dow'       => date_i18n( 'w', $end ),
-		'end_doy'       => date_i18n( 'z', $end ),
-		'end_hour'      => date_i18n( 'H', $end ),
-		'end_minutes'   => date_i18n( 'i', $end ),
-		'end_seconds'   => date_i18n( 's', $end )
-	);
-
-	$cell_start   = $current_cell['start'];
-	$cell_end     = $current_cell['end'];
-
-	// Turn datetimes to timestamps for easier comparisons
-	$item_start   = $event->start_date( 'U' );
-	$item_end     = $event->end_date( 'U' );
-	$recur_end    = $event->is_empty_date( $event->recurrence_end )
-		? strtotime( $event->recurrence_end )
-		: false;
-
-	// Break it down
-	$item_month     = $event->start_date( 'm' );
-	$item_day       = $event->start_date( 'd' );
-	$item_dow       = $event->start_date( 'w' );
-	$item_hour      = $event->start_date( 'H' );
-
-	// Break it down
-	$item_end_month = $event->end_date( 'm' );
-	$item_end_day   = $event->end_date( 'd' );
-	$item_end_dow   = $event->end_date( 'w' );
-	$item_end_hour  = $event->end_date( 'H' );
-
-	// Bail if recurring ended after cell start (inclusive of last cell)
-	if ( ! empty( $event->recurrence ) && ! empty( $recur_end ) && ( $cell_start > $recur_end ) ) {
-		return $retval;
-	}
-
-	// Boundary fits, recurring or not
-	if ( ( $item_end <= $cell_end ) && ( $item_start >= $cell_start ) ) {
-		$retval = true;
-
-	// Boundary does not fit, so must be recurring
-	} else {
-
-		// Daily recurring
-		if ( 'daily' === $event->recurrence ) {
-
-			// Month
-			if ( ( 'month' === $this->mode ) && ( $item_start <= $cell_end ) ) {
-				$retval = true;
-
-			// Week
-			} elseif ( ( 'week' === $this->mode ) && ( $item_hour <= $current_cell['end_hour' ] ) && ( $item_end_hour >= $current_cell['start_hour' ] ) ) {
-				$retval = true;
-
-			// Day
-			} elseif ( ( 'day' === $this->mode ) && ( $item_hour <= $current_cell['end_hour' ] ) && ( $item_end_hour >= $current_cell['start_hour' ] ) ) {
-				$retval = true;
-			}
-
-		// Weekly recurring
-		} elseif ( 'weekly' === $event->recurrence ) {
-			$multi = $event->is_multi( 'w' );
-
-			if (
-
-					// Same year
-					(
-						( false === $multi )
-						&&
-						(
-							// Starts before end
-							( $item_dow <= $current_cell['end_dow'] )
-
-							&&
-
-							// Ends before start
-							( $item_end_dow >= $current_cell['start_dow'] )
-
-							&&
-
-							// Same start month
-							( $item_hour <= $current_cell['end_hour'] )
-
-							&&
-
-							// Same end month
-							( $item_end_hour >= $current_cell['start_hour'] )
-						)
-					)
-
-					||
-
-					// Different years
-					(
-						( true === $multi )
-						&&
-						(
-							// Before start & end
-							(
-								( $item_dow <= $current_cell['start_dow'] )
-								&&
-								( $item_end_dow <= $current_cell['end_dow'] )
-								&&
-								( $item_hour <= $current_cell['end_hour'] )
-							)
-
-							||
-
-							// After end & start
-							(
-								( $item_dow >= $current_cell['end_dow'] )
-								&&
-								( $item_end_dow >= $current_cell['start_dow'] )
-								&&
-								( $item_end_hour >= $current_cell['end_hour'] )
-							)
-						)
-					)
-				) {
-				$retval = true;
-			}
-
-		// Monthly recurring
-		} elseif ( 'monthly' === $event->recurrence ) {
-			$multi = $event->is_multi( 'm' );
-
-			if (
-					// Same month
-					(
-						( false === $multi )
-						&&
-						(
-							// Starts before end
-							( $item_day <= $current_cell['end_day'] )
-
-							&&
-
-							// Ends before start
-							( $item_end_day >= $current_cell['start_day'] )
-						)
-					)
-
-					||
-
-					// Different months
-					(
-						( true === $multi )
-						&&
-						(
-							// Before start & end
-							(
-								( $item_day <= $current_cell['start_day'] )
-								&&
-								( $item_end_day <= $current_cell['end_day'] )
-							)
-
-							||
-
-							// After end & start
-							(
-								( $item_day >= $current_cell['end_day'] )
-								&&
-								( $item_end_day >= $current_cell['start_day'] )
-							)
-						)
-					)
-				) {
-				$retval = true;
-			}
-
-		// Yearly recurring
-		} elseif ( 'yearly' === $event->recurrence ) {
-			$multi = $event->is_multi( 'y' );
-
-			if (
-
-					// Same year
-					(
-						( false === $multi )
-						&&
-						(
-							// Starts before end
-							( $item_day <= $current_cell['end_day'] )
-
-							&&
-
-							// Ends before start
-							( $item_end_day >= $current_cell['start_day'] )
-
-							&&
-
-							// Same start month
-							( $item_month === $current_cell['start_month'] )
-
-							&&
-
-							// Same end month
-							( $item_end_month === $current_cell['end_month'] )
-						)
-					)
-
-					||
-
-					// Different years
-					(
-						( true === $multi )
-						&&
-						(
-							// Before start & end
-							(
-								( $item_day <= $current_cell['start_day'] )
-								&&
-								( $item_end_day <= $current_cell['end_day'] )
-								&&
-								( $item_month === $current_cell['start_month'] )
-							)
-
-							||
-
-							// After end & start
-							(
-								( $item_day >= $current_cell['end_day'] )
-								&&
-								( $item_end_day >= $current_cell['start_day'] )
-								&&
-								( $item_end_month === $current_cell['end_month'] )
-							)
-						)
-					)
-				) {
-				$retval = true;
-			}
-		}
-	}
-
-	return $retval;
+	// Return
+	return $event->overlaps( $start, $end );
 }
 
 /**

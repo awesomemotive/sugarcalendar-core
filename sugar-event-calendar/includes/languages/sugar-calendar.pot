@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar 2.0.0\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com/\n"
-"POT-Creation-Date: 2019-03-21 21:41:49+00:00\n"
+"POT-Creation-Date: 2019-04-10 21:11:09+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -264,7 +264,7 @@ msgid "Has Location"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/help.php:112
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1982
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1676
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-list.php:344
 #: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:377
 #: sugar-event-calendar/includes/post/functions.php:159
@@ -311,96 +311,96 @@ msgstr ""
 msgid "List"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:970
-#: sugar-event-calendar/includes/post/types.php:67
-msgid "Search Events"
-msgstr ""
-
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:971
-msgid "Search events..."
-msgstr ""
-
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1577
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1790
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1269
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1484
 msgid "(No title)"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1757
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1451
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-list.php:420
 msgid "Edit"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1762
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2674
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1456
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2438
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-list.php:471
 msgid "View"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1923
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1617
 msgid "Password required"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1957
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1965
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1973
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1994
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1997
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1651
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1659
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1667
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1688
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1691
 #: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:390
 msgid "Start"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1960
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1968
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1976
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2012
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2015
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1654
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1662
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1670
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1706
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1709
 #: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:423
 msgid "End"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1998
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2016
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1692
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1710
 msgid "%s on %s"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2028
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1722
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-list.php:213
 msgid "Repeats"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2036
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1730
 msgid "%s until %s"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2040
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1734
 msgid "%s forever"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2569
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1991
+#: sugar-event-calendar/includes/post/types.php:67
+msgid "Search Events"
+msgstr ""
+
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1992
+msgid "Search events..."
+msgstr ""
+
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2333
 msgid "Filter by %s"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2614
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2378
 msgid "Filter"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2626
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2390
 msgid "Switch to this month"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2642
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2406
 msgid "Set the day"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2654
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2418
 msgid "Set the year"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2678
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2442
 msgid "Empty Trash"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2704
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2468
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-day.php:91
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-list.php:283
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-month.php:273
@@ -408,21 +408,21 @@ msgstr ""
 msgid "Today"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2705
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2706
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2469
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2470
 #: sugar-event-calendar/includes/themes/legacy/calendar.php:188
 #: sugar-event-calendar/includes/themes/legacy/calendar.php:246
 msgid "Next"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2707
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2708
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2471
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2472
 #: sugar-event-calendar/includes/themes/legacy/calendar.php:176
 #: sugar-event-calendar/includes/themes/legacy/calendar.php:236
 msgid "Previous"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2759
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2523
 msgid "Options"
 msgstr ""
 
@@ -687,71 +687,71 @@ msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:90
 #: sugar-event-calendar/includes/admin/settings.php:965
-#: sugar-event-calendar/includes/themes/legacy/functions.php:399
-#: sugar-event-calendar/includes/themes/legacy/functions.php:583
-#: sugar-event-calendar/includes/themes/legacy/functions.php:726
-#: sugar-event-calendar/includes/themes/legacy/functions.php:874
-#: sugar-event-calendar/includes/themes/legacy/functions.php:998
+#: sugar-event-calendar/includes/themes/legacy/functions.php:149
+#: sugar-event-calendar/includes/themes/legacy/functions.php:333
+#: sugar-event-calendar/includes/themes/legacy/functions.php:476
+#: sugar-event-calendar/includes/themes/legacy/functions.php:624
+#: sugar-event-calendar/includes/themes/legacy/functions.php:748
 msgid "Sunday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:91
 #: sugar-event-calendar/includes/admin/settings.php:966
-#: sugar-event-calendar/includes/themes/legacy/functions.php:400
-#: sugar-event-calendar/includes/themes/legacy/functions.php:584
-#: sugar-event-calendar/includes/themes/legacy/functions.php:727
-#: sugar-event-calendar/includes/themes/legacy/functions.php:875
-#: sugar-event-calendar/includes/themes/legacy/functions.php:999
+#: sugar-event-calendar/includes/themes/legacy/functions.php:150
+#: sugar-event-calendar/includes/themes/legacy/functions.php:334
+#: sugar-event-calendar/includes/themes/legacy/functions.php:477
+#: sugar-event-calendar/includes/themes/legacy/functions.php:625
+#: sugar-event-calendar/includes/themes/legacy/functions.php:749
 msgid "Monday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:92
 #: sugar-event-calendar/includes/admin/settings.php:967
-#: sugar-event-calendar/includes/themes/legacy/functions.php:401
-#: sugar-event-calendar/includes/themes/legacy/functions.php:585
-#: sugar-event-calendar/includes/themes/legacy/functions.php:728
-#: sugar-event-calendar/includes/themes/legacy/functions.php:876
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1000
+#: sugar-event-calendar/includes/themes/legacy/functions.php:151
+#: sugar-event-calendar/includes/themes/legacy/functions.php:335
+#: sugar-event-calendar/includes/themes/legacy/functions.php:478
+#: sugar-event-calendar/includes/themes/legacy/functions.php:626
+#: sugar-event-calendar/includes/themes/legacy/functions.php:750
 msgid "Tuesday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:93
 #: sugar-event-calendar/includes/admin/settings.php:968
-#: sugar-event-calendar/includes/themes/legacy/functions.php:402
-#: sugar-event-calendar/includes/themes/legacy/functions.php:586
-#: sugar-event-calendar/includes/themes/legacy/functions.php:729
-#: sugar-event-calendar/includes/themes/legacy/functions.php:877
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1001
+#: sugar-event-calendar/includes/themes/legacy/functions.php:152
+#: sugar-event-calendar/includes/themes/legacy/functions.php:336
+#: sugar-event-calendar/includes/themes/legacy/functions.php:479
+#: sugar-event-calendar/includes/themes/legacy/functions.php:627
+#: sugar-event-calendar/includes/themes/legacy/functions.php:751
 msgid "Wednesday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:94
 #: sugar-event-calendar/includes/admin/settings.php:969
-#: sugar-event-calendar/includes/themes/legacy/functions.php:403
-#: sugar-event-calendar/includes/themes/legacy/functions.php:587
-#: sugar-event-calendar/includes/themes/legacy/functions.php:730
-#: sugar-event-calendar/includes/themes/legacy/functions.php:878
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1002
+#: sugar-event-calendar/includes/themes/legacy/functions.php:153
+#: sugar-event-calendar/includes/themes/legacy/functions.php:337
+#: sugar-event-calendar/includes/themes/legacy/functions.php:480
+#: sugar-event-calendar/includes/themes/legacy/functions.php:628
+#: sugar-event-calendar/includes/themes/legacy/functions.php:752
 msgid "Thursday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:95
 #: sugar-event-calendar/includes/admin/settings.php:970
-#: sugar-event-calendar/includes/themes/legacy/functions.php:404
-#: sugar-event-calendar/includes/themes/legacy/functions.php:588
-#: sugar-event-calendar/includes/themes/legacy/functions.php:731
-#: sugar-event-calendar/includes/themes/legacy/functions.php:879
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1003
+#: sugar-event-calendar/includes/themes/legacy/functions.php:154
+#: sugar-event-calendar/includes/themes/legacy/functions.php:338
+#: sugar-event-calendar/includes/themes/legacy/functions.php:481
+#: sugar-event-calendar/includes/themes/legacy/functions.php:629
+#: sugar-event-calendar/includes/themes/legacy/functions.php:753
 msgid "Friday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:96
 #: sugar-event-calendar/includes/admin/settings.php:971
-#: sugar-event-calendar/includes/themes/legacy/functions.php:405
-#: sugar-event-calendar/includes/themes/legacy/functions.php:589
-#: sugar-event-calendar/includes/themes/legacy/functions.php:732
-#: sugar-event-calendar/includes/themes/legacy/functions.php:880
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1004
+#: sugar-event-calendar/includes/themes/legacy/functions.php:155
+#: sugar-event-calendar/includes/themes/legacy/functions.php:339
+#: sugar-event-calendar/includes/themes/legacy/functions.php:482
+#: sugar-event-calendar/includes/themes/legacy/functions.php:630
+#: sugar-event-calendar/includes/themes/legacy/functions.php:754
 msgid "Saturday"
 msgstr ""
 
@@ -1223,83 +1223,83 @@ msgstr ""
 msgid "Read More"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:409
-#: sugar-event-calendar/includes/themes/legacy/functions.php:593
-#: sugar-event-calendar/includes/themes/legacy/functions.php:736
-#: sugar-event-calendar/includes/themes/legacy/functions.php:884
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1008
+#: sugar-event-calendar/includes/themes/legacy/functions.php:159
+#: sugar-event-calendar/includes/themes/legacy/functions.php:343
+#: sugar-event-calendar/includes/themes/legacy/functions.php:486
+#: sugar-event-calendar/includes/themes/legacy/functions.php:634
+#: sugar-event-calendar/includes/themes/legacy/functions.php:758
 msgid "Sun"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:410
-#: sugar-event-calendar/includes/themes/legacy/functions.php:594
-#: sugar-event-calendar/includes/themes/legacy/functions.php:737
-#: sugar-event-calendar/includes/themes/legacy/functions.php:885
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1009
+#: sugar-event-calendar/includes/themes/legacy/functions.php:160
+#: sugar-event-calendar/includes/themes/legacy/functions.php:344
+#: sugar-event-calendar/includes/themes/legacy/functions.php:487
+#: sugar-event-calendar/includes/themes/legacy/functions.php:635
+#: sugar-event-calendar/includes/themes/legacy/functions.php:759
 msgid "Mon"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:411
-#: sugar-event-calendar/includes/themes/legacy/functions.php:595
-#: sugar-event-calendar/includes/themes/legacy/functions.php:738
-#: sugar-event-calendar/includes/themes/legacy/functions.php:886
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1010
+#: sugar-event-calendar/includes/themes/legacy/functions.php:161
+#: sugar-event-calendar/includes/themes/legacy/functions.php:345
+#: sugar-event-calendar/includes/themes/legacy/functions.php:488
+#: sugar-event-calendar/includes/themes/legacy/functions.php:636
+#: sugar-event-calendar/includes/themes/legacy/functions.php:760
 msgid "Tue"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:412
-#: sugar-event-calendar/includes/themes/legacy/functions.php:596
-#: sugar-event-calendar/includes/themes/legacy/functions.php:739
-#: sugar-event-calendar/includes/themes/legacy/functions.php:887
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1011
+#: sugar-event-calendar/includes/themes/legacy/functions.php:162
+#: sugar-event-calendar/includes/themes/legacy/functions.php:346
+#: sugar-event-calendar/includes/themes/legacy/functions.php:489
+#: sugar-event-calendar/includes/themes/legacy/functions.php:637
+#: sugar-event-calendar/includes/themes/legacy/functions.php:761
 msgid "Wed"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:413
-#: sugar-event-calendar/includes/themes/legacy/functions.php:597
-#: sugar-event-calendar/includes/themes/legacy/functions.php:740
-#: sugar-event-calendar/includes/themes/legacy/functions.php:888
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1012
+#: sugar-event-calendar/includes/themes/legacy/functions.php:163
+#: sugar-event-calendar/includes/themes/legacy/functions.php:347
+#: sugar-event-calendar/includes/themes/legacy/functions.php:490
+#: sugar-event-calendar/includes/themes/legacy/functions.php:638
+#: sugar-event-calendar/includes/themes/legacy/functions.php:762
 msgid "Thr"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:414
-#: sugar-event-calendar/includes/themes/legacy/functions.php:598
-#: sugar-event-calendar/includes/themes/legacy/functions.php:741
-#: sugar-event-calendar/includes/themes/legacy/functions.php:889
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1013
+#: sugar-event-calendar/includes/themes/legacy/functions.php:164
+#: sugar-event-calendar/includes/themes/legacy/functions.php:348
+#: sugar-event-calendar/includes/themes/legacy/functions.php:491
+#: sugar-event-calendar/includes/themes/legacy/functions.php:639
+#: sugar-event-calendar/includes/themes/legacy/functions.php:763
 msgid "Fri"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:415
-#: sugar-event-calendar/includes/themes/legacy/functions.php:599
-#: sugar-event-calendar/includes/themes/legacy/functions.php:742
-#: sugar-event-calendar/includes/themes/legacy/functions.php:890
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1014
+#: sugar-event-calendar/includes/themes/legacy/functions.php:165
+#: sugar-event-calendar/includes/themes/legacy/functions.php:349
+#: sugar-event-calendar/includes/themes/legacy/functions.php:492
+#: sugar-event-calendar/includes/themes/legacy/functions.php:640
+#: sugar-event-calendar/includes/themes/legacy/functions.php:764
 msgid "Sat"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1529
+#: sugar-event-calendar/includes/themes/legacy/functions.php:1279
 msgid "Starts %s then every %s until %s"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1541
+#: sugar-event-calendar/includes/themes/legacy/functions.php:1291
 msgid "Starts %s then every month on the %s until %s"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1553
+#: sugar-event-calendar/includes/themes/legacy/functions.php:1303
 msgid "Starts %s then every year on the %s of %s until %s"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1571
+#: sugar-event-calendar/includes/themes/legacy/functions.php:1321
 msgid "Starts %s then every %s"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1582
+#: sugar-event-calendar/includes/themes/legacy/functions.php:1332
 msgid "Starts %s then every month on the %s"
 msgstr ""
 
-#: sugar-event-calendar/includes/themes/legacy/functions.php:1593
+#: sugar-event-calendar/includes/themes/legacy/functions.php:1343
 msgid "Starts %s then every year on the %s of %s"
 msgstr ""
 
@@ -1441,7 +1441,7 @@ msgstr ""
 msgid "A calendar with a sweet disposition."
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1018
+#: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:980
 msgctxt "events"
 msgid "All <span class=\"count\">(%s)</span>"
 msgid_plural "All <span class=\"count\">(%s)</span>"

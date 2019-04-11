@@ -162,7 +162,7 @@ class Week extends Base_List_Table {
 
 			// Only allow multi-day events in multi-day cells
 			case 'multi_day' :
-				if ( $item->is_all_day() ||! $item->is_multi( 'day' ) ) {
+				if ( $item->is_all_day() || ! $item->is_multi( 'day' ) ) {
 					$retval = true;
 				}
 				break;

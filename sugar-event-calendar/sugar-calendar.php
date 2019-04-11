@@ -144,7 +144,7 @@ final class Plugin {
 
 		// Plugin version.
 		if ( ! defined( 'SC_PLUGIN_VERSION' ) ) {
-			define( 'SC_PLUGIN_VERSION', '2.0.0' );
+			define( 'SC_PLUGIN_VERSION', '2.0.1' );
 		}
 
 		// Plugin Root File.
@@ -282,25 +282,6 @@ final class Plugin {
 	 * @since 2.0.0
 	 */
 	private function include_admin() {
-
-		// Plugin updater class name
-		$updater = '\\EDD_SL_Plugin_Updater';
-
-		// Maybe load updater
-		if ( ! class_exists( $updater ) ) {
-			include SC_PLUGIN_DIR . 'EDD_SL_Plugin_Updater.php';
-		}
-
-		// Setup the updater
-		if ( class_exists( $updater ) ) {
-			new \EDD_SL_Plugin_Updater( 'https://sugarcalendar.com/', __FILE__, array(
-				'license'   => trim( get_option( 'sc_license_key' ) ),
-				'version'   => SC_PLUGIN_VERSION,
-				'item_id'   => 16,
-				'author'    => 'Sandhills Development, LLC',
-				'beta'      => (bool) get_option( 'sc_beta_opt_in' )
-			) );
-		}
 
 		// Include the admin files
 		require_once SC_PLUGIN_DIR . 'includes/admin/assets.php';

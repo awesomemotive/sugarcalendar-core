@@ -381,6 +381,7 @@ class Base_List_Table extends \WP_List_Table {
 		// Set days for week
 		$this->week_days = $start + $finish;
 	}
+
 	/** Setters ***************************************************************/
 
 	/**
@@ -477,7 +478,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	protected function get_date_query_args() {
-		return sugar_calendar_get_date_query_args( $this->mode, $this->view_start, $this->view_end );
+		return sugar_calendar_get_date_query_args( $this->get_mode(), $this->view_start, $this->view_end );
 	}
 
 	/**
@@ -948,45 +949,6 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Event filter to match the styling of the Media Filter
-	 *
-	 * This methods outputs the HTML used to switch modes, search events, filter
-	 * with taxonomies
-	 *
-	 * @since 2.0.0
-	 */
-	public function event_filter() {
-		?>
-
-		<form id="events-filter" method="get">
-			<div class="wp-filter">
-				<div class="filter-items">
-					<?php echo $this->mode_picker(); ?>
-
-					<?php echo $this->extra_tablenav( 'bar' ); ?>
-				</div>
-
-				<div class="search-form">
-					<label for="event-search-input" class="screen-reader-text"><?php esc_html_e( 'Search Events', 'sugar-calendar' ); ?></label>
-					<input type="search" placeholder="<?php esc_attr_e( 'Search events...', 'sugar-calendar' ) ?>" id="event-search-input" class="search" name="s" value="<?php _admin_search_query(); ?>">
-				</div>
-
-				<input type="hidden" name="object_type" value="<?php echo esc_attr( $this->get_object_type() ); ?>" />
-				<input type="hidden" name="status" value="<?php echo esc_attr( $this->get_status() ); ?>" />
-				<input type="hidden" name="mode" value="<?php echo esc_attr( $this->get_mode() ); ?>" />
-				<input type="hidden" name="page" value="<?php echo esc_attr( $this->get_page() ); ?>" />
-				<input type="hidden" name="cd" value="<?php echo esc_attr( $this->get_day() ); ?>" />
-				<input type="hidden" name="cm" value="<?php echo esc_attr( $this->get_month() ); ?>" />
-				<input type="hidden" name="cy" value="<?php echo esc_attr( $this->get_year() ); ?>" />
-				<input type="hidden" name="order" value="<?php echo esc_attr( $this->get_order() ); ?>" />
-				<input type="hidden" name="orderby" value="<?php echo esc_attr( $this->get_orderby() ); ?>" />
-			</div>
-		</form>
-
-		<?php
-	}
-
-	/**
 	 * Get the calendar views
 	 *
 	 * @since 2.0.0
@@ -1067,37 +1029,6 @@ class Base_List_Table extends \WP_List_Table {
 		}
 
 		return $status_links;
-	}
-
-	/**
-	 * Prepare items for list-table display
-	 *
-	 * @since 2.0.0
-	 *
-	 * @uses $this->_column_headers
-	 * @uses $this->get_columns()
-	 * @uses $this->get_orderby()
-	 * @uses $this->get_order()
-	 */
-	public function prepare_items() {
-
-		// Set column headers
-		$this->_column_headers = array(
-			$this->get_columns(),
-			$this->get_hidden_columns(),
-			$this->get_sortable_columns(),
-			$this->get_primary_column_name()
-		);
-
-		// Juggle the Trash status specifically
-		$args = ( 'all' !== $this->get_status() )
-			? array( 'status'         => $this->get_status() )
-			: array( 'status__not_in' => array( 'trash' )    );
-
-		// Query for events in the view
-		$this->query = new \Sugar_Calendar\Event_Query(
-			$this->all_query_args( $args )
-		);
 	}
 
 	/**
@@ -1230,255 +1161,16 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	protected function is_item_for_cell( $item = false ) {
 
-		// Default return value
-		$retval = false;
-
 		// Bail if skipping
 		if ( $this->skip_item_in_cell( $item ) ) {
-			return $retval;
+			return false;
 		}
 
 		// Get the current cell
 		$current_cell = $this->get_current_cell();
 
-		// Bail if no boundaries
-		if ( empty( $current_cell['start'] ) || empty( $current_cell['end'] ) ) {
-			return $retval;
-		}
-
-		// Shortcuts to start & end
-		$cell_start = $current_cell['start'];
-		$cell_end   = $current_cell['end'];
-
-		// Turn datetimes to timestamps for easier comparisons
-		$item_start = $item->start_date( 'U' );
-		$item_end   = $item->end_date( 'U' );
-		$recur_end  = $item->is_empty_date( $item->recurrence_end )
-			? strtotime( $item->recurrence_end )
-			: false;
-
-		// Break it down
-		$item_month     = $item->start_date( 'm' );
-		$item_day       = $item->start_date( 'd' );
-		$item_dow       = $item->start_date( 'w' );
-		$item_hour      = $item->start_date( 'H' );
-
-		// Break it down
-		$item_end_month = $item->end_date( 'm' );
-		$item_end_day   = $item->end_date( 'd' );
-		$item_end_dow   = $item->end_date( 'w' );
-		$item_end_hour  = $item->end_date( 'H' );
-
-		// Bail if recurring ended after cell start (inclusive of last cell)
-		if ( ! empty( $item->recurrence ) && ! empty( $recur_end ) && ( $cell_start > $recur_end ) ) {
-			return $retval;
-		}
-
-		// Boundary fits inside current cell
-		if ( ( $item_end <= $cell_end ) && ( $item_start >= $cell_start ) ) {
-			$retval = true;
-
-		// Boundary fits outside current cell
-		} elseif ( ( $item_end >= $cell_start ) && ( $item_start <= $cell_end ) ) {
-			$retval = true;
-
-		// Boundary does not fit, so must be recurring
-		} elseif ( ! empty( $item->recurrence ) ) {
-
-			// Daily recurring
-			if ( 'daily' === $item->recurrence ) {
-
-				// Month
-				if ( ( 'month' === $this->mode ) && ( $item_start <= $cell_end ) ) {
-					$retval = true;
-
-				// Week
-				} elseif ( ( 'week' === $this->mode ) && ( $item_hour <= $current_cell['end_hour' ] ) && ( $item_end_hour >= $current_cell['start_hour' ] ) ) {
-					$retval = true;
-
-				// Day
-				} elseif ( ( 'day' === $this->mode ) && ( $item_hour <= $current_cell['end_hour' ] ) && ( $item_end_hour >= $current_cell['start_hour' ] ) ) {
-					$retval = true;
-				}
-
-			// Weekly recurring
-			} elseif ( 'weekly' === $item->recurrence ) {
-				$multi = $item->is_multi( 'w' );
-
-				if (
-
-						// Same year
-						(
-							( false === $multi )
-							&&
-							(
-								// Starts before end
-								( $item_dow <= $current_cell['end_dow'] )
-
-								&&
-
-								// Ends before start
-								( $item_end_dow >= $current_cell['start_dow'] )
-
-								&&
-
-								// Same start month
-								( $item_hour <= $current_cell['end_hour'] )
-
-								&&
-
-								// Same end month
-								( $item_end_hour >= $current_cell['start_hour'] )
-							)
-						)
-
-						||
-
-						// Different years
-						(
-							( true === $multi )
-							&&
-							(
-								// Before start & end
-								(
-									( $item_dow <= $current_cell['start_dow'] )
-									&&
-									( $item_end_dow <= $current_cell['end_dow'] )
-									&&
-									( $item_hour <= $current_cell['end_hour'] )
-								)
-
-								||
-
-								// After end & start
-								(
-									( $item_dow >= $current_cell['end_dow'] )
-									&&
-									( $item_end_dow >= $current_cell['start_dow'] )
-									&&
-									( $item_end_hour >= $current_cell['end_hour'] )
-								)
-							)
-						)
-					) {
-					$retval = true;
-				}
-
-			// Monthly recurring
-			} elseif ( 'monthly' === $item->recurrence ) {
-				$multi = $item->is_multi( 'm' );
-
-				if (
-						// Same month
-						(
-							( false === $multi )
-							&&
-							(
-								// Starts before end
-								( $item_day <= $current_cell['end_day'] )
-
-								&&
-
-								// Ends before start
-								( $item_end_day >= $current_cell['start_day'] )
-							)
-						)
-
-						||
-
-						// Different months
-						(
-							( true === $multi )
-							&&
-							(
-								// Before start & end
-								(
-									( $item_day <= $current_cell['start_day'] )
-									&&
-									( $item_end_day <= $current_cell['end_day'] )
-								)
-
-								||
-
-								// After end & start
-								(
-									( $item_day >= $current_cell['end_day'] )
-									&&
-									( $item_end_day >= $current_cell['start_day'] )
-								)
-							)
-						)
-					) {
-					$retval = true;
-				}
-
-			// Yearly recurring
-			} elseif ( 'yearly' === $item->recurrence ) {
-				$multi = $item->is_multi( 'y' );
-
-				if (
-
-						// Same year
-						(
-							( false === $multi )
-							&&
-							(
-								// Starts before end
-								( $item_day <= $current_cell['end_day'] )
-
-								&&
-
-								// Ends before start
-								( $item_end_day >= $current_cell['start_day'] )
-
-								&&
-
-								// Same start month
-								( $item_month === $current_cell['start_month'] )
-
-								&&
-
-								// Same end month
-								( $item_end_month === $current_cell['end_month'] )
-							)
-						)
-
-						||
-
-						// Different years
-						(
-							( true === $multi )
-							&&
-							(
-								// Before start & end
-								(
-									( $item_day <= $current_cell['start_day'] )
-									&&
-									( $item_end_day <= $current_cell['end_day'] )
-									&&
-									( $item_month === $current_cell['start_month'] )
-								)
-
-								||
-
-								// After end & start
-								(
-									( $item_day >= $current_cell['end_day'] )
-									&&
-									( $item_end_day >= $current_cell['start_day'] )
-									&&
-									( $item_end_month === $current_cell['end_month'] )
-								)
-							)
-						)
-					) {
-					$retval = true;
-				}
-			}
-		}
-
 		// Return if event belongs in cell
-		return (bool) $retval;
+		return $item->overlaps( $current_cell['start'], $current_cell['end'], $this->get_mode() );
 	}
 
 	/**
@@ -1658,6 +1350,7 @@ class Base_List_Table extends \WP_List_Table {
 			$r['start_day']     = date_i18n( 'd', $r['start'] );
 			$r['start_dow']     = date_i18n( 'w', $r['start'] );
 			$r['start_doy']     = date_i18n( 'z', $r['start'] );
+			$r['start_woy']     = date_i18n( 'W', $r['start'] );
 			$r['start_hour']    = date_i18n( 'H', $r['start'] );
 			$r['start_minutes'] = date_i18n( 'i', $r['start'] );
 			$r['start_seconds'] = date_i18n( 's', $r['start'] );
@@ -1670,6 +1363,7 @@ class Base_List_Table extends \WP_List_Table {
 			$r['end_day']       = date_i18n( 'd', $r['end'] );
 			$r['end_dow']       = date_i18n( 'w', $r['end'] );
 			$r['end_doy']       = date_i18n( 'z', $r['end'] );
+			$r['end_woy']       = date_i18n( 'W', $r['end'] );
 			$r['end_hour']      = date_i18n( 'H', $r['end'] );
 			$r['end_minutes']   = date_i18n( 'i', $r['end'] );
 			$r['end_seconds']   = date_i18n( 's', $r['end'] );
@@ -2032,7 +1726,7 @@ class Base_List_Table extends \WP_List_Table {
 					$pointer_metadata[] = $intervals[ $event->recurrence ];
 
 				// Recurrence ends
-				} elseif ( $event->is_empty_date( $event->recurrence_end ) ) {
+				} elseif ( ! $event->is_empty_date( $event->recurrence_end ) ) {
 					$pointer_metadata[] = sprintf( esc_html__( '%s until %s', 'sugar-calendar' ), $intervals[ $event->recurrence ], $this->get_event_date( $event->recurrence_end ) );
 
 				// Recurrence goes forever
@@ -2242,6 +1936,76 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/** Output & Markup *******************************************************/
+
+	/**
+	 * Prepare items for list-table display
+	 *
+	 * @since 2.0.0
+	 *
+	 * @uses $this->_column_headers
+	 * @uses $this->get_columns()
+	 * @uses $this->get_orderby()
+	 * @uses $this->get_order()
+	 */
+	public function prepare_items() {
+
+		// Set column headers
+		$this->_column_headers = array(
+			$this->get_columns(),
+			$this->get_hidden_columns(),
+			$this->get_sortable_columns(),
+			$this->get_primary_column_name()
+		);
+
+		// Juggle the Trash status specifically
+		$args = ( 'all' !== $this->get_status() )
+			? array( 'status'         => $this->get_status() )
+			: array( 'status__not_in' => array( 'trash' )    );
+
+		// Query for events in the view
+		$this->query = new \Sugar_Calendar\Event_Query(
+			$this->all_query_args( $args )
+		);
+	}
+
+	/**
+	 * Event filter to match the styling of the Media Filter
+	 *
+	 * This methods outputs the HTML used to switch modes, search events, filter
+	 * with taxonomies
+	 *
+	 * @since 2.0.0
+	 */
+	public function event_filter() {
+		?>
+
+		<form id="events-filter" method="get">
+			<div class="wp-filter">
+				<div class="filter-items">
+					<?php echo $this->mode_picker(); ?>
+
+					<?php echo $this->extra_tablenav( 'bar' ); ?>
+				</div>
+
+				<div class="search-form">
+					<label for="event-search-input" class="screen-reader-text"><?php esc_html_e( 'Search Events', 'sugar-calendar' ); ?></label>
+					<input type="search" placeholder="<?php esc_attr_e( 'Search events...', 'sugar-calendar' ) ?>" id="event-search-input" class="search" name="s" value="<?php _admin_search_query(); ?>">
+				</div>
+
+				<input type="hidden" name="object_type" value="<?php echo esc_attr( $this->get_object_type() ); ?>" />
+				<input type="hidden" name="status" value="<?php echo esc_attr( $this->get_status() ); ?>" />
+				<input type="hidden" name="mode" value="<?php echo esc_attr( $this->get_mode() ); ?>" />
+				<input type="hidden" name="page" value="<?php echo esc_attr( $this->get_page() ); ?>" />
+				<input type="hidden" name="cd" value="<?php echo esc_attr( $this->get_day() ); ?>" />
+				<input type="hidden" name="cm" value="<?php echo esc_attr( $this->get_month() ); ?>" />
+				<input type="hidden" name="cy" value="<?php echo esc_attr( $this->get_year() ); ?>" />
+				<input type="hidden" name="order" value="<?php echo esc_attr( $this->get_order() ); ?>" />
+				<input type="hidden" name="orderby" value="<?php echo esc_attr( $this->get_orderby() ); ?>" />
+			</div>
+		</form>
+
+		<?php
+	}
 
 	/**
 	 * Display the table
@@ -2481,7 +2245,7 @@ class Base_List_Table extends \WP_List_Table {
 		}
 
 		// Day offset
-		$offset = ( $this->mode === 'month' )
+		$offset = ( $this->get_mode() === 'month' )
 			? $this->get_current_cell( 'offset' ) + 1
 			: 0;
 

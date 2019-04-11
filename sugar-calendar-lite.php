@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: Sugar Calendar
+ * Plugin Name: Sugar Calendar (Lite)
  * Plugin URI:  https://sugarcalendar.com
  * Description: A calendar with a sweet disposition.
  * Author:      Sandhills Development, LLC
  * Author URI:  https://sandhillsdev.com
- * Version:     2.0.0
+ * Version:     2.0.1
  * Text Domain: sugar-calendar
  * Domain Path: /sugar-event-calendar/includes/languages/
  */

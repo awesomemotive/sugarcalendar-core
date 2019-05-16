@@ -87,7 +87,7 @@ class Week extends Base_List_Table {
 
 			// Setup return value
 			$retval = array(
-				'hour' => sprintf( esc_html__( 'Wk. %s', 'sugar-calendar' ), date_i18n( 'W', $this->today ) )
+				'hour' => sprintf( esc_html_x( 'Wk. %s', 'Week number', 'sugar-calendar' ), date_i18n( 'W', $this->today ) )
 			);
 
 			// PHP day => day ID

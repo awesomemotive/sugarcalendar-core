@@ -6,7 +6,7 @@ Plugin URI: https://sugarcalendar.com
 Tags: event calendar, events, simple, events calendar, calendar, Pippin Williamson, Pippin's Plugins
 Requires at least: 5.0
 Tested up to: 5.1
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 
 A sweet, simple event calendar plugin. Create your events and show them on a simple calendar. That's it.
 
@@ -77,9 +77,16 @@ I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-cal
 
 == Changelog ==
 
-= Development =
+= 2.0.1 =
 
-* New features from Standard!
+May 10, 2019
+
+* Fixed: Admin notices on certain screens
+* Fixed: Widget filters not working on archive pages
+* Fixed: Database query actions not working as expected
+* Fixed: Trashed events being displayed in widgets
+* Fixed: Event archive showing details multiple times
+* Added: Context to some strings to improved internationalization
 
 = 2.0.1 =
 
@@ -106,39 +113,39 @@ March 21, 2019
 
 = 1.6.8 =
 
-* Added categories taxonomy (from Standard)
-* Added widgets (from Standard)
-* Added end-time (from Standard)
-* Added settings page (from Standard)
-* Added feed support (from Standard)
-* Added license key & beta opt-in (from Standard)
-* Minor tweaks to plugin naming & verbiage
-* Updated sc_before_event_content action  and sc_after_event_content action to run on archive pages as well as singular event pages.
+* Added: categories taxonomy (from Standard)
+* Added: widgets (from Standard)
+* Added: end-time (from Standard)
+* Added: settings page (from Standard)
+* Added: feed support (from Standard)
+* Added: license key & beta opt-in (from Standard)
+* Minor: tweaks to plugin naming & verbiage
+* Updated: sc_before_event_content action  and sc_after_event_content action to run on archive pages as well as singular event pages.
 
 = 1.0.5 =
 
-* Fixed an incorrect variable name
-* Added Spanish translation files
+* Fixed: an incorrect variable name
+* Added: Spanish translation files
 
 = 1.0.4 =
 
-* Replaced the dashboard menu with a dashicon, props Devin Walker
+* Replaced: the dashboard menu with a dashicon, props Devin Walker
 
 = 1.0.3 =
 
-* Fixed a bug with Week Start Day being set to Monday
+* Fixed: a bug with Week Start Day being set to Monday
 
 = 1.0.2 =
 
-* Fixed a bug with the Year/Month drop down
-* Fixed an undefined index error
+* Fixed: a bug with the Year/Month drop down
+* Fixed: an undefined index error
 
 = 1.0.1 =
 
-* Fixed a display issue with some months
-* Fixed a javascript error
-* Fixed an issue with child elements when loading the calendar via ajax
+* Fixed: a display issue with some months
+* Fixed: a javascript error
+* Fixed: an issue with child elements when loading the calendar via ajax
 
 = 1.0 =
 
-First release of lite version.
+First release of lite version

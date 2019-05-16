@@ -6,6 +6,13 @@
  * @package Plugins/Site/Events/Admin
  */
 
+/**
+ * @todo
+ *
+ * Namespace all of these functions to Sugar_Calendar\Admin\General before
+ * everyone starts using them in add-ons.
+ */
+
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
@@ -48,7 +55,38 @@ function sugar_calendar_is_admin() {
 
 		||
 
-		// Or if the Sugar Calendar page
+		// Or if Events pages
+		sugar_calendar_get_admin_page_id() === $screen->id
+
+		||
+
+		// Or if Settings pages
+		\Sugar_Calendar\Admin\Settings\in()
+	) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Is this an admin area page used for displaying or interacting with Events?
+ *
+ * @since 2.0.2
+ *
+ * @return boolean
+ */
+function sugar_calendar_admin_is_events_page() {
+	$screen = get_current_screen();
+
+	if (
+
+		// Add if the event post type
+		post_type_supports( $screen->post_type, 'events' )
+
+		||
+
+		// Or if Events pages
 		sugar_calendar_get_admin_page_id() === $screen->id
 	) {
 		return true;

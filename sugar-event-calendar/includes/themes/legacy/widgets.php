@@ -250,47 +250,46 @@ class sc_events_list_widget extends WP_Widget
 			</select>
 		</p>
 		<p>
-			<input class="widefat" id="<?php
-			echo $this->get_field_id('number'); ?>" style="width: 40px;"
-						 name="<?php
-			echo $this->get_field_name('number'); ?>" type="text" value="<?php
+			<input class="widefat" type="text" id="<?php
+			echo $this->get_field_id('number'); ?>" style="width: 40px;" name="<?php
+			echo $this->get_field_name('number'); ?>" value="<?php
 			echo $number; ?>">
 				<label for="<?php
 			echo $this->get_field_id('number'); ?>"><?php
 			_e('Number to show', 'sugar-calendar'); ?></label>
 		</p>
 		<p>
-			<input class="checkbox" id="<?php
+			<input class="checkbox" type="checkbox" id="<?php
 			echo $this->get_field_id('show_title'); ?>" name="<?php
-			echo $this->get_field_name('show_title'); ?>" type="checkbox" <?php
+			echo $this->get_field_name('show_title'); ?>" <?php
 			echo checked( $show_title, 1 ); ?>">
 			<label for="<?php
 			echo $this->get_field_id('show_title'); ?>"><?php
 				_e('Show widget title', 'sugar-calendar'); ?></label>
 		</p>
 		<p>
-			<input class="checkbox" id="<?php
+			<input class="checkbox" type="checkbox" id="<?php
 			echo $this->get_field_id('show_date'); ?>" name="<?php
-			echo $this->get_field_name('show_date'); ?>" type="checkbox" <?php
-			echo checked( $show_date, 1 ); ?>">
+			echo $this->get_field_name('show_date'); ?>" <?php
+			echo checked( $show_date, 1 ); ?>>
 			<label for="<?php
 			echo $this->get_field_id('show_date'); ?>"><?php
-				_e('Show date', 'sugar-calendar'); ?></label>
+				_ex('Show event dates', 'Start & end if available', 'sugar-calendar'); ?></label>
 		</p>
 		<p>
-			<input class="checkbox" id="<?php
+			<input class="checkbox" type="checkbox" id="<?php
 			echo $this->get_field_id('show_time'); ?>" name="<?php
-			echo $this->get_field_name('show_time'); ?>" type="checkbox" <?php
-			echo checked( $show_time, 1 ); ?>">
+			echo $this->get_field_name('show_time'); ?>" <?php
+			echo checked( $show_time, 1 ); ?>>
 			<label for="<?php
 			echo $this->get_field_id('show_time'); ?>"><?php
-				_e('Show event time', 'sugar-calendar'); ?></label>
+				_ex('Show event times', 'Start & end if available', 'sugar-calendar'); ?></label>
 		</p>
 		<p>
-			<input class="checkbox" id="<?php
+			<input class="checkbox" type="checkbox" id="<?php
 			echo $this->get_field_id('show_categories'); ?>" name="<?php
-			echo $this->get_field_name('show_categories'); ?>" type="checkbox" <?php
-			echo checked( $show_categories, 1 ); ?>">
+			echo $this->get_field_name('show_categories'); ?>" <?php
+			echo checked( $show_categories, 1 ); ?>>
 			<label for="<?php
 			echo $this->get_field_id('show_categories'); ?>"><?php
 				_e('Show event categories', 'sugar-calendar'); ?></label>

@@ -69,7 +69,7 @@ class Day extends Base_List_Table {
 
 		// Return Week & Day
 		return array(
-			'hour' => sprintf( esc_html__( 'Wk. %s', 'sugar-calendar' ), date_i18n( 'W', $this->today ) ),
+			'hour' => sprintf( esc_html_x( 'Wk. %s', 'Week number', 'sugar-calendar' ), date_i18n( 'W', $this->today ) ),
 			$day   => date_i18n( 'l, F j, Y', $this->grid_start ),
 		);
 	}

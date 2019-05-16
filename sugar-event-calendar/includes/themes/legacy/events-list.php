@@ -45,6 +45,7 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 	if ( 'upcoming' === $display ) {
 		$args = array(
 			'object_type' => 'post',
+			'status'      => 'publish',
 			'orderby'     => 'start',
 			'order'       => $order,
 			'number'      => $number,
@@ -58,6 +59,7 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 	} elseif ( 'past' === $display ) {
 		$args = array(
 			'object_type' => 'post',
+			'status'      => 'publish',
 			'orderby'     => 'start',
 			'order'       => $order,
 			'number'      => $number,
@@ -71,6 +73,7 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 	} else {
 		$args = array(
 			'object_type' => 'post',
+			'status'      => 'publish',
 			'orderby'     => 'start',
 			'order'       => $order,
 			'number'      => $number

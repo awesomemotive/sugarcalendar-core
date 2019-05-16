@@ -87,7 +87,7 @@ function fix_menu_highlight() {
 	global $parent_file, $submenu_file, $pagenow;
 
 	// Highlight both, since they're the same thing.
-	if ( sugar_calendar_is_admin() ) {
+	if ( sugar_calendar_admin_is_events_page() ) {
 
 		// Always set the parent file to the main menu
 		$parent_file  = 'sugar-calendar';
@@ -174,7 +174,7 @@ function calendar_page() {
 function body_class( $class = '' ) {
 
 	// Add class if in an admin page
-	if ( sugar_calendar_is_admin() ) {
+	if ( sugar_calendar_admin_is_events_page() ) {
 		$class .= 'sugar-calendar';
 	}
 

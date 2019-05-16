@@ -71,13 +71,13 @@ function updated_messages( $messages = array() ) {
 	);
 
 	// Scheduled
-	$scheduled_date = date_i18n( __( 'M j, Y @ H:i', 'sugar-calendar' ), strtotime( $post->post_date ) );
+	$scheduled_date = date_i18n( esc_html_x( 'M j, Y @ H:i', 'Date formatting', 'sugar-calendar' ), strtotime( $post->post_date ) );
 
 	// Add post type to messages array
 	$messages[ sugar_calendar_get_event_post_type_id() ] = array(
 		0  => '', // Unused. Messages start at index 1.
 		1  => esc_html__( 'Event updated.',   'sugar-calendar' ) . $view_post_link_html,
-		4  => esc_html__( 'EVent updated.',   'sugar-calendar' ),
+		4  => esc_html__( 'Event updated.',   'sugar-calendar' ),
 		5  => isset( $_GET['revision'] )
 			? sprintf( esc_html__( 'Event restored to revision from %s.', 'sugar-calendar' ), wp_post_revision_title( (int) $_GET['revision'], false ) )
 			: false,

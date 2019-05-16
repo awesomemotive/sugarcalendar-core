@@ -50,7 +50,7 @@ class Box {
 	 * @since 2.0.0
 	 */
 	public function __construct() {
-		$this->setup_default_sections();
+
 	}
 
 	/**
@@ -60,22 +60,23 @@ class Box {
 	 *
 	 * @param WP_Post $post
 	 */
-	public function setup( $post = null ) {
+	public function setup_post( $post = null ) {
 		$this->event = $this->get_post_event_data( $post );
 	}
 
 	/**
 	 * Setup default sections
 	 *
-	 * @since 2.0.0
+	 * @since 2.0.3
 	 */
-	public function setup_default_sections() {
+	public function setup_sections() {
 
 		// Duration
 		$this->add_section( array(
 			'id'       => 'duration',
 			'label'    => esc_html__( 'Duration', 'sugar-calendar' ),
 			'icon'     => 'clock',
+			'order'    => 10,
 			'callback' => array( $this, 'section_duration' )
 		) );
 
@@ -84,8 +85,12 @@ class Box {
 			'id'       => 'location',
 			'label'    => esc_html__( 'Location', 'sugar-calendar' ),
 			'icon'     => 'location',
+			'order'    => 80,
 			'callback' => array( $this, 'section_location' )
 		) );
+
+		// Allow actions to add sections
+		do_action( 'sugar_calendar_admin_meta_box_setup_sections', $this );
 	}
 
 	/**
@@ -100,8 +105,12 @@ class Box {
 			'id'       => '',
 			'label'    => '',
 			'icon'     => 'admin-settings',
+			'order'    => 50,
 			'callback' => ''
 		) );
+
+		// Resort by order
+		$this->sections = wp_list_sort( $this->sections, 'order', 'ASC' );
 	}
 
 	/**
@@ -439,73 +448,6 @@ class Box {
 								<option value="pm" <?php selected( $end_am_pm, 'pm' ); ?>><?php esc_html_e( 'PM', 'sugar-calendar' ); ?></option>
 							</select>
 						</div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<?php
-
-		echo ob_get_clean();
-	}
-
-	/**
-	 * Output the event recurrence meta-box
-	 *
-	 * @since  0.2.3
-	 *
-	 * @param Event $event
-	*/
-	public function section_recurrence( $event = null ) {
-
-		// Interval
-		$interval = ! empty( $event->recurrence )
-			? $event->recurrence
-			: '';
-
-		// Expiration
-		$expire = ! empty( $event->recurrence_end ) && ( '0000-00-00 00:00:00' !== $event->recurrence_end )
-			? date( 'Y-m-d', strtotime( $event->recurrence_end ) )
-			: '';
-
-		// Filter the intervals
-		$options = sugar_calendar_get_recurrence_types();
-
-		// Start an output buffer
-		ob_start(); ?>
-
-		<table class="form-table rowfat">
-			<tbody>
-				<tr>
-					<th>
-						<label for="recurrence"><?php esc_html_e( 'Repeat', 'sugar-calendar' ); ?></label>
-					</th>
-
-					<td>
-						<select name="recurrence" id="recurrence" class="recurrence sc-select-chosen">
-							<option value="0" <?php selected( 0, $interval ); ?>><?php echo esc_html__( 'Never', 'sugar-calendar' ); ?></option>
-
-							<?php foreach ( $options as $key => $option ) : ?>
-
-								<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $key, $interval ); ?>><?php echo esc_html( $option ); ?></option>
-
-							<?php endforeach; ?>
-
-						</select>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<table class="form-table rowfat repeat-until">
-			<tbody>
-				<tr>
-					<th>
-						<label for="recurrence_end"><?php esc_html_e( 'End Repeat', 'sugar-calendar' ); ?></label>
-					</th>
-
-					<td>
-						<input type="text" class="sugar_calendar_datepicker" name="recurrence_end" id="recurrence_end" value="<?php echo esc_attr( $expire ); ?>" placeholder="<?php esc_html_e( 'Never', 'sugar-calendar' ); ?>" <?php disabled( empty( $interval ) ); ?> />
 					</td>
 				</tr>
 			</tbody>

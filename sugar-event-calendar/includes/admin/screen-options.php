@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
 function add() {
 
 	// Bail if not primary post type screen
-	if ( ! sugar_calendar_is_admin() ) {
+	if ( ! sugar_calendar_admin_is_events_page() ) {
 		return;
 	}
 

@@ -959,7 +959,7 @@ class Date_Query extends Base {
 		$datetime = array_map( 'absint', $datetime );
 
 		if ( ! isset( $datetime['year'] ) ) {
-			$datetime['year'] = gmdate( 'Y', $now );
+			$datetime['year'] = date( 'Y', $now );
 		}
 
 		if ( ! isset( $datetime['month'] ) ) {

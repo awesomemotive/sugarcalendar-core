@@ -24,12 +24,6 @@ add_action( 'admin_notices', __NAMESPACE__ . '\\Upgrades\\notices' );
 // Admin Settings
 add_action( 'admin_menu', __NAMESPACE__ . '\\Settings\\menu'               );
 add_action( 'admin_init', __NAMESPACE__ . '\\Settings\\register_settings'  );
-add_action( 'admin_init', __NAMESPACE__ . '\\Settings\\activate_license'   );
-add_action( 'admin_init', __NAMESPACE__ . '\\Settings\\deactivate_license' );
-add_action( 'admin_init', __NAMESPACE__ . '\\Settings\\check_license'      );
-
-// AJAX license verify
-add_action( 'wp_ajax_sc_license_verify', __NAMESPACE__ . '\\Settings\\ajax_verify' );
 
 // Admin meta box
 add_action( 'add_meta_boxes',          __NAMESPACE__ . '\\Editor\\Meta\\add'          );

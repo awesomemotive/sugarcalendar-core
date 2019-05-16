@@ -981,7 +981,7 @@ class Base_List_Table extends \WP_List_Table {
 				'All <span class="count">(%s)</span>',
 				'All <span class="count">(%s)</span>',
 				$event_counts['total'],
-				'events',
+				'List table: all statuses (excluding trash)',
 				'sugar-calendar'
 			),
 			number_format_i18n( $event_counts['total'] )
@@ -1453,7 +1453,7 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Add view link
 		if ( $this->current_user_can_view( $event ) )  {
-			$view_link = '<span class="action event-view">' . $this->get_event_view_link( $event, esc_html__( 'View', 'sugar-calendar' ) ) . '</span>';
+			$view_link = '<span class="action event-view">' . $this->get_event_view_link( $event, esc_html_x( 'View', 'verb', 'sugar-calendar' ) ) . '</span>';
 		}
 
 		// Setup actions
@@ -1689,7 +1689,7 @@ class Base_List_Table extends \WP_List_Table {
 					$pointer_metadata[] = $this->get_event_date( $event->start );
 				} else {
 					$pointer_metadata[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_metadata[] = sprintf( esc_html__( '%s on %s', 'sugar-calendar' ), $this->get_event_time( $event->start ), $GLOBALS['wp_locale']->get_weekday( $event->start_date( 'w' ) ) );
+					$pointer_metadata[] = sprintf( esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ), $this->get_event_time( $event->start ), $GLOBALS['wp_locale']->get_weekday( $event->start_date( 'w' ) ) );
 				}
 			}
 
@@ -1707,7 +1707,7 @@ class Base_List_Table extends \WP_List_Table {
 					$pointer_metadata[] = $this->get_event_date( $event->end );
 				} else {
 					$pointer_metadata[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_metadata[] = sprintf( esc_html__( '%s on %s', 'sugar-calendar' ), $this->get_event_time( $event->end ), $GLOBALS['wp_locale']->get_weekday( $event->end_date( 'w' ) ) );
+					$pointer_metadata[] = sprintf( esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ), $this->get_event_time( $event->end ), $GLOBALS['wp_locale']->get_weekday( $event->end_date( 'w' ) ) );
 				}
 			}
 		}
@@ -1719,7 +1719,7 @@ class Base_List_Table extends \WP_List_Table {
 			// Interval is known
 			if ( isset( $intervals[ $event->recurrence ] ) ) {
 				$pointer_metadata[] = '';
-				$pointer_metadata[] = '<strong>' . esc_html__( 'Repeats', 'sugar-calendar' ) . '</strong>';
+				$pointer_metadata[] = '<strong>' . esc_html_x( 'Repeats', 'Noun', 'sugar-calendar' ) . '</strong>';
 
 				// No end
 				if ( empty( $event->recurrence_end ) ) {
@@ -1727,11 +1727,11 @@ class Base_List_Table extends \WP_List_Table {
 
 				// Recurrence ends
 				} elseif ( ! $event->is_empty_date( $event->recurrence_end ) ) {
-					$pointer_metadata[] = sprintf( esc_html__( '%s until %s', 'sugar-calendar' ), $intervals[ $event->recurrence ], $this->get_event_date( $event->recurrence_end ) );
+					$pointer_metadata[] = sprintf( esc_html_x( '%s until %s', 'Weekly until December 31, 2030', 'sugar-calendar' ), $intervals[ $event->recurrence ], $this->get_event_date( $event->recurrence_end ) );
 
 				// Recurrence goes forever
 				} else {
-					$pointer_metadata[] = sprintf( esc_html__( '%s forever', 'sugar-calendar' ), $intervals[ $event->recurrence ] );
+					$pointer_metadata[] = sprintf( esc_html_x( '%s forever', 'Weekly forever', 'sugar-calendar' ), $intervals[ $event->recurrence ] );
 				}
 			}
 		}
@@ -2375,7 +2375,7 @@ class Base_List_Table extends \WP_List_Table {
 				echo $drop; ?>
 
 				<div class="actions">
-					<input type="submit" name="filter_action" id="post-query-submit" class="button" value="<?php esc_html_e( 'Filter', 'sugar-calendar' ); ?>">
+					<input type="submit" name="filter_action" id="post-query-submit" class="button" value="<?php echo esc_html_x( 'Filter', 'Verb', 'sugar-calendar' ); ?>">
 				</div>
 
 				<?php
@@ -2435,7 +2435,7 @@ class Base_List_Table extends \WP_List_Table {
 			endif;
 
 			// Output the "View" button
-			submit_button( esc_html__( 'View', 'sugar-calendar' ), 'action', '', false, array( 'id' => 'doaction' ) );
+			submit_button( esc_html_x( 'View', 'verb', 'sugar-calendar' ), 'action', '', false, array( 'id' => 'doaction' ) );
 
 			// Maybe output an "Empty Trash" button
 			if ( ( 'trash' === $this->get_status() ) && current_user_can( get_post_type_object( $this->get_primary_post_type() )->cap->edit_others_posts ) && $this->has_items() ) :
@@ -2465,15 +2465,15 @@ class Base_List_Table extends \WP_List_Table {
 			'small'  => '1 month',
 			'large'  => '1 year',
 			'labels' => array(
-				'today'      => esc_html__( 'Today',    'sugar-calendar' ),
-				'next_small' => esc_html__( 'Next',     'sugar-calendar' ),
-				'next_large' => esc_html__( 'Next',     'sugar-calendar' ),
-				'prev_small' => esc_html__( 'Previous', 'sugar-calendar' ),
-				'prev_large' => esc_html__( 'Previous', 'sugar-calendar' )
+				'today'      => esc_html__( 'Today',          'sugar-calendar' ),
+				'next_small' => esc_html__( 'Next month',     'sugar-calendar' ),
+				'next_large' => esc_html__( 'Next year',      'sugar-calendar' ),
+				'prev_small' => esc_html__( 'Previous month', 'sugar-calendar' ),
+				'prev_large' => esc_html__( 'Previous year',  'sugar-calendar' )
 			)
 		) );
 
-		// No botton pagination
+		// Bail if not top (no bottom pagination)
 		if ( 'top' !== $r['which'] ) {
 			return;
 		}

@@ -19,35 +19,68 @@ defined( 'ABSPATH' ) || exit;
  * @return      $content string the content with any additional data attached
  */
 function sc_event_content_hooks( $content = '' ) {
-	global $post;
 
-	if ( is_singular( 'sc_event' ) || is_post_type_archive( 'sc_event' ) || is_tax( 'sc_event_category' ) && is_main_query() ) {
-		ob_start();
-		do_action( 'sc_before_event_content', $post->ID );
-		echo $content;
-		do_action( 'sc_after_event_content', $post->ID );
-		$content = ob_get_clean();
+	// Bail if not in the main query loop
+	if ( ! ( is_main_query() && in_the_loop() ) ) {
+		return $content;
 	}
 
-	return $content;
-}
+	// Bail if recursing
+	if ( doing_filter( 'get_the_excerpt' ) && doing_filter( 'the_content' ) ) {
+		return $content;
+	}
 
-function sc_add_event_details( $event_id ) {
+	// Bail if not single event, event archive, or calendar archive
+	if ( ! ( is_singular( 'sc_event' ) || is_post_type_archive( 'sc_event' ) || is_tax( 'sc_event_category' ) ) ) {
+		return $content;
+	}
+
+	// Get the global post
+	$post_id = get_the_ID();
+
+	// Bail if no post ID
+	if ( empty( $post_id ) ) {
+		return $content;
+	}
+
+	// Start an output buffer
 	ob_start();
 
+	// Before content
+	do_action( 'sc_before_event_content', $post_id );
+
+	// Output the original content
+	echo $content;
+
+	// After content
+	do_action( 'sc_after_event_content', $post_id );
+
+	// Return the current output buffer
+	return ob_get_clean();
+}
+
+/**
+ * Output event details before a specific post ID.
+ *
+ * @since 1.0
+ *
+ * @param int $post_id Post ID
+ */
+function sc_add_event_details( $post_id ) {
+
 	// Support 1.x
-	$start_date = sc_get_event_date( $event_id );
-	$start_time = sc_get_event_start_time( $event_id );
-	$end_time   = sc_get_event_end_time( $event_id );
+	$start_date = sc_get_event_date( $post_id );
+	$start_time = sc_get_event_start_time( $post_id );
+	$end_time   = sc_get_event_end_time( $post_id );
 
 	// New in 2.0
-	$location   = sugar_calendar_get_event_by_object( $event_id, 'post' )->location; ?>
+	$location   = sugar_calendar_get_event_by_object( $post_id, 'post' )->location; ?>
 
-	<div class="sc_event_details" id="sc_event_details_<?php echo $event_id; ?>">
+	<div class="sc_event_details" id="sc_event_details_<?php echo $post_id; ?>">
 		<div class="sc_event_details_inner">
-			<?php if ( sc_is_recurring( $event_id ) ) : ?>
+			<?php if ( sc_is_recurring( $post_id ) ) : ?>
 
-				<div class="sc_event_date"><?php sc_show_single_recurring_date( $event_id ); ?></div>
+				<div class="sc_event_date"><?php sc_show_single_recurring_date( $post_id ); ?></div>
 
 			<?php else : ?>
 
@@ -81,5 +114,4 @@ function sc_add_event_details( $event_id ) {
 	</div><!--end .sc_event_details-->
 
 	<?php
-	echo ob_get_clean();
 }

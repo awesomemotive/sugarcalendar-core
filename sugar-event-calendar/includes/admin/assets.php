@@ -95,16 +95,18 @@ function enqueue() {
 
 	// Menu styling
 	wp_enqueue_style( 'sugar_calendar_admin_menu'     );
-	wp_enqueue_style( 'sugar_calendar_admin_settings' );
 
 	// Nav styling
 	wp_enqueue_style( 'sugar_calendar_admin_nav' );
 
-	// Settings
-	wp_enqueue_script( 'sugar_calendar_admin_settings' );
+	// Settings Pages
+	if ( \Sugar_Calendar\Admin\Settings\in() ) {
+		wp_enqueue_style( 'sugar_calendar_admin_settings' );
+		wp_enqueue_script( 'sugar_calendar_admin_settings' );
+	}
 
-	// Bail if not an event post type
-	if ( sugar_calendar_is_admin() ) {
+	// Events Pages
+	if ( sugar_calendar_admin_is_events_page() ) {
 
 		// General
 		wp_enqueue_script( 'sugar_calendar_admin_general' );

@@ -3,8 +3,7 @@ jQuery( document ).ready( function( $ ) {
 	'use strict';
 
 	// Get license key elements (for togglin')
-	var toggle     = $( 'button.sc-license-toggle' ),
-		license    = $( 'input.sc-license-key' ),
+	var license    = $( 'input.sc-license-key' ),
 		verify     = $( '.sc-license-verify' ),
 		deactivate = $( '.sc-license-deactivate' ),
 		refresh    = $( '.sc-license-refresh' ),
@@ -12,7 +11,7 @@ jQuery( document ).ready( function( $ ) {
 		bubbles    = $( '.sc-settings-bubble' ),
 		feedback   = $( '.sc-license-feedback span' );
 
-	//
+	// License key changes
 	license.on( 'input', function( e ) {
 
 		// Get the data attributes
@@ -34,7 +33,7 @@ jQuery( document ).ready( function( $ ) {
 			feedback.html( sc_vars.feedback_empty );
 		}
 
-		// Empty
+		// Not empty
 		function not_empty() {
 			status.removeClass( 'valid invalid empty verifying' );
 			status.addClass( 'empty' );
@@ -46,8 +45,10 @@ jQuery( document ).ready( function( $ ) {
 			refresh.hide();
 		}
 
+		// Trim spaces
 		var license_key = license.val().trim();
 
+		// Decide which to call based on trimmed length
 		if ( ! license_key.length ) {
 			empty();
 		} else {
@@ -56,10 +57,11 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	/**
+	 * Checking based on clicks
+	 *
 	 * @since 2.0.0
 	 *
 	 * @param {string} method
-	 * @returns {undefined}
 	 */
 	function click( method = 'activate' ) {
 

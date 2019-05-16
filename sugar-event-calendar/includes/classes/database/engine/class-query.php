@@ -125,6 +125,14 @@ class Query extends Base {
 	 */
 	protected $cache_group = '';
 
+	/**
+	 * The last updated time.
+	 *
+	 * @since 3.0
+	 * @var   int
+	 */
+	protected $last_changed = 0;
+
 	/** Columns ***************************************************************/
 
 	/**
@@ -183,16 +191,24 @@ class Query extends Base {
 	 */
 	protected $date_query = false;
 
+	/** Query Variables *******************************************************/
+
 	/**
-	 * Parsed query vars set by the user.
+	 * Parsed query vars set by the application, possibly filtered and changed.
+	 *
+	 * This is specifically marked as public, to allow byref actions to change
+	 * them from outside the class methods proper and inside filter functions.
 	 *
 	 * @since 3.0
 	 * @var   array
 	 */
-	protected $query_vars = array();
+	public $query_vars = array();
 
 	/**
-	 * Original query vars set by the user.
+	 * Original query vars set by the application.
+	 *
+	 * These are the original query variables before any filters are applied,
+	 * and are the results of merging $query_var_defaults with $query_vars.
 	 *
 	 * @since 3.0
 	 * @var   array
@@ -202,12 +218,15 @@ class Query extends Base {
 	/**
 	 * Default values for query vars.
 	 *
+	 * These are computed at runtime based on the registered columns for the
+	 * database table this query relates to.
+	 *
 	 * @since 3.0
 	 * @var   array
 	 */
 	protected $query_var_defaults = array();
 
-	/** Items *****************************************************************/
+	/** Results ***************************************************************/
 
 	/**
 	 * List of items located by the query.
@@ -241,13 +260,7 @@ class Query extends Base {
 	 */
 	protected $request = '';
 
-	/**
-	 * The last updated time.
-	 *
-	 * @since 3.0
-	 * @var   int
-	 */
-	protected $last_changed = 0;
+	/** Shims *****************************************************************/
 
 	/**
 	 * This private variable only exists to temporarily hold onto the SQL used
@@ -1612,16 +1625,31 @@ class Query extends Base {
 		// Get primary column
 		$primary = $this->get_primary_column_name();
 
-		// Bail if data to add includes the primary column
-		if ( isset( $data[ $primary ] ) ) {
-			return false;
+		// If data includes primary column, check if item already exists
+		if ( ! empty( $data[ $primary ] ) ) {
+
+			// Shape the primary item ID
+			$item_id = $this->shape_item_id( $data[ $primary ] );
+
+			// Get item by ID (from database, not cache)
+			$item    = $this->get_item_raw( $primary, $item_id );
+
+			// Bail if item already exists
+			if ( ! empty( $item ) ) {
+				return false;
+			}
+
+			// Set data primary ID to newly shaped ID
+			$data[ $primary ] = $item_id;
 		}
 
 		// Get default values for item (from columns)
 		$item = $this->default_item();
 
-		// Unset the primary key value from defaults
-		unset( $item[ $primary ] );
+		// Unset the primary key if not part of data array (auto-incremented)
+		if ( empty( $data[ $primary ] ) ) {
+			unset( $item[ $primary ] );
+		}
 
 		// Cut out non-keys for meta
 		$columns = $this->get_column_names();

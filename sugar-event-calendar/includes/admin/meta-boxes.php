@@ -98,7 +98,8 @@ function box( $post = null ) {
 	$meta_box = new Box();
 
 	// Setup & display the meta box
-	$meta_box->setup( $post );
+	$meta_box->setup_sections();
+	$meta_box->setup_post( $post );
 	$meta_box->display();
 }
 
@@ -306,30 +307,6 @@ function save( $object_id = 0, $object = null ) {
 			: $date;
 	}
 
-	/** Repeat ****************************************************************/
-
-	// Repeat
-	$repeat = ! empty( $_POST['recurrence'] )
-		? sanitize_key( $_POST['recurrence'] )
-		: '';
-
-	// Expire
-	$expire = ! empty( $_POST['recurrence_end'] )
-		? sanitize_text_field( $_POST['recurrence_end'] )
-		: '';
-
-	// Recurrence expriation
-	if ( ! empty( $repeat ) && ! empty( $expire ) ) {
-		$recur_end         = strtotime( $expire );
-		$recur_end_hour    = 0;
-		$recur_end_minutes = 0;
-		$recur_end_am_pm   = 'am';
-		$recur_end_hour    = adjust_hour_for_meridiem( $recur_end_hour, $recur_end_am_pm );
-		$recur_end_date    = mktime( intval( $recur_end_hour ), intval( $recur_end_minutes ), 0, date( 'm', $recur_end ), date( 'd', $recur_end ), date( 'Y', $recur_end ) );
-	} else {
-		$recur_end_date = '';
-	}
-
 	/** Save ******************************************************************/
 
 	// Save the start date & time
@@ -340,11 +317,6 @@ function save( $object_id = 0, $object = null ) {
 	// Save the end date & time
 	if ( ! empty( $end_date ) ) {
 		$end_date = gmdate( 'Y-m-d H:i:s', $end_date );
-	}
-
-	// Save only if repeating with an end
-	if ( ! empty(  $repeat ) && ! empty( $recur_end_date ) ) {
-		$recur_end_date = gmdate( 'Y-m-d H:i:s', $recur_end_date );
 	}
 
 	// Shim these for now (need to make functions for them)
@@ -371,12 +343,7 @@ function save( $object_id = 0, $object = null ) {
 		'start_tz'            => '',
 		'end'                 => $end_date,
 		'end_tz'              => '',
-		'all_day'             => $all_day,
-		'recurrence'          => $repeat,
-		'recurrence_interval' => 0,
-		'recurrence_count'    => 0,
-		'recurrence_end'      => $recur_end_date,
-		'recurrence_end_tz'   => '',
+		'all_day'             => $all_day
 	) );
 
 	// Update

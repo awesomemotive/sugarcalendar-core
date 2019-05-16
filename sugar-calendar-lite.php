@@ -5,7 +5,7 @@
  * Description: A calendar with a sweet disposition.
  * Author:      Sandhills Development, LLC
  * Author URI:  https://sandhillsdev.com
- * Version:     2.0.1
+ * Version:     2.0.2
  * Text Domain: sugar-calendar
  * Domain Path: /sugar-event-calendar/includes/languages/
  */

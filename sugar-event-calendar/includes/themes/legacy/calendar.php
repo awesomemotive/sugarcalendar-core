@@ -173,7 +173,7 @@ function sc_calendar_next_prev( $today_month, $today_year, $size = 'large', $cat
 			<input type="hidden" name="sc_month" value="<?php echo absint( $prev_month ); ?>">
 			<input type="hidden" name="sc_year" value="<?php echo absint( $prev_year ); ?>">
 			<input type="hidden" name="sc_current_month" value="<?php echo absint( $today_month ); ?>">
-			<input type="submit" class="sc_calendar_submit" name="sc_prev" value="<?php _e('Previous', 'sugar-calendar'); ?>"/>
+			<input type="submit" class="sc_calendar_submit" name="sc_prev" value="<?php echo esc_html_x( 'Previous', 'Previous month', 'sugar-calendar' ); ?>"/>
 			<input name="sc_nonce" type="hidden" value="<?php echo wp_create_nonce('sc_calendar_nonce'); ?>" />
 			<input type="hidden" name="action" value="sc_load_calendar"/>
 			<input type="hidden" name="action_2" value="prev_month"/>
@@ -185,7 +185,7 @@ function sc_calendar_next_prev( $today_month, $today_year, $size = 'large', $cat
 			<input type="hidden" name="sc_month" class="month" value="<?php echo absint( $next_month ); ?>">
 			<input type="hidden" name="sc_year" class="year" value="<?php echo absint( $next_year ); ?>">
 			<input type="hidden" name="sc_current_month" value="<?php echo absint( $today_month ); ?>">
-			<input type="submit" class="sc_calendar_submit" name="sc_next" value="<?php _e('Next', 'sugar-calendar'); ?>"/>
+			<input type="submit" class="sc_calendar_submit" name="sc_next" value="<?php echo esc_html_x( 'Next', 'Next month', 'sugar-calendar' ); ?>"/>
 			<input name="sc_nonce" type="hidden" value="<?php echo wp_create_nonce('sc_calendar_nonce') ?>" />
 			<input type="hidden" name="action" value="sc_load_calendar"/>
 			<input type="hidden" name="action_2" value="next_month"/>

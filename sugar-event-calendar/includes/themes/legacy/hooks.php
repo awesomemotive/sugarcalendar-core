@@ -16,6 +16,10 @@ add_action( 'init', 'sc_add_shortcodes' );
 add_action( 'widgets_init', 'sc_register_widgets' );
 add_filter( 'widget_text',  'do_shortcode' );
 
+// Legacy Posts
+add_action( 'rss2_item',     'sc_add_fields_to_rss' );
+add_action( 'pre_get_posts', 'sc_modify_events_archive', 999 );
+
 // Front-end Hooks
 if ( ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) || wp_doing_ajax() ) {
 

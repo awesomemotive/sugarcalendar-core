@@ -18,7 +18,7 @@ function menu() {
 	add_submenu_page(
 		'sugar-calendar',
 		esc_html__( 'Settings', 'sugar-calendar' ),
-		append_license_bubble( esc_html__( 'Settings', 'sugar-calendar' ) ),
+		append_submenu_bubble( esc_html__( 'Settings', 'sugar-calendar' ) ),
 		'manage_options',
 		'sc-settings',
 		'Sugar_Calendar\\Admin\\Settings\\page'
@@ -26,64 +26,25 @@ function menu() {
 }
 
 /**
- * Get the license key
+ * Get the Settings screen ID
  *
- * @since 2.0.0
- *
- * @return string
- */
-function get_license_key() {
-	return trim( get_option( 'sc_license_key' ) );
-}
-
-/**
- * Update the license key
- *
- * @since 2.0.0
+ * @since 2.0.2
  *
  * @return string
  */
-function update_license_key( $key = '' ) {
-	! empty( $key )
-		? update_option( 'sc_license_key', $key )
-		: delete_option( 'sc_license_key' );
+function get_screen_id() {
+	return 'calendar_page_sc-settings';
 }
 
 /**
- * Get the license status
+ * Is the current admin screen a settings page?
  *
- * @since 2.0.0
+ * @since 2.0.2
  *
- * @return string
+ * @return bool
  */
-function get_license_status() {
-	return trim( get_option( 'sc_license_status' ) );
-}
-
-/**
- * Update the license status
- *
- * @since 2.0.0
- *
- * @param object $license_data
- */
-function update_license_status( $license_data = false ) {
-	if ( empty( $license_data->license ) || ( 'empty' === $license_data->license ) ) {
-		delete_license_status();
-	} else {
-		update_option( 'sc_license_status', $license_data->license );
-		set_transient( 'sc_license_check', $license_data, DAY_IN_SECONDS );
-	}
-}
-
-/**
- * Delete the license status
- *
- * @since 2.0.0
- */
-function delete_license_status() {
-	delete_option( 'sc_license_status' );
-	delete_transient( 'sc_license_check' );
+function in() {
+	return ( get_screen_id() === get_current_screen()->id );
 }
 
 /**
@@ -93,20 +54,7 @@ function delete_license_status() {
  * @return int
  */
 function get_bubble_count() {
-
-	// Default return value
-	$retval = 0;
-
-	// Get the license status
-	$license_data = check_license();
-
-	// Bump return value if license is not valid
-	if ( empty( $license_data->license ) || ( 'valid' !== $license_data->license ) ) {
-		++$retval;
-	}
-
-	// Return the bubble count
-	return absint( $retval );
+	return apply_filters( 'sugar_calendar_admin_get_bubble_count', 0 );
 }
 
 /**
@@ -124,14 +72,14 @@ function get_bubble_html( $count = 0 ) {
 /**
  * Get the HTML used to display a bubble in the "Settings" submenu.
  *
- * @since 2.0.0
+ * @since 2.0.3
  */
-function append_license_bubble( $html = '' ) {
+function append_submenu_bubble( $html = '' ) {
 
 	// Default return value
 	$retval = $html;
 
-	// Get the license status
+	// Get the bubble count
 	$count = get_bubble_count();
 
 	// Append the count to the string
@@ -142,46 +90,6 @@ function append_license_bubble( $html = '' ) {
 
 	// Return the original HTML, possibly with a bubble behind it
 	return $retval;
-}
-
-/**
- * Remotely verify a license key.
- *
- * @since 2.0.0
- *
- * @param array $args
- *
- * @return object
- */
-function verify_license( $args = array() ) {
-
-	// Parse arguments
-	$r = wp_parse_args( $args, array(
-		'body'      => array(),
-		'timeout'   => 15,
-		'sslverify' => true
-	) );
-
-	// Return
-	return wp_remote_post( 'https://sugarcalendar.com/', $r );
-}
-
-/**
- * Return array of API parameters
- *
- * @since 2.0.0
- *
- * @param array $args
- *
- * @return array
- */
-function get_api_params( $args = array() ) {
-	return wp_parse_args( $args, array(
-		'edd_action' => 'check_license',
-		'license' 	 => get_license_key(),
-		'item_id'    => 16,
-		'url'        => home_url()
-	) );
 }
 
 /**
@@ -196,16 +104,34 @@ function get_sections() {
 
 	// Store statically to avoid thrashing the gettext API
 	if ( null === $retval ) {
+
+		// Setup
 		$retval = array(
 			'main' => array(
+				'id'   => 'main',
 				'name' => esc_html__( 'Settings', 'sugar-calendar' ),
 				'url'  => admin_url( 'admin.php?page=sc-settings' ),
-				'func' => 'Sugar_Calendar\\Admin\\Settings\\license_section'
+				'func' => 'Sugar_Calendar\\Admin\\Settings\\datetime_section'
 			)
 		);
+
+		// Filter
+		$retval = apply_filters( 'sg_settings_sections', $retval );
 	}
 
-	return apply_filters( 'sg_settings_sections', $retval );
+	// Return
+	return $retval;
+}
+
+/**
+ * Return the first/main section ID.
+ *
+ * @since 2.0.3
+ *
+ * @return string
+ */
+function get_main_section_id() {
+	return key( get_sections() );
 }
 
 /**
@@ -220,23 +146,22 @@ function get_subsections( $section = '' ) {
 
 	// Store statically to avoid thrashing the gettext API
 	if ( null === $retval ) {
+
+		// Setup
 		$retval = array(
-			'main' => array(
-				'main' => array(
-					'name' => append_license_bubble( esc_html__( 'License', 'sugar-calendar' ) ),
-					'url'  => admin_url( 'admin.php?page=sc-settings' ),
-					'func' => 'Sugar_Calendar\\Admin\\Settings\\license_section'
-				),
+			get_main_section_id() => array(
 				'display' => array(
+					'id'   => 'display',
 					'name' => esc_html__( 'Display', 'sugar-calendar' ),
 					'url'  => admin_url( 'admin.php?page=sc-settings' ),
 					'func' => 'Sugar_Calendar\\Admin\\Settings\\datetime_section'
 				)
 			)
 		);
-	}
 
-	$retval = apply_filters( 'sugar_calendar_settings_subsections', $retval, $section );
+		// Filter
+		$retval = apply_filters( 'sugar_calendar_settings_subsections', $retval, $section );
+	}
 
 	// Maybe return a secific set of subsection
 	if ( ! empty( $section ) && isset( $retval[ $section ] ) ) {
@@ -245,6 +170,18 @@ function get_subsections( $section = '' ) {
 
 	// Return all subsections
 	return $retval;
+}
+
+/**
+ * Return the first/main subsection ID.
+ *
+ * @since 2.0.3
+ *
+ * @param string $section
+ * @return string
+ */
+function get_main_subsection_id( $section = '' ) {
+	return key( get_subsections( $section ) );
 }
 
 /**
@@ -261,7 +198,7 @@ function get_subsection( $section = 'main', $subsection = '' ) {
 
 	// Default
 	$default = array(
-		'main' => array(
+		get_main_section_id() => array(
 			'name' => esc_html__( 'General', 'sugar-calendar' )
 		)
 	);
@@ -326,6 +263,15 @@ function secondary_nav( $section = 'main', $subsection = 'main' ) {
 	// Default links array
 	$links = array();
 
+	// Fudge if no main subsection exists
+	$main_section    = get_main_section_id();
+	$main_subsection = get_main_subsection_id( $section );
+
+	// Maybe fallback to main
+	if ( ! isset( $sections[ $subsection ] ) ) {
+		$subsection = $main_subsection;
+	}
+
 	// Loop through sections
 	foreach ( $sections as $subsection_id => $sub ) {
 
@@ -342,14 +288,14 @@ function secondary_nav( $section = 'main', $subsection = 'main' ) {
 			'error'
 		);
 
-		// No main tab
-		if ( 'main' === $section ) {
+		// No main section in URL
+		if ( $main_section === $section ) {
 			array_push( $removables, 'section' );
 			unset( $args['section'] );
 		}
 
-		// No main tab
-		if ( 'main' === $subsection_id ) {
+		// No main subsection in URL
+		if ( $main_subsection === $subsection_id ) {
 			array_push( $removables, 'subsection' );
 			unset( $args['subsection'] );
 		}
@@ -409,11 +355,11 @@ function page() {
 	// Get the section & subsection
 	$section = ! empty( $_GET['section'] )
 		? sanitize_key( $_GET['section'] )
-		: 'main';
+		: get_main_section_id();
 
 	$subsection = ! empty( $_GET['subsection'] )
 		? sanitize_key( $_GET['subsection'] )
-		: 'main';
+		: get_main_subsection_id( $section );
 
 	if ( ! empty( $_GET['settings-updated'] ) && ( 'true' === $_GET['settings-updated'] ) ) : ?>
 
@@ -453,491 +399,15 @@ function page() {
  */
 function register_settings() {
 
-	// Main/Main
-	register_setting( 'sc_main_main',    'sc_license_key', __NAMESPACE__ . '\\sanitize_license' );
-
-	// Main/Display
+	// Date/Time Formatting
 	register_setting( 'sc_main_display', 'sc_start_of_week' );
 	register_setting( 'sc_main_display', 'sc_date_format' );
 	register_setting( 'sc_main_display', 'sc_time_format' );
 
-	// Main/Updates
-	register_setting( 'sc_main_updates', 'sc_beta_opt_in' );
-
 	do_action( 'sugar_calendar_register_settings' );
 }
 
-/** License *******************************************************************/
-
-/**
- * Callback for setting up the sc_license_key setting
- *
- * @since 2.0.0
- * @param $new
- *
- * @return string
- */
-function sanitize_license( $new = '' ) {
-	$old = get_license_key();
-
-	// New license has been entered, so must reactivate
-	if ( empty( $new ) || ! empty( $old ) && ( $old !== $new ) ) {
-		delete_license_status();
-	}
-
-	return preg_replace( '/[^a-zA-Z0-9]/', '', $new );
-}
-
-/**
- * License activation check
- *
- * @since 1.0.0
- */
-function activate_license() {
-
-	// listen for our activate button to be clicked
-	if ( ! isset( $_POST['sc_license_activate'] ) ) {
-		return;
-	}
-
-	// Run a quick security check
-	if ( ! check_admin_referer( 'sc_license_nonce', 'sc_license_nonce' ) ) {
-		return;
-	}
-
-	// Data to send in our API request
-	$api_params = get_api_params( array(
-		'edd_action' => 'activate_license'
-	) );
-
-	// Call the custom API
-	$response = verify_license( array(
-		'body' => $api_params
-	) );
-
-	// Make sure the response came back okay
-	if ( is_wp_error( $response ) ) {
-		return;
-	}
-
-	// Decode the license data
-	$license_data = json_decode( wp_remote_retrieve_body( $response ) );
-
-	// Update the license status
-	update_license_status( $license_data );
-
-	if ( ( 'valid' !== $license_data->license ) && ( 'missing' !== $license_data->error ) ) {
-		wp_safe_redirect( admin_url( 'admin.php?page=sc-settings&error=' . $license_data->error ) );
-		exit();
-	}
-}
-
-/**
- * Deactivate license
- *
- * @since 1.0.0
- */
-function deactivate_license() {
-
-	// Listen for our activate button to be clicked
-	if ( ! isset( $_POST['sc_license_deactivate'] ) ) {
-		return;
-	}
-
-	// Run a quick security check
-	if ( ! check_admin_referer( 'sc_license_nonce', 'sc_license_nonce' ) ) {
-		return;
-	}
-
-	// Data to send in our API request
-	$api_params = get_api_params( array(
-		'edd_action' => 'deactivate_license'
-	) );
-
-	// Call the custom API
-	$response = verify_license( array(
-		'body' => $api_params
-	) );
-
-	// Make sure the response came back okay
-	if ( is_wp_error( $response ) ) {
-		return;
-	}
-
-	// Decode the license data
-	$license_data = json_decode( wp_remote_retrieve_body( $response ) );
-
-	// Delete the license status
-	if ( 'deactivated' === $license_data->license ) {
-		delete_license_status();
-	}
-}
-
-/**
- * Check if license is valid
- *
- * @since 1.0.0
- * @return void|string
- */
-function check_license() {
-
-	// Don't fire when saving settings
-	if ( ! empty( $_POST['sc_license_activate'] ) || ! empty( $_POST['sc_license_deactivate'] ) ) {
-		return;
-	}
-
-	// Get the license data
-	$license_data = get_transient( 'sc_license_check' );
-
-	// Run the license check a maximum of once per day
-	if ( false !== $license_data ) {
-		return $license_data;
-	}
-
-	// Default return value
-	$retval = false;
-
-	// Not an empty license
-	if ( get_license_key() ) {
-
-		// Data to send in our API request
-		$api_params = get_api_params( array(
-			'edd_action' => 'check_license'
-		) );
-
-		// Call the custom API
-		$response = verify_license( array(
-			'body' => $api_params
-		) );
-
-		// Make sure the response came back okay
-		if ( ! is_wp_error( $response ) ) {
-			$license_data = json_decode( wp_remote_retrieve_body( $response ) );
-			$retval       = $license_data->license;
-		}
-	} else {
-		$retval = 'empty';
-		$license_data = (object) array(
-			'license' => $retval
-		);
-	}
-
-	// Update the license status
-	update_license_status( $license_data );
-
-	return $retval;
-}
-
-/**
- * AJAX handler for license verification
- *
- * @since 2.0.0
- */
-function ajax_verify() {
-
-	// Bail if no license or nonce
-	if ( ! isset( $_REQUEST['license'] ) || ! isset( $_REQUEST['nonce'] ) || ! isset( $_REQUEST['method'] ) ) {
-		wp_send_json_error();
-	}
-
-	// Bail if user cannot manage options
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error();
-	}
-
-	// Check the AJAX nonce
-	check_ajax_referer( 'sc_license_nonce', 'nonce' );
-
-	// Sanitize the license
-	$license = sanitize_text_field( $_REQUEST['license'] );
-	$action  = sanitize_key( $_REQUEST['method'] );
-	$method  = in_array( $action, array( 'activate', 'check', 'deactivate' ), true )
-		? "{$action}_license"
-		: 'check_license';
-
-	// Data to send in our API request
-	$api_params = get_api_params( array(
-		'edd_action' => $method,
-		'license'    => $license
-	) );
-
-	// Call the custom API
-	$response = verify_license( array(
-		'body' => $api_params
-	) );
-
-	// Make sure the response came back okay
-	if ( is_wp_error( $response ) ) {
-		wp_send_json_error( $response );
-	}
-
-	// Get the license data
-	$license_data = json_decode( wp_remote_retrieve_body( $response ) );
-	$feedback     = get_license_feedback( $license_data->license );
-
-	// Deactivate
-	if ( in_array( $license_data->license, array( 'deactivated', 'failed' ), true ) ) {
-		delete_license_status();
-
-	// Activate or Check
-	} else {
-		update_license_key( $license );
-		update_license_status( $license_data );
-
-		$feedback['message'] = maybe_add_expiration( $license_data, $feedback['message'] );
-	}
-
-	// All done
-	wp_send_json_success( array(
-		'key'      => get_license_key(),
-		'feedback' => $feedback
-	) );
-}
-
-/**
- * Maybe add the expiration date to a valid license feedback message.
- *
- * @since 2.0.0
- *
- * @param object $license_data
- * @param string $feedback
- *
- * @return string
- */
-function maybe_add_expiration( $license_data, $feedback ) {
-
-	// Default return value
-	$retval = $feedback;
-
-	// Bail if not a valid license
-	if ( 'valid' !== $license_data->license ) {
-		return $retval;
-	}
-
-	// Bail if no expiration
-	if ( empty( $license_data->expires ) ) {
-		return $retval;
-	}
-
-	// Format date/time/text
-	$date    = date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires ) );
-	$time    = date_i18n( get_option( 'time_format' ), strtotime( $license_data->expires ) );
-	$until   = __( ' until: <time datetime="%s">%s (at %s)</time>', 'sugar-calendar' );
-	$expires = sprintf( $until, $license_data->expires, $date, $time );
-	$retval  = sprintf( $feedback, $expires );
-
-	// Return appended string
-	return $retval;
-}
-
 /** Sections ******************************************************************/
-
-/**
- * Get license feedback, based on a specific status.
- *
- * @since 2.0.0
- *
- * @staticvar array $retval
- * @param     string $status
- * @return    array
- */
-function get_license_feedback( $status = '' ) {
-	static $retval = array();
-
-	// Stash array in local static var to avoid thrashing the gettext API
-	if ( empty( $retval ) ) {
-		$retval = array(
-
-			// Empty
-			'empty' => array(
-				'id'      => 'empty',
-				'message' => esc_html__( 'Please enter a valid license key.', 'sugar-calendar'  ),
-				'text'    => esc_html__( 'Empty', 'sugar-calendar' ),
-				'class'   => 'empty'
-			),
-
-			// Valid
-			'valid' => array(
-				'id'      => 'valid',
-				'message' => esc_html__( 'This license key is valid%s.', 'sugar-calendar'  ),
-				'text'    => esc_html__( 'Valid', 'sugar-calendar' ),
-				'class'   => 'valid'
-			),
-
-			// Expired
-			'expired' => array(
-				'id'      => 'expired',
-				'message' => esc_html__( 'This license key is expired', 'sugar-calendar' ),
-				'text'    => esc_html__( 'Expired', 'sugar-calendar' ),
-				'class'   => 'invalid'
-			),
-
-			// Disabled
-			'disabled' => array(
-				'id'      => 'disabled',
-				'message' => esc_html__( 'This license key is disabled.', 'sugar-calendar' ),
-				'text'    => esc_html__( 'Disabled', 'sugar-calendar' ),
-				'class'   => 'invalid'
-			),
-
-			// Revoked
-			'revoked' => array(
-				'id'      => 'revoked',
-				'message' => esc_html__( 'This license key is disabled.', 'sugar-calendar' ),
-				'text'    => esc_html__( 'Revoked', 'sugar-calendar' ),
-				'class'   => 'invalid'
-			),
-
-			// Invalid
-			'invalid' => array(
-				'id'      => 'invalid',
-				'message' => esc_html__( 'This license key is not valid.', 'sugar-calendar'  ),
-				'text'    => esc_html__( 'Invalid', 'sugar-calendar' ),
-				'class'   => 'invalid'
-			),
-
-			// Inactive
-			'inactive' => array(
-				'id'      => 'site_inactive',
-				'message' => esc_html__( 'This license key is saved but has not been verified.', 'sugar-calendar'  ),
-				'text'    => esc_html__( 'Site Inactive', 'sugar-calendar' ),
-				'class'   => 'invalid'
-			),
-
-			// Deactivated
-			'deactivated' => array(
-				'id'      => 'deactivated',
-				'message' => esc_html__( 'This license key is saved but has not been verified.', 'sugar-calendar'  ),
-				'text'    => esc_html__( 'Site Inactive', 'sugar-calendar' ),
-				'class'   => 'invalid'
-			),
-
-			// Failed
-			'failed' => array(
-				'id'      => 'failed',
-				'message' => esc_html__( 'This license key could not be deactivated.', 'sugar-calendar'  ),
-				'text'    => esc_html__( 'Failed', 'sugar-calendar' ),
-				'class'   => 'empty'
-			),
-
-			// Inactive
-			'site_inactive' => array(
-				'id'      => 'site_inactive',
-				'message' => esc_html__( 'This license key is saved but has not been verified.', 'sugar-calendar'  ),
-				'text'    => esc_html__( 'Site Inactive', 'sugar-calendar' ),
-				'class'   => 'invalid'
-			),
-
-			// Wrong Product
-			'item_name_mismatch' => array(
-				'id'      => 'item_name_mismatch',
-				'message' => esc_html__( 'This license key appears to be for another product.', 'sugar-calendar'  ),
-				'text'    => esc_html__( 'Mismatch', 'sugar-calendar' ),
-				'class'   => 'invalid'
-			),
-
-			// Item ID incorrect (check your arguments!)
-			'invalid_item_id' => array(
-				'id'      => 'invalid_item_id',
-				'message' => esc_html__( 'This license key appears to be for another product.', 'sugar-calendar'  ),
-				'text'    => esc_html__( 'Invalid', 'sugar-calendar' ),
-				'class'   => 'invalid'
-			),
-
-			// Too many activations
-			'no_activations_left' => array(
-				'id'      => 'no_activations_left',
-				'message' => esc_html__( 'This license key has reached its activation limit.', 'sugar-calendar'  ),
-				'text'    => esc_html__( 'Out of Activations', 'sugar-calendar' ),
-				'class'   => 'invalid'
-			),
-		);
-	}
-
-	// Maybe pluck a specific status
-	if ( isset( $retval[ $status ] ) ) {
-		$retval = $retval[ $status ];
-	}
-
-	// Return specific array, or all if not found
-	return $retval;
-}
-
-/**
- * Output the license settings section
- *
- * @since 2.0.0
- */
-function license_section() {
-
-	// License settings
-	$license  = get_license_key();
-	$status   = get_license_status();
-
-	// Force status if inactive
-	if ( ! empty( $license ) && empty( $status ) ) {
-		$status = 'inactive';
-
-	// Force status if empty
-	} elseif ( empty( $license ) || empty( $status ) ) {
-		$status = 'empty';
-	}
-
-	// Get license feedback
-	$feedback = get_license_feedback( $status );
-
-	// Toggle
-	$refresh_style       = 'display: none;';
-	$deactivate_disabled = true;
-	$verify_disabled     = empty( $license );
-
-	// Button
-	if ( in_array( $status, array( 'valid', 'empty' ), true ) && ! empty( $license ) ) {
-		$refresh_style       = 'display: inline-block;';
-		$deactivate_disabled = false;
-	}
-
-	// Force verify to disabled when status is valid
-	if ( 'valid' === $status ) {
-		$verify_disabled = true;
-		$license_data = get_transient( 'sc_license_check' );
-		$feedback['message'] = maybe_add_expiration( $license_data, $feedback['message'] );
-	}
-
-	?>
-
-	<div class="sc-license-wrapper">
-		<div class="sc-license-header">
-			<h3><?php esc_html_e( 'License Key', 'sugar-calendar' ); ?></h3>
-			<span><?php esc_html_e( 'Enter a valid license key to enable automatic updates', 'sugar-calendar' ); ?></span>
-		</div>
-		<div class="sc-license-content">
-			<?php _e( 'Look for your license key in your <a href="https://sugarcalendar.com/account/">SugarCalendar.com account</a>. Don\'t have one? <a href="https://sugarcalendar.com/pricing/">Purchase one today!</a>', 'sugar-calendar' ); ?></p>
-			<div class="sc-license-input-wrapper">
-				<span class="sc-license-input">
-					<input id="sc_license_key" name="sc_license_key" type="password" class="sc-license-key" value="<?php echo esc_attr( $license ); ?>" maxlength="32" pattern="[a-zA-Z0-9]+" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-
-					<span class="sc-license-status <?php echo sanitize_key( $feedback['class'] ); ?>" title="<?php echo esc_attr( $feedback['text'] ); ?>" aria-hidden="true">
-						<span class="screen-reader-text"><?php echo esc_html( $feedback['text'] ); ?></span>
-					</span>
-				</span>
-
-				<button type="button" class="button-primary sc-license-verify" name="sc_license_verify" <?php disabled( $verify_disabled, true ); ?> data-status="<?php echo sanitize_key( $feedback['class'] ); ?>"><?php esc_html_e( 'Verify', 'sugar-calendar' ); ?></button>
-				<button type="submit" class="button-secondary sc-license-deactivate" name="sc_license_deactivate" <?php disabled( $deactivate_disabled, true ); ?>><?php esc_attr_e( 'Deactivate', 'sugar-calendar' ); ?></button>
-			</div>
-
-			<p class="sc-license-feedback">
-				<span><?php echo $feedback['message']; // May contain HTML ?></span>
-				<button type="button" class="sc-license-refresh" style="<?php echo $refresh_style; ?>"><?php esc_html_e( 'Refresh Status', 'sugar-calendar' ); ?></button>
-			</p>
-		</div>
-
-		<?php wp_nonce_field( 'sc_license_nonce', 'sc_license_nonce' ); ?>
-
-	</div>
-
-<?php
-}
 
 /**
  * Output the admin settings datetime section
@@ -991,36 +461,6 @@ function datetime_section() {
 					<label title="g:i a"><input type="radio" name="sc_time_format" id="sc_time_format" value="g:i a" <?php checked('g:i a', $sc_time_format); ?>> <span><?php echo date( 'g:i a' ); ?></span></label><br/>
 					<label title="g:i A"><input type="radio" name="sc_time_format" value="g:i A" <?php checked('g:i A', $sc_time_format); ?>> <span><?php echo date( 'g:i A' ); ?></span></label><br/>
 					<label title="H:i"><input type="radio" name="sc_time_format" value="H:i" <?php checked('H:i', $sc_time_format); ?>> <span><?php echo date( 'H:i' ); ?></span></label><br/>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-<?php
-}
-
-/**
- * Output the admin settings updates section
- *
- * @since 2.0.0
- */
-function updates_section() {
-	$beta_opt_in = (bool) get_option( 'sc_beta_opt_in' ); ?>
-
-	<table class="form-table">
-		<tbody>
-			<tr valign="top">
-				<th scope="row" valign="top">
-					<label for="sc_beta_opt_in"><?php esc_html_e( 'Software Updates', 'sugar-calendar' ); ?></label>
-				</th>
-				<td>
-					<label class="sc-toggle">
-						<input type="checkbox" name="sc_beta_opt_in" id="sc_beta_opt_in" value="1" <?php checked( true, $beta_opt_in ); ?>>
-						<span class="label"><?php esc_html_e( 'Get Beta Versions', 'sugar-calendar' ) ?></span>
-					</label>
-					<p class="description">
-						<?php esc_html_e( 'Receive update notifications about beta versions instead.', 'sugar-calendar' ) ?>
-					</p>
 				</td>
 			</tr>
 		</tbody>

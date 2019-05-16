@@ -142,9 +142,9 @@ final class Plugin {
 	 */
 	private function setup_constants() {
 
-		// Plugin version.
+		// Plugin Version.
 		if ( ! defined( 'SC_PLUGIN_VERSION' ) ) {
-			define( 'SC_PLUGIN_VERSION', '2.0.1' );
+			define( 'SC_PLUGIN_VERSION', '2.0.2' );
 		}
 
 		// Plugin Root File.
@@ -190,8 +190,11 @@ final class Plugin {
 			$this->include_frontend();
 		}
 
-		// Everything else
-		$this->include_files();
+		// Lite
+		$this->include_lite();
+
+		// Standard
+		$this->include_standard();
 	}
 
 	/**
@@ -220,7 +223,7 @@ final class Plugin {
 	 * @since 2.0.0
 	 * @return array
 	 */
-	private function include_files() {
+	private function include_lite() {
 
 		// Database Engine
 		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/class-base.php';
@@ -330,6 +333,54 @@ final class Plugin {
 		require_once SC_PLUGIN_DIR . 'includes/themes/legacy/event-display.php';
 		require_once SC_PLUGIN_DIR . 'includes/themes/legacy/events-list.php';
 		require_once SC_PLUGIN_DIR . 'includes/themes/legacy/scripts.php';
+	}
+
+	/**
+	 * Include Standard (non Lite) files, if they exist.
+	 *
+	 * @since 2.0.3
+	 */
+	private function include_standard() {
+
+		// Files & directory
+		$files = array();
+		$dir   = trailingslashit( __DIR__ ) . 'includes/standard';
+
+		// Bail if standard directory does not exist
+		if ( ! is_dir( $dir ) ) {
+			return;
+		}
+
+		// Try to open the directory
+		$dh = opendir( $dir );
+
+		// Bail if directory exists but cannot be opened
+		if ( empty( $dh ) ) {
+			return;
+		}
+
+		// Look for files in the directory
+		while ( ( $plugin = readdir( $dh ) ) !== false ) {
+			if ( substr( $plugin, -4 ) == '.php' ) {
+				$files[] = trailingslashit( $dir ) . $plugin;
+			}
+		}
+
+		// Close the directory
+		closedir( $dh );
+
+		// Bail if no files
+		if ( empty( $files ) ) {
+			return;
+		}
+
+		// Sort files alphabetically
+		sort( $files );
+
+		// Include each file
+		foreach ( $files as $file ) {
+			include_once $file;
+		}
 	}
 }
 

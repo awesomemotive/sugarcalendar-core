@@ -19,10 +19,6 @@ add_action( 'init', 'sugar_calendar_register_calendar_taxonomy' );
 add_filter( 'map_meta_cap', 'sugar_calendar_post_meta_caps',     10, 4 );
 add_filter( 'map_meta_cap', 'sugar_calendar_category_meta_caps', 10, 4 );
 
-// Legacy Posts
-add_action( 'rss2_item', 'sc_add_fields_to_rss' );
-add_action( 'pre_get_posts', 'sc_modify_events_archive', 999 );
-
 // Post statuses
 add_action( 'transition_post_status', 'sugar_calendar_transition_post_status', 10, 3 );
 add_action( 'deleted_post',           'sugar_calendar_delete_post_events' );

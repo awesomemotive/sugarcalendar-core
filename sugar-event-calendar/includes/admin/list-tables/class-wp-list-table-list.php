@@ -206,11 +206,11 @@ class Basic extends Base_List_Table {
 
 		// Default columns
 		$columns = array(
-			'title'    => esc_html__( 'Title',    'sugar-calendar' ),
-			'start'    => esc_html__( 'Starts',   'sugar-calendar' ),
-			'end'      => esc_html__( 'Ends',     'sugar-calendar' ),
-			'duration' => esc_html__( 'Duration', 'sugar-calendar' ),
-			'repeat'   => esc_html__( 'Repeats',  'sugar-calendar' )
+			'title'    => esc_html_x( 'Title',    'Noun', 'sugar-calendar' ),
+			'start'    => esc_html_x( 'Start',    'Noun', 'sugar-calendar' ),
+			'end'      => esc_html_x( 'End',      'Noun', 'sugar-calendar' ),
+			'duration' => esc_html_x( 'Duration', 'Noun', 'sugar-calendar' ),
+			'repeat'   => esc_html_x( 'Repeats',  'Noun', 'sugar-calendar' )
 		);
 
 		// Return columns
@@ -468,7 +468,7 @@ class Basic extends Base_List_Table {
 					get_permalink( $post->ID ),
 					/* translators: %s: post title */
 					esc_attr( sprintf( __( 'View &#8220;%s&#8221;', 'sugar-calendar' ), $title ) ),
-					__( 'View', 'sugar-calendar' )
+					_x( 'View', 'verb', 'sugar-calendar' )
 				);
 			}
 		}

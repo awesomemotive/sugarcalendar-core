@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 function sc_load_calendar_via_ajax() {
 
 	// Bail if no nonce
-	if ( ! isset( $_POST[ 'sc_nonce' ] ) ){
+	if ( ! isset( $_POST[ 'sc_nonce' ] ) ) {
 		return;
 	}
 
@@ -39,7 +39,7 @@ function sc_load_calendar_via_ajax() {
 		: 'large';
 
 	// Output the calendar
-	echo sc_get_events_calendar( $size, $category, $type, null );
+	echo sc_get_events_calendar( $size, $category, $type );
 
 	// Done!
 	die();

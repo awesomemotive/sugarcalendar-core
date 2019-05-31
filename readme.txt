@@ -1,12 +1,13 @@
 === Sugar Calendar (Lite) ===
-Author: Pippin Williamson
-Contributors: mordauk
-Author URI: https://sandhillsdev.com
-Plugin URI: https://sugarcalendar.com
-Tags: event calendar, events, simple, events calendar, calendar, Pippin Williamson, Pippin's Plugins
+Author:            Pippin Williamson
+Contributors:      mordauk
+Author URI:        https://sandhillsdev.com
+Plugin URI:        https://sugarcalendar.com
+Tags:              event calendar, events, simple, events calendar, calendar, Pippin Williamson, Pippin's Plugins
+Requires PHP:      5.6.20
 Requires at least: 5.0
-Tested up to: 5.1
-Stable tag: 2.0.2
+Tested up to:      5.2
+Stable tag:        2.0.3
 
 A sweet, simple event calendar plugin. Create your events and show them on a simple calendar. That's it.
 
@@ -20,14 +21,14 @@ Most event calendar plugins are either way too simple, or extremely overly compl
 * Beautiful Admin Interface
 * Ajax Enabled Calendar View
 * Events Custom Post Type
+* Event Calendar Custom Taxonomy
 * Simple Event Configuration
 * Easily Set Event Dates
 * Easily Set Event Start and End Time
-* A short code for showing the calendar of events
-* Events Archive, Listed by Date of Occurrence
-* Large and small calendar views
-* Event categories
+* Events Archive, Listed by Start Date
 * Widgets for displaying calendars and event filters
+* Shortcode for showing the calendar of events
+* Large and small calendar views
 
 = Extended Features =
 
@@ -74,10 +75,18 @@ Yes, there is a [free add-on plugin](http://wordpress.org/extend/plugins/simple-
 
 I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-calendar-gravity-forms/) that provides integration with the very popular [Gravity Forms plugin](http://www.gravityforms.com/).
 
-
 == Changelog ==
 
-= 2.0.1 =
+= 2.0.3 =
+
+May 31, 2019
+
+* Fixed: Possible conflicts with other custom taxonomies
+* Fixed: Admin area event color styling
+* Added: Start month support in Calendar Widget
+* Improved: Handling of events with no end date or time
+
+= 2.0.2 =
 
 May 10, 2019
 
@@ -143,7 +152,7 @@ March 21, 2019
 = 1.0.1 =
 
 * Fixed: a display issue with some months
-* Fixed: a javascript error
+* Fixed: a JavaScript error
 * Fixed: an issue with child elements when loading the calendar via ajax
 
 = 1.0 =

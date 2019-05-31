@@ -144,7 +144,7 @@ final class Plugin {
 
 		// Plugin Version.
 		if ( ! defined( 'SC_PLUGIN_VERSION' ) ) {
-			define( 'SC_PLUGIN_VERSION', '2.0.2' );
+			define( 'SC_PLUGIN_VERSION', '2.0.3' );
 		}
 
 		// Plugin Root File.
@@ -154,7 +154,7 @@ final class Plugin {
 
 		// Plugin Base Name.
 		if ( ! defined( 'SC_PLUGIN_BASE' ) ) {
-			define( 'SC_PLUGIN_BASE', plugin_basename( SC_PLUGIN_FILE ) . 'sugar-event-calendar/' );
+			define( 'SC_PLUGIN_BASE', plugin_basename( SC_PLUGIN_FILE ) );
 		}
 
 		// Plugin Folder Path.
@@ -275,6 +275,7 @@ final class Plugin {
 
 		// Common files
 		require_once SC_PLUGIN_DIR . 'includes/common/time.php';
+		require_once SC_PLUGIN_DIR . 'includes/common/color.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/preferences.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/hooks.php';
 	}

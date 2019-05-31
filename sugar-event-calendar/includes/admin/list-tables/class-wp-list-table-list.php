@@ -322,30 +322,59 @@ class Basic extends Base_List_Table {
 	}
 
 	/**
-	 * @global WP_Post $post
+	 * Output a single row.
 	 *
-	 * @param int|WP_Post $post
-	 * @param int         $level
+	 * @since 2.0.0
+	 *
+	 * @param object $item
 	 */
 	public function single_row( $item ) {
 
+		// Defaults
+		$title = $start = $end = $duration = $recurrence = '&mdash;';
+		$ends = false;
+
 		// Title
-		$link  = $this->get_event_edit_url( $item );
-		$title = '<strong><a href="' . esc_url( $link ) . '" class="row-title">' . esc_html( $item->title ) . '</a></strong>';
+		$title = '<strong>' . $this->get_event_link( $item ) . '</strong>';
 
 		// Start
-		$start = $this->get_event_date( $item->start ) . '<br>' . $this->get_event_time( $item->start );
+		if ( ! $item->is_empty_date( $item->start ) ) {
+			$dt   = $item->format_date( 'Y-m-d\TH:i:s\Z', $item->start );
+			$start = '<time datetime="' . esc_attr( $dt ) . '">' . $this->get_event_date( $item->start );
+
+			// Maybe add time if not all-day
+			if ( ! $item->is_all_day() ) {
+				 $start .= '<br><span>' . $this->get_event_time( $item->start ) . '</span>';
+			}
+		}
 
 		// End
-		$end   = $this->get_event_date( $item->end   ) . '<br>' . $this->get_event_time( $item->end   );
+		if ( ! $item->is_empty_date( $item->end ) && ! ( $item->format_date( 'Y-m-d', $item->start ) === $item->format_date( 'Y-m-d', $item->end ) ) ) {
+			$dt   = $item->format_date( 'Y-m-d\TH:i:s\Z', $item->end );
+			$end  = '<time datetime="' . esc_attr( $dt ) . '">' . $this->get_event_date( $item->end );
+			$ends = true;
+
+			// Maybe add time if not all-day
+			if ( ! $item->is_all_day() ) {
+				 $end .= '<br><span>' . $this->get_event_time( $item->end ) . '</span>';
+			}
+
+			$end .= '</time>';
+		}
 
 		// Duration
-		$duration = ! empty( $item->all_day )
-			? esc_html__( 'All Day', 'sugar-calendar' )
-			: $this->get_human_diff_time( $item->start, $item->end );
+		if ( $item->is_all_day() ) {
+			$duration = esc_html__( 'All Day', 'sugar-calendar' );
 
-		// Recurrence
-		$recurrence = '&mdash;';
+			// Maybe add duration if mulitple all-day days
+			if ( $item->is_multi() ) {
+				$duration .= '<br>' . $this->get_human_diff_time( $item->start, $item->end );
+			}
+
+		// Get diff only if end exists
+		} elseif ( true === $ends ) {
+			$duration = $this->get_human_diff_time( $item->start, $item->end );
+		}
 
 		// Get recurrence type
 		if ( ! empty( $item->recurrence ) ) {

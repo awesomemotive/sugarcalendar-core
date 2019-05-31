@@ -283,6 +283,6 @@ class Schema {
 
 		$event .= 'END:VEVENT' . PHP_EOL;
 
-		return apply_filters( 'sugar_calendar_event', $event, $vevent );
+		return $event;
 	}
 }

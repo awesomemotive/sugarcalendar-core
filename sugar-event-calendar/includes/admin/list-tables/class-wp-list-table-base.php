@@ -316,7 +316,7 @@ class Base_List_Table extends \WP_List_Table {
 	protected function init_boundaries() {
 
 		// Set now once, so everything uses the same timestamp
-		$this->now = current_time( 'timestamp' );
+		$this->now = $this->get_current_time();
 
 		// Set formatting options
 		$this->start_of_week = $this->get_start_of_week();
@@ -508,6 +508,17 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	protected function get_item_color( $object ) {
 		return sugar_calendar_get_event_color( $object->id, $object->type );
+	}
+
+	/**
+	 * Get the current time
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return string
+	 */
+	protected function get_current_time() {
+		return current_time( 'timestamp' );
 	}
 
 	/**
@@ -1251,16 +1262,48 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Bail if event is empty
 		if ( empty( $event ) ) {
-			return;
+			return '';
 		}
 
 		// Get the cell
 		$cell = $this->get_current_cell( 'index' );
 
-		// Setup the pointer ID
-		$pointer_id = "{$event->id}-{$cell}";
+		// Get the link
+		$link = $this->get_event_link( $event );
 
-		// Get the edit link
+		// Setup the pointer ID
+		$pointer_id = "calendar-pointer-{$event->id}-{$cell}";
+
+		// Setup the pointer for this event
+		$this->setup_pointer( $event, $cell );
+
+		// Prepare the link HTML
+		$html  = '<div id="%s">%s</div>';
+		$event = sprintf( $html, $pointer_id, $link );
+
+		// Return the event link
+		return $event;
+	}
+
+	/**
+	 * Return the HTML for linking to an event.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param object $event
+	 * @return string
+	 */
+	protected function get_event_link( $event = false ) {
+
+		// Bail if event is empty
+		if ( empty( $event ) ) {
+			return '';
+		}
+
+		// Get the cell
+		$cell = $this->get_current_cell( 'index' );
+
+		// Get the edit url
 		$event_edit_url = $this->get_event_edit_url( $event );
 
 		// Handle empty titles
@@ -1270,9 +1313,9 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Filter all event attributes
 		$attributes = array(
-			'id'    => 'calendar-pointer-' . esc_attr( $pointer_id ),
 			'href'  => esc_url( $event_edit_url ),
-			'class' => $this->get_event_classes( $event, $cell )
+			'class' => $this->get_event_classes( $event, $cell ),
+			'style' => $this->get_event_link_styling( $event )
 		);
 
 		// Default attribute string
@@ -1286,15 +1329,47 @@ class Base_List_Table extends \WP_List_Table {
 		// Setup the pointer for this event
 		$this->setup_pointer( $event, $cell );
 
-		// Add background color styling
-		if ( $event->color ) {
-			$bg_color = 'background-color: ' . sugar_calendar_sanitize_hex_color( $event->color ) . ';';
-		} else {
-			$bg_color = 'background-color: transparent;';
-		}
+		// Prepare the link HTML
+		$html = '<a %s>%s</a>';
+		$link = sprintf( $html, $attr, $event_title );
 
 		// Return the event link
-		return sprintf( '<div style="%s"><a %s>%s</a></div>', $bg_color, $attr, $event_title );
+		return $link;
+	}
+
+	/**
+	 * @since 2.0.3
+	 *
+	 * @param object $event
+	 *
+	 * @return string
+	 */
+	protected function get_event_link_styling( $event = false ) {
+
+		// Default anchor style
+		$retval = '';
+
+		// Enforce a color
+		if ( empty( $event->color ) ) {
+			return $retval;
+		}
+
+		// Get the color contrast score so a background color can be applied
+		$score = sugar_calendar_get_contrast_score( $event->color );
+
+		// Contrast is OK
+		if ( $score < 5 ) {
+			$retval = 'color: ' . $event->color . ' !important;';
+
+		// Contrast is not OK
+		} else {
+			$color    = sugar_calendar_get_contrast_color( $event->color );
+			$bg_color = $event->color;
+			$retval   = 'background-color: ' . $bg_color . '; color: ' . $color . ' !important;';
+		}
+
+		// Return the link styling, if any
+		return $retval;
 	}
 
 	/** Cell ******************************************************************/
@@ -1392,8 +1467,10 @@ class Base_List_Table extends \WP_List_Table {
 				: $default;
 		}
 
-		// Return the entire array
-		return $this->current_cell;
+		// Return the entire array, or default return value
+		return is_null( $default )
+			? $this->current_cell
+			: $default;
 	}
 
 	/** Formatting ************************************************************/
@@ -1436,6 +1513,11 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	protected function setup_pointer( $event = false, $cell = 1 ) {
 
+		// Bail if no event or no cell
+		if ( empty( $event ) || empty( $cell ) || ! is_numeric( $cell ) ) {
+			return;
+		}
+
 		// Default links
 		$edit_link = $view_link = '';
 
@@ -1444,7 +1526,7 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Pointer content
 		$pointer_content[] = '<h3 class="' . $this->get_event_classes( $event ) . '">' . $this->get_pointer_title( $event ) . '</h3>';
-		$pointer_content[] = '<p>' . implode( '<br>', $this->get_pointer_text( $event ) ) . '</p>';
+		$pointer_content[] = '<p>' . $this->get_pointer_text( $event ) . '</p>';
 
 		// Maybe add edit link
 		if ( $this->current_user_can_edit( $event ) ) {
@@ -1596,7 +1678,7 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Return the pointer title text
+	 * Get all of the pointer text.
 	 *
 	 * @since 2.0.0
 	 *
@@ -1605,16 +1687,40 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return  string
 	 */
 	protected function get_pointer_text( $event = false ) {
-		$pointer_text = $this->get_pointer_metadata( $event );
 
-		// Append with new-line if metadata exists
-		$new_line = ! empty( $pointer_text )
-			? '<br>'
-			: '';
+		// Get all pointer info
+		$pointer = array(
+			$this->get_pointer_dates( $event ),
+			$this->get_pointer_meta( $event ),
+			$this->get_pointer_details( $event )
+		);
+
+		// Filter out empties and merge
+		$pointer_text = array_merge( array_filter( $pointer ) );
+
+		// Remove HTML tags that are not allowed
+		$pointer_text = wp_kses( $pointer_text, $this->get_allowed_pointer_tags() );
+
+		// Combine with line breaks
+		return implode( '<br><br>', $pointer_text );
+	}
+
+	/**
+	 * Get the pointer details
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param   object  $event
+	 *
+	 * @return  string
+	 */
+	protected function get_pointer_details( $event = false ) {
+		$pointer_text = array();
 
 		// Special case for password protected events
 		if ( ! empty( $event->post_password ) ) {
-			$pointer_text[] = $new_line . esc_html__( 'Password required', 'sugar-calendar' );
+			$pointer_text[] = '<strong>' . esc_html__( 'Details', 'sugar-calendar' ) . '</strong>';
+			$pointer_text[] = esc_html__( 'Password protected', 'sugar-calendar' );
 
 		// Post is not protected
 		} elseif ( ! empty( $event->content ) ) {
@@ -1622,23 +1728,28 @@ class Base_List_Table extends \WP_List_Table {
 			// Trim content down to 25 words or less - no HTML, to be safe
 			$content = wp_trim_words( $event->content, 25 );
 
+			// Title
+			$pointer_text[] = '<strong>' . esc_html__( 'Details', 'sugar-calendar' ) . '</strong>';
+
 			// Texturize
-			$pointer_text[] = $new_line . esc_html( $content );
+			$pointer_text[] = esc_html( $content );
 		}
 
-		// Filter & return the pointer title
-		return $pointer_text;
+		// Separate with line breaks
+		return implode( '<br>', $pointer_text );
 	}
 
 	/**
-	 * Get event metadata for display in a pointer
+	 * Get event dates for display in a pointer
 	 *
 	 * @since 2.0.0
 	 *
+	 * @param object $event
+	 *
 	 * @return array
 	 */
-	protected function get_pointer_metadata( $event ) {
-		$pointer_metadata = array();
+	protected function get_pointer_dates( $event ) {
+		$pointer_dates = array();
 
 		// All day, single-day event
 		if ( $event->is_all_day() ) {
@@ -1648,66 +1759,85 @@ class Base_List_Table extends \WP_List_Table {
 
 				// Yearly
 				if ( 'yearly' === $event->recurrence ) {
-					$pointer_metadata[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_metadata[] = $event->start_date( 'F j' );
-					$pointer_metadata[] = '';
-					$pointer_metadata[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_metadata[] = $event->end_date( 'F j' );
+					$pointer_dates[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = $event->start_date( 'F j' );
+					$pointer_dates[] = '';
+					$pointer_dates[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = $event->end_date( 'F j' );
 
 				// Monthly
 				} elseif ( 'monthly' === $event->recurrence ) {
-					$pointer_metadata[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_metadata[] = $event->start_date( 'F j' );
-					$pointer_metadata[] = '';
-					$pointer_metadata[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_metadata[] = $event->end_date( 'F j' );
+					$pointer_dates[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = $event->start_date( 'F j' );
+					$pointer_dates[] = '';
+					$pointer_dates[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = $event->end_date( 'F j' );
 
 				// No recurrence
 				} else {
-					$pointer_metadata[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_metadata[] = $this->get_event_date( $event->start );
-					$pointer_metadata[] = '';
-					$pointer_metadata[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_metadata[] = $this->get_event_date( $event->end );
+					$pointer_dates[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = $this->get_event_date( $event->start );
+					$pointer_dates[] = '';
+					$pointer_dates[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = $this->get_event_date( $event->end );
 				}
 
 			// Single all-day
 			} else {
-				$pointer_metadata[] = '<strong>' . esc_html__( 'All Day', 'sugar-calendar' ) . '</strong>';
-				$pointer_metadata[] = $this->get_event_date( $event->start );
+				$pointer_dates[] = '<strong>' . esc_html__( 'All Day', 'sugar-calendar' ) . '</strong>';
+				$pointer_dates[] = $this->get_event_date( $event->start );
 			}
 
 		// All other events
 		} else {
 
-			// Date & Time
-			if ( ! empty( $event->start ) ) {
+			// Multi-day
+			if ( $event->is_multi( 'day' ) ) {
 
-				// No time for all-day
-				if ( $event->is_all_day() ) {
-					$pointer_metadata[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_metadata[] = $this->get_event_date( $event->start );
+				// Yearly
+				if ( 'yearly' === $event->recurrence ) {
+					$pointer_dates[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = $event->start_date( 'F j' );
+					$pointer_dates[] = '';
+					$pointer_dates[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = $event->end_date( 'F j' );
+
+				// Monthly
+				} elseif ( 'monthly' === $event->recurrence ) {
+					$pointer_dates[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = $event->start_date( 'F j' );
+					$pointer_dates[] = '';
+					$pointer_dates[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = $event->end_date( 'F j' );
+
+				// No recurrence
 				} else {
-					$pointer_metadata[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_metadata[] = sprintf( esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ), $this->get_event_time( $event->start ), $GLOBALS['wp_locale']->get_weekday( $event->start_date( 'w' ) ) );
-				}
-			}
-
-			// Date & Time
-			if ( ! empty( $event->end ) ) {
-
-				// Extra padding
-				if ( ! empty( $event->start ) ) {
-					$pointer_metadata[] = '';
+					$pointer_dates[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = $this->get_event_date( $event->start );
+					$pointer_dates[] = '';
+					$pointer_dates[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = $this->get_event_date( $event->end );
 				}
 
-				// No time for all-day
-				if ( $event->is_all_day() ) {
-					$pointer_metadata[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_metadata[] = $this->get_event_date( $event->end );
-				} else {
-					$pointer_metadata[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_metadata[] = sprintf( esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ), $this->get_event_time( $event->end ), $GLOBALS['wp_locale']->get_weekday( $event->end_date( 'w' ) ) );
+			// Single day
+			} else {
+
+				// Date & Time
+				if ( ! $event->is_empty_date( $event->start ) ) {
+					$pointer_dates[] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = sprintf( esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ), $this->get_event_time( $event->start ), $GLOBALS['wp_locale']->get_weekday( $event->start_date( 'w' ) ) );
+				}
+
+				// Date & Time
+				if ( ! $event->is_empty_date( $event->end ) && ( $event->start !== $event->end ) ) {
+
+					// Extra padding
+					if ( ! $event->is_empty_date( $event->start ) ) {
+						$pointer_dates[] = '';
+					}
+
+					$pointer_dates[] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
+					$pointer_dates[] = sprintf( esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ), $this->get_event_time( $event->end ), $GLOBALS['wp_locale']->get_weekday( $event->end_date( 'w' ) ) );
 				}
 			}
 		}
@@ -1718,26 +1848,69 @@ class Base_List_Table extends \WP_List_Table {
 
 			// Interval is known
 			if ( isset( $intervals[ $event->recurrence ] ) ) {
-				$pointer_metadata[] = '';
-				$pointer_metadata[] = '<strong>' . esc_html_x( 'Repeats', 'Noun', 'sugar-calendar' ) . '</strong>';
+				$pointer_dates[] = '';
+				$pointer_dates[] = '<strong>' . esc_html_x( 'Repeats', 'Noun', 'sugar-calendar' ) . '</strong>';
 
 				// No end
 				if ( empty( $event->recurrence_end ) ) {
-					$pointer_metadata[] = $intervals[ $event->recurrence ];
+					$pointer_dates[] = $intervals[ $event->recurrence ];
 
 				// Recurrence ends
 				} elseif ( ! $event->is_empty_date( $event->recurrence_end ) ) {
-					$pointer_metadata[] = sprintf( esc_html_x( '%s until %s', 'Weekly until December 31, 2030', 'sugar-calendar' ), $intervals[ $event->recurrence ], $this->get_event_date( $event->recurrence_end ) );
+					$pointer_dates[] = sprintf(
+						esc_html_x( '%s from %s until %s', 'Weekly from December 1, 2030 until December 31, 2030', 'sugar-calendar' ),
+						$intervals[ $event->recurrence ],
+						$this->get_event_date( $event->start ),
+						$this->get_event_date( $event->recurrence_end )
+					);
 
 				// Recurrence goes forever
+				} elseif ( ! $event->is_empty_date( $event->end ) && ( $event->start === $event->end ) ) {
+					$pointer_dates[] = sprintf(
+						esc_html_x( '%s starting %s', 'Weekly forever, starting May 15, 1980', 'sugar-calendar' ),
+						$intervals[ $event->recurrence ],
+						$this->get_event_date( $event->start )
+					);
 				} else {
-					$pointer_metadata[] = sprintf( esc_html_x( '%s forever', 'Weekly forever', 'sugar-calendar' ), $intervals[ $event->recurrence ] );
+					$pointer_dates[] = sprintf(
+						esc_html_x( '%s', 'Weekly forever', 'sugar-calendar' ),
+						$intervals[ $event->recurrence ]
+					);
 				}
 			}
 		}
 
-		// Filter & return the pointer title
-		return $pointer_metadata;
+		// Separate with line breaks
+		return implode( '<br>', $pointer_dates );
+	}
+
+	/**
+	 * Get event dates for display in a pointer
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param object $event
+	 *
+	 * @return array
+	 */
+	protected function get_pointer_meta( $event = false ) {
+		$pointer_meta = array();
+
+		// Location
+		if ( ! empty( $event->location ) ) {
+
+			// Turn new lines into line breaks
+			$location       = preg_replace( '/[\r\n]+/', '<br>', $event->location );
+
+			// Title
+			$pointer_meta[] = '<strong>' . esc_html__( 'Location', 'sugar-calendar' ) . '</strong>';
+
+			// Location though kses, only allow breaks
+			$pointer_meta[] = $location;
+		}
+
+		// Separate with line breaks
+		return implode( '<br>', $pointer_meta );
 	}
 
 	/**
@@ -1752,7 +1925,8 @@ class Base_List_Table extends \WP_List_Table {
 			'a'      => array(),
 			'strong' => array(),
 			'em'     => array(),
-			'img'    => array()
+			'img'    => array(),
+			'br'     => array()
 		);
 	}
 
@@ -1805,6 +1979,9 @@ class Base_List_Table extends \WP_List_Table {
 		} );
 
 	<?php endforeach; ?>
+
+		// Hide all of the pointers
+		$( '.wp-pointer.sugar-calendar' ).hide();
 	} )( jQuery );
 	/* ]]> */
 </script>

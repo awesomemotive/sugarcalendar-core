@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Time Functions
  *
@@ -8,6 +7,58 @@
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
+
+/**
+ * Return the current time, according to the very beginning of the current page
+ * being loaded.
+ *
+ * This is a more precise & predictable version of the current_time() function
+ * included with WordPress.
+ *
+ * The 'mysql' type will return the time in the format for MySQL DATETIME field.
+ *
+ * The 'timestamp' type will return the current timestamp.
+ *
+ * Other strings will be interpreted as PHP date formats (e.g. 'Y-m-d').
+ *
+ * If $gmt is set to either '1' or 'true', then both types will use GMT time.
+ *
+ * if $gmt is false, the output is adjusted with the GMT offset in the WordPress option.
+ *
+ * @since 2.0.3
+ *
+ * @param string   $type Type of time to retrieve. Accepts 'mysql', 'timestamp', or PHP date
+ *                       format string (e.g. 'Y-m-d').
+ * @param int|bool $gmt  Optional. Whether to use GMT timezone. Default false.
+ *
+ * @return int|string Integer if $type is 'timestamp', string otherwise.
+ */
+function sugar_calendar_get_request_time( $type = 'timestamp', $gmt = 0 ) {
+	global $timestart;
+
+	// Should never be empty, but just in case...
+	if ( empty( $timestart ) ) {
+		$timestart = microtime( true );
+	}
+
+	// Get the offset for
+	$offset = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+
+	switch ( $type ) {
+		case 'mysql':
+			return ! empty( $gmt )
+				? gmdate( 'Y-m-d H:i:s' )
+				: gmdate( 'Y-m-d H:i:s', ( $timestart + $offset ) );
+		case 'timestamp':
+			return ! empty( $gmt )
+				? $timestart
+				: $timestart + $offset;
+		default:
+			return ! empty( $gmt )
+				? gmdate( $type )
+				: gmdate( $type, $timestart + $offset );
+	}
+}
 
 /**
  * Get a human readable representation of the time elapsed since a given date.
@@ -35,13 +86,14 @@ defined( 'ABSPATH' ) || exit;
  */
 function sugar_calendar_human_diff_time( $older_date, $newer_date = false ) {
 
-	// Format
+	// Format start if not numeric
 	if ( ! is_numeric( $older_date ) ) {
 		$older_date = strtotime( $older_date );
 	}
 
+	// Format end if not numeric
 	if ( ! is_numeric( $newer_date ) ) {
-		$newer_date = strtotime( $newer_date );
+		$newer_date = strtotime( $newer_date . ' +1 second' );
 	}
 
 	// Catch issues with flipped old vs. new dates
@@ -61,7 +113,14 @@ function sugar_calendar_human_diff_time( $older_date, $newer_date = false ) {
 	if ( ! empty( $older_date ) && ! is_numeric( $older_date ) ) {
 		$time_chunks = explode( ':', str_replace( ' ', ':', $older_date ) );
 		$date_chunks = explode( '-', str_replace( ' ', '-', $older_date ) );
-		$older_date  = gmmktime( (int) $time_chunks[1], (int) $time_chunks[2], (int) $time_chunks[3], (int) $date_chunks[1], (int) $date_chunks[2], (int) $date_chunks[0] );
+		$older_date  = gmmktime(
+			(int) $time_chunks[1],
+			(int) $time_chunks[2],
+			(int) $time_chunks[3],
+			(int) $date_chunks[1],
+			(int) $date_chunks[2],
+			(int) $date_chunks[0]
+		);
 	}
 
 	/**
@@ -129,7 +188,7 @@ function sugar_calendar_human_diff_time( $older_date, $newer_date = false ) {
 
 		// Add to output var
 		if ( 0 != $count2 ) {
-			$output .= _x( ',', 'Separator in time since', 'sugar-calendar' ) . ' ';
+			$output .= esc_html_x( ',', 'Separator in time since', 'sugar-calendar' ) . ' ';
 
 			switch ( $seconds2 ) {
 				case 30 * DAY_IN_SECONDS :

@@ -301,7 +301,7 @@ class Box {
 		/** Ends **************************************************************/
 
 		// Get date_time
-		$end_date_time = ! empty( $event->end )
+		$end_date_time = ! empty( $event->end ) && ( $event->start !== $event->end )
 			? strtotime( $event->end )
 			: null;
 
@@ -322,7 +322,7 @@ class Box {
 
 				// Minute
 				$end_minute = date( 'i', $end_date_time );
-				if ( empty( $end_hour ) ) {
+				if ( empty( $end_hour ) || empty( $end_minute )) {
 					$end_minute = '';
 				}
 
@@ -351,18 +351,22 @@ class Box {
 
 				// Hour
 				$hour = date( 'h', $date_time );
-				if ( empty( $end_hour ) || empty( $hour ) ) {
+				if ( empty( $hour ) ) {
 					$hour = '';
 				}
 
 				// Minute
 				$minute = date( 'i', $date_time );
-				if ( empty( $hour ) && empty( $end_minute ) ) {
+				if ( empty( $hour ) || empty( $minute ) ) {
 					$minute = '';
 				}
 
 				// Day/night
 				$am_pm = date( 'a', $date_time );
+
+			// All day
+			} elseif ( $date === $end_date ) {
+				$end_date = '';
 			}
 		}
 

@@ -21,34 +21,45 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return string
  */
-function sc_get_events_calendar( $size = 'large', $category = null, $type = 'month', $year_override = null ) {
+function sc_get_events_calendar( $size = 'large', $category = null, $type = 'month', $year_override = null, $month_override = null ) {
 
-	// Default display to today
-	$display_time = current_time('timestamp');
+	// Default display time
+	$display_time = current_time( 'timestamp' );
 
-	// check for posted display time
+	// Check for posted display time
 	if ( isset( $_POST['sc_nonce'] ) && wp_verify_nonce( $_POST['sc_nonce'], 'sc_calendar_nonce' ) ) {
 
 		if ( isset( $_POST['display_time'] ) ) {
-			$display_time = $_POST['display_time'];
-		}
+			$display_time = sanitize_text_field( $_POST['display_time'] );
 
-		if ( isset( $_POST['sc_year'] ) && isset( $_POST['sc_month'] ) ) {
-			$display_time = mktime( 0, 0, 0, $_POST['sc_month'], 1, $_POST['sc_year'] );
+		} elseif ( isset( $_POST['sc_year'] ) && isset( $_POST['sc_month'] ) ) {
+			$month_override = sanitize_text_field( $_POST['sc_month'] );
+			$year_override  = sanitize_text_field( $_POST['sc_year'] );
+			$display_time   = mktime( 0, 0, 0, $month_override, 1, $year_override );
 		}
 	}
 
+	// Year can be set via function parameter
+	if ( ! is_null( $year_override ) ) {
+		$today_year = absint( $year_override );
+	} else {
+		$today_year = date( 'Y', $display_time );
+	}
+
+	// Month can be set via function parameter
+	if ( ! is_null( $month_override ) ) {
+		$today_month = absint( $month_override );
+	} else {
+		$today_month = date( 'n', $display_time );
+	}
+
+	// Category
 	$category = isset( $_REQUEST['sc_event_category'] )
 		? sanitize_text_field( $_REQUEST['sc_event_category'] )
 		: $category;
 
-	$today_month = date( 'n', $display_time );
-	$today_year  = date( 'Y', $display_time );
-
-	// Year can be set via function parameter
-	if ( !is_null( $year_override ) ) {
-		$today_year = absint( $year_override );
-	}
+	// Recalculate display time for $calendar_func below
+	$display_time = mktime( 0, 0, 0, $today_month, 0, $today_year );
 
 	$months = array(
 		1  => sc_month_num_to_name(1),
@@ -85,7 +96,7 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 	// Draw function to use
 	$calendar_func = "sc_draw_calendar_{$type}";
 
-	$start_year = date('Y') - 1;
+	$start_year = $today_year - 1;
 	$end_year   = $start_year + 5;
 	$years      = range( $start_year, $end_year, 1 );
 

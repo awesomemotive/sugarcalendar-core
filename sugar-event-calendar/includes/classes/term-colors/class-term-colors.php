@@ -10,14 +10,15 @@ namespace Sugar_Calendar;
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use Sugar_Calendar\Term_Meta_UI;
+// Use the Term Meta UI class
+use JJJ\WP\Term\Meta\UI;
 
 /**
- * Main WP Term Colors class
+ * Main Term Colors class
  *
  * @since 2.0.0
  */
-final class Term_Colors extends Term_Meta_UI {
+final class Term_Colors extends UI {
 
 	/**
 	 * @var string Plugin version

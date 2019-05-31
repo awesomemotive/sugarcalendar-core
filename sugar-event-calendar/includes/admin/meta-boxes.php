@@ -268,16 +268,14 @@ function save( $object_id = 0, $object = null ) {
 		: false;
 
 	// Set all day if no end date
-	if ( ( false === $all_day ) && ( empty( $minutes ) && empty( $hour ) && empty( $end_minutes ) && empty( $end_hour ) ) ) {
-		if ( empty( $end_date ) || ( $date === $end_date ) ) {
+	if ( ( $date === $end_date ) || ( empty( $minutes ) && empty( $hour ) && empty( $end_minutes ) && empty( $end_hour ) && empty( $end_date ) ) ) {
 
-			// Make all-day event
-			$all_day = true;
+		// Make all-day event
+		$all_day = true;
 
-			// Make single-day event
-			if ( empty( $end_date ) ) {
-				$end_date = $date;
-			}
+		// Make single-day event
+		if ( empty( $end_date ) ) {
+			$end_date = strtotime( '+1 day -1 second', $date );
 		}
 	}
 
@@ -291,7 +289,7 @@ function save( $object_id = 0, $object = null ) {
 	$date = mktime( intval( $hour ), intval( $minutes ), 0, date( 'm', $date ), date( 'd', $date ), date( 'Y', $date ) );
 
 	// End dates for all-day events must be end of day
-	if ( true === $all_day ) {
+	if ( ( true === $all_day ) && ! empty( $end_date ) ) {
 		$end_date = mktime( 23, 59, 59, date( 'm', $end_date ), date( 'd', $end_date ), date( 'Y', $end_date ) );
 
 	// Use the passed end date and time

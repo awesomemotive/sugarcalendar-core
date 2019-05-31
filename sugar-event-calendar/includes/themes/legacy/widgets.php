@@ -48,15 +48,24 @@ class sc_events_widget extends WP_Widget {
 		$size          = isset($instance['size']) ? $instance['size'] : 'small';
 		$category      = isset($instance['category']) ? $instance['category'] : null;
 
+		// New in 2.0.3
+		$year          = ! empty($instance['year']) ? $instance['year'] : null;
+		$month         = ! empty($instance['month']) ? $instance['month'] : null;
+
 		echo $before_widget;
-		if ($title) {
+
+		if ( ! empty( $title ) ) {
 			echo $before_title . $title . $after_title;
 		}
+
 		do_action('sc_before_calendar_widget');
+
 		echo '<div id="sc_calendar_wrap_widget">';
-		echo sc_get_events_calendar($size, $category);
+		echo sc_get_events_calendar( $size, $category, 'month', $year, $month );
 		echo '</div>';
+
 		do_action('sc_after_calendar_widget');
+
 		echo $after_widget;
 	}
 
@@ -72,6 +81,8 @@ class sc_events_widget extends WP_Widget {
 		$instance['title']    = strip_tags($new_instance['title']);
 		$instance['size']     = strip_tags($new_instance['size']);
 		$instance['category'] = strip_tags($new_instance['category']);
+		$instance['month']    = strip_tags($new_instance['month']);
+		$instance['year']     = strip_tags($new_instance['year']);
 
 		return $instance;
 	}
@@ -84,13 +95,15 @@ class sc_events_widget extends WP_Widget {
 	 * @return string|void
 	 */
 	public function form( $instance ) {
-		$title = isset($instance['title']) ? esc_attr($instance['title']) : '';
-		$size = isset($instance['size']) ? esc_attr($instance['size']) : '';
-		$category = isset($instance['category']) ? esc_attr($instance['category']) : '';
-?>
+		$title    = isset($instance['title']) ? $instance['title'] : '';
+		$size     = isset($instance['size']) ? $instance['size'] : '';
+		$category = isset($instance['category']) ? $instance['category'] : '';
+		$month    = isset($instance['month']) ? $instance['month'] : '';
+		$year     = isset($instance['year']) ? $instance['year'] : ''; ?>
+
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'sugar-calendar'); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>">
+			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id('size'); ?>"><?php _e('Size:', 'sugar-calendar'); ?></label>
@@ -99,20 +112,24 @@ class sc_events_widget extends WP_Widget {
 				<option value="large" <?php selected('large', $size); ?>><?php _e('Large', 'sugar-calendar'); ?></option>
 			</select>
 		</p>
-	<p>
-		<label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Month', 'sugar-calendar'); ?></label>
-		<select class="widefat <?php echo $this->get_field_name('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>" id="<?php echo $this->get_field_id('category'); ?>">
-			<option value="0" <?php selected(0, $category); ?>><?php _e('All', 'sugar-calendar'); ?></option>
-<?php
-		$terms = get_terms('sc_event_category');
-		if ($terms) {
-			foreach ($terms as $term) {
-				echo '<option value="' . $term->slug . '" ' . selected($term->slug, $category, false) . '>' . $term->name . '</option>';
-			}
-		}
-?>
-		</select>
-	</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Calendar:', 'sugar-calendar'); ?></label>
+			<select class="widefat <?php echo $this->get_field_name('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>" id="<?php echo $this->get_field_id('category'); ?>">
+				<option value="0" <?php selected(0, $category); ?>><?php _e('All', 'sugar-calendar'); ?></option><?php
+					$terms = get_terms('sc_event_category');
+					if ($terms) {
+						foreach ($terms as $term) {
+							echo '<option value="' . $term->slug . '" ' . selected($term->slug, $category, false) . '>' . esc_html( $term->name ) . '</option>';
+						}
+					}
+			?></select>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('month'); ?>"><?php _e('Month & Year:', 'sugar-calendar'); ?></label><br>
+			<input class="small" id="<?php echo $this->get_field_id('month'); ?>" name="<?php echo $this->get_field_name('month'); ?>" type="number" min="1" max="12" pattern="\d{1,2}" autocomplete="off" value="<?php echo esc_attr( $month ); ?>">
+			<input class="small" id="<?php echo $this->get_field_id('year'); ?>" name="<?php echo $this->get_field_name('year'); ?>" type="number" min="1900" max="9999" pattern="\d{1,4}" autocomplete="off" value="<?php echo esc_attr( $year ); ?>">
+			<br><span><?php esc_html_e( 'Leave empty for current', 'sugar-calendar' ); ?></span>
+		</p>
 	<?php
 	}
 }

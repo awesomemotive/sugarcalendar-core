@@ -145,7 +145,7 @@ function sugar_calendar_register_post_types() {
 		'supports'             => $supports,
 		'description'          => '',
 		'public'               => true,
-		'hierarchical'         => true,
+		'hierarchical'         => false,
 		'exclude_from_search'  => true,
 		'publicly_queryable'   => true,
 		'show_ui'              => true,

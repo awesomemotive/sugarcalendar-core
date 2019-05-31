@@ -144,7 +144,7 @@ function sugar_calendar_get_event_duration( $post = false ) {
 	// Get the post object & start date
 	$post       = get_post( $post );
 	$event      = sugar_calendar_get_event_by_object( $post->ID );
-	$all_day    = $event->all_day;
+	$all_day    = $event->is_all_day();
 	$start_date = $event->start;
 	$end_date   = $event->end;
 
@@ -155,7 +155,7 @@ function sugar_calendar_get_event_duration( $post = false ) {
 	if ( true === $all_day ) {
 
 		// 1 day
-		if ( date( 'd', $start_date ) === date( 'd', $end_date ) ) {
+		if ( $event->format_date( 'd', $start_date ) === $event->format_date( 'd', $end_date ) ) {
 			esc_html_e( 'All Day', 'sugar-calendar' );
 
 		// More than 1 day

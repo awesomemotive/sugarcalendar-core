@@ -156,22 +156,6 @@ table.calendar:not(.list) tbody td {
 	border-left: 1px solid #e1e1e1;
 }
 
-table.calendar:not(.list) a {
-	display: block;
-	-o-text-overflow: ellipsis;
-	text-overflow:    ellipsis;
-	overflow-x: hidden;
-	white-space: nowrap;
-	margin: 0;
-	padding: 0 5px;
-}
-
-table.calendar:not(.list) a.sugar-calendar {
-	position: relative;
-	padding: 0 20px 0 0;
-	margin-left: 1px;
-}
-
 table.calendar:not(.day) tbody td.saturday,
 table.calendar:not(.day) tbody td.sunday {
 	background-color: #f1f1f1;
@@ -181,17 +165,49 @@ table.calendar:not(.list) tbody td:hover {
 	box-shadow: inset 0 0 0 1px #ccc !important;
 }
 
-table.calendar:not(.list) a:before {
+table.calendar a.sugar-calendar {
+	display: block;
+	-o-text-overflow: ellipsis;
+	text-overflow:    ellipsis;
+	overflow-x: hidden;
+	white-space: nowrap;
+	margin: 0;
+	padding: 0 5px;
+}
+
+table.calendar a.sugar-calendar {
+	position: relative;
+	padding: 0 20px 0 0;
+}
+
+table.calendar a.sugar-calendar:before {
 	font: normal 15px/18px 'dashicons';
 	display: inline-block;
 	position: absolute;
 	right: 2px;
+	top: 0.5px;
 	speak: none;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	width: 18px;
 	height: 18px;
 	margin: 0;
+}
+
+table.calendar.list a.sugar-calendar {
+	display: inline;
+	border-radius: 3px;
+	padding: 5px 22px 5px 5px;
+}
+
+table.calendar.list a.sugar-calendar:before {
+	top: 4.5px;
+	right: 5px;
+}
+
+table.calendar.list .row-actions {
+	margin-right: 5px;
+	margin-top: 2px;
 }
 
 .wp-pointer.sugar-calendar .wp-pointer-arrow {

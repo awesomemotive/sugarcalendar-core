@@ -1,5 +1,5 @@
 <?php
-namespace Sugar_Calendar;
+namespace JJJ\WP\Term\Meta;
 
 /**
  * Term Meta UI Class
@@ -9,18 +9,20 @@ namespace Sugar_Calendar;
  * core actions & filters to add columns to list tables, add fields to forms,
  * and handle the sanitization & saving of values.
  *
- * @since 2.0.0
+ * @since   2.0.0
+ * @version 3.0.0
  */
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+if ( ! class_exists( __NAMESPACE__ . '\\UI' ) ) :
 /**
  * Main WP Term Meta UI class
  *
  * @since 2.0.0
  */
-class Term_Meta_UI {
+class UI {
 
 	/**
 	 * @var string Plugin version
@@ -30,7 +32,7 @@ class Term_Meta_UI {
 	/**
 	 * @var string Database version
 	 */
-	protected $db_version = 201801010001;
+	protected $db_version = 201905301644;
 
 	/**
 	 * @var string Database version
@@ -105,7 +107,7 @@ class Term_Meta_UI {
 
 		// Setup plugin
 		$this->file       = $file;
-		$this->url        = plugin_dir_url( $this->file ) . 'sugar-event-calendar/';
+		$this->url        = plugin_dir_url( $this->file );
 		$this->path       = plugin_dir_path( $this->file );
 		$this->basename   = plugin_basename( $this->file );
 
@@ -118,11 +120,22 @@ class Term_Meta_UI {
 	 * @since 2.0.0
 	 */
 	public function initialize() {
+
+		// Get the targeted taxonomies
 		$this->taxonomies = $this->get_taxonomies();
+
+		// A simple filter to allow for UI variations
 		$this->fancy      = apply_filters( "wp_fancy_term_{$this->meta_key}", true );
 
-		// Register Meta and Add Hooks
+		// Bail if no targeted taxonomies
+		if ( empty( $this->taxonomies ) ) {
+			return;
+		}
+
+		// Register Meta
 		$this->register_meta();
+
+		// Add Hooks
 		$this->add_hooks();
 	}
 
@@ -137,9 +150,12 @@ class Term_Meta_UI {
 		add_action( 'create_term', array( $this, 'save_meta' ), 10, 2 );
 		add_action( 'edit_term',   array( $this, 'save_meta' ), 10, 2 );
 
+		// ajax actions
+		add_action( "wp_ajax_{$this->meta_key}_terms", array( $this, 'ajax_update' ) );
+
 		// Term meta orderby
 		add_filter( 'terms_clauses',     array( $this, 'terms_clauses'     ), 10, 3 );
-		add_filter( 'get_terms_orderby', array( $this, 'get_terms_orderby' ), 10, 1 );
+		add_filter( 'get_terms_orderby', array( $this, 'get_terms_orderby' ), 10, 3 );
 
 		// Always hook these in, for ajax actions
 		foreach ( $this->taxonomies as $value ) {
@@ -157,9 +173,6 @@ class Term_Meta_UI {
 				add_action( "{$value}_edit_form_fields", array( $this, 'edit_form_field' ) );
 			}
 		}
-
-		// ajax actions
-		add_action( "wp_ajax_{$this->meta_key}_terms", array( $this, 'ajax_update' ) );
 
 		// Only blog admin screens
 		if ( is_blog_admin() || doing_action( 'wp_ajax_inline_save_tax' ) ) {
@@ -246,15 +259,20 @@ class Term_Meta_UI {
 	/** Get Terms *************************************************************/
 
 	/**
-	 * Filter `get_terms_args` and tweak for meta_query orderby's
+	 * Filter `get_terms_orderby` and tweak for meta_query orderby's
 	 *
 	 * @since 2.0.0
 	 *
 	 * @param  string  $orderby
-	 * @param  array   $args
+	 * @param  array   $query_vars
 	 * @param  array   $taxonomies
 	 */
-	public function get_terms_orderby( $orderby = '' ) {
+	public function get_terms_orderby( $orderby = '', $query_vars = array(), $taxonomies = array() ) {
+
+		// Bail if not a target taxonomy
+		if ( ! $this->is_taxonomy( $taxonomies ) ) {
+			return $orderby;
+		}
 
 		// Ordering by meta key
 		if ( ! empty( $_REQUEST['orderby'] ) && ( $this->meta_key === $_REQUEST['orderby'] ) ) {
@@ -275,6 +293,11 @@ class Term_Meta_UI {
 	 */
 	public function terms_clauses( $clauses = array(), $taxonomies = array(), $args = array() ) {
 		global $wpdb;
+
+		// Bail if not a target taxonomy
+		if ( ! $this->is_taxonomy( $taxonomies ) ) {
+			return $clauses;
+		}
 
 		// Default allowed keys & primary key
 		$allowed_keys = array( $this->meta_key );
@@ -410,7 +433,7 @@ class Term_Meta_UI {
 
 		// Bail if no taxonomy passed or not on the `meta_key` column
 		if ( empty( $_REQUEST['taxonomy'] ) || ( $this->meta_key !== $custom_column ) || ! empty( $empty ) ) {
-			return;
+			return $empty;
 		}
 
 		// Get the metadata
@@ -448,6 +471,11 @@ class Term_Meta_UI {
 	 * @param  string  $taxonomy
 	 */
 	public function save_meta( $term_id = 0, $taxonomy = '' ) {
+
+		// Bail if not a target taxonomy
+		if ( ! $this->is_taxonomy( $taxonomy ) ) {
+			return;
+		}
 
 		// Get the term being posted
 		$term_key = 'term-' . $this->meta_key;
@@ -571,7 +599,7 @@ class Term_Meta_UI {
 	public function quick_edit_meta( $column_name = '', $screen = '', $name = '' ) {
 
 		// Bail if not the meta_key column on the `edit-tags` screen for a visible taxonomy
-		if ( ( $this->meta_key !== $column_name ) || ( 'edit-tags' !== $screen ) || ! in_array( $name, $this->taxonomies ) ) {
+		if ( ( $this->meta_key !== $column_name ) || ( 'edit-tags' !== $screen ) || ! $this->is_taxonomy( $name ) ) {
 			return false;
 		} ?>
 
@@ -649,10 +677,35 @@ class Term_Meta_UI {
 	 * Upgrade the database as needed, based on version comparisons
 	 *
 	 * @since 2.0.0
-	 *
-	 * @param  int  $old_version
 	 */
-	private function upgrade_database( $old_version = 0 ) {
+	private function upgrade_database() {
 		update_option( $this->db_version_key, $this->db_version );
 	}
+
+	/** Helpers ***************************************************************/
+
+	/**
+	 * Compare some taxonomies against the ones for this term meta.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param array $taxonomies
+	 */
+	private function is_taxonomy( $taxonomies = array() ) {
+
+		// Bail early if empty
+		if ( empty( $taxonomies ) ) {
+			return false;
+		}
+
+		// Always make sure this is an array
+		$taxonomies = (array) $taxonomies;
+
+		// Check the intersect
+		$intersect = array_intersect( $taxonomies, $this->taxonomies );
+
+		// Return
+		return (bool) ! empty( $intersect );
+	}
 }
+endif;

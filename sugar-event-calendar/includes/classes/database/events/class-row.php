@@ -165,6 +165,18 @@ final class Event extends Row {
 	public $recurrence_end_tz = '';
 
 	/**
+	 * Issetter.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param string $key Property to check.
+	 * @return bool True if set, False if not
+	 */
+	public function __isset( $key = '' ) {
+		return (bool) $this->__get( $key );
+	}
+
+	/**
 	 * Getter.
 	 *
 	 * @since 2.0.0

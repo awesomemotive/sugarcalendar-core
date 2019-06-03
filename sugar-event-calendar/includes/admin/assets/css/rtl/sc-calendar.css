@@ -141,10 +141,10 @@ table.calendar:not(.list) tfoot th {
 	text-align: center;
 }
 
-.striped > tbody > :nth-child(even) td {
+table.calendar.striped > tbody > :nth-child(even) td {
 	background-color: #fff;
 }
-.striped > tbody > :nth-child(odd) td {
+table.calendar.striped > tbody > :nth-child(odd) td {
 	background-color: #f9f9f9;
 }
 

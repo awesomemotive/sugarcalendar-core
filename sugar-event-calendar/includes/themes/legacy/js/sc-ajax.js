@@ -1,44 +1,25 @@
+/* global sc_vars */
 jQuery(document).ready(function($) {
 	$('body').on('submit', '.sc_events_form', function() {
 
 		document.body.style.cursor = 'wait';
-		if( $(this).attr('id') == 'sc_event_select' ) {
-			var calendar = $(this).parent().parent().parent().attr('id');
-		} else {
-			var calendar = $(this).parent().parent().parent().attr('id');
-		}
-		var data = $(this).serialize();
+
+		var calendar = $(this).parents( 'div.sc_events_calendar' ).attr('id'),
+			data     = $(this).serialize();
+
 	    $.post(sc_vars.ajaxurl, data, function (response) {
-	   		$('#' + calendar).html(response);
+	   		$('#' + calendar).parent().html(response);
 			scResizeCal();
+
 	 	}).done(function() {
 	 		document.body.style.cursor = 'default';
 	 	});
+
 		return false;
 	});
-
-	$('body').on('submit', '.sc_events_form_widget', function() {
-
-		document.body.style.cursor = 'wait';
-		if( $(this).attr('id') == 'sc_event_select' ) {
-			var calendar = $(this).parent().parent().parent().attr('id');
-		} else {
-			var calendar = $(this).parent().parent().parent().parent().attr('id');
-		}
-		var data = $(this).serialize();
-		$.post(sc_vars.ajaxurl, data, function (response) {
-			$('#' + calendar).html(response);
-			scResizeCal();
-		}).done(function() {
-			document.body.style.cursor = 'default';
-		});
-		return false;
-	});
-
 
 	function scResizeCal() {
 		var winwidth = $(window).width();
-		var winheight = $(window).height();
 
 		if(winwidth <= 480) {
 			$('#sc_calendar th').each(function() {
@@ -71,5 +52,4 @@ jQuery(document).ready(function($) {
 	$(window).resize(function() {
 		scResizeCal();
 	});
-
 });

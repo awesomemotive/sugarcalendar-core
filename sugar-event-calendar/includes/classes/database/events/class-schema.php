@@ -143,7 +143,7 @@ final class Event_Schema extends Schema {
 			'type'       => 'varchar',
 			'length'     => '20',
 			'default'    => '',
-			'date_query' => true
+			'sortable'   => true
 		),
 
 		// recurrence_interval

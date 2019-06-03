@@ -231,7 +231,7 @@ class Basic extends Base_List_Table {
 			'end'    => array( 'end',   true ),
 
 			// May want to remove when more complex recurrences exist
-			'repeat' => array( 'repeat', true )
+			'repeat' => array( 'recurrence', true )
 		);
 	}
 

@@ -144,7 +144,7 @@ final class Plugin {
 
 		// Plugin Version.
 		if ( ! defined( 'SC_PLUGIN_VERSION' ) ) {
-			define( 'SC_PLUGIN_VERSION', '2.0.3' );
+			define( 'SC_PLUGIN_VERSION', '2.0.4' );
 		}
 
 		// Plugin Root File.

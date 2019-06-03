@@ -81,6 +81,7 @@ function sugar_calendar_register_calendar_taxonomy() {
 		'public'                => false,
 		'show_ui'               => true,
 		'colors'                => true,
+		'source'                => 'sugar-calendar',
 		'meta_box_cb'           => 'Sugar_Calendar\\Admin\\Editor\\Meta\\calendars'
 	);
 

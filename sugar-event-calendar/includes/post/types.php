@@ -164,6 +164,7 @@ function sugar_calendar_register_post_types() {
 		'query_var'            => true,
 		'can_export'           => true,
 		'delete_with_user'     => false,
+		'source'               => 'sugar-calendar'
 	);
 
 	// Register the event type

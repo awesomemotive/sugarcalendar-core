@@ -59,7 +59,7 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 		: $category;
 
 	// Recalculate display time for $calendar_func below
-	$display_time = mktime( 0, 0, 0, $today_month, 0, $today_year );
+	$display_time = mktime( 0, 0, 0, $today_month, 1, $today_year );
 
 	$months = array(
 		1  => sc_month_num_to_name(1),

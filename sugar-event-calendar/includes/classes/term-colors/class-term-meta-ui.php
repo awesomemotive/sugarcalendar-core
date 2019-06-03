@@ -10,7 +10,7 @@ namespace JJJ\WP\Term\Meta;
  * and handle the sanitization & saving of values.
  *
  * @since   2.0.0
- * @version 3.0.0
+ * @version 3.0.1
  */
 
 // Exit if accessed directly
@@ -111,7 +111,8 @@ class UI {
 		$this->path       = plugin_dir_path( $this->file );
 		$this->basename   = plugin_basename( $this->file );
 
-		add_action( 'init', array( $this, 'initialize' ), 11 );
+		// Initialize late, after taxonomies are likely registered
+		add_action( 'init', array( $this, 'initialize' ), 999 );
 	}
 
 	/**
@@ -147,8 +148,8 @@ class UI {
 	public function add_hooks() {
 
 		// Queries
-		add_action( 'create_term', array( $this, 'save_meta' ), 10, 2 );
-		add_action( 'edit_term',   array( $this, 'save_meta' ), 10, 2 );
+		add_action( 'create_term', array( $this, 'save_meta' ), 10, 3 );
+		add_action( 'edit_term',   array( $this, 'save_meta' ), 10, 3 );
 
 		// ajax actions
 		add_action( "wp_ajax_{$this->meta_key}_terms", array( $this, 'ajax_update' ) );
@@ -468,9 +469,10 @@ class UI {
 	 * @since 2.0.0
 	 *
 	 * @param  int     $term_id
+	 * @param  int     $tt_id
 	 * @param  string  $taxonomy
 	 */
-	public function save_meta( $term_id = 0, $taxonomy = '' ) {
+	public function save_meta( $term_id = 0, $tt_id = 0, $taxonomy = '' ) {
 
 		// Bail if not a target taxonomy
 		if ( ! $this->is_taxonomy( $taxonomy ) ) {

@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 function sc_get_events_calendar( $size = 'large', $category = null, $type = 'month', $year_override = null, $month_override = null ) {
 
 	// Default display time
-	$display_time = current_time( 'timestamp' );
+	$display_time = sugar_calendar_get_request_time();
 
 	// Check for posted display time
 	if ( isset( $_POST['sc_nonce'] ) && wp_verify_nonce( $_POST['sc_nonce'], 'sc_calendar_nonce' ) ) {

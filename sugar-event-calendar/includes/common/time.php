@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * If $gmt is set to either '1' or 'true', then both types will use GMT time.
  *
- * if $gmt is false, the output is adjusted with the GMT offset in the WordPress option.
+ * If $gmt is false, the output is adjusted with the GMT offset in the WordPress option.
  *
  * @since 2.0.3
  *
@@ -41,7 +41,7 @@ function sugar_calendar_get_request_time( $type = 'timestamp', $gmt = 0 ) {
 		$timestart = microtime( true );
 	}
 
-	// Get the offset for
+	// Get the offset
 	$offset = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
 
 	switch ( $type ) {
@@ -56,7 +56,7 @@ function sugar_calendar_get_request_time( $type = 'timestamp', $gmt = 0 ) {
 		default:
 			return ! empty( $gmt )
 				? gmdate( $type )
-				: gmdate( $type, $timestart + $offset );
+				: gmdate( $type, ( $timestart + $offset ) );
 	}
 }
 
@@ -129,7 +129,7 @@ function sugar_calendar_human_diff_time( $older_date, $newer_date = false ) {
 	 * work out time elapsed between two known dates.
 	 */
 	$newer_date = empty( $newer_date )
-		? current_time( 'timestamp' )
+		? sugar_calendar_get_request_time()
 		: $newer_date;
 
 	// Difference in seconds

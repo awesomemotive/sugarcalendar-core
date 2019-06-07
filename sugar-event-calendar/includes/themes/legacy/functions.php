@@ -198,7 +198,7 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
 	$day_counter = 0;
 
 	//get today's date
-	$time        = current_time( 'timestamp' );
+	$time        = sugar_calendar_get_request_time();
 	$today_day   = date( 'j', $time );
 	$today_month = date( 'm', $time );
 	$today_year  = date( 'Y', $time );
@@ -380,7 +380,7 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 	$display_year  = date( 'Y', $display_time );
 
 	//get today's date
-	$time        = current_time( 'timestamp' );
+	$time        = sugar_calendar_get_request_time();
 	$today_day   = date( 'j', $time );
 	$today_month = date( 'm', $time );
 	$today_year  = date( 'Y', $time );
@@ -523,7 +523,7 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 	$display_year  = date( 'Y', $display_time );
 
 	//get today's date
-	$time        = current_time( 'timestamp' );
+	$time        = sugar_calendar_get_request_time();
 	$today_day   = date( 'j', $time );
 	$today_month = date( 'm', $time );
 	$today_year  = date( 'Y', $time );
@@ -659,7 +659,7 @@ function sc_draw_calendar_day( $display_time, $size = 'large', $category = null 
 	$display_year  = date( 'Y', $display_time );
 
 	//get today's date
-	$time        = current_time( 'timestamp' );
+	$time        = sugar_calendar_get_request_time();
 	$today_day   = date( 'j', $time );
 	$today_month = date( 'm', $time );
 	$today_year  = date( 'Y', $time );
@@ -790,7 +790,7 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 	$display_year  = date( 'Y', $display_time );
 
 	//get today's date
-	$time        = current_time( 'timestamp' );
+	$time        = sugar_calendar_get_request_time();
 	$today_day   = date( 'j', $time );
 	$today_month = date( 'm', $time );
 	$today_year  = date( 'Y', $time );

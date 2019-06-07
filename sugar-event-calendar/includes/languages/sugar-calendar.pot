@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Sugar Calendar package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Sugar Calendar 2.0.3\n"
+"Project-Id-Version: Sugar Calendar 2.0.5\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com/\n"
-"POT-Creation-Date: 2019-06-03 05:12:14+00:00\n"
+"POT-Creation-Date: 2019-06-07 14:48:03+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -266,7 +266,7 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/help.php:112
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1787
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-list.php:367
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:382
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:392
 #: sugar-event-calendar/includes/post/functions.php:159
 msgid "All Day"
 msgstr ""
@@ -337,7 +337,7 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1807
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1815
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1827
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:395
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:405
 msgid "Start"
 msgstr ""
 
@@ -348,13 +348,13 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1810
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1818
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1839
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:428
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:439
 msgid "End"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1906
 #: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:86
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:487
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:499
 msgid "Location"
 msgstr ""
 
@@ -547,27 +547,27 @@ msgstr ""
 msgid "Duration"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:388
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:398
 #: sugar-event-calendar/includes/themes/legacy/events-list.php:122
 msgid "All-day event"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:401
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:434
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:411
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:445
 msgid " at "
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:418
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:451
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:429
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:463
 msgid "AM"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:419
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:452
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:430
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:464
 msgid "PM"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:492
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:504
 msgid "(Optional)"
 msgstr ""
 
@@ -1133,20 +1133,20 @@ msgstr ""
 msgid "Refresh Status"
 msgstr ""
 
-#: sugar-event-calendar/includes/standard/recurring.php:78
+#: sugar-event-calendar/includes/standard/recurring.php:88
 msgid "Recurrence"
 msgstr ""
 
-#: sugar-event-calendar/includes/standard/recurring.php:114
+#: sugar-event-calendar/includes/standard/recurring.php:124
 msgid "Repeat"
 msgstr ""
 
-#: sugar-event-calendar/includes/standard/recurring.php:119
-#: sugar-event-calendar/includes/standard/recurring.php:141
+#: sugar-event-calendar/includes/standard/recurring.php:129
+#: sugar-event-calendar/includes/standard/recurring.php:151
 msgid "Never"
 msgstr ""
 
-#: sugar-event-calendar/includes/standard/recurring.php:137
+#: sugar-event-calendar/includes/standard/recurring.php:147
 msgid "End Repeat"
 msgstr ""
 

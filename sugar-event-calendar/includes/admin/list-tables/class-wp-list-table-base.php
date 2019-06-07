@@ -518,7 +518,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_current_time() {
-		return current_time( 'timestamp' );
+		return sugar_calendar_get_request_time();
 	}
 
 	/**

@@ -285,8 +285,12 @@ class Box {
 	 * @since  0.2.3
 	 */
 	public function section_duration( $event = null ) {
-		$date = $hour = $minute = $am_pm = '';
-		$end_date = $end_hour = $end_minute = $end_am_pm = '';
+
+		// Defaults
+		$date = $hour = $minute = $end_date = $end_hour = $end_minute = '';
+
+		// Default AM/PM
+		$am_pm = $end_am_pm = '';
 
 		/** All Day ***********************************************************/
 
@@ -328,6 +332,9 @@ class Box {
 
 				// Day/night
 				$end_am_pm = date( 'a', $end_date_time );
+				if ( empty( $end_hour ) && empty( $end_minute ) ) {
+					$end_am_pm = '';
+				}
 			}
 		}
 
@@ -363,6 +370,9 @@ class Box {
 
 				// Day/night
 				$am_pm = date( 'a', $date_time );
+				if ( empty( $hour ) && empty( $minute ) ) {
+					$am_pm = '';
+				}
 
 			// All day
 			} elseif ( $date === $end_date ) {
@@ -400,7 +410,7 @@ class Box {
 						<div class="event-time" <?php echo $hidden; ?>>
 							<span class="sc-time-separator"><?php esc_html_e( ' at ', 'sugar-calendar' ); ?></span>
 							<?php sugar_calendar_time_dropdown( array(
-								'first'    => '',
+								'first'    => '&nbsp;',
 								'id'       => 'start_time_hour',
 								'name'     => 'start_time_hour',
 								'items'    => sugar_calendar_get_hours(),
@@ -408,13 +418,14 @@ class Box {
 							) ); ?>
 							<span class="sc-time-separator">:</span>
 							<?php sugar_calendar_time_dropdown( array(
-								'first'    => '',
+								'first'    => '&nbsp;',
 								'id'       => 'start_time_minute',
 								'name'     => 'start_time_minute',
 								'items'    => sugar_calendar_get_minutes(),
 								'selected' => $minute
 							) ); ?>
 							<select id="start_time_am_pm" name="start_time_am_pm" class="sc-select-chosen sc-time">
+								<option value="">&nbsp;</option>
 								<option value="am" <?php selected( $am_pm, 'am' ); ?>><?php esc_html_e( 'AM', 'sugar-calendar' ); ?></option>
 								<option value="pm" <?php selected( $am_pm, 'pm' ); ?>><?php esc_html_e( 'PM', 'sugar-calendar' ); ?></option>
 							</select>
@@ -433,7 +444,7 @@ class Box {
 						<div class="event-time" <?php echo $hidden; ?>>
 							<span class="sc-time-separator"><?php esc_html_e( ' at ', 'sugar-calendar' ); ?></span>
 							<?php sugar_calendar_time_dropdown( array(
-								'first'    => '',
+								'first'    => '&nbsp;',
 								'id'       => 'end_time_hour',
 								'name'     => 'end_time_hour',
 								'items'    => sugar_calendar_get_hours(),
@@ -441,13 +452,14 @@ class Box {
 							) ); ?>
 							<span class="sc-time-separator">:</span>
 							<?php sugar_calendar_time_dropdown( array(
-								'first'    => '',
+								'first'    => '&nbsp;',
 								'id'       => 'end_time_minute',
 								'name'     => 'end_time_minute',
 								'items'    => sugar_calendar_get_minutes(),
 								'selected' => $end_minute
 							) ); ?>
 							<select id="end_time_am_pm" name="end_time_am_pm" class="sc-select-chosen sc-time">
+								<option value="">&nbsp;</option>
 								<option value="am" <?php selected( $end_am_pm, 'am' ); ?>><?php esc_html_e( 'AM', 'sugar-calendar' ); ?></option>
 								<option value="pm" <?php selected( $end_am_pm, 'pm' ); ?>><?php esc_html_e( 'PM', 'sugar-calendar' ); ?></option>
 							</select>

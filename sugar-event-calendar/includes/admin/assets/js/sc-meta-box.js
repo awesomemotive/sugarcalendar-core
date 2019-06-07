@@ -56,6 +56,10 @@ jQuery( document ).ready( function ( $ ) {
 				start.datepicker( 'option', 'maxDate', getDate( this.value ) );
 			} );
 
+	// Set min & max on page load
+	start.datepicker( 'option', 'maxDate', getDate( end.val() ) );
+	end.datepicker( 'option', 'minDate', getDate( start.val() ) );
+
 	// Toggle time field visibility if all-day
 	$( '#all_day' ).on( 'click', function() {
 		var checked = $( this ).prop( 'checked' ),

@@ -205,7 +205,7 @@ function can_save_meta_box( $object_id = 0, $object = null ) {
  * @since 2.0.0
  *
  * @param int    $object_id ID of the connected object
- * @param obejct $object    Connected object data
+ * @param object $object    Connected object data
  *
  * @return int|void
  */
@@ -216,106 +216,18 @@ function save( $object_id = 0, $object = null ) {
 		return $object_id;
 	}
 
-	/** Starts ****************************************************************/
+	// Prepare event parameters
+	$all_day = prepare_all_day();
+	$start   = prepare_start();
+	$end     = prepare_end();
 
-	// Get calendar date
-	$date = ! empty( $_POST['start_date'] )
-		? strtotime( sanitize_text_field( $_POST['start_date'] ) )
-		: current_time( 'timestamp' );
+	// Sanitize start & end to prevent data entry errors
+	$start   = sanitize_start( $start, $end, $all_day );
+	$end     = sanitize_end( $end, $start, $all_day );
+	$all_day = sanitize_all_day( $all_day, $start, $end );
 
-	// Hour
-	$hour = ! empty( $_POST['start_time_hour'] )
-		? sanitize_text_field( $_POST['start_time_hour'] )
-		: 0;
-
-	// Minutes
-	$minutes = ! empty( $_POST['start_time_minute'] )
-		? sanitize_text_field( $_POST['start_time_minute'] )
-		: 0;
-
-	// Day/night
-	$am_pm = ! empty( $_POST['start_time_am_pm'] )
-		? sanitize_text_field( $_POST['start_time_am_pm'] )
-		: 'am';
-
-	/** Ends ******************************************************************/
-
-	// Calendar date is set
-	$end_date = ! empty( $_POST['end_date'] )
-		? strtotime( sanitize_text_field( $_POST['end_date'] ) )
-		: null;
-
-	// Hour
-	$end_hour = ! empty( $_POST['end_time_hour'] )
-		? sanitize_text_field( $_POST['end_time_hour'] )
-		: 0;
-
-	// Minutes
-	$end_minutes = ! empty( $_POST['end_time_minute'] )
-		? sanitize_text_field( $_POST['end_time_minute'] )
-		: 0;
-
-	// Day/night
-	$end_am_pm = ! empty( $_POST['end_time_am_pm']  )
-		? sanitize_text_field( $_POST['end_time_am_pm'] )
-		: 'am';
-
-	/** All Day ***************************************************************/
-
-	// Get all-day status
-	$all_day = ! empty( $_POST['all_day'] )
-		? (bool) $_POST['all_day']
-		: false;
-
-	// Set all day if no end date
-	if ( ( $date === $end_date ) || ( empty( $minutes ) && empty( $hour ) && empty( $end_minutes ) && empty( $end_hour ) && empty( $end_date ) ) ) {
-
-		// Make all-day event
-		$all_day = true;
-
-		// Make single-day event
-		if ( empty( $end_date ) ) {
-			$end_date = strtotime( '+1 day -1 second', $date );
-		}
-	}
-
-	/** Combine ***************************************************************/
-
-	// Maybe tweak hours
-	$hour     = adjust_hour_for_meridiem( $hour,     $am_pm     );
-	$end_hour = adjust_hour_for_meridiem( $end_hour, $end_am_pm );
-
-	// Make timestamps from pieces
-	$date = mktime( intval( $hour ), intval( $minutes ), 0, date( 'm', $date ), date( 'd', $date ), date( 'Y', $date ) );
-
-	// End dates for all-day events must be end of day
-	if ( ( true === $all_day ) && ! empty( $end_date ) ) {
-		$end_date = mktime( 23, 59, 59, date( 'm', $end_date ), date( 'd', $end_date ), date( 'Y', $end_date ) );
-
-	// Use the passed end date and time
-	} else {
-		$end_date = mktime( intval( $end_hour ), intval( $end_minutes ), 0, date( 'm', $end_date ), date( 'd', $end_date ), date( 'Y', $end_date ) );
-	}
-
-	// End dates can't be before start dates
-	if ( $end_date <= $date ) {
-		$minimum  = sugar_calendar_get_minimum_event_duration();
-		$end_date = ! empty( $minimum )
-			? strtotime( '+' . $minimum, $date )
-			: $date;
-	}
-
-	/** Save ******************************************************************/
-
-	// Save the start date & time
-	if ( ! empty( $date ) ) {
-		$date = gmdate( 'Y-m-d H:i:s', $date );
-	}
-
-	// Save the end date & time
-	if ( ! empty( $end_date ) ) {
-		$end_date = gmdate( 'Y-m-d H:i:s', $end_date );
-	}
+	// Time zones (empty for UTC by default)
+	$start_tz = $end_tz = '';
 
 	// Shim these for now (need to make functions for them)
 	$title   = $object->post_title;
@@ -331,27 +243,332 @@ function save( $object_id = 0, $object = null ) {
 
 	// Assemble the event properties
 	$to_save = apply_filters( 'sugar_calendar_event_to_save', array(
-		'object_id'           => $object_id,
-		'object_type'         => $type,
-		'object_subtype'      => $subtype,
-		'title'               => $title,
-		'content'             => $content,
-		'status'              => $status,
-		'start'               => $date,
-		'start_tz'            => '',
-		'end'                 => $end_date,
-		'end_tz'              => '',
-		'all_day'             => $all_day
+		'object_id'      => $object_id,
+		'object_type'    => $type,
+		'object_subtype' => $subtype,
+		'title'          => $title,
+		'content'        => $content,
+		'status'         => $status,
+		'start'          => $start,
+		'start_tz'       => $start_tz,
+		'end'            => $end,
+		'end_tz'         => $end_tz,
+		'all_day'        => $all_day
 	) );
 
-	// Update
-	if ( ! empty( $event->id ) ) {
-		$success = sugar_calendar_update_event( $event->id, $to_save );
+	// Update or Add New
+	$success = ! empty( $event->id )
+		? sugar_calendar_update_event( $event->id, $to_save )
+		: sugar_calendar_add_event( $to_save );
 
-	// Add
-	} else {
-		$success = sugar_calendar_add_event( $to_save );
+	// Return the results of the update/add event
+	return $success;
+}
+
+/**
+ * Does the event that is trying to be saved have an end date & time?
+ *
+ * @since 2.0.5
+ *
+ * @return bool
+ */
+function has_start() {
+	return ! (
+		empty( $_POST['start_date'] )
+		&& empty( $_POST['start_time_hour'] )
+		&& empty( $_POST['start_time_minute'] )
+	);
+}
+
+/**
+ * Does the event that is trying to be saved have an end date & time?
+ *
+ * @since 2.0.5
+ *
+ * @return bool
+ */
+function has_end() {
+	return ! (
+		empty( $_POST['end_date'] )
+		&& empty( $_POST['end_time_hour'] )
+		&& empty( $_POST['end_time_minute'] )
+	);
+}
+
+/**
+ * Prepare the all-day value to be saved to the database.
+ *
+ * @since 2.0.5
+ *
+ * @return bool
+ */
+function prepare_all_day() {
+	return ! empty( $_POST['all_day'] )
+		? (bool) $_POST['all_day']
+		: false;
+}
+
+/**
+ * Prepare the start value to be saved to the database.
+ *
+ * @since 2.0.5
+ *
+ * @return string The MySQL formatted datetime to start
+ */
+function prepare_start() {
+	return prepare_date_time( 'start' );
+}
+
+/**
+ * Prepare the start value to be saved to the database.
+ *
+ * @since 2.0.5
+ *
+ * @return string The MySQL formatted datetime to start
+ */
+function prepare_end() {
+	return prepare_date_time( 'end' );
+}
+
+/**
+ * Helper function to prepare any combined date/hour/minute/meridiem fields.
+ *
+ * Used by start & end, but could reliably be used elsewhere.
+ *
+ * This helper exists to eliminate duplicated code, and to provide a single
+ * function to funnel different field formats through, I.E. 12/24 hour clocks.
+ *
+ * @since 2.0.5
+ *
+ * @param type $prefix
+ * @return type
+ */
+function prepare_date_time( $prefix = 'start' ) {
+
+	// Sanity check the prefix
+	if ( empty( $prefix ) || ! is_string( $prefix ) ) {
+		$prefix = 'start';
 	}
+
+	// Sanitize the prefix, and append an underscore
+	$prefix = sanitize_key( $prefix ) . '_';
+
+	// Get the current time
+	$now = sugar_calendar_get_request_time();
+
+	// Get the current Year, Month, and Day, without any time
+	$nt  = date( 'Y-m-d H:i:s', mktime(
+		0,
+		0,
+		0,
+		date( 'n', $now ),
+		date( 'j', $now ),
+		date( 'Y', $now )
+	) );
+
+	// Calendar date is set
+	$date = ! empty( $_POST[ $prefix . 'date' ] )
+		? strtotime( sanitize_text_field( $_POST[ $prefix . 'date' ] ) )
+		: strtotime( $nt );
+
+	// Hour
+	$hour = ! empty( $_POST[ $prefix . 'time_hour' ] )
+		? sanitize_text_field( $_POST[ $prefix . 'time_hour'] )
+		: 0;
+
+	// Minutes
+	$minutes = ! empty( $_POST[ $prefix . 'time_minute' ] )
+		? sanitize_text_field( $_POST[ $prefix . 'time_minute' ] )
+		: 0;
+
+	// Seconds
+	$seconds = ! empty( $_POST[ $prefix . 'time_second' ] )
+		? sanitize_text_field( $_POST[ $prefix . 'time_second' ] )
+		: 0;
+
+	// Day/night
+	$am_pm = ! empty( $_POST[ $prefix . 'time_am_pm' ] )
+		? sanitize_text_field( $_POST[ $prefix . 'time_am_pm' ] )
+		: 'am';
+
+	// Maybe tweak hours
+	$hour = adjust_hour_for_meridiem( $hour, $am_pm );
+
+	// Make timestamp from pieces
+	$timestamp = mktime(
+		intval( $hour ),
+		intval( $minutes ),
+		intval( $seconds ),
+		date( 'n', $date ),
+		date( 'j', $date ),
+		date( 'Y', $date )
+	);
+
+	// Format for MySQL
+	$retval = date( 'Y-m-d H:i:s', $timestamp );
+
+	// Return
+	return $retval;
+}
+
+/**
+ * Sanitizes the start MySQL datetime, so that:
+ *
+ * - If all-day, time is set to midnight
+ *
+ * @since 2.0.5
+ *
+ * @param string $start   The start time, in MySQL format
+ * @param string $end     The end time, in MySQL format
+ * @param bool   $all_day True|False, whether the event is all-day
+ *
+ * @return string
+ */
+function sanitize_start( $start = '', $end = '', $all_day = false ) {
+
+	// Bail early if start or end are empty or malformed
+	if ( empty( $start ) || empty( $end ) || ! is_string( $start ) || ! is_string( $end ) ) {
+		return $start;
+	}
+
+	// Check if the user attempted to set an end date and/or time
+	$start_int = strtotime( $start );
+
+	// All day events end at the final second
+	if ( true === $all_day ) {
+		$start_int = mktime(
+			0,
+			0,
+			0,
+			date( 'n', $start_int ),
+			date( 'j', $start_int ),
+			date( 'Y', $start_int )
+		);
+	}
+
+	// Format
+	$retval = date( 'Y-m-d H:i:s', $start_int );
+
+	// Return the new start
+	return $retval;
+}
+
+/**
+ * Sanitizes the all-day value, so that:
+ *
+ * - If times align, all-day is made true
+ *
+ * @since 2.0.5
+ *
+ * @param bool   $all_day True|False, whether the event is all-day
+ * @param string $start   The start time, in MySQL format
+ * @param string $end     The end time, in MySQL format
+ *
+ * @return string
+ */
+function sanitize_all_day( $all_day = false, $start = '', $end = '' ) {
+
+	// Bail early if start or end are empty or malformed
+	if ( empty( $start ) || empty( $end ) || ! is_string( $start ) || ! is_string( $end ) ) {
+		return $start;
+	}
+
+	// Check if the user attempted to set an end date and/or time
+	$start_int = strtotime( $start );
+	$end_int   = strtotime( $end );
+
+	// Starts at midnight and ends 1 second before
+	if (
+		( '00:00:00' === date( 'H:i:s', $start_int ) )
+		&&
+		( '23:59:59' === date( 'H:i:s', $end_int ) )
+	) {
+		$all_day = true;
+	}
+
+	// Return the new start
+	return (bool) $all_day;
+}
+
+/**
+ * Sanitizes the end MySQL datetime, so that:
+ *
+ * - It does not end before it starts
+ * - It is at least as long as the minimum event duration (if exists)
+ * - If the date is empty, the time can still be used
+ * - If both the date and the time are empty, it will equal the start
+ *
+ * @since 2.0.5
+ *
+ * @param string $end     The end time, in MySQL format
+ * @param string $start   The start time, in MySQL format
+ * @param bool   $all_day True|False, whether the event is all-day
+ *
+ * @return string
+ */
+function sanitize_end( $end = '', $start = '', $all_day = false ) {
+
+	// Bail early if start or end are empty or malformed
+	if ( empty( $start ) || empty( $end ) || ! is_string( $start ) || ! is_string( $end ) ) {
+		return $end;
+	}
+
+	// See if there a minimum duration to enforce...
+	$minimum = sugar_calendar_get_minimum_event_duration();
+
+	// Convert to integers for faster comparisons
+	$start_int = strtotime( $start );
+	$end_int   = strtotime( $end   );
+
+	// Calculate the end, based on a minimum duration (if set)
+	$end_compare = ! empty( $minimum )
+		? strtotime( '+' . $minimum, $end_int )
+		: $end_int;
+
+	// Check if the user attempted to set an end date and/or time
+	$has_end = has_end();
+
+	// Bail if event duration exceeds the minimum (great!)
+	if ( ( true === $has_end ) && ( $end_compare > $start_int ) ) {
+		return $end;
+	}
+
+	// ...or the user attempted an end date and this isn't an all-day event
+	if ( ( true === $has_end ) && ( false === $all_day ) ) {
+
+		// If there is a minimum, the new end is the start + the minimum
+		if ( ! empty( $minimum ) ) {
+			$end_int = strtotime( '+' . $minimum, $start_int );
+
+		// If there isn't a minimum, then the end needs to be rejected
+		} else {
+			$has_end = false;
+		}
+	}
+
+	// The above logic deterimned that the end needs to equal the start.
+	// This is how events are allowed to have a start without a known end.
+	if ( false === $has_end ) {
+		$end_int = $start_int;
+	}
+
+	// All day events end at the final second
+	if ( true === $all_day ) {
+		$end_int = mktime(
+			23,
+			59,
+			59,
+			date( 'n', $end_int ),
+			date( 'j', $end_int ),
+			date( 'Y', $end_int )
+		);
+	}
+
+	// Format
+	$retval = date( 'Y-m-d H:i:s', $end_int );
+
+	// Return the new end
+	return $retval;
 }
 
 /**

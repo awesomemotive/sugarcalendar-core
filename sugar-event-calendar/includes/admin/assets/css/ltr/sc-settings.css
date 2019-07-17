@@ -208,6 +208,58 @@ button.sc-license-refresh {
 	margin-bottom: 0;
 }
 
+/* Sortable Lists
+-------------------------------------------------------------- */
+
+.sc-sortable-list {
+	margin: 0;
+	width: 300px;
+	position: relative;
+}
+
+.sc-sortable-list li {
+	margin: 0;
+	padding: 0;
+	position: relative;
+	height: 28px;
+	cursor: move;
+}
+
+.sc-sortable-list li label * {
+	vertical-align: middle;
+}
+
+.sc-sortable-list li label:after {
+	display: block;
+	width: 17px;
+	height: 17px;
+	position: absolute;
+	right: 6px;
+	top: 0px;
+	color: #aaa;
+	font-family: dashicons;
+	font-size: 17px;
+	content: '\f228';
+	cursor: move;
+}
+
+.form-table .sc-sortable-list li label {
+	display: block;
+	height: 28px;
+	padding: 0;
+	margin: 0;
+}
+
+.sc-check-wrapper {
+	clear: both;
+}
+
+.sc-check-wrapper label {
+	margin: -2px 0 3px 0;
+	display: inline-block;
+	vertical-align: initial;
+}
+
 /* Keyframes
 -------------------------------------------------------------- */
 

@@ -10,7 +10,7 @@ namespace JJJ\WP\Term\Meta;
  * and handle the sanitization & saving of values.
  *
  * @since   2.0.0
- * @version 3.0.1
+ * @version 3.1.0
  */
 
 // Exit if accessed directly
@@ -99,6 +99,11 @@ class UI {
 	public $has_fields = true;
 
 	/**
+	 * @var bool Whether to support quick edit
+	 */
+	public $has_quick = true;
+
+	/**
 	 * Hook into queries, admin screens, and more!
 	 *
 	 * @since 2.0.0
@@ -106,10 +111,10 @@ class UI {
 	public function __construct( $file = '' ) {
 
 		// Setup plugin
-		$this->file       = $file;
-		$this->url        = plugin_dir_url( $this->file );
-		$this->path       = plugin_dir_path( $this->file );
-		$this->basename   = plugin_basename( $this->file );
+		$this->file     = $file;
+		$this->url      = plugin_dir_url( $this->file );
+		$this->path     = plugin_dir_path( $this->file );
+		$this->basename = plugin_basename( $this->file );
 
 		// Initialize late, after taxonomies are likely registered
 		add_action( 'init', array( $this, 'initialize' ), 999 );
@@ -254,7 +259,9 @@ class UI {
 		add_action( 'admin_head',            array( $this, 'admin_head'      ) );
 
 		// Quick edit
-		add_action( 'quick_edit_custom_box', array( $this, 'quick_edit_meta' ), 10, 3 );
+		if ( true === $this->has_quick ) {
+			add_action( 'quick_edit_custom_box', array( $this, 'quick_edit_meta' ), 10, 3 );
+		}
 	}
 
 	/** Get Terms *************************************************************/

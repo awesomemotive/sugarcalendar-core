@@ -145,20 +145,23 @@ function calendar_page() {
 
 		<hr class="wp-header-end">
 
-		<?php $wp_list_table->views(); ?>
+		<div id="sugar-calendar-admin-calendar-wrapper">
 
-		<form id="posts-filter" method="get">
+			<?php $wp_list_table->views(); ?>
 
-			<?php $wp_list_table->search_box( $post_type_object->labels->search_items, $post_type ); ?>
+			<form id="posts-filter" method="get">
 
-			<input type="hidden" name="page" value="sugar-calendar" />
+				<?php $wp_list_table->search_box( $post_type_object->labels->search_items, $post_type ); ?>
 
-			<?php $wp_list_table->display(); ?>
+				<input type="hidden" name="page" value="sugar-calendar" />
 
-		</form>
+				<?php $wp_list_table->display(); ?>
 
-		<div id="ajax-response"></div>
-		<br class="clear">
+			</form>
+
+			<div id="ajax-response"></div>
+			<br class="clear">
+		</div>
 	</div>
 
 <?php

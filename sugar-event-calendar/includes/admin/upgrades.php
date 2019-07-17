@@ -118,10 +118,19 @@ function notices() {
 		upgrade_complete( '20_migration' );
 	}
 
+	// 2.0 - Database migration
 	if ( ! did_upgrade( '20_migration' ) ) {
 		printf(
-			'<div class="updated"><p>' . __( 'Sugar Calendar needs to upgrade the events database, click <a href="%s">here</a> to start the upgrade.', 'sugar-calendar' ) . '</p></div>',
+			'<div class="updated"><p>' . __( 'Sugar Calendar needs to upgrade the events database. Click <a href="%s">here</a> to start.', 'sugar-calendar' ) . '</p></div>',
 			page_url( array( 'upgrade' => '20_migration' ) )
+		);
+	}
+
+	// 2.0.6 - Flush rewrite rules
+	if ( ! did_upgrade( '206_migration' ) ) {
+		printf(
+			'<div class="updated"><p>' . __( 'Sugar Calendar needs to perform an upgrade. Click <a href="%s">here</a> to start.', 'sugar-calendar' ) . '</p></div>',
+			page_url( array( 'upgrade' => '206_migration' ) )
 		);
 	}
 }
@@ -355,4 +364,13 @@ function do_20_migration() {
 
 	// Unet the upgrade global
 	unset( $sc_doing_upgrade );
+}
+
+/**
+ * Upgrades rewrite rules for version 2.0.6
+ *
+ * @since 2.0.0
+ */
+function do_206_migration() {
+	flush_rewrite_rules( true );
 }

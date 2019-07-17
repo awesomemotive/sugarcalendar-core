@@ -7,7 +7,7 @@ Tags:              event calendar, events, simple, events calendar, calendar, Pi
 Requires PHP:      5.6.20
 Requires at least: 5.0
 Tested up to:      5.2
-Stable tag:        2.0.5
+Stable tag:        2.0.6
 
 A sweet, simple event calendar plugin. Create your events and show them on a simple calendar. That's it.
 
@@ -76,6 +76,15 @@ Yes, there is a [free add-on plugin](http://wordpress.org/extend/plugins/simple-
 I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-calendar-gravity-forms/) that provides integration with the very popular [Gravity Forms plugin](http://www.gravityforms.com/).
 
 == Changelog ==
+
+= 2.0.6 =
+
+June 17, 2019
+
+* Fixed: Quick editing Calendar colors back-to-back would fail
+* Fixed: 404 when viewing single Calendar archives
+* Fixed: Event list widget not filtering by Calendar
+* Added: actions to admin-area output for future add-on support
 
 = 2.0.5 =
 

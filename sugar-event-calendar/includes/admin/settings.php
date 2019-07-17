@@ -116,7 +116,7 @@ function get_sections() {
 		);
 
 		// Filter
-		$retval = apply_filters( 'sg_settings_sections', $retval );
+		$retval = apply_filters( 'sugar_calendar_settings_sections', $retval );
 	}
 
 	// Return

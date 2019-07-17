@@ -38,6 +38,36 @@ function sugar_calendar_transition_post_status( $new_status = '', $old_status = 
 }
 
 /**
+ * Get which taxonomy term is being queried.
+ *
+ * First this checks the global $_REQUEST, then it checks the $query.
+ *
+ * @since 2.0.6
+ *
+ * @param string       $taxonomy
+ * @param object|Query $query
+ *
+ * @return mixed False if no term, String(slug) if term
+ */
+function sugar_calendar_get_taxonomy_term_for_query( $taxonomy = '', $query = false ) {
+
+	// Default return value
+	$retval = false;
+
+	// Sanitize the requested term
+	if ( ! empty( $_REQUEST[ $taxonomy ] ) ) {
+		$retval = sanitize_text_field( $_REQUEST[ $taxonomy ] );
+
+	// Sanitize the queried term
+	} elseif ( ! empty( $query->query_vars[ $taxonomy ] ) ) {
+		$retval = sanitize_key( $query->query_vars[ $taxonomy ] );
+	}
+
+	// Return the term, or false
+	return $retval;
+}
+
+/**
  * Filter events query variables and maybe add the taxonomy and term.
  *
  * This filter is necessary to ensure events queries are cached using the
@@ -52,10 +82,8 @@ function sugar_calendar_pre_get_events_by_taxonomy( $query ) {
 	// Get the taxonomy ID
 	$tax = sugar_calendar_get_calendar_taxonomy_id();
 
-	// Sanitize the requested term
-	$term = ! empty( $_REQUEST[ $tax ] )
-		? sanitize_text_field( $_REQUEST[ $tax ] )
-		: false;
+	// Get the term slug
+	$term = sugar_calendar_get_taxonomy_term_for_query( $tax, $query );
 
 	// Bail if sanitized term is empty
 	if ( empty( $term ) ) {
@@ -75,18 +103,17 @@ function sugar_calendar_pre_get_events_by_taxonomy( $query ) {
  * @since 2.0.0
  *
  * @param array $clauses
+ * @param object|Query $query
  *
  * @return array
  */
-function sugar_calendar_join_by_taxonomy_term( $clauses = array() ) {
+function sugar_calendar_join_by_taxonomy_term( $clauses = array(), $query = false ) {
 
 	// Get the taxonomy ID
 	$tax = sugar_calendar_get_calendar_taxonomy_id();
 
-	// Sanitize the requested term
-	$term = ! empty( $_REQUEST[ $tax ] )
-		? sanitize_text_field( $_REQUEST[ $tax ] )
-		: false;
+	// Get the term slug
+	$term = sugar_calendar_get_taxonomy_term_for_query( $tax, $query );
 
 	// Bail if sanitized term is empty
 	if ( empty( $term ) ) {

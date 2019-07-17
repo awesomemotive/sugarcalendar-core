@@ -1,4 +1,5 @@
 .sc_clearfix:after { display: block; visibility:hidden;float: none; clear: both; height: 0; content: "."; text-indent: -9999px; }
+#sc_calendar_wrap, #sc_calendar * { -webkit-hyphens: none; -moz-hyphens: none; -ms-hyphens: none; hyphens: none; overflow: ellipses; }
 #sc_calendar table { width: 100%; border-collapse: collapse; float:left; }
 #sc_calendar th { width: 13.25%; background: #fdfdfd; border: 1px solid #ddd; text-align: center; text-transform: capitalize; padding: 3px 4px!important; font-size: 1.2rem;}
 #sc_calendar td { width: 13.25%; border: 1px solid #ddd; font-size: 11px; padding: 0!important; }

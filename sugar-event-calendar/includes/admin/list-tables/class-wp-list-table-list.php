@@ -277,8 +277,8 @@ class Basic extends Base_List_Table {
 
 		// Parse args
 		$r = wp_parse_args( $args, array(
-			'small'  => '1 month',
-			'large'  => '1 year',
+			'small'  => '1 year',
+			'large'  => '10 years',
 			'labels' => array(
 				'today'      => esc_html__( 'Today',          'sugar-calendar' ),
 				'next_small' => esc_html__( 'Next Month',     'sugar-calendar' ),

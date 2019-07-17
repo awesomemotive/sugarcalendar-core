@@ -50,7 +50,7 @@ function sugar_calendar_register_calendar_taxonomy() {
 		'no_terms'                   => esc_html__( 'No Calendars',                        'sugar-calendar' ),
 		'not_found'                  => esc_html__( 'No calendars found',                  'sugar-calendar' ),
 		'items_list_navigation'      => esc_html__( 'Calendars list navigation',           'sugar-calendar' ),
-		'items_list'                 => esc_html__( 'Calendars list',                      'sugar-calendar' ),		
+		'items_list'                 => esc_html__( 'Calendars list',                      'sugar-calendar' ),
 		'back_to_items'              => esc_html__( '&larr; Back to Calendars',            'sugar-calendar' )
 	);
 
@@ -78,7 +78,7 @@ function sugar_calendar_register_calendar_taxonomy() {
 		'show_tagcloud'         => true,
 		'hierarchical'          => true,
 		'show_in_nav_menus'     => false,
-		'public'                => false,
+		'public'                => true,
 		'show_ui'               => true,
 		'colors'                => true,
 		'source'                => 'sugar-calendar',
@@ -88,9 +88,33 @@ function sugar_calendar_register_calendar_taxonomy() {
 	// Register
 	register_taxonomy(
 		sugar_calendar_get_calendar_taxonomy_id(),
-		sugar_calendar_allowed_post_types(),
+		sugar_calendar_get_event_post_type_id(),
 		$args
 	);
+}
+
+/**
+ * Relate taxonomy to post types.
+ *
+ * @since 2.0.6
+ */
+function sugar_calendar_relate_taxonomy_to_post_types() {
+
+	// Get the taxonomy
+	$tax = sugar_calendar_get_calendar_taxonomy_id();
+
+	// Get the types
+	$types = sugar_calendar_allowed_post_types();
+
+	// Bail if no types
+	if ( empty( $types ) ) {
+		return;
+	}
+
+	// Loop through types and relate them
+	foreach ( $types as $type ) {
+		register_taxonomy_for_object_type( $tax, $type );
+	}
 }
 
 /**

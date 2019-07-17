@@ -79,15 +79,6 @@ class Base_List_Table extends \WP_List_Table {
 	public $time_format = 'g:i a';
 
 	/**
-	 * Whether the week column is shown
-	 *
-	 * @since 2.0.0
-	 *
-	 * @var boolean
-	 */
-	protected $show_week_column = false;
-
-	/**
 	 * The beginning boundary for the current view
 	 *
 	 * @since 2.0.0
@@ -113,6 +104,15 @@ class Base_List_Table extends \WP_List_Table {
 	 * @var int
 	 */
 	public $view_duration = 0;
+
+	/**
+	 * The items with pointers
+	 *
+	 * @since 2.0.0
+	 *
+	 * @var array
+	 */
+	public $pointers = array();
 
 	/**
 	 * The year being viewed
@@ -163,6 +163,15 @@ class Base_List_Table extends \WP_List_Table {
 	protected $now = 0;
 
 	/**
+	 * Whether the week column is shown
+	 *
+	 * @since 2.0.0
+	 *
+	 * @var boolean
+	 */
+	protected $show_week_column = false;
+
+	/**
 	 * Current item details
 	 *
 	 * @since 2.0.0
@@ -188,51 +197,6 @@ class Base_List_Table extends \WP_List_Table {
 	 * @var object
 	 */
 	protected $recurring_query = null;
-
-	/**
-	 * The items being displayed
-	 *
-	 * @since 2.0.0
-	 *
-	 * @var array
-	 */
-	public $items = array();
-
-	/**
-	 * The positions of items being displayed
-	 *
-	 * @since 2.0.0
-	 *
-	 * @var array
-	 */
-	public $positions = array();
-
-	/**
-	 * The all-day items in the current query
-	 *
-	 * @since 2.0.0
-	 *
-	 * @var array
-	 */
-	public $all_day_items = array();
-
-	/**
-	 * The multi-day items in the current query
-	 *
-	 * @since 2.0.0
-	 *
-	 * @var array
-	 */
-	public $multi_day_items = array();
-
-	/**
-	 * The items with pointers
-	 *
-	 * @since 2.0.0
-	 *
-	 * @var array
-	 */
-	public $pointers = array();
 
 	/**
 	 * Unix time month start
@@ -2243,17 +2207,17 @@ class Base_List_Table extends \WP_List_Table {
 	protected function display_tablenav( $which = 'top' ) {
 		?>
 
-		<div class="tablenav <?php echo esc_attr( $which ); ?>">
+		<div class="tablenav <?php echo esc_attr( $which ); ?>"><?php
 
-			<?php
+			// Output Month, Year tablenav
+			echo $this->extra_tablenav( $which );
 
-				// Output Month, Year tablenav
-				echo $this->extra_tablenav( $which );
+			// Output pagination on top only
+			if ( 'top' === $which ) :
+				echo $this->extra_tablenav( 'pagination' );
+			endif;
 
-				// Output year/month pagination
-				echo $this->pagination( array( 'which' => $which ) ); ?>
-
-			<br class="clear">
+			?><br class="clear">
 		</div>
 
 		<?php
@@ -2541,6 +2505,9 @@ class Base_List_Table extends \WP_List_Table {
 		// Start an output buffer
 		ob_start();
 
+		// Before action
+		do_action( "sugar_calendar_admin_before_extra_tablenav_{$which}", $this );
+
 		// Bar
 		if ( 'bar' === $which ) :
 
@@ -2621,7 +2588,14 @@ class Base_List_Table extends \WP_List_Table {
 
 			// Nonce for event actions
 			wp_nonce_field( 'event-actions' );
+
+		// Output pagination
+		elseif ( 'pagination' === $which ) :
+			echo $this->pagination();
 		endif;
+
+		// After action
+		do_action( "sugar_calendar_admin_after_extra_tablenav_{$which}", $this );
 
 		// Filter & return
 		return ob_get_clean();
@@ -2638,7 +2612,6 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Parse args
 		$r = wp_parse_args( $args, array(
-			'which'  => 'top',
 			'small'  => '1 month',
 			'large'  => '1 year',
 			'labels' => array(
@@ -2649,11 +2622,6 @@ class Base_List_Table extends \WP_List_Table {
 				'prev_large' => esc_html__( 'Previous year',  'sugar-calendar' )
 			)
 		) );
-
-		// Bail if not top (no bottom pagination)
-		if ( 'top' !== $r['which'] ) {
-			return;
-		}
 
 		// Base URLs
 		$today = $this->get_today_url();

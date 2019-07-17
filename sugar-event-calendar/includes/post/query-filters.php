@@ -61,6 +61,9 @@ function sc_modify_events_archive( $query = false ) {
 			$order_arg = $default_order;
 		}
 
+		// Force the post type
+		$query->set( 'post_type', $post_type );
+
 		// Custom query args
 		$query->set( '_sc_alias',   $alias       );
 		$query->set( '_sc_today',   $today       );
@@ -140,7 +143,7 @@ function sc_modify_events_archive_join( $join = '', $query = false ) {
 	}
 
 	// Add a right join
-	$join .= "RIGHT JOIN {$wpdb->sc_events} AS {$alias} ON ({$wpdb->posts}.ID = {$alias}.object_id AND {$alias}.object_type = 'post' AND {$alias}.object_subtype = '{$pt}')";
+	$join .= " RIGHT JOIN {$wpdb->sc_events} AS {$alias} ON ({$wpdb->posts}.ID = {$alias}.object_id AND {$alias}.object_type = 'post' AND {$alias}.object_subtype = '{$pt}')";
 
 	// Return new join
 	return $join;

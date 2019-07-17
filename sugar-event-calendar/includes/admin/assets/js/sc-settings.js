@@ -2,6 +2,8 @@
 jQuery( document ).ready( function( $ ) {
 	'use strict';
 
+	/** License Key ***********************************************************/
+
 	// Get license key elements (for togglin')
 	var license    = $( 'input.sc-license-key' ),
 		verify     = $( '.sc-license-verify' ),
@@ -65,7 +67,7 @@ jQuery( document ).ready( function( $ ) {
 	 */
 	function click( method = 'activate' ) {
 
-			// Get the data attributes
+		// Get the data attributes
 		var daction   = verify.attr( 'data-action' ),
 			dactivate = deactivate.attr( 'disabled' ),
 			dbubbles  = bubbles.is( ':hidden' ),
@@ -226,4 +228,41 @@ jQuery( document ).ready( function( $ ) {
 		e.preventDefault();
 		click( 'activate' );
 	} );
+
+	/** Sortables *************************************************************/
+
+	/**
+	 * Sortables
+	 *
+	 * This makes certain settings sortable, and attempts to stash the results
+	 * in the nearest .edd-order input value.
+	 */
+	const sc_sortables = $( 'ul.sc-sortable-list' );
+
+	if ( sc_sortables.length > 0 ) {
+		sc_sortables.sortable( {
+			axis:        'y',
+			items:       'li',
+			cursor:      'move',
+			tolerance:   'pointer',
+			containment: 'parent',
+			distance:    2,
+			opacity:     0.7,
+			scroll:      true,
+
+			/**
+			 * When sorting stops, assign the value to the previous input.
+			 * This input should be a hidden text field
+			 */
+			stop: function() {
+				var list = $( this );
+
+				const keys = $.map( list.children( 'li' ), function( el ) {
+					 return $( el ).data( 'key' );
+				} );
+
+				list.prev( 'input.sc-order' ).val( keys );
+			},
+		} );
+	}
 } );

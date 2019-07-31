@@ -111,7 +111,7 @@ function get_sections() {
 				'id'   => 'main',
 				'name' => esc_html__( 'Settings', 'sugar-calendar' ),
 				'url'  => admin_url( 'admin.php?page=sc-settings' ),
-				'func' => 'Sugar_Calendar\\Admin\\Settings\\datetime_section'
+				'func' => 'Sugar_Calendar\\Admin\\Settings\\display_subsection'
 			)
 		);
 
@@ -154,7 +154,7 @@ function get_subsections( $section = '' ) {
 					'id'   => 'display',
 					'name' => esc_html__( 'Display', 'sugar-calendar' ),
 					'url'  => admin_url( 'admin.php?page=sc-settings' ),
-					'func' => 'Sugar_Calendar\\Admin\\Settings\\datetime_section'
+					'func' => 'Sugar_Calendar\\Admin\\Settings\\display_subsection'
 				)
 			)
 		);
@@ -400,6 +400,7 @@ function page() {
 function register_settings() {
 
 	// Date/Time Formatting
+	register_setting( 'sc_main_display', 'sc_number_of_events' );
 	register_setting( 'sc_main_display', 'sc_start_of_week' );
 	register_setting( 'sc_main_display', 'sc_date_format' );
 	register_setting( 'sc_main_display', 'sc_time_format' );
@@ -414,13 +415,26 @@ function register_settings() {
  *
  * @since 2.0.0
  */
-function datetime_section() {
+function display_subsection() {
+	$events_max_num = sc_get_number_of_events();
 	$start_of_week  = sc_get_week_start_day();
 	$sc_date_format = sc_get_date_format();
 	$sc_time_format = sc_get_time_format(); ?>
 
 	<table class="form-table">
 		<tbody>
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="sc_number_of_events"><?php esc_html_e( 'Maximum Events', 'sugar-calendar' ); ?></label>
+				</th>
+				<td>
+					<input type="number" inputMode="numeric" step="1" min="0" max="999" class="code" name="sc_number_of_events" id="sc_number_of_events" maxlength="3" value="<?php echo absint( $events_max_num ); ?>">
+					<p class="description">
+						<?php _e( 'Number of events to include in any theme-side calendar. Default <code>30</code>. Use <code>0</code> for no limit.', 'sugar-calendar' ); ?>
+					</p>
+				</td>
+			</tr>
+
 			<tr valign="top">
 				<th scope="row" valign="top">
 					<label for="sc_start_of_week"><?php esc_html_e( 'Start of Week', 'sugar-calendar' ); ?></label>

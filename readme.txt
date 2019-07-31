@@ -7,7 +7,7 @@ Tags:              event calendar, events, simple, events calendar, calendar, Pi
 Requires PHP:      5.6.20
 Requires at least: 5.0
 Tested up to:      5.2
-Stable tag:        2.0.6
+Stable tag:        2.0.7
 
 A sweet, simple event calendar plugin. Create your events and show them on a simple calendar. That's it.
 
@@ -77,9 +77,17 @@ I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-cal
 
 == Changelog ==
 
+= 2.0.7 =
+
+July 31, 2019
+
+* Fixed: Bug limiting months to 30 events
+* Added: Developer hook inside of event details
+* Added: Display setting to adjust the number of events shown
+
 = 2.0.6 =
 
-June 17, 2019
+July 17, 2019
 
 * Fixed: Quick editing Calendar colors back-to-back would fail
 * Fixed: 404 when viewing single Calendar archives

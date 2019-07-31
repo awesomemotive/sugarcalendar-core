@@ -37,9 +37,11 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 	$month_start = mysql2date( 'U', $view_start );
 	$month_end   = strtotime( '+1 month -1 second', $month_start );
 	$view_end    = date_i18n( 'Y-m-d H:i:s', $month_end );
+	$number      = sc_get_number_of_events();
 
 	// Prime the events
 	$events = sugar_calendar_get_events( array(
+		'number'      => $number,
 		'object_type' => 'post',
 		'status'      => 'publish',
 		'orderby'     => 'start',
@@ -51,7 +53,7 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 	if ( ! empty( $events ) ) {
 		$post_ids = wp_filter_object_list( $events, array( 'object_type' => 'post' ), 'and', 'object_id' );
 
-		// Only prime if there is more than 2 to query
+		// Only prime if there are more than 2 to query
 		if ( 2 > count( $post_ids ) ) {
 			new WP_Query( array(
 				'post_type'      => sugar_calendar_get_event_post_type_id(),
@@ -1369,6 +1371,26 @@ function sc_get_date_format() {
 
 	// Filter and return
 	return apply_filters( 'sc_date_format', $format );
+}
+
+/**
+ * Retrieves the maximum number of events to include in a theme-side query.
+ *
+ * @access      public
+ * @since       2.0.7
+ * @return      string
+ */
+function sc_get_number_of_events() {
+
+	$number = get_option( 'sc_number_of_events', false );
+
+	// default to WordPress value
+	if ( false === $number ) {
+		$number = 30;
+	}
+
+	// Filter and return
+	return (int) apply_filters( 'sc_number_of_events', $number );
 }
 
 /**

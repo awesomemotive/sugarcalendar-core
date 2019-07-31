@@ -35,5 +35,7 @@ if ( ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) || wp_doing_ajax() ) {
 	add_filter( 'the_excerpt', 'sc_event_content_hooks' );
 
 	// Event Details
-	add_action( 'sc_before_event_content', 'sc_add_event_details' );
+	add_action( 'sc_before_event_content', 'sc_add_event_details'     );
+	add_action( 'sc_event_details',        'sc_add_date_time_details' );
+	add_action( 'sc_event_details',        'sc_add_location_details'  );
 }

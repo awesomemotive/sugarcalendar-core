@@ -66,52 +66,99 @@ function sc_event_content_hooks( $content = '' ) {
  *
  * @param int $post_id Post ID
  */
-function sc_add_event_details( $post_id ) {
+function sc_add_event_details( $post_id = 0 ) {
+
+	// Start an output buffer
+	ob_start();
+
+	/**
+	 * Output event details.
+	 *
+	 * @since 2.0.7
+	 */
+	do_action( 'sc_event_details', $post_id );
+
+	// Get the current output buffer
+	$details = ob_get_clean();
+
+	// Bail if no event details
+	if ( empty( $details ) ) {
+		return;
+	} ?>
+
+	<div class="sc_event_details" id="sc_event_details_<?php echo esc_attr( $post_id ); ?>">
+		<div class="sc_event_details_inner"><?php
+
+			// Output the event details
+			echo $details;
+
+		?></div><!--end .sc_event_details_inner-->
+	</div><!--end .sc_event_details-->
+
+	<?php
+}
+
+/**
+ * Add date & time details to event contents.
+ *
+ * @since 2.0.7
+ *
+ * @param int $post_id
+ */
+function sc_add_date_time_details( $post_id = 0 ) {
 
 	// Support 1.x
 	$start_date = sc_get_event_date( $post_id );
 	$start_time = sc_get_event_start_time( $post_id );
 	$end_time   = sc_get_event_end_time( $post_id );
 
+	// Recurring
+	if ( sc_is_recurring( $post_id ) ) : ?>
+
+		<div class="sc_event_date"><?php sc_show_single_recurring_date( $post_id ); ?></div>
+
+	<?php else : ?>
+
+		<div class="sc_event_date"><?php echo __( 'Date:', 'sugar-calendar' ) . ' ' . $start_date; ?></div>
+
+	<?php endif;
+
+	// Start & end
+	if ( ! empty( $start_time ) ) : ?>
+
+		<div class="sc_event_time">
+			<span class="sc_event_start_time"><?php echo __( 'Time:', 'sugar-calendar' ) . ' ' . $start_time; ?></span>
+
+			<?php if ( ! empty( $end_time ) && ( $end_time !== $start_time ) ) : ?>
+
+				<span class="sc_event_time_sep">&nbsp;<?php _e( 'to', 'sugar-calendar' ); ?>&nbsp;</span>
+				<span class="sc_event_end_time"><?php echo $end_time; ?></span>
+
+			<?php endif; ?>
+
+		</div>
+
+	<?php endif;
+}
+
+/**
+ * Add location details to event contents.
+ *
+ * @since 2.0.7
+ *
+ * @param int $post_id
+ */
+function sc_add_location_details( $post_id = 0 ) {
+
 	// New in 2.0
-	$location   = sugar_calendar_get_event_by_object( $post_id, 'post' )->location; ?>
+	$location   = sugar_calendar_get_event_by_object( $post_id, 'post' )->location;
 
-	<div class="sc_event_details" id="sc_event_details_<?php echo $post_id; ?>">
-		<div class="sc_event_details_inner">
-			<?php if ( sc_is_recurring( $post_id ) ) : ?>
+	// Maybe add location
+	if ( ! empty( $location ) ) : ?>
 
-				<div class="sc_event_date"><?php sc_show_single_recurring_date( $post_id ); ?></div>
+		<div class="sc_event_location">
+			<?php echo __( 'Location:', 'sugar-calendar' ) . ' ' . esc_html( $location ); ?>
+		</div>
 
-			<?php else : ?>
-
-				<div class="sc_event_date"><?php echo __( 'Date:', 'sugar-calendar' ) . ' ' . $start_date; ?></div>
-
-			<?php endif; ?>
-
-			<?php if ( ! empty( $start_time ) ) : ?>
-
-				<div class="sc_event_time">
-					<span class="sc_event_start_time"><?php echo __( 'Time:', 'sugar-calendar' ) . ' ' . $start_time; ?></span>
-
-					<?php if ( ! empty( $end_time ) && ( $end_time !== $start_time ) ) : ?>
-
-						<span class="sc_event_time_sep">&nbsp;<?php _e( 'to', 'sugar-calendar' ); ?>&nbsp;</span>
-						<span class="sc_event_end_time"><?php echo $end_time; ?></span>
-
-					<?php endif; ?>
-
-				</div>
-
-			<?php endif; ?>
-
-			<?php if ( ! empty( $location ) ) : ?>
-				<div class="sc_event_location">
-					<?php echo __( 'Location:', 'sugar-calendar' ) . ' ' . esc_html( $location ); ?>
-				</div>
-			<?php endif; ?>
-
-		</div><!--end .sc_event_details_inner-->
-	</div><!--end .sc_event_details-->
-
-	<?php
+	<?php endif;
 }

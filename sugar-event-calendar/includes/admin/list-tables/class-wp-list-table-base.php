@@ -1027,6 +1027,7 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Setup default args
 		$defaults = array(
+			'number'     => absint( get_option( 'sc_events_max_num', 100 ) ),
 			'orderby'    => $this->get_orderby(),
 			'order'      => strtoupper( $this->get_order() ),
 			'search'     => $this->get_search(),

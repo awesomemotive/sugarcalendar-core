@@ -94,7 +94,7 @@ function register() {
 function enqueue() {
 
 	// Menu styling
-	wp_enqueue_style( 'sugar_calendar_admin_menu'     );
+	wp_enqueue_style( 'sugar_calendar_admin_menu' );
 
 	// Nav styling
 	wp_enqueue_style( 'sugar_calendar_admin_nav' );

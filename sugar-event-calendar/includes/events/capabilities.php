@@ -212,7 +212,7 @@ function sugar_calendar_category_meta_caps( $caps, $cap, $user_id, $args ) {
 		case 'edit_event_calendars'   :
 		case 'delete_event_calendars' :
 		case 'assign_event_calendars' :
-			$caps = array( 'list_users' );
+			$caps = array( 'publish_posts' );
 			break;
 	}
 

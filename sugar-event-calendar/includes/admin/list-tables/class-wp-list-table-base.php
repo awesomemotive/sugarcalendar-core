@@ -1286,7 +1286,7 @@ class Base_List_Table extends \WP_List_Table {
 		// Default attribute string
 		$attr = '';
 
-		// Loop through attributes and combine them (unsanitized)
+		// Loop through attributes and combine them (previously sanitized)
 		foreach ( $attributes as $key => $value ) {
 			$attr .= ' ' . $key . '="' . $value . '"';
 		}
@@ -1476,10 +1476,10 @@ class Base_List_Table extends \WP_List_Table {
 	 * @param  object  $event
 	 * @param  int     $cell
 	 */
-	protected function setup_pointer( $event = false, $cell = 1 ) {
+	protected function setup_pointer( $event = false, $cell = false ) {
 
-		// Bail if no event or no cell
-		if ( empty( $event ) || empty( $cell ) || ! is_numeric( $cell ) ) {
+		// Bail if no event or no cell (0 is OK for cell)
+		if ( empty( $event ) || ! is_numeric( $cell ) ) {
 			return;
 		}
 

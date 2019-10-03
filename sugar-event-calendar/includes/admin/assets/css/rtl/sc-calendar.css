@@ -17,7 +17,7 @@ body.sugar-calendar #post-body-content {
 	display: inline-block;
 }
 .sugar_calendar_datepicker {
-	max-width: 125px;
+	max-width: 105px;
 	height: 29px;
 	margin: 2px 0 3px;
 	vertical-align: middle;
@@ -40,15 +40,17 @@ body.sugar-calendar #post-body-content {
 }
 
 @media only screen and ( max-width: 782px ) {
-	.event-time {
-		width: 100%;
-		display: block;
-	}
 
 	.event-time input,
-	.event-time select {
-		max-width: 80px !important;
+	.event-time select:not(.sc-select-chosen),
+	.event-time div.sc-select-chosen {
+		max-width: 100px !important;
 		display: inline-block !important;
+	}
+
+	.sugar_calendar_datepicker {
+		height: auto;
+		margin: 2px 0 3px;
 	}
 }
 
@@ -387,11 +389,7 @@ table.month tbody tr th:last-of-type {
 	border-left: 1px solid #e1e1e1;
 }
 
-table.month tbody td:last-of-type:not(.position-6) {
-	border-left: 1px solid #e1e1e1;
-}
-
-table.month tbody tr td:last-of-type {
+table.month tbody tr td:nth-child(8) {
 	border-left: none;
 }
 
@@ -430,7 +428,7 @@ input#year {
 	}
 }
 
-/** Week **********************************************************************/
+/** Week/Day ******************************************************************/
 
 table.week th,
 table.day th {
@@ -443,15 +441,41 @@ table.day th {
 	cursor: default;
 }
 
+table.week thead tr th:last-of-type,
+table.day thead tr th:last-of-type,
+table.week tfoot tr th:last-of-type,
+table.day tfoot tr th:last-of-type,
+table.week tbody tr td:last-of-type,
+table.day tbody tr td:last-of-type {
+	border-left: none;
+}
+
+table.week thead tr th:not(:first-child),
+table.day thead tr th:not(:first-child),
+table.week tfoot tr th:not(:first-child),
+table.day tfoot tr th:not(:first-child) {
+	border-left: none;
+}
+
+table.week tfoot tr:last-of-type th,
+table.day tfoot tr:last-of-type th {
+	border-bottom: none;
+}
+
+table.week tbody tr:not(.multi-day) th:first-of-type,
+table.day tbody tr:not(.multi-day) th:first-of-type {
+	border-bottom: none;
+}
+
 table.week tbody tr.this-hour td,
 table.day tbody tr.this-hour td {
 	background: #ffe !important;
 }
 
-table.day tr.multi-day td,
-table.day tr.all-day td,
-table.week tr.multi-day td,
-table.week tr.all-day td {
+table.calendar.day tr.multi-day td,
+table.calendar.day tr.all-day td,
+table.calendar.week tr.multi-day td,
+table.calendar.week tr.all-day td {
 	background-color: #efe;
 }
 

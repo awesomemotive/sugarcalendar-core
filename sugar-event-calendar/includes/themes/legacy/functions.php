@@ -942,7 +942,17 @@ function sc_using_widget() {
  * @return array
  */
 function sc_get_valid_calendar_types() {
-	return array( 'day', '4day', 'week', '2week', 'month' );
+	return array(
+		'day',
+		'4day',
+		'week',
+		'2week',
+		'month',
+
+		// See: https://github.com/sugarcalendar/standard/issues/300
+		'4days',
+		'2weeks'
+	);
 }
 
 /**

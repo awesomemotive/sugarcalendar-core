@@ -108,26 +108,24 @@ function page_url( $args = array() ) {
  */
 function notices() {
 
-	// Don't show notices on the upgrades page
-	if ( isset( $_GET['page'] ) && ( 'sc-upgrades' === $_GET['page'] ) ) {
+	// Avoid showing notices on the upgrades page
+	if ( is_upgrades_page() || doing_upgrade() ) {
 		return;
 	}
 
-	// Bail if non upgrading from 1.x to 2.x
-	if ( ! get_option( 'sc_version' ) ) {
-		upgrade_complete( '20_migration' );
-	}
+	// 2.x - Fresh install, not from 1.x
+	if ( ! get_option( 'sc_version' ) && ! did_upgrade( '20_fresh' ) ) {
+		do_fresh_install();
 
-	// 2.0 - Database migration
-	if ( ! did_upgrade( '20_migration' ) ) {
+	// 2.x - Database migration
+	} elseif ( ! did_upgrade( '20_migration' ) ) {
 		printf(
 			'<div class="updated"><p>' . __( 'Sugar Calendar needs to upgrade the events database. Click <a href="%s">here</a> to start.', 'sugar-calendar' ) . '</p></div>',
 			page_url( array( 'upgrade' => '20_migration' ) )
 		);
-	}
 
 	// 2.0.6 - Flush rewrite rules
-	if ( ! did_upgrade( '206_migration' ) ) {
+	} else if ( ! did_upgrade( '206_migration' ) ) {
 		printf(
 			'<div class="updated"><p>' . __( 'Sugar Calendar needs to perform an upgrade. Click <a href="%s">here</a> to start.', 'sugar-calendar' ) . '</p></div>',
 			page_url( array( 'upgrade' => '206_migration' ) )
@@ -149,8 +147,13 @@ function process() {
 		return;
 	}
 
-	// Bail if no upgrade action or nonce
-	if ( empty( $_GET['upgrade'] ) || empty( $_REQUEST['_wpnonce'] ) ) {
+	// Bail if no upgrade action
+	if ( ! doing_upgrade() ) {
+		return;
+	}
+
+	// Bail if nonce check fails
+	if ( ! verify_nonce() ) {
 		return;
 	}
 
@@ -164,15 +167,11 @@ function process() {
 		return;
 	}
 
-	// Bail if nonce check fails
-	if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'sc-upgrade-nonce' ) ) {
-		return;
-	}
-
 	// Sanitize the step
-	$step = sanitize_key( $_GET['upgrade'] );
+	$step = current_upgrade();
 	$func = "Sugar_Calendar\\Admin\\Upgrades\\do_{$step}";
 
+	// Process the step
 	if ( function_exists( $func ) ) {
 		call_user_func( $func );
 	}
@@ -182,23 +181,30 @@ function process() {
  * Adds an upgrade action to the completed upgrades array
  *
  * @since  2.0.0
- * @param  string $upgrade_action The action to add to the completed upgrades array
+ * @param  string $new_upgrade The action to add to the completed upgrades array
  *
- * @return bool                   If the function was successfully added
+ * @return boolean             If the function was successfully added
  */
-function upgrade_complete( $upgrade_action = '' ) {
+function upgrade_complete( $new_upgrade = '' ) {
 
 	// Bail if no new upgrade action to set
-	if ( empty( $upgrade_action ) ) {
+	if ( empty( $new_upgrade ) ) {
 		return false;
 	}
 
-	$completed_upgrades   = completed_upgrades();
-	$completed_upgrades[] = $upgrade_action;
+	// Get completed upgrades
+	$existing = completed_upgrades();
 
-	// Remove any blanks, and only show uniques
-	$completed_upgrades = array_unique( array_values( $completed_upgrades ) );
+	// Cast upgrade to array (to support multiples
+	$upgrades = (array) $new_upgrade;
 
+	// Merge new upgrades with existing
+	$completed = array_merge( $existing, $upgrades );
+
+	// Remove any blanks and duplicates
+	$completed_upgrades = array_unique( array_values( $completed ) );
+
+	// Return the results of upgrading the option
 	return update_option( 'sc_completed_upgrades', $completed_upgrades );
 }
 
@@ -208,7 +214,7 @@ function upgrade_complete( $upgrade_action = '' ) {
  * @since  2.0.0
  * @param  string $upgrade_action The upgrade action to check completion for
  *
- * @return bool                   If the action has been added to the completed actions array
+ * @return boolean                If the action has been added to the completed actions array
  */
 function did_upgrade( $upgrade_action = '' ) {
 
@@ -244,17 +250,88 @@ function completed_upgrades() {
 }
 
 /**
+ * Is the current admin area page our "upgrades" page?
+ *
+ * @since 2.0.8
+ *
+ * @return hoolean
+ */
+function is_upgrades_page() {
+	return isset( $_GET['page'] ) && ( 'sc-upgrades' === $_GET['page'] );
+}
+
+/**
+ * Get the current upgrade
+ *
+ * @since 2.0.8
+ *
+ * @return string
+ */
+function current_upgrade() {
+	return is_upgrades_page() && doing_upgrade()
+		? sanitize_key( $_GET['upgrade'] )
+		: false;
+}
+
+/**
+ * Is an upgrade being performed?
+ *
+ * @since 2.0.8
+ *
+ * @return mixed
+ */
+function doing_upgrade() {
+	return ! empty( $_GET['upgrade'] );
+}
+
+/**
+ * Verify the upgrade nonce.
+ *
+ * @since 2.0.8
+ *
+ * @return boolean
+ */
+function verify_nonce() {
+	return ! empty( $_REQUEST['_wpnonce'] )
+		? wp_verify_nonce( $_REQUEST['_wpnonce'], 'sc-upgrade-nonce' )
+		: false;
+}
+
+/**
+ * Things that happen on a fresh installation.
+ *
+ * Only fires once (on initial activation) via notices() function.
+ *
+ * @since 2.0.8
+ */
+function do_fresh_install() {
+
+	// Remove the 1.x option.
+	delete_option( 'sc_version' );
+
+	// Mark all upgrades as complete so they are not asked for again.
+	upgrade_complete( array(
+		'20_fresh',
+		'20_migration',
+		'206_migration'
+	) );
+}
+
+/**
  * Upgrades for events data for version 2.0
  *
  * @since 2.0.0
+ *
+ * @global mixed $sc_upgrade_meta_skip
  */
 function do_20_migration() {
-	global $wpdb, $sc_doing_upgrade;
+	global $wpdb, $sc_upgrade_meta_skip;
 
 	// Set the upgrade global
-	$sc_doing_upgrade = true;
+	$sc_upgrade_meta_skip = true;
 
-	@ignore_user_abort( true );
+	// Get the old abort, and set it
+	$old_abort = ignore_user_abort( true );
 
 	$step   = isset( $_GET['step'] ) ? absint( $_GET['step'] ) : 1;
 	$number = 20;
@@ -362,14 +439,17 @@ function do_20_migration() {
 		}
 	}
 
-	// Unet the upgrade global
-	unset( $sc_doing_upgrade );
+	// Reset abort
+	ignore_user_abort( $old_abort );
+
+	// Unset the meta-skip global
+	unset( $sc_upgrade_meta_skip );
 }
 
 /**
  * Upgrades rewrite rules for version 2.0.6
  *
- * @since 2.0.0
+ * @since 2.0.6
  */
 function do_206_migration() {
 	flush_rewrite_rules( true );

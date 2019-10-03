@@ -26,6 +26,11 @@ jQuery( document ).ready( function( $ ) {
 			delete inputVars.disable_search_threshold;
 		}
 
+		// Allow a lists to configure single deselection
+		if ( el.data( 'single-deselect' ) ) {
+			inputVars.allow_single_deselect = true;
+		}
+
 		return inputVars;
 	};
 

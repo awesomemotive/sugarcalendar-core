@@ -12,6 +12,9 @@ defined( 'ABSPATH' ) || exit;
 // Always Add Shortcodes
 add_action( 'init', 'sc_add_shortcodes' );
 
+// Always Register Front-end Scripts
+add_action( 'init', 'sc_register_assets' );
+
 // Always Add Widgets
 add_action( 'widgets_init', 'sc_register_widgets' );
 add_filter( 'widget_text',  'do_shortcode' );
@@ -25,6 +28,9 @@ if ( ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) || wp_doing_ajax() ) {
 
 	// Load front-end scripts
 	add_action( 'wp_enqueue_scripts', 'sc_load_front_end_scripts' );
+
+	// Load front-end scripts inline
+	add_filter( 'render_block', 'sc_enqueue_if_block_has_shortcodes' );
 
 	// Load calendar via AJAX
 	add_action( 'wp_ajax_sc_load_calendar',        'sc_load_calendar_via_ajax' );

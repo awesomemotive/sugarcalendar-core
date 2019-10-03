@@ -1,13 +1,13 @@
 === Sugar Calendar (Lite) ===
-Author:            Pippin Williamson
-Contributors:      mordauk
+Author:            Sandhills Development, LLC
+Contributors:      mordauk, johnjamesjacoby
 Author URI:        https://sandhillsdev.com
 Plugin URI:        https://sugarcalendar.com
 Tags:              event calendar, events, simple, events calendar, calendar, Pippin Williamson, Pippin's Plugins
 Requires PHP:      5.6.20
 Requires at least: 5.0
-Tested up to:      5.2
-Stable tag:        2.0.7
+Tested up to:      5.3
+Stable tag:        2.0.8
 
 A sweet, simple event calendar plugin. Create your events and show them on a simple calendar. That's it.
 
@@ -73,9 +73,22 @@ Yes, there is a [free add-on plugin](http://wordpress.org/extend/plugins/simple-
 
 = Can I have event registration forms? =
 
-I have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-calendar-gravity-forms/) that provides integration with the very popular [Gravity Forms plugin](http://www.gravityforms.com/).
+We have built a [free add-on](http://wordpress.org/extend/plugins/sugar-event-calendar-gravity-forms/) that provides integration with the very popular [Gravity Forms plugin](http://www.gravityforms.com/).
 
 == Changelog ==
+
+= 2.0.8 =
+
+October 3, 2019
+
+* Fixed: Multiple styling improvements
+* Fixed: Incorrect date displayed with certain software licenses
+* Fixed: Database upgrade notice on activation
+* Fixed: Editor role unable to edit Calendars
+* Fixed: Shortcodes did not match documentation
+* Fixed: Broken admin pointers on first table cell not working
+* Added: Improved styling support for WordPress 5.3
+* Added: Improved support for Advanced Recurring
 
 = 2.0.7 =
 

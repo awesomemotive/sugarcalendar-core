@@ -454,7 +454,7 @@ final class Back_Compat {
 	private function skip() {
 
 		// Return true during upgrades
-		if ( ! empty( $GLOBALS['sc_doing_upgrade'] ) ) {
+		if ( ! $this->doing_upgrade() ) {
 			return true;
 		}
 
@@ -473,9 +473,20 @@ final class Back_Compat {
 	}
 
 	/**
-	 * Returns whether a requested meta-key is in the back_compat_keys array.
+	 * Returns whether an upgrade is being performed or not.
 	 *
-	 * Used by all
+	 * This ensures that meta is not mapped during the upgrade process.
+	 *
+	 * @since 2.0.8
+	 *
+	 * @return boolean
+	 */
+	private function doing_upgrade() {
+		return ! empty( $GLOBALS['sc_upgrade_meta_skip'] );
+	}
+
+	/**
+	 * Returns whether a requested meta-key is in the back_compat_keys array.
 	 *
 	 * @since 2.0.0
 	 *

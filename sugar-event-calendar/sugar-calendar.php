@@ -144,7 +144,7 @@ final class Plugin {
 
 		// Plugin Version.
 		if ( ! defined( 'SC_PLUGIN_VERSION' ) ) {
-			define( 'SC_PLUGIN_VERSION', '2.0.7' );
+			define( 'SC_PLUGIN_VERSION', '2.0.8' );
 		}
 
 		// Plugin Root File.
@@ -269,6 +269,7 @@ final class Plugin {
 
 		// Legacy
 		require_once SC_PLUGIN_DIR . 'includes/themes/legacy/functions.php';
+		require_once SC_PLUGIN_DIR . 'includes/themes/legacy/scripts.php';
 		require_once SC_PLUGIN_DIR . 'includes/themes/legacy/shortcodes.php';
 		require_once SC_PLUGIN_DIR . 'includes/themes/legacy/widgets.php';
 		require_once SC_PLUGIN_DIR . 'includes/themes/legacy/hooks.php';

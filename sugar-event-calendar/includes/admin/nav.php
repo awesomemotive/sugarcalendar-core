@@ -35,6 +35,13 @@ function display() {
 	// Maybe add taxonomies to tabs array
 	if ( ! empty( $taxonomies ) ) {
 		foreach ( $taxonomies as $tax => $details ) {
+
+			// Skip if current user cannot manage
+			if ( ! current_user_can( $details->cap->manage_terms ) ) {
+				continue;
+			}
+
+			// Add taxonomy to tabs
 			$tabs[ $tax ] = array(
 				'name' => $details->labels->menu_name,
 				'url'  => add_query_arg( array(

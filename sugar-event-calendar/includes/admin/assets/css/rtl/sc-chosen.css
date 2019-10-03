@@ -163,6 +163,7 @@ body.sugar-calendar .wp-filter .sc-select-chosen {
 .chosen-container .chosen-results li.highlighted {
 	background-image: none;
 	color: #fff;
+	border-radius: 4px;
 }
 
 .chosen-container-multi .chosen-choices li.search-choice {
@@ -209,6 +210,31 @@ body.sugar-calendar .wp-filter .sc-select-chosen {
 	left: -4px;
 }
 
+.chosen-container-single .chosen-single abbr {
+	position: absolute;
+	top: 4px;
+	left: 20px;
+	display: block;
+	width: 18px;
+	height: 18px;
+	color: #666;
+}
+
+.chosen-container-single .chosen-single abbr:before {
+	height: 15px;
+	width: 15px;
+	position: absolute;
+	top: 2px;
+	font-family: 'dashicons';
+	content: '\f158';
+	font-size: 15px;
+	line-height: 15px;
+}
+
+.chosen-container-single .chosen-single abbr:hover {
+	color: #555;
+}
+
 /* Force on all screen sizes & resolutions */
 .chosen-rtl .chosen-search input[type=text],
 .chosen-container-single .chosen-single abbr,
@@ -220,10 +246,28 @@ body.sugar-calendar .wp-filter .sc-select-chosen {
 	background-image: none !important;
 }
 
-/* WordPress Color Schemes */
+/* Mobile Screen Sizes
+-------------------------------------------------------------- */
+@media only screen and ( max-width: 782px ) {
+
+	.chosen-container-single .chosen-single,
+	.chosen-container-single.chosen-container-active.chosen-with-drop .chosen-single {
+		height: auto;
+		line-height: 2;
+		font-size: 16px;
+		padding: 3px 10px;
+	}
+
+	.chosen-container .chosen-results li {
+		font-size: 16px;
+		line-height: 16px;
+	}
+}
+
+/* WordPress Color Schemes
+-------------------------------------------------------------- */
 
 /* Fresh */
-
 .admin-color-fresh .chosen-container .chosen-results li.highlighted {
 	background-color: #00a0d2;
 }
@@ -263,7 +307,8 @@ body.sugar-calendar .wp-filter .sc-select-chosen {
 	background-color: #888;
 }
 
-/* bbPress Color Schemes */
+/* bbPress Color Schemes
+-------------------------------------------------------------- */
 
 /* Evergreen */
 .admin-color-evergreen .chosen-container .chosen-results li.highlighted {
@@ -272,5 +317,188 @@ body.sugar-calendar .wp-filter .sc-select-chosen {
 
 /* Mint */
 .admin-color-mint .chosen-container .chosen-results li.highlighted {
+	background-color: #4f6d59;
+}
+
+/* WordPress 5.3 Support
+-------------------------------------------------------------- */
+
+body.branch-5-3 .chosen-container-multi .chosen-choices,
+body.branch-5-3 .chosen-container-single .chosen-single,
+body.branch-5-3 .chosen-container-active .chosen-single {
+	box-shadow: 0 0 0 transparent;
+	border-radius: 4px;
+	border: 1px solid #7e8993;
+	color: #32373c;
+	background: #fff url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat left 4px top 50%;
+}
+
+body.branch-5-3 .chosen-container-active .chosen-single {
+	border-color: transparent;
+	outline: 2px solid transparent;
+}
+
+body.branch-5-3 .chosen-container-active.chosen-with-drop .chosen-single {
+	border-radius: 4px 4px 0 0;
+}
+
+body.branch-5-3 .chosen-container-single .chosen-single div b:before,
+body.branch-5-3 .chosen-container-single .chosen-search input[type=text]:before {
+	content: '';
+}
+
+body.branch-5-3 .chosen-container .chosen-drop {
+	width: 100%;
+	border-radius: 0 0 4px 4px;
+	background: #fff;
+	border-width: 0 1px 0 1px;
+	outline: 2px solid transparent;
+}
+
+body.branch-5-3 .chosen-container:hover .chosen-drop,
+body.branch-5-3 .chosen-container:hover .chosen-choices,
+body.branch-5-3 .chosen-container:hover .chosen-single {
+	color: #007cba;
+}
+
+body.branch-5-3 .chosen-container-single .chosen-search input[type=text] {
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-shadow: none;
+}
+
+
+/* WordPress Color Schemes
+-------------------------------------------------------------- */
+
+/* Fresh */
+body.branch-5-3 .chosen-container-active .chosen-single {
+	border-color: #007cba;
+	box-shadow: 0 0 0 1px #007cba;
+}
+body.branch-5-3 .chosen-container .chosen-drop {
+	border-color: #007cba;
+	box-shadow: 0 1px 0 1px #007cba;
+}
+body.branch-5-3 .chosen-container .chosen-results li.highlighted {
+	background-color: #007cba;
+}
+
+/* Blue */
+body.branch-5-3.admin-color-blue .chosen-container-active .chosen-single {
+	border-color: #096484;
+	box-shadow: 0 0 0 1px #096484;
+}
+body.branch-5-3.admin-color-blue .chosen-container .chosen-drop {
+	border-color: #096484;
+	box-shadow: 0 1px 0 1px #096484;
+}
+body.branch-5-3.admin-color-blue .chosen-container .chosen-results li.highlighted {
+	background-color: #007cba;
+}
+
+/* Coffee */
+body.branch-5-3.admin-color-coffee .chosen-container-active .chosen-single {
+	border-color: #c7a589;
+	box-shadow: 0 0 0 1px #c7a589;
+}
+body.branch-5-3.admin-color-coffee .chosen-container .chosen-drop {
+	border-color: #c7a589;
+	box-shadow: 0 1px 0 1px #c7a589;
+}
+body.branch-5-3.admin-color-coffee .chosen-container .chosen-results li.highlighted {
+	background-color: #c7a589;
+}
+
+/* Ectoplasm */
+body.branch-5-3.admin-color-ectoplasm .chosen-container-active .chosen-single {
+	border-color: #a3b745;
+	box-shadow: 0 0 0 1px #a3b745;
+}
+body.branch-5-3.admin-color-ectoplasm .chosen-container .chosen-drop {
+	border-color: #a3b745;
+	box-shadow: 0 1px 0 1px #a3b745;
+}
+body.branch-5-3.admin-color-ectoplasm .chosen-container .chosen-results li.highlighted {
+	background-color: #a3b745;
+}
+
+/* Midnight */
+body.branch-5-3.admin-color-midnight .chosen-container-active .chosen-single {
+	border-color: #e14d43;
+	box-shadow: 0 0 0 1px #e14d43;
+}
+body.branch-5-3.admin-color-midnight .chosen-container .chosen-drop {
+	border-color: #e14d43;
+	box-shadow: 0 1px 0 1px #e14d43;
+}
+body.branch-5-3.admin-color-midnight .chosen-container .chosen-results li.highlighted {
+	background-color: #e14d43;
+}
+
+/* Ocean */
+body.branch-5-3.admin-color-ocean .chosen-container-active .chosen-single {
+	border-color: #9ebaa0;
+	box-shadow: 0 0 0 1px #9ebaa0;
+}
+body.branch-5-3.admin-color-ocean .chosen-container .chosen-drop {
+	border-color: #9ebaa0;
+	box-shadow: 0 1px 0 1px #9ebaa0;
+}
+body.branch-5-3.admin-color-ocean .chosen-container .chosen-results li.highlighted {
+	background-color: #9ebaa0;
+}
+
+/* Sunrise */
+body.branch-5-3.admin-color-sunrise .chosen-container-active .chosen-single {
+	border-color: #dd823b;
+	box-shadow: 0 0 0 1px #dd823b;
+}
+body.branch-5-3.admin-color-sunrise .chosen-container .chosen-drop {
+	border-color: #dd823b;
+	box-shadow: 0 1px 0 1px #dd823b;
+}
+body.branch-5-3.admin-color-sunrise .chosen-container .chosen-results li.highlighted {
+	background-color: #dd823b;
+}
+
+/* Light */
+body.branch-5-3.admin-color-light .chosen-container-active .chosen-single {
+	border-color: #04a4cc;
+	box-shadow: 0 0 0 1px #04a4cc;
+}
+body.branch-5-3.admin-color-light .chosen-container .chosen-drop {
+	border-color: #04a4cc;
+	box-shadow: 0 1px 0 1px #04a4cc;
+}
+body.branch-5-3.admin-color-light .chosen-container .chosen-results li.highlighted {
+	background-color: #04a4cc;
+}
+
+/* bbPress Color Schemes
+-------------------------------------------------------------- */
+
+/* Evergreen */
+body.branch-5-3.admin-color-evergreen .chosen-container-active .chosen-single {
+	box-shadow: 0 0 0 1px #36533f;
+}
+body.branch-5-3.admin-color-evergreen .chosen-container .chosen-drop {
+	border-color: #36533f;
+	box-shadow: 0 1px 0 1px #36533f;
+}
+body.branch-5-3.admin-color-evergreen .chosen-container .chosen-results li.highlighted {
+	background-color: #36533f;
+}
+
+/* Mint */
+body.branch-5-3.admin-color-mint .chosen-container-active .chosen-single {
+	border-color: #4f6d59;
+	box-shadow: 0 0 0 1px #4f6d59;
+}
+body.branch-5-3.admin-color-mint .chosen-container .chosen-drop {
+	border-color: #4f6d59;
+	box-shadow: 0 1px 0 1px #4f6d59;
+}
+body.branch-5-3.admin-color-mint .chosen-container .chosen-results li.highlighted {
 	background-color: #4f6d59;
 }

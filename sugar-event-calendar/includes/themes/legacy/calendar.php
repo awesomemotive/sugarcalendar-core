@@ -93,6 +93,12 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 		? $type
 		: 'month';
 
+	// Trim trailing 's' if is a mistakenly plural type
+	// See: https://github.com/sugarcalendar/standard/issues/300
+	if ( in_array( $type, array( '4days', '2weeks' ), true ) ) {
+		$type = trim( $type, 's' );
+	}
+
 	// Draw function to use
 	$calendar_func = "sc_draw_calendar_{$type}";
 
@@ -225,18 +231,24 @@ function sc_get_next_prev( $display_time, $size = 'large', $category = null, $ty
 			$next_display_time = strtotime( '+1 day', $display_time );
 			$prev_display_time = strtotime( '-1 day', $display_time );
 			break;
+
 		case '4day':
+		case '4days': // See: https://github.com/sugarcalendar/standard/issues/300
 			$next_display_time = strtotime( '+4 day', $display_time );
 			$prev_display_time = strtotime( '-4 day', $display_time );
 			break;
+
 		case 'week':
 			$next_display_time = strtotime( '+1 week', $display_time );
 			$prev_display_time = strtotime( '-1 week', $display_time );
 			break;
+
 		case '2week':
+		case '2weeks': // See: https://github.com/sugarcalendar/standard/issues/300
 			$next_display_time = strtotime( '+2 week', $display_time );
 			$prev_display_time = strtotime( '-2 week', $display_time );
 			break;
+
 		default:
 			$next_display_time = strtotime( '+1 month', $display_time );
 			$prev_display_time = strtotime( '-1 month', $display_time );

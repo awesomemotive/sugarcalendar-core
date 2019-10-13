@@ -88,63 +88,73 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 	// Query for events
 	$events = sugar_calendar_get_events( $args );
 
-	wp_reset_postdata();
-
-	ob_start();
-
-	if ( ! empty( $events ) ) {
-		echo '<ul class="sc_events_list">';
-
-		foreach ( $events as $event ) {
-			$event_id = $event->object_id;
-			$timestamp = strtotime( $event->start );
-
-			echo '<li class="' . str_replace( 'hentry', '', implode( ' ', get_post_class( 'sc_event',$event_id ) ) ) . '">';
-
-			do_action( 'sc_before_event_list_item', $event_id );
-
-			echo '<a href="' . get_permalink( $event_id ) . '" class="sc_event_link">';
-			echo '<span class="sc_event_title">' . get_the_title( $event_id ) . '</span></a>';
-
-			if ( isset( $show['date'] ) && $show['date'] ) {
-				echo '<span class="sc_event_date">' . sc_get_formatted_date( $event_id, $timestamp ) . '</span>';
-			}
-
-			if ( isset( $show['time'] ) && $show['time'] ) {
-				$start_time = sc_get_event_start_time( $event_id );
-				$end_time   = sc_get_event_end_time( $event_id );
-
-				if ( $end_time !== $start_time ) {
-					echo '<span class="sc_event_time">' . esc_html( $start_time ) . '&nbsp;&ndash;&nbsp;' . esc_html( $end_time ) . '</span>';
-				} elseif ( $start_time ) {
-					echo '<span class="sc_event_time">' . esc_html( $start_time ) . '</span>';
-				} else {
-					echo '<span class="sc_event_time">' . __( 'All-day event', 'sugar-calendar' ) . '</span>';
-				}
-			}
-
-			if ( isset( $show['categories'] ) && $show['categories'] ) {
-				$event_categories = get_the_terms( $event_id, 'sc_event_category' );
-
-				if ( $event_categories ) {
-					$categories = wp_list_pluck( $event_categories, 'name' );
-					echo '<span class="sc_event_categories">' . join( $categories, ', ' ) . '</span>';
-				}
-			}
-
-			if ( isset( $show['link'] ) && $show['link'] ) {
-				echo '<a href="' . get_permalink( $event_id ) . '" class="sc_event_link">';
-				echo __( 'Read More', 'sugar-calendar' );
-				echo '</a>';
-			}
-
-			do_action( 'sc_after_event_list_item', $event_id );
-
-			echo '<br class="clear"></li>';
-		}
-
-		echo '</ul>';
+	// Bail if no events
+	if ( empty( $events ) ) {
+		return '';
 	}
 
+	// Start an output buffer to store these result
+	ob_start();
+
+	// Start an unordered list
+	echo '<ul class="sc_events_list">';
+
+	// Loop through all events
+	foreach ( $events as $event ) {
+
+		// Get the object ID and use it for the event ID (for back compat)
+		$event_id = $event->object_id;
+
+		echo '<li class="' . str_replace( 'hentry', '', implode( ' ', get_post_class( 'sc_event',$event_id ) ) ) . '">';
+
+		do_action( 'sc_before_event_list_item', $event_id );
+
+		echo '<a href="' . get_permalink( $event_id ) . '" class="sc_event_link">';
+		echo '<span class="sc_event_title">' . get_the_title( $event_id ) . '</span></a>';
+
+		if ( ! empty( $show['date'] ) ) {
+			echo '<span class="sc_event_date">' . sc_get_formatted_date( $event_id ) . '</span>';
+		}
+
+		if ( isset( $show['time'] ) && $show['time'] ) {
+			$start_time = sc_get_event_start_time( $event_id );
+			$end_time   = sc_get_event_end_time( $event_id );
+
+			if ( $event->is_all_day() ) {
+				echo '<span class="sc_event_time">' . esc_html__( 'All-day', 'sugar-calendar' ) . '</span>';
+			} elseif ( $end_time !== $start_time ) {
+				echo '<span class="sc_event_time">' . esc_html( $start_time ) . '&nbsp;&ndash;&nbsp;' . esc_html( $end_time ) . '</span>';
+			} elseif ( ! empty( $start_time ) ) {
+				echo '<span class="sc_event_time">' . esc_html( $start_time ) . '</span>';
+			}
+		}
+
+		if ( ! empty( $show['categories'] ) ) {
+			$event_categories = get_the_terms( $event_id, 'sc_event_category' );
+
+			if ( $event_categories ) {
+				$categories = wp_list_pluck( $event_categories, 'name' );
+				echo '<span class="sc_event_categories">' . join( $categories, ', ' ) . '</span>';
+			}
+		}
+
+		if ( ! empty( $show['link'] ) ) {
+			echo '<a href="' . get_permalink( $event_id ) . '" class="sc_event_link">';
+			echo esc_html__( 'Read More', 'sugar-calendar' );
+			echo '</a>';
+		}
+
+		do_action( 'sc_after_event_list_item', $event_id );
+
+		echo '<br class="clear"></li>';
+	}
+
+	// Close the list
+	echo '</ul>';
+
+	// Reset post data - we'll be looping through our own
+	wp_reset_postdata();
+
+	// Return the current buffer and delete it
 	return ob_get_clean();
 }

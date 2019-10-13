@@ -108,28 +108,55 @@ function sc_add_event_details( $post_id = 0 ) {
 function sc_add_date_time_details( $post_id = 0 ) {
 
 	// Support 1.x
+	$all_day    = sugar_calendar_get_event_by_object( $post_id )->is_all_day();
 	$start_date = sc_get_event_date( $post_id );
 	$start_time = sc_get_event_start_time( $post_id );
 	$end_time   = sc_get_event_end_time( $post_id );
+	$recurring  = sc_is_recurring( $post_id )
+		? sc_get_recurring_description( $post_id )
+		: '';
 
-	// Recurring
-	if ( sc_is_recurring( $post_id ) ) : ?>
+	// Recurring description
+	if ( ! empty( $recurring ) ) : ?>
 
-		<div class="sc_event_date"><?php sc_show_single_recurring_date( $post_id ); ?></div>
+		<div class="sc_event_date"><?php echo esc_html( $recurring ); ?></div>
 
-	<?php else : ?>
+	<?php
 
-		<div class="sc_event_date"><?php echo __( 'Date:', 'sugar-calendar' ) . ' ' . $start_date; ?></div>
+	// Non-recurring start DATE
+	else : ?>
+
+		<div class="sc_event_date"><?php
+
+			esc_html_e( 'Date:', 'sugar-calendar' );
+
+			echo ' ' . $start_date;
+
+		?></div>
 
 	<?php endif;
 
-	// Start & end
-	if ( ! empty( $start_time ) ) : ?>
+	// Start & end TIMES
+	if ( ! empty( $start_time ) ) :
 
-		<div class="sc_event_time">
-			<span class="sc_event_start_time"><?php echo __( 'Time:', 'sugar-calendar' ) . ' ' . $start_time; ?></span>
+		// Set to all-day and noop the end time
+		if ( ! empty( $all_day ) ) :
+			$start_time = esc_html__( 'All-day', 'sugar-calendar' );
+			$end_time   = false;
+		endif;
 
-			<?php if ( ! empty( $end_time ) && ( $end_time !== $start_time ) ) : ?>
+		// Output start (or all-day)
+		?><div class="sc_event_time">
+			<span class="sc_event_start_time"><?php
+
+				esc_html_e( 'Time:', 'sugar-calendar' );
+
+				echo ' ' . $start_time;
+
+			?></span><?php
+
+			// Maybe output a separator and the end time
+			if ( ! empty( $end_time ) && ( $end_time !== $start_time ) ) : ?>
 
 				<span class="sc_event_time_sep">&nbsp;<?php _e( 'to', 'sugar-calendar' ); ?>&nbsp;</span>
 				<span class="sc_event_end_time"><?php echo $end_time; ?></span>

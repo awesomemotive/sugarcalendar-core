@@ -39,15 +39,24 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 	$view_end    = date_i18n( 'Y-m-d H:i:s', $month_end );
 	$number      = sc_get_number_of_events();
 
-	// Prime the events
-	$events = sugar_calendar_get_events( array(
+	// Default arguments
+	$args = array(
 		'number'      => $number,
 		'object_type' => 'post',
 		'status'      => 'publish',
 		'orderby'     => 'start',
 		'order'       => 'ASC',
 		'date_query'  => sugar_calendar_get_date_query_args( 'month', $view_start, $view_end )
-	) );
+	);
+
+	// Maybe add category if non-empty
+	if ( ! empty( $category ) ) {
+		$tax          = sugar_calendar_get_calendar_taxonomy_id();
+		$args[ $tax ] = $category; // Sanitized later
+	}
+
+	// Query for events
+	$events = sugar_calendar_get_events( $args );
 
 	// Maybe prime the post cache if there are more than 2 post objects
 	if ( ! empty( $events ) ) {
@@ -964,24 +973,49 @@ function sc_get_valid_calendar_types() {
  * @param 		bool $formatted bool Whether to return a time stamp or the nicely formatted date
  * @return      string
  */
-function sc_get_event_date( $event_id, $formatted = true ) {
-	$date = get_post_meta( $event_id, 'sc_event_date_time', true );
-	$end_date = get_post_meta( $event_id, 'sc_event_end_date_time', true );
+function sc_get_event_date( $event_id = 0, $formatted = true ) {
 
-	if ( empty( $date ) || empty( $end_date ) ) {
-		return '';
+	// Get start & end dates & times
+	$retval = get_post_meta( $event_id, 'sc_event_date_time', true );
+
+	// Bail if no event start datetime (how'd this happen?)
+	if ( empty( $retval ) ) {
+		return $retval;
 	}
 
-	if ( $formatted ) {
-		$date = date_i18n( sc_get_date_format(), $date );
-		$end_date = date_i18n( sc_get_date_format(), $end_date );
-
-		if ( $end_date != $date ) {
-			$date = $date . '<span class="sc-date-start-end-sep"> - </span>' . $end_date;
-		}
+	// Return date if not formatting
+	if ( empty( $formatted ) ) {
+		return $retval;
 	}
 
-	return $date;
+	// Get the date format, and format start
+	$format     = sc_get_date_format();
+	$start_date = date_i18n( $format, $retval );
+	$start_html = '<span class="sc-date-start">' . $start_date . '</span>';
+
+	// Get the end date
+	$end = get_post_meta( $event_id, 'sc_event_end_date_time', true );
+
+	// Maybe append the end date
+	if ( empty( $end ) ) {
+		return $start_html;
+	}
+
+	// Format the end
+	$end_date = date_i18n( $format, $end );
+
+	// Add end to start, with separator
+	if ( $end_date !== $start_date ) {
+		$end_html = '<span class="sc-date-start-end-sep"> - </span><span class="sc-date-end">' . $end_date . '</span>';
+		$retval   = $start_html . $end_html;
+
+	// Just the start
+	} else {
+		$retval = $start_html;
+	}
+
+	// Return the date(s) & time(s)
+	return $retval;
 }
 
 /**
@@ -995,10 +1029,29 @@ function sc_get_event_date( $event_id, $formatted = true ) {
  * @param 		int $timestamp
  * @return      string
  */
-function sc_get_formatted_date( $event_id, $timestamp = null ) {
-	$date = date_i18n( sc_get_date_format(), $timestamp );
+function sc_get_formatted_date( $event_id = 0, $timestamp = null ) {
 
-	return $date;
+	// Default return value
+	$retval = '';
+
+	// Bail if no event and no timestamp to derive a date from
+	if ( empty( $event_id ) && empty( $timestamp ) ) {
+		return $retval;
+	}
+
+	// Get a timestamp from the start date & time
+	if ( ! empty( $event_id ) && empty( $timestamp ) ) {
+		$timestamp = get_post_meta( $event_id, 'sc_event_date_time', true );
+	}
+
+	// Maybe format a timestamp if one was found
+	if ( ! empty( $timestamp ) ) {
+		$format = sc_get_date_format();
+		$retval = date_i18n( $format, $timestamp );
+	}
+
+	// Return a possibly formatted start date & time
+	return $retval;
 }
 
 /**
@@ -1006,14 +1059,20 @@ function sc_get_formatted_date( $event_id, $timestamp = null ) {
  *
  * @access      public
  * @since       1.0.0
- * @param unknown $event_id int The ID number of the event
+ * @param       int $event_id int The ID number of the event
  * @return      array
  */
 function sc_get_event_time( $event_id ) {
-	$start_time = sc_get_event_start_time( $event_id );
-	$end_time = sc_get_event_end_time( $event_id );
 
-	return apply_filters( 'sc_event_time', array( 'start' => $start_time, 'end' => $end_time ) );
+	// Get start & end times
+	$start_time = sc_get_event_start_time( $event_id );
+	$end_time   = sc_get_event_end_time( $event_id );
+
+	// Return array of start & end times
+	return apply_filters( 'sc_event_time', array(
+		'start' => $start_time,
+		'end'   => $end_time
+	) );
 }
 
 /**
@@ -1021,38 +1080,42 @@ function sc_get_event_time( $event_id ) {
  *
  * @access      public
  * @since       1.0.0
- * @param unknown $event_id int The ID number of the event
+ * @param       int $event_id int The ID number of the event
  * @return      string
  */
-function sc_get_event_start_time( $event_id ) {
+function sc_get_event_start_time( $event_id = 0 ) {
+
+	// Get the start date
 	$start = get_post_meta( $event_id, 'sc_event_date', true );
 
+	// Bail if no start time
 	if ( empty( $start ) ) {
 		return '';
 	}
 
-	$day = date( 'd', $start );
-	$month = date( 'm', $start );
-	$year = date( 'Y', $start );
+	// Use meta keys for back-compat
+	$day    = get_post_meta( $event_id, 'sc_event_day_of_month', true );
+	$month  = get_post_meta( $event_id, 'sc_event_month',        true );
+	$year   = get_post_meta( $event_id, 'sc_event_year',         true );
+	$hour   = get_post_meta( $event_id, 'sc_event_time_hour',    true );
+	$minute = get_post_meta( $event_id, 'sc_event_time_minute',  true );
+	$am_pm  = get_post_meta( $event_id, 'sc_event_time_am_pm',   true );
 
-	$hour = absint( get_post_meta( $event_id, 'sc_event_time_hour', true ) );
-	$minute = absint( get_post_meta( $event_id, 'sc_event_time_minute', true ) );
-	$am_pm = get_post_meta( $event_id, 'sc_event_time_am_pm', true );
-
-	$hour = $hour ? $hour : null;
-	$minute = $minute ? $minute : null;
-	$am_pm = $am_pm ? $am_pm : null;
-
-	if ( $am_pm == 'pm' && $hour < 12 ) {
+	// Adjust for meridiem
+	if ( ( $am_pm === 'pm' ) && ( $hour < 12 ) ) {
 		$hour += 12;
-	} elseif ( $am_pm == 'am' && $hour >= 12 ) {
+	} elseif ( ( $am_pm === 'am' ) && ( $hour >= 12 ) ) {
 		$hour -= 12;
 	}
 
-	if ( $hour == null && $minute == null ) {
-		$time = null;
-	} else {
-		$time = date_i18n( sc_get_time_format(), mktime( $hour, $minute, 0, $month, $day, $year ) );
+	// Default return value
+	$time = null;
+
+	// Format time value if not null
+	if ( ( false !== $hour ) && ( false !== $minute ) ) {
+		$format = sc_get_time_format();
+		$mktime = mktime( $hour, $minute, 0, $month, $day, $year );
+		$time   = date_i18n( $format, $mktime );
 	}
 
 	return apply_filters( 'sc_event_start_time', $time, $hour, $minute, $am_pm );
@@ -1063,38 +1126,42 @@ function sc_get_event_start_time( $event_id ) {
  *
  * @access      public
  * @since       1.0.0
- * @param unknown $event_id int The ID number of the event
+ * @param       int $event_id int The ID number of the event
  * @return      string
  */
-function sc_get_event_end_time( $event_id ) {
+function sc_get_event_end_time( $event_id = 0 ) {
+
+	// Get the end date
 	$end = get_post_meta( $event_id, 'sc_event_end_date', true );
 
+	// Bail if no end in sight (ha!)
 	if ( empty( $end ) ) {
 		return '';
 	}
 
-	$day = date( 'd', $end );
-	$month = date( 'm', $end );
-	$year = date( 'Y', $end );
+	// Use meta keys for back-compat
+	$day    = get_post_meta( $event_id, 'sc_event_end_day_of_month', true );
+	$month  = get_post_meta( $event_id, 'sc_event_end_month',        true );
+	$year   = get_post_meta( $event_id, 'sc_event_end_year',         true );
+	$hour   = get_post_meta( $event_id, 'sc_event_end_time_hour',    true );
+	$minute = get_post_meta( $event_id, 'sc_event_end_time_minute',  true );
+	$am_pm  = get_post_meta( $event_id, 'sc_event_end_time_am_pm',   true );
 
-	$hour = get_post_meta( $event_id, 'sc_event_end_time_hour', true );
-	$minute = get_post_meta( $event_id, 'sc_event_end_time_minute', true );
-	$am_pm = get_post_meta( $event_id, 'sc_event_end_time_am_pm', true );
-
-	$hour = $hour ? $hour : null;
-	$minute = $minute ? $minute : null;
-	$am_pm = $am_pm ? $am_pm : null;
-
-	if ( $am_pm == 'pm' && $hour < 12 ) {
+	// Adjust for meridiem
+	if ( ( $am_pm === 'pm' ) && ( $hour < 12 ) ) {
 		$hour += 12;
-	} elseif ( $am_pm == 'am' && $hour >= 12 ) {
+	} elseif ( ( $am_pm === 'am' ) && ( $hour >= 12 ) ) {
 		$hour -= 12;
 	}
 
-	if ( $hour == null && $minute == null ) {
-		$time = null;
-	} else {
-		$time = date_i18n( sc_get_time_format(), mktime( $hour, $minute, 0, $month, $day, $year ) );
+	// Default return value
+	$time = null;
+
+	// Format time value if not null
+	if ( ( false !== $hour ) && ( false !== $minute ) ) {
+		$format = sc_get_time_format();
+		$mktime = mktime( $hour, $minute, 0, $month, $day, $year );
+		$time   = date_i18n( $format, $mktime );
 	}
 
 	return apply_filters( 'sc_event_end_time', $time, $hour, $minute );
@@ -1110,8 +1177,9 @@ function sc_get_event_end_time( $event_id ) {
  */
 function sc_is_recurring( $event_id ) {
 	$recurring = get_post_meta( $event_id, 'sc_event_recurring', true );
-	$recurring = ( $recurring && $recurring != 'none' ) ? true : false;
-	return $recurring;
+	$retval    = ! empty( $recurring ) && ( 'none' !== $recurring );
+
+	return $retval;
 }
 
 /**
@@ -1124,6 +1192,7 @@ function sc_is_recurring( $event_id ) {
  */
 function sc_get_recurring_period( $event_id ) {
 	$period = get_post_meta( $event_id, 'sc_event_recurring', true );
+
 	return apply_filters( 'sc_recurring_period', $period, $event_id );
 }
 
@@ -1139,7 +1208,7 @@ function sc_get_recurring_stop_date( $event_id ) {
 
 	$recur_until = get_post_meta( $event_id, 'sc_recur_until', true );
 
-	if ( !sc_is_recurring( $event_id ) ) {
+	if ( ! sc_is_recurring( $event_id ) ) {
 		$recur_until = false;
 	}
 
@@ -1151,131 +1220,32 @@ function sc_get_recurring_stop_date( $event_id ) {
 }
 
 /**
- * Retrieves all recurring events
- *
- * @access      public
- * @since       1.1
- *
- * @param string $time Timestamp that recurring event should include
- * @param string $type type of recurring event to retrieve
- * @param string|null $category Category to limit events
- *
- * @return array
- */
-function sc_get_recurring_events( $time, $type, $category = null ) {
-
-	$start_key = '';
-	$end_key   = '';
-	$date      = '';
-
-	switch ( $type ) {
-		case 'weekly' :
-			$start_key = 'sc_event_day_of_week';
-			$end_key   = 'sc_event_end_day_of_week';
-			$date      = date( 'w', $time );
-			break;
-
-		case 'monthly' :
-			$start_key = 'sc_event_day_of_month';
-			$end_key   = 'sc_event_end_day_of_month';
-			$date      = date( 'd', $time );
-			break;
-
-		case 'yearly' :
-			$date = ''; // these are reset below
-			break;
-	}
-
-	$args = array(
-		'post_type'      => 'sc_event',
-		'posts_per_page' => -1,
-		'post_status'    => 'publish',
-		'fields'         => 'ids',
-		'order'          => 'asc',
-		'meta_query' => array(
-			'relation' => 'AND',
-			array(
-				'key'     => $start_key,
-				'value'   => $date,
-				'compare' => '<=',
-			),
-			array(
-				'key'     => $end_key,
-				'value'   => $date,
-				'compare' => '>=',
-			),
-			array(
-				'key'   => 'sc_event_recurring',
-				'value' => $type
-			),
-			array(
-				'key'     => 'sc_event_recurring',
-				'value'   => 'none',
-				'compare' => '!='
-			),
-			array(
-				'key'     => 'sc_event_date_time',
-				'value'   => $time,
-				'compare' => '<='
-			)
-		),
-	);
-
-	if ( $type == 'yearly' ) {
-		// for yearly we have to completely reset the meta query
-		$args[ 'meta_query' ] = array(
-			'relation' => 'AND',
-			array(
-				'key'     => 'sc_event_day_of_month',
-				'value'   => date( 'j', $time ),
-				'compare' => '<=',
-			),
-			array(
-				'key'     => 'sc_event_end_day_of_month',
-				'value'   => date( 'j', $time ),
-				'compare' => '>=',
-			),
-			array(
-				'key'     => 'sc_event_month',
-				'value'   => date( 'm', $time ),
-				'compare' => '<=',
-			),
-			array(
-				'key'     => 'sc_event_end_month',
-				'value'   => date( 'm', $time ),
-				'compare' => '>=',
-			),
-			array(
-				'key'     => 'sc_event_date_time',
-				'value'   => $time,
-				'compare' => '<='
-			),
-			array(
-				'key'   => 'sc_event_recurring',
-				'value' => $type
-			)
-		);
-	}
-	if ( !is_null( $category ) ) {
-		$args[ 'sc_event_category' ] = $category;
-	}
-
-	return get_posts( apply_filters( 'sc_recurring_events_query', $args ) );
-}
-
-/**
- * Shows the date of recurring events
+ * Shows the date of a recurring event
  *
  * @access      public
  * @since       1.1.1
  * @return      array
  */
-function sc_show_single_recurring_date( $event_id ) {
+function sc_show_single_recurring_date( $event_id = 0 ) {
+	echo sc_get_recurring_description( $event_id );
+}
+
+/**
+ * Get the date of a recurring event
+ *
+ * @access      public
+ * @since       2.0.9
+ * @return      array
+ */
+function sc_get_recurring_description( $event_id = 0 ) {
+
+	// Default return value
+	$retval = '';
 
 	$recurring_schedule = get_post_meta( $event_id, 'sc_event_recurring', true );
-	$recur_until = sc_get_recurring_stop_date( $event_id );
-	$event_date_time = get_post_meta( $event_id, 'sc_event_date_time', true );
-	$date_format = sc_get_date_format();
+	$event_date_time    = get_post_meta( $event_id, 'sc_event_date_time', true );
+	$recur_until        = sc_get_recurring_stop_date( $event_id );
+	$date_format        = sc_get_date_format();
 
 	$format = apply_filters( 'sc_recurring_date_format', array(), $event_date_time, $recur_until );
 
@@ -1286,9 +1256,9 @@ function sc_show_single_recurring_date( $event_id ) {
 			case 'weekly':
 
 				if ( isset( $format[ 'weekly' ] ) ) {
-					echo $format[ 'weekly' ];
+					$retval = $format[ 'weekly' ];
 				} else {
-					echo sprintf( __( 'Starts %s then every %s until %s', 'sugar-calendar' ),
+					$retval = sprintf( __( 'Starts %s then every %s until %s', 'sugar-calendar' ),
 						date_i18n( $date_format, $event_date_time ),
 						date_i18n( 'l', $event_date_time ),
 						date_i18n( $date_format, $recur_until ) );
@@ -1298,9 +1268,9 @@ function sc_show_single_recurring_date( $event_id ) {
 			case 'monthly':
 
 				if ( isset( $format[ 'monthly' ] ) ) {
-					echo $format[ 'monthly' ];
+					$retval = $format[ 'monthly' ];
 				} else {
-					echo sprintf( __( 'Starts %s then every month on the %s until %s', 'sugar-calendar' ),
+					$retval = sprintf( __( 'Starts %s then every month on the %s until %s', 'sugar-calendar' ),
 						date_i18n( $date_format, $event_date_time ),
 						date_i18n( 'jS', $event_date_time ),
 						date_i18n( $date_format, $recur_until ) );
@@ -1310,9 +1280,9 @@ function sc_show_single_recurring_date( $event_id ) {
 			case 'yearly':
 
 				if ( isset( $format[ 'yearly' ] ) ) {
-					echo $format[ 'yearly' ];
+					$retval = $format[ 'yearly' ];
 				} else {
-					echo sprintf( __( 'Starts %s then every year on the %s of %s until %s', 'sugar-calendar' ),
+					$retval = sprintf( __( 'Starts %s then every year on the %s of %s until %s', 'sugar-calendar' ),
 						date_i18n( $date_format, $event_date_time ),
 						date_i18n( 'jS', $event_date_time ),
 						date_i18n( 'F', $event_date_time ),
@@ -1328,9 +1298,9 @@ function sc_show_single_recurring_date( $event_id ) {
 			case 'weekly':
 
 				if ( isset( $format[ 'weekly' ] ) ) {
-					echo $format[ 'weekly' ];
+					$retval = $format[ 'weekly' ];
 				} else {
-					echo sprintf( __( 'Starts %s then every %s', 'sugar-calendar' ),
+					$retval = sprintf( __( 'Starts %s then every %s', 'sugar-calendar' ),
 						date_i18n( $date_format, $event_date_time ),
 						date_i18n( 'l', $event_date_time ) );
 				}
@@ -1339,9 +1309,9 @@ function sc_show_single_recurring_date( $event_id ) {
 			case 'monthly':
 
 				if ( isset( $format[ 'monthly' ] ) ) {
-					echo $format[ 'monthly' ];
+					$retval = $format[ 'monthly' ];
 				} else {
-					echo sprintf( __( 'Starts %s then every month on the %s', 'sugar-calendar' ),
+					$retval = sprintf( __( 'Starts %s then every month on the %s', 'sugar-calendar' ),
 						date_i18n( $date_format, $event_date_time ),
 						date_i18n( 'jS', $event_date_time ) );
 				}
@@ -1350,17 +1320,19 @@ function sc_show_single_recurring_date( $event_id ) {
 			case 'yearly':
 
 				if ( isset( $format[ 'yearly' ] ) ) {
-					echo $format[ 'yearly' ];
+					$retval = $format[ 'yearly' ];
 				} else {
-					echo sprintf( __( 'Starts %s then every year on the %s of %s', 'sugar-calendar' ),
+					$retval = sprintf( __( 'Starts %s then every year on the %s of %s', 'sugar-calendar' ),
 						date_i18n( $date_format, $event_date_time ),
 						date_i18n( 'jS', $event_date_time ),
 						date_i18n( 'F', $event_date_time ) );
 				}
 				break;
 		}
-
 	endif;
+
+	// Return the formatted recurring description
+	return $retval;
 }
 
 /**
@@ -1435,7 +1407,7 @@ function sc_get_week_start_day() {
 	$start_day = (int) get_option( 'sc_start_of_week' );
 
 	// default to WordPress value
-	if ( empty( $start_day ) && 0 !== $start_day ) {
+	if ( empty( $start_day ) && ( 0 !== $start_day ) ) {
 		$start_day = get_option( 'start_of_week' );
 	}
 
@@ -1449,9 +1421,9 @@ function sc_get_week_start_day() {
  * @since 1.6.0
  * @param int $event_id
  */
-function sc_update_recurring_events( $event_id = null ) {
+function sc_update_recurring_events( $event_id = 0 ) {
 
-	if ( $event_id ) {
+	if ( ! empty( $event_id ) ) {
 		$events[] = $event_id;
 
 	} else {
@@ -1532,7 +1504,7 @@ function sc_get_all_events( $category = null ) {
 		'order'       => 'asc',
 	);
 
-	if ( !is_null( $category ) ) {
+	if ( ! is_null( $category ) ) {
 		$args[ 'sc_event_category' ] = $category;
 	}
 
@@ -1558,6 +1530,7 @@ function sc_get_all_events( $category = null ) {
 			$full_list[ $start ][] = $event_id;
 		}
 	}
+
 	ksort( $full_list );
 
 	return apply_filters( 'sc_get_all_events', $full_list );
@@ -1573,29 +1546,157 @@ function sc_order_events_by_time( $events ) {
 	$events_time = array();
 
 	foreach ( $events as $event_id ) {
+
 		// sort by sc_event_time_hour + sc_event_time_minute + sc_event_time_am_pm
 		$hour = get_post_meta( $event_id, 'sc_event_time_hour', true );
 		if ( empty( $hour ) ) {
 			$hour = '00';
 		}
+
 		$minute = get_post_meta( $event_id, 'sc_event_time_minute', true );
 		if ( empty( $minute ) ) {
 			$minute = '00';
 		}
-		$am_pm = get_post_meta( $event_id, 'sc_event_time_am_pm', true );
 
+		$am_pm = get_post_meta( $event_id, 'sc_event_time_am_pm', true );
 		if ( 'pm' === $am_pm ) {
 			$hour += 12;
 		}
+
 		$events_time[ $hour . $minute . $event_id ] = $event_id;
 	}
 
 	ksort( $events_time );
+
 	return $events_time;
+}
+
+/** Deprecated ****************************************************************/
+
+/**
+ * Retrieves all recurring events.
+ *
+ * This function is no longer in use.
+ *
+ * @access      public
+ * @since       1.1
+ * @deprecated  2.0.0
+ *
+ * @param string $time Timestamp that recurring event should include
+ * @param string $type type of recurring event to retrieve
+ * @param string|null $category Category to limit events
+ *
+ * @return array
+ */
+function sc_get_recurring_events( $time, $type, $category = null ) {
+
+	// Default variable values
+	$start_key = $end_key = $date = '';
+
+	switch ( $type ) {
+		case 'weekly' :
+			$start_key = 'sc_event_day_of_week';
+			$end_key   = 'sc_event_end_day_of_week';
+			$date      = date( 'w', $time );
+			break;
+
+		case 'monthly' :
+			$start_key = 'sc_event_day_of_month';
+			$end_key   = 'sc_event_end_day_of_month';
+			$date      = date( 'd', $time );
+			break;
+
+		case 'yearly' :
+			$date = ''; // these are reset below
+			break;
+	}
+
+	$args = array(
+		'post_type'      => 'sc_event',
+		'posts_per_page' => -1,
+		'post_status'    => 'publish',
+		'fields'         => 'ids',
+		'order'          => 'asc',
+		'meta_query' => array(
+			'relation' => 'AND',
+			array(
+				'key'     => $start_key,
+				'value'   => $date,
+				'compare' => '<=',
+			),
+			array(
+				'key'     => $end_key,
+				'value'   => $date,
+				'compare' => '>=',
+			),
+			array(
+				'key'   => 'sc_event_recurring',
+				'value' => $type
+			),
+			array(
+				'key'     => 'sc_event_recurring',
+				'value'   => 'none',
+				'compare' => '!='
+			),
+			array(
+				'key'     => 'sc_event_date_time',
+				'value'   => $time,
+				'compare' => '<='
+			)
+		),
+	);
+
+	if ( 'yearly' === $type ) {
+
+		// for yearly we have to completely reset the meta query
+		$args[ 'meta_query' ] = array(
+			'relation' => 'AND',
+			array(
+				'key'     => 'sc_event_day_of_month',
+				'value'   => date( 'j', $time ),
+				'compare' => '<=',
+			),
+			array(
+				'key'     => 'sc_event_end_day_of_month',
+				'value'   => date( 'j', $time ),
+				'compare' => '>=',
+			),
+			array(
+				'key'     => 'sc_event_month',
+				'value'   => date( 'm', $time ),
+				'compare' => '<=',
+			),
+			array(
+				'key'     => 'sc_event_end_month',
+				'value'   => date( 'm', $time ),
+				'compare' => '>=',
+			),
+			array(
+				'key'     => 'sc_event_date_time',
+				'value'   => $time,
+				'compare' => '<='
+			),
+			array(
+				'key'   => 'sc_event_recurring',
+				'value' => $type
+			)
+		);
+	}
+
+	if ( ! is_null( $category ) ) {
+		$args[ 'sc_event_category' ] = $category;
+	}
+
+	return get_posts( apply_filters( 'sc_recurring_events_query', $args ) );
 }
 
 /**
  * Get a list of event post ids ordered by start time for a specific day
+ *
+ * This function is no longer in use.
+ *
+ * @since      1.1
+ * @deprecated 2.0.0
  *
  * @param $display_day
  * @param $display_month
@@ -1608,21 +1709,21 @@ function sc_get_events_for_day( $display_day, $display_month, $display_year, $ca
 
 	$args = array(
 		'numberposts' => -1,
-		'post_type' => 'sc_event',
+		'post_type'   => 'sc_event',
 		'post_status' => 'publish',
-		'orderby' => 'meta_value_num',
-		'order' => 'asc',
-		'fields' => 'ids',
-		'meta_query' => array(
+		'orderby'     => 'meta_value_num',
+		'order'       => 'asc',
+		'fields'      => 'ids',
+		'meta_query'  => array(
 			'relation' => 'AND',
 			array(
-				'key' => 'sc_event_date',
-				'value' => mktime( 0, 0, 0, $display_month, $display_day, $display_year ),
+				'key'     => 'sc_event_date',
+				'value'   => mktime( 0, 0, 0, $display_month, $display_day, $display_year ),
 				'compare' => '<=',
 			),
 			array(
-				'key' => 'sc_event_end_date',
-				'value' => mktime( 0, 0, 0, $display_month, $display_day, $display_year ),
+				'key'     => 'sc_event_end_date',
+				'value'   => mktime( 0, 0, 0, $display_month, $display_day, $display_year ),
 				'compare' => '>=',
 			),
 		),

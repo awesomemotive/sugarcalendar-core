@@ -395,7 +395,7 @@ class Box {
 					<td>
 						<label>
 							<input type="checkbox" name="all_day" id="all_day" value="1" <?php checked( $all_day ); ?> />
-							<?php esc_html_e( 'All-day event', 'sugar-calendar' ); ?>
+							<?php esc_html_e( 'All-day', 'sugar-calendar' ); ?>
 						</label>
 					</td>
 				</tr>

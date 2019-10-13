@@ -454,7 +454,7 @@ final class Back_Compat {
 	private function skip() {
 
 		// Return true during upgrades
-		if ( ! $this->doing_upgrade() ) {
+		if ( $this->doing_upgrade() ) {
 			return true;
 		}
 

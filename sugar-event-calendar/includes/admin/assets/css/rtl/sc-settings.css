@@ -6,6 +6,162 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 }
 
 
+/* Settings
+-------------------------------------------------------------- */
+
+/* Sidebar */
+.sc-settings-sidebar {
+	padding-top: 27px;
+}
+
+.sc-settings-sidebar-content {
+	background-color: #fff;
+	border: 1px solid #ddd;
+	box-sizing: border-box;
+	max-width: 350px;
+}
+
+.sc-settings-sidebar-content p {
+	font-size: 15px;
+	line-height: 1.6;
+	margin-top: 0;
+}
+
+/* Sidebar header section */
+.sc-sidebar-header-section {
+	background-color: #253b51;
+	line-height: 1;
+	padding: 30px 20px 28px;
+	border-bottom: 3px dashed #fafafa;
+}
+
+/* Sidebar description section */
+.sc-sidebar-description-section {
+	background-color: #fafafa;
+	padding: 20px;
+	border-bottom: 1px solid #ddd;
+}
+
+.sc-sidebar-description-section .sidebar-description {
+	margin: 0;
+}
+
+/* Sidebar coupon section */
+.sc-sidebar-coupon-section {
+	font-size: 14px;
+	padding: 20px;
+}
+
+.sc-sidebar-coupon-section label {
+	display: block;
+	line-height: 1.4;
+	text-align: center;
+	margin-bottom: 6px;
+}
+
+.sc-sidebar-coupon-section label strong {
+	color: #253b51;
+	font-weight: 700;
+}
+
+.sc-sidebar-coupon-section input {
+	background: #fffaf6;
+	font-size: 22px;
+	font-weight: 600;
+	text-align: center;
+	padding: 10px;
+	border: 2px dashed #f27100;
+	border-radius: 4px;
+	margin-bottom: 1em;
+	box-shadow: none;
+	width: 100%;
+}
+
+.sc-sidebar-coupon-section input:focus {
+	border: 2px dashed #f27100;
+	box-shadow: none;
+}
+
+.sc-settings-sidebar-content .coupon-note {
+	color: #6c7883;
+	font-size: 13px;
+	font-style: italic;
+	margin: 0;
+}
+
+.sc-settings-sidebar-content .coupon-note a {
+	color: #253b51;
+}
+
+.sc-settings-sidebar-content .coupon-note a:hover {
+	text-decoration: none;
+}
+
+/* Sidebar footer section */
+.sc-sidebar-footer-section {
+	background-color: #fafafa;
+	padding: 20px;
+	border-top: 1px solid #ddd;
+}
+
+.sc-sidebar-footer-section .cta-button {
+	display: block;
+	background-color: #f27100;
+	color: #fff;
+	text-decoration: none;
+	font-size: 20px;
+	font-weight: 700;
+	text-transform: uppercase;
+	text-align: center;
+	padding: 17px 10px;
+	border-radius: 4px;
+	width: 100%;
+	box-sizing: border-box;
+	transition: background-color .2s;
+}
+
+.sc-sidebar-footer-section .cta-button:hover {
+	background-color: #e16900;
+}
+
+/* Sidebar after */
+.sc-sidebar-logo-section .sc-logo-wrap {
+	padding-top: 1em;
+	text-align: right;
+	margin-right: 20px;
+	max-width: 350px;
+}
+
+.sc-sidebar-logo-section .sc-logo {
+	max-width: 115px;
+}
+
+/* Sidebar responsive behavior */
+@media all and ( min-width: 960px ) {
+
+	.has-sidebar .sc-settings-content {
+		float: right;
+		width: 65%;
+	}
+
+	.has-sidebar .sc-settings-sidebar {
+		float: left;
+		width: 33%;
+	}
+}
+
+@media all and ( min-width: 1200px ) {
+
+	.has-sidebar .sc-settings-content {
+		width: 72%;
+	}
+
+	.has-sidebar .sc-settings-sidebar {
+		width: 26%;
+	}
+}
+
+
 /* Toggle Styles
 -------------------------------------------------------------- */
 

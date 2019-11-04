@@ -361,6 +361,9 @@ function page() {
 		? sanitize_key( $_GET['subsection'] )
 		: get_main_subsection_id( $section );
 
+	// Find out if we're displaying a sidebar
+	$maybe_display_sidebar = maybe_display_sidebar();
+
 	if ( ! empty( $_GET['settings-updated'] ) && ( 'true' === $_GET['settings-updated'] ) ) : ?>
 
 		<div class="notice updated fade is-dismissible">
@@ -378,15 +381,29 @@ function page() {
 
 		<hr class="wp-header-end">
 
-		<form method="post" action="options.php">
+		<div class="sc-settings-main<?php echo $maybe_display_sidebar ? ' has-sidebar' : ''; ?> wp-clearfix">
 
-			<?php section( $section, $subsection ); ?>
+			<div class="sc-settings-content">
 
-			<?php submit_button(); ?>
+				<form method="post" action="options.php">
 
-			<?php settings_fields( "sc_{$section}_{$subsection}" ); ?>
+					<?php section( $section, $subsection ); ?>
 
-		</form>
+					<?php submit_button(); ?>
+
+					<?php settings_fields( "sc_{$section}_{$subsection}" ); ?>
+
+				</form>
+
+			</div>
+
+			<?php
+			if ( $maybe_display_sidebar ) {
+				display_sidebar();
+			}
+			?>
+
+		</div>
 	</div>
 
 <?php
@@ -481,4 +498,68 @@ function display_subsection() {
 	</table>
 
 <?php
+}
+
+/**
+ * Check to see if we should be displaying a sidebar.
+ *
+ * @since 2.0.10
+ */
+function maybe_display_sidebar() {
+
+	// Set the date/time range based on UTC
+	$start = strtotime( '2019-11-29 06:00:00' );
+	$end   = strtotime( '2019-12-07 05:59:59' );
+	$now   = time();
+
+	// Only display sidebar if the page is loaded within the date range
+	if ( $now > $start && $now < $end ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Output the admin settings sidebar
+ *
+ * @since 2.0.10
+ */
+function display_sidebar() {
+	$coupon_code = 'BFCM2019';
+	?>
+
+	<div class="sc-settings-sidebar">
+
+		<div class="sc-settings-sidebar-content">
+
+			<div class="sc-sidebar-header-section">
+				<img class="bcfm-header" src="<?php echo SC_PLUGIN_URL . 'includes/admin/assets/images/bfcm-header.svg'; ?>">
+			</div>
+
+			<div class="sc-sidebar-description-section">
+				<p class="sidebar-description"><?php _e( '🤔 <strong>Thinking about upgrading?</strong> Well, now\'s the time! Our Black Friday & Cyber Monday sale ends at <strong>MIDNIGHT on the 6th of December</strong>. Don\'t miss out! ⏳', 'sugar-calendar' ); ?></p>
+			</div>
+
+			<div class="sc-sidebar-coupon-section">
+				<label for="coupon-code"><?php _e( 'Copy your <strong>COUPON CODE</strong> and use it at checkout for instant savings:', 'sugar-calendar' ); ?></label>
+				<input id="coupon-code" type="text" value="<?php echo $coupon_code; ?>" readonly>
+				<p class="coupon-note"><?php _e( 'The sale period is based on Central Standard Time (UTC -6 hrs). The same coupon code can be used to save on <a href="https://sandhillsdev.com/projects/" target="_blank">our other WordPress plugins</a>.', 'sugar-calendar' ); ?></p>
+			</div>
+
+			<div class="sc-sidebar-footer-section">
+				<a class="cta-button" href="https://sugarcalendar.com/pricing/"><?php _e( 'Upgrade Now!', 'sugar-calendar' ); ?></a>
+			</div>
+
+		</div>
+
+		<div class="sc-sidebar-logo-section">
+			<div class="sc-logo-wrap">
+				<img class="sc-logo" src="<?php echo SC_PLUGIN_URL . 'includes/admin/assets/images/sugar-calendar-logo-light.svg'; ?>">
+			</div>
+		</div>
+
+	</div>
+
+	<?php
 }

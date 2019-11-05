@@ -16,14 +16,15 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 
 .sc-settings-sidebar-content {
 	background-color: #fff;
+	text-align: center;
 	border: 1px solid #ddd;
 	box-sizing: border-box;
 	max-width: 350px;
 }
 
 .sc-settings-sidebar-content p {
-	font-size: 15px;
-	line-height: 1.6;
+	font-size: 14px;
+	line-height: 1.5;
 	margin-top: 0;
 }
 
@@ -31,14 +32,14 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 .sc-sidebar-header-section {
 	background-color: #253b51;
 	line-height: 1;
-	padding: 30px 20px 28px;
+	padding: 26px 20px 24px;
 	border-bottom: 3px dashed #fafafa;
 }
 
 /* Sidebar description section */
 .sc-sidebar-description-section {
 	background-color: #fafafa;
-	padding: 20px;
+	padding: 16px 20px;
 	border-bottom: 1px solid #ddd;
 }
 
@@ -49,13 +50,12 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 /* Sidebar coupon section */
 .sc-sidebar-coupon-section {
 	font-size: 14px;
-	padding: 20px;
+	padding: 16px 20px;
 }
 
 .sc-sidebar-coupon-section label {
 	display: block;
 	line-height: 1.4;
-	text-align: center;
 	margin-bottom: 6px;
 }
 
@@ -72,7 +72,7 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 	padding: 10px;
 	border: 2px dashed #f27100;
 	border-radius: 4px;
-	margin-bottom: 1em;
+	margin-bottom: 16px;
 	box-shadow: none;
 	width: 100%;
 }
@@ -100,7 +100,7 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 /* Sidebar footer section */
 .sc-sidebar-footer-section {
 	background-color: #fafafa;
-	padding: 20px;
+	padding: 16px 20px;
 	border-top: 1px solid #ddd;
 }
 
@@ -112,7 +112,6 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 	font-size: 20px;
 	font-weight: 700;
 	text-transform: uppercase;
-	text-align: center;
 	padding: 17px 10px;
 	border-radius: 4px;
 	width: 100%;

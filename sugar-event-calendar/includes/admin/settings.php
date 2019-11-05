@@ -511,7 +511,7 @@ function display_subsection() {
 function maybe_display_sidebar() {
 
 	// Set the date/time range based on UTC
-	$start = strtotime( '2019-11-04 06:00:00' );
+	$start = strtotime( '2019-11-29 06:00:00' );
 	$end   = strtotime( '2019-12-07 05:59:59' );
 	$now   = time();
 

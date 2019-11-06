@@ -340,7 +340,7 @@ function section( $section = '', $subsection = 'main' ) {
 		: '';
 
 	// Maybe call the function
-	if ( function_exists( $func ) ) {
+	if ( is_callable( $func ) || function_exists( $func ) ) {
 		call_user_func( $func );
 	}
 }

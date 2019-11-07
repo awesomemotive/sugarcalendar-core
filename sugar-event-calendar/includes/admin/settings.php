@@ -504,7 +504,7 @@ function display_subsection() {
 }
 
 /**
- * Check to see if we should be displaying a sidebar.
+ * Check to see if we should be displaying a sidebar
  *
  * @since 2.0.10
  */
@@ -551,7 +551,7 @@ function display_sidebar() {
 			</div>
 
 			<div class="sc-sidebar-footer-section">
-				<a class="sc-cta-button" href="https://sugarcalendar.com/pricing/"><?php _e( 'Upgrade Now!', 'sugar-calendar' ); ?></a>
+				<a class="sc-cta-button" href="https://sugarcalendar.com/pricing/" target="_blank"><?php _e( 'Upgrade Now!', 'sugar-calendar' ); ?></a>
 			</div>
 
 		</div>

@@ -43,7 +43,7 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 	border-bottom: 1px solid #ddd;
 }
 
-.sc-sidebar-description-section .sidebar-description {
+.sc-sidebar-description-section .sc-sidebar-description {
 	margin: 0;
 }
 
@@ -82,18 +82,18 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 	box-shadow: none;
 }
 
-.sc-settings-sidebar-content .coupon-note {
+.sc-settings-sidebar-content .sc-coupon-note {
 	color: #6c7883;
 	font-size: 13px;
 	font-style: italic;
 	margin: 0;
 }
 
-.sc-settings-sidebar-content .coupon-note a {
+.sc-settings-sidebar-content .sc-coupon-note a {
 	color: #253b51;
 }
 
-.sc-settings-sidebar-content .coupon-note a:hover {
+.sc-settings-sidebar-content .sc-coupon-note a:hover {
 	text-decoration: none;
 }
 
@@ -104,7 +104,7 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 	border-top: 1px solid #ddd;
 }
 
-.sc-sidebar-footer-section .cta-button {
+.sc-sidebar-footer-section .sc-cta-button {
 	display: block;
 	background-color: #f27100;
 	color: #fff;
@@ -119,7 +119,7 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 	transition: background-color .2s;
 }
 
-.sc-sidebar-footer-section .cta-button:hover {
+.sc-sidebar-footer-section .sc-cta-button:hover {
 	background-color: #e16900;
 }
 
@@ -138,12 +138,12 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 /* Sidebar responsive behavior */
 @media all and ( min-width: 960px ) {
 
-	.has-sidebar .sc-settings-content {
+	.sc-has-sidebar .sc-settings-content {
 		float: right;
 		width: 65%;
 	}
 
-	.has-sidebar .sc-settings-sidebar {
+	.sc-has-sidebar .sc-settings-sidebar {
 		float: left;
 		width: 33%;
 	}
@@ -151,11 +151,11 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 
 @media all and ( min-width: 1200px ) {
 
-	.has-sidebar .sc-settings-content {
+	.sc-has-sidebar .sc-settings-content {
 		width: 72%;
 	}
 
-	.has-sidebar .sc-settings-sidebar {
+	.sc-has-sidebar .sc-settings-sidebar {
 		width: 26%;
 	}
 }

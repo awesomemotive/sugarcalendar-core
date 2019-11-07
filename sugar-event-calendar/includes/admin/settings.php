@@ -364,7 +364,7 @@ function page() {
 	// Find out if we're displaying a sidebar
 	$maybe_display_sidebar = maybe_display_sidebar();
 	$wrapper_class         = ( true === $maybe_display_sidebar )
-		? ' has-sidebar'
+		? ' sc-has-sidebar'
 		: '';
 
 	if ( ! empty( $_GET['settings-updated'] ) && ( 'true' === $_GET['settings-updated'] ) ) : ?>
@@ -537,21 +537,21 @@ function display_sidebar() {
 		<div class="sc-settings-sidebar-content">
 
 			<div class="sc-sidebar-header-section">
-				<img class="bcfm-header" src="<?php echo esc_url( SC_PLUGIN_URL . 'includes/admin/assets/images/bfcm-header.svg' ); ?>">
+				<img class="sc-bcfm-header" src="<?php echo esc_url( SC_PLUGIN_URL . 'includes/admin/assets/images/bfcm-header.svg' ); ?>">
 			</div>
 
 			<div class="sc-sidebar-description-section">
-				<p class="sidebar-description"><?php _e( 'Save 25% on all Sugar Calendar purchases <strong>this week</strong>, including renewals and upgrades!', 'sugar-calendar' ); ?></p>
+				<p class="sc-sidebar-description"><?php _e( 'Save 25% on all Sugar Calendar purchases <strong>this week</strong>, including renewals and upgrades!', 'sugar-calendar' ); ?></p>
 			</div>
 
 			<div class="sc-sidebar-coupon-section">
-				<label for="coupon-code"><?php _e( 'Use <strong>COUPON CODE</strong> at checkout:', 'sugar-calendar' ); ?></label>
-				<input id="coupon-code" type="text" value="<?php echo $coupon_code; ?>" readonly>
-				<p class="coupon-note"><?php _e( 'The sale ends the 6th of December at midnight (UTC-6). Use the same coupon code to save on <a href="https://sandhillsdev.com/projects/" target="_blank">our other WordPress plugins</a>.', 'sugar-calendar' ); ?></p>
+				<label for="sc-coupon-code"><?php _e( 'Use code at checkout:', 'sugar-calendar' ); ?></label>
+				<input id="sc-coupon-code" type="text" value="<?php echo $coupon_code; ?>" readonly>
+				<p class="sc-coupon-note"><?php _e( 'Sale ends 23:59 PM December 6th CST. Save 25% on <a href="https://sandhillsdev.com/projects/" target="_blank">our other plugins</a>.', 'sugar-calendar' ); ?></p>
 			</div>
 
 			<div class="sc-sidebar-footer-section">
-				<a class="cta-button" href="https://sugarcalendar.com/pricing/"><?php _e( 'Upgrade Now!', 'sugar-calendar' ); ?></a>
+				<a class="sc-cta-button" href="https://sugarcalendar.com/pricing/"><?php _e( 'Upgrade Now!', 'sugar-calendar' ); ?></a>
 			</div>
 
 		</div>

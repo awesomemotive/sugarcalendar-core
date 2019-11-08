@@ -531,7 +531,7 @@ function maybe_display_sidebar() {
 function display_sidebar() {
 	$coupon_code = 'BFCM2019';
 	$utm_args    = array(
-		'utm_source'   => 'sc-settings',
+		'utm_source'   => 'settings',
 		'utm_medium'   => 'wp-admin',
 		'utm_campaign' => 'bfcm2019',
 		'utm_content'  => 'sidebar-promo',

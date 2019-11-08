@@ -530,6 +530,7 @@ function maybe_display_sidebar() {
  */
 function display_sidebar() {
 	$coupon_code = 'BFCM2019';
+	$utm_params  = '?utm_source=sc-settings&utm_medium=wp-admin&utm_campaign=bfcm2019&utm_content=sidebar-promo';
 	?>
 
 	<div class="sc-settings-sidebar">
@@ -551,7 +552,7 @@ function display_sidebar() {
 			</div>
 
 			<div class="sc-sidebar-footer-section">
-				<a class="sc-cta-button" href="https://sugarcalendar.com/pricing/" target="_blank"><?php _e( 'Upgrade Now!', 'sugar-calendar' ); ?></a>
+				<a class="sc-cta-button" href="https://sugarcalendar.com/pricing/<?php echo $utm_params; ?>" target="_blank"><?php _e( 'Upgrade Now!', 'sugar-calendar' ); ?></a>
 			</div>
 
 		</div>

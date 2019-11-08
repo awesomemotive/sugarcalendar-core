@@ -113,9 +113,11 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 	font-weight: 700;
 	text-transform: uppercase;
 	padding: 17px 10px;
+	border: none;
 	border-radius: 4px;
 	width: 100%;
 	box-sizing: border-box;
+	box-shadow: none;
 	transition: background-color .2s;
 }
 

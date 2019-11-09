@@ -516,7 +516,7 @@ function maybe_display_sidebar() {
 	$now   = time();
 
 	// Only display sidebar if the page is loaded within the date range
-	if ( ( $now ) > $start && ( $now < $end ) ) {
+	if ( ( $now > $start ) && ( $now < $end ) ) {
 		return true;
 	}
 

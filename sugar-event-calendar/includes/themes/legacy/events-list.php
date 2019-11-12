@@ -96,6 +96,8 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 	// Start an output buffer to store these result
 	ob_start();
 
+	do_action( 'sc_before_events_list' );
+
 	// Start an unordered list
 	echo '<ul class="sc_events_list">';
 
@@ -154,6 +156,8 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 
 	// Reset post data - we'll be looping through our own
 	wp_reset_postdata();
+
+	do_action( 'sc_after_events_list' );
 
 	// Return the current buffer and delete it
 	return ob_get_clean();

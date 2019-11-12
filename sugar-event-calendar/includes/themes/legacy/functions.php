@@ -222,7 +222,7 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
 
 	//print "blank" days until the first of the current week
 	for ( $x = 0; $x < $running_day; $x++ ) {
-		$calendar .= '<td class="calendar-day-np" valign="top"></td>';
+		$calendar .= '<td class="calendar-day-np past" valign="top"></td>';
 		$days_in_this_week++;
 	}
 
@@ -231,7 +231,9 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
 		$cal_event = '';
 		$today = ( $today_day == $list_day && $today_month == $month && $today_year == $year )
 			? 'today'
-			: '';
+			: ( ( $today_day > $list_day && $today_month >= $month && $today_year >= $year ) 
+				? 'past'
+				: 'upcoming' );
 
 		// Filter events
 		$events = sc_filter_events_for_day( $all_events, $list_day, $month, $year );
@@ -289,7 +291,7 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
 	//finish the rest of the days in the week
 	if ( $days_in_this_week < 8 ) {
 		for ( $x = 1; $x <= ( 8 - $days_in_this_week ); $x++ ) {
-			$calendar .= '<td class="calendar-day-np" valign="top"><div class="sc_day_div"></div></td>';
+			$calendar .= '<td class="calendar-day-np upcoming" valign="top"><div class="sc_day_div"></div></td>';
 		}
 	}
 
@@ -407,7 +409,9 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 		$cal_event = '';
 		$today = ( $today_day == $display_day && $today_month == $display_month && $today_year == $display_year )
 			? 'today'
-			: '';
+			: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year ) 
+				? 'past'
+				: 'upcoming' );
 
 		// Filter events
 		$events = sc_filter_events_for_day( $all_events, $display_day, $display_month, $display_year );
@@ -550,7 +554,9 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 		$cal_event = '';
 		$today = ( $today_day == $display_day && $today_month == $display_month && $today_year == $display_year )
 			? 'today'
-			: '';
+			: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year ) 
+				? 'past'
+				: 'upcoming' );
 
 		// Filter events
 		$events = sc_filter_events_for_day( $all_events, $display_day, $display_month, $display_year );
@@ -684,7 +690,9 @@ function sc_draw_calendar_day( $display_time, $size = 'large', $category = null 
 	// output current day
 	$today = ( $today_day == $display_day && $today_month == $display_month && $today_year == $display_year )
 		? 'today'
-		: '';
+		: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year ) 
+			? 'past'
+			: 'upcoming' );
 
 	$cal_event = '';
 
@@ -817,7 +825,9 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 		$cal_event = '';
 		$today = ( $today_day == $display_day && $today_month == $display_month && $today_year == $display_year )
 			? 'today'
-			: '';
+			: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year ) 
+				? 'past'
+				: 'upcoming' );
 
 		// Filter events
 		$events = sc_filter_events_for_day( $all_events, $display_day, $display_month, $display_year );

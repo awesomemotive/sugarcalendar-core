@@ -32,7 +32,7 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 .sc-sidebar-header-section {
 	background-color: #253b51;
 	line-height: 1;
-	padding: 30px 20px 28px;
+	padding: 26px 20px 24px;
 	border-bottom: 3px dashed #fafafa;
 }
 
@@ -128,8 +128,8 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 /* Sidebar after */
 .sc-sidebar-logo-section .sc-logo-wrap {
 	padding-top: 1em;
-	text-align: right;
-	margin-right: 20px;
+	text-align: left;
+	margin-left: 20px;
 	max-width: 350px;
 }
 

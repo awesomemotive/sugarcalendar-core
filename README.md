@@ -1,4 +1,4 @@
-# [Sugar Calendar](https://sugarcalendar.com) #
+# [Sugar Calendar (Lite)](https://sugarcalendar.com) #
 
 [![Build Status](https://travis-ci.org/sugarcalendar/lite.svg?branch=master)](https://travis-ci.org/sugarcalendar/lite)
 

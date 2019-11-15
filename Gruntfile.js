@@ -242,7 +242,7 @@ module.exports = function( grunt ) {
 				options: {
 					domainPath: '/sugar-event-calendar/includes/languages/', // Where to save the POT file.
 					exclude: [ 'build/.*' ],
-					mainFile: 'sugar-calendar.php', // Main project file.
+					mainFile: 'sugar-calendar-lite.php', // Main project file.
 					potFilename: 'sugar-calendar.pot', // Name of the POT file.
 					potHeaders: {
 						poedit: true, // Includes common Poedit headers.

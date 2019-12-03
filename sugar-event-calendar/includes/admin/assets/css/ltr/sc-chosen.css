@@ -1,38 +1,52 @@
-/* Chosen styles
+/* Sugar Calendar Overrides
 -------------------------------------------------------------- */
 
-body.js select.sc-select-chosen {
-	height: 29px;
+/* Default SELECT styling, inherited by Chosen */
+body.sugar-calendar.js select.sc-select-chosen {
+	height: 28px;
 	opacity: 0.2;
 	width: auto;
+	min-width: 55px;
 	max-width: 300px;
 }
 
-body.js div.sc-select-chosen {
+/* Min/Max widths for wrapper divs */
+body.sugar-calendar div.sc-select-chosen {
 	min-width: 55px;
 	max-width: 125px;
 }
 
-.sc-select-chosen.sc-time {
+/* Time pickers have explicit max-widths */
+body.sugar-calendar .sc-select-chosen.sc-time {
 	max-width: 55px;
 }
 
-div.filter-items div.sc-select-chosen,
-div.tablenav.top div.sc-select-chosen {
+/* Filters & Tablenavs have explicit widths */
+body.sugar-calendar div.filter-items div.sc-select-chosen,
+body.sugar-calendar div.tablenav.top div.sc-select-chosen {
 	min-width: 125px;
 	max-width: 125px;
 }
 
-body.sugar-calendar .wp-filter .sc-select-chosen {
-	height: 28px;
+/* Make sure certain wrappers allow dropdowns to appear outside their rects */
+body.sugar-calendar .wrap .actions:not(.bulkactions),
+body.sugar-calendar .media-toolbar,
+body.sugar-calendar .tablenav .actions {
+	overflow: visible !important;
 }
 
-.chosen-container.chosen-container-multi {
+/* WP Chosen
+-------------------------------------------------------------- */
+
+/* Certain pages expect 100% wide selects */
+.chosen-container.chosen-container-multi,
+#customize-theme-controls .chosen-container {
 	width: 100% !important;
 }
 
 .chosen-container {
-	font-size: 14px;
+	font-size: 13px;
+	vertical-align: middle;
 }
 
 .chosen-container-single .chosen-single div b {
@@ -87,7 +101,7 @@ body.sugar-calendar .wp-filter .sc-select-chosen {
 
 .chosen-container-single .chosen-single,
 .chosen-container-single.chosen-container-active.chosen-with-drop .chosen-single {
-	height: 29px;
+	min-height: 28px;
 }
 
 .chosen-container-active .chosen-single {
@@ -99,7 +113,7 @@ body.sugar-calendar .wp-filter .sc-select-chosen {
 }
 
 .chosen-container-multi .chosen-choices li.search-field input[type=text] {
-	min-height: 29px !important;
+	min-height: 28px !important;
 	width: auto !important;
 }
 
@@ -118,10 +132,11 @@ body.sugar-calendar .wp-filter .sc-select-chosen {
 }
 
 .chosen-container-single .chosen-single div {
-	width: 17px;
+	width: 20px;
 }
+
 .chosen-container-single .chosen-single span {
-	margin-right: 13px;
+	margin-right: 18px;
 }
 
 .chosen-container .chosen-drop {
@@ -150,13 +165,17 @@ body.sugar-calendar .wp-filter .sc-select-chosen {
 	box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.07 );
 }
 
+.chosen-container a.chosen-default span {
+	color: #aaa;
+}
+
 .chosen-container .chosen-results {
 	color: #444;
 	position: relative;
 	overflow-x: hidden;
 	overflow-y: auto;
-	margin: 0 4px 4px 0;
-	padding: 0 0 0 4px;
+	margin: 0 4px 4px 0 !important;
+	padding: 0 0 0 4px !important;
 	max-height: 240px;
 }
 
@@ -326,11 +345,13 @@ body.sugar-calendar .wp-filter .sc-select-chosen {
 body.branch-5-3 .chosen-container-multi .chosen-choices,
 body.branch-5-3 .chosen-container-single .chosen-single,
 body.branch-5-3 .chosen-container-active .chosen-single {
-	box-shadow: 0 0 0 transparent;
-	border-radius: 4px;
+	background: #fff url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 50%;
+	background-size: 16px 16px;
+	border-radius: 3px;
 	border: 1px solid #7e8993;
+	box-shadow: 0 0 0 transparent;
 	color: #32373c;
-	background: #fff url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 4px top 50%;
+	padding: 1px 7px;
 }
 
 body.branch-5-3 .chosen-container-active .chosen-single {
@@ -339,7 +360,7 @@ body.branch-5-3 .chosen-container-active .chosen-single {
 }
 
 body.branch-5-3 .chosen-container-active.chosen-with-drop .chosen-single {
-	border-radius: 4px 4px 0 0;
+	border-radius: 3px 3px 0 0;
 }
 
 body.branch-5-3 .chosen-container-single .chosen-single div b:before,
@@ -349,7 +370,7 @@ body.branch-5-3 .chosen-container-single .chosen-search input[type=text]:before 
 
 body.branch-5-3 .chosen-container .chosen-drop {
 	width: 100%;
-	border-radius: 0 0 4px 4px;
+	border-radius: 0 0 3px 3px;
 	background: #fff;
 	border-width: 0 1px 0 1px;
 	outline: 2px solid transparent;
@@ -363,7 +384,7 @@ body.branch-5-3 .chosen-container:hover .chosen-single {
 
 body.branch-5-3 .chosen-container-single .chosen-search input[type=text] {
 	border: 1px solid #ddd;
-	border-radius: 4px;
+	border-radius: 3px;
 	box-shadow: none;
 }
 
@@ -382,6 +403,7 @@ body.branch-5-3 .chosen-container .chosen-drop {
 }
 body.branch-5-3 .chosen-container .chosen-results li.highlighted {
 	background-color: #007cba;
+	border-radius: 3px;
 }
 
 /* Blue */

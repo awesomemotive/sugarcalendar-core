@@ -52,6 +52,23 @@ tr.sugar-calendar-post-header th {
 	width: 60%;
 }
 
+/* WordPress 5.3 makes these 30px, which is 2px too tall for Chosen */
+.sugar-calendar-wrap .section-content input[type=date],
+.sugar-calendar-wrap .section-content input[type=datetime-local],
+.sugar-calendar-wrap .section-content input[type=datetime],
+.sugar-calendar-wrap .section-content input[type=email],
+.sugar-calendar-wrap .section-content input[type=month],
+.sugar-calendar-wrap .section-content input[type=number],
+.sugar-calendar-wrap .section-content input[type=password],
+.sugar-calendar-wrap .section-content input[type=search],
+.sugar-calendar-wrap .section-content input[type=tel],
+.sugar-calendar-wrap .section-content input[type=text],
+.sugar-calendar-wrap .section-content input[type=time],
+.sugar-calendar-wrap .section-content input[type=url],
+.sugar-calendar-wrap .section-content input[type=week] {
+	min-height: 28px;
+}
+
 @media only screen and ( max-width: 782px ) {
 
 	.sugar-calendar-wrap .section-content .sugar_calendar_datepicker {

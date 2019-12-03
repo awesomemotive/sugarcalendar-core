@@ -121,7 +121,7 @@ class Box {
 	 * @return array
 	 */
 	private function get_all_sections() {
-		return (array) apply_filters( 'sugar_calendar', $this->sections, $this );
+		return (array) apply_filters( 'sugar_calendar_admin_meta_box_sections', $this->sections, $this );
 	}
 
 	/**

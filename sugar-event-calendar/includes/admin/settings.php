@@ -401,9 +401,11 @@ function page() {
 			</div>
 
 			<?php
-			if ( true === $maybe_display_sidebar ) {
+
+			if ( true === $maybe_display_sidebar ) :
 				display_sidebar();
-			}
+			endif;
+
 			?>
 
 		</div>
@@ -504,40 +506,55 @@ function display_subsection() {
 }
 
 /**
- * Check to see if we should be displaying a sidebar
+ * Return whether or not to display the settings sidebar
+ *
+ * The contents of this function will change over time to accommodate special
+ * promotional offers.
  *
  * @since 2.0.10
  */
 function maybe_display_sidebar() {
 
-	// Set the date/time range based on UTC
-	$start = strtotime( '2019-11-29 06:00:00' );
-	$end   = strtotime( '2019-12-07 05:59:59' );
-	$now   = time();
+	// Default return value
+	$display = false;
 
-	// Only display sidebar if the page is loaded within the date range
-	if ( ( $now > $start ) && ( $now < $end ) ) {
-		return true;
+	// Only show for non-standard versions
+	if ( ! is_dir( SC_PLUGIN_DIR . 'includes/standard' ) ) {
+
+		// Set the date/time range based on UTC
+		$start = strtotime( '2019-11-29 06:00:00' );
+		$end   = strtotime( '2019-12-07 05:59:59' );
+		$now   = time();
+
+		// Only display sidebar if the page is loaded within the date range
+		$display = ( ( $now > $start ) && ( $now < $end ) );
 	}
 
-	return false;
+	// Filter & return
+	return (bool) apply_filters( 'sugar_calendar_settings_maybe_display_sidebar', $display );
 }
 
 /**
  * Output the admin settings sidebar
  *
+ * The contents of this function will change over time to accommodate special
+ * promotional offers.
+ *
  * @since 2.0.10
  */
 function display_sidebar() {
+
+	// Code & tracking args
 	$coupon_code = 'BFCM2019';
 	$utm_args    = array(
 		'utm_source'   => 'settings',
 		'utm_medium'   => 'wp-admin',
-		'utm_campaign' => 'bfcm2019',
+		'utm_campaign' => strtolower( $coupon_code ),
 		'utm_content'  => 'sidebar-promo',
 	);
-	$url         = add_query_arg( $utm_args, 'https://sugarcalendar.com/pricing/' );
-	?>
+
+	// Get the URL to the promotion
+	$url = add_query_arg( $utm_args, 'https://sugarcalendar.com/pricing/' ); ?>
 
 	<div class="sc-settings-sidebar">
 
@@ -553,7 +570,7 @@ function display_sidebar() {
 
 			<div class="sc-sidebar-coupon-section">
 				<label for="sc-coupon-code"><?php _e( 'Use code at checkout:', 'sugar-calendar' ); ?></label>
-				<input id="sc-coupon-code" type="text" value="<?php echo $coupon_code; ?>" readonly>
+				<input id="sc-coupon-code" type="text" value="<?php echo esc_attr( $coupon_code ); ?>" readonly>
 				<p class="sc-coupon-note"><?php _e( 'Sale ends 23:59 PM December 6th CST. Save 25% on <a href="https://sandhillsdev.com/projects/" target="_blank">our other plugins</a>.', 'sugar-calendar' ); ?></p>
 			</div>
 

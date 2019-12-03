@@ -144,7 +144,7 @@ final class Plugin {
 
 		// Plugin Version.
 		if ( ! defined( 'SC_PLUGIN_VERSION' ) ) {
-			define( 'SC_PLUGIN_VERSION', '2.0.11' );
+			define( 'SC_PLUGIN_VERSION', '2.0.12' );
 		}
 
 		// Plugin Root File.
@@ -181,6 +181,12 @@ final class Plugin {
 	 */
 	private function setup_files() {
 
+		// Lite
+		$this->include_lite();
+
+		// Standard
+		$this->include_standard();
+
 		// Admin specific
 		if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 			$this->include_admin();
@@ -189,12 +195,6 @@ final class Plugin {
 		} else {
 			$this->include_frontend();
 		}
-
-		// Lite
-		$this->include_lite();
-
-		// Standard
-		$this->include_standard();
 	}
 
 	/**
@@ -277,6 +277,7 @@ final class Plugin {
 		// Common files
 		require_once SC_PLUGIN_DIR . 'includes/common/time.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/color.php';
+		require_once SC_PLUGIN_DIR . 'includes/common/general.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/preferences.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/hooks.php';
 	}
@@ -346,7 +347,7 @@ final class Plugin {
 
 		// Files & directory
 		$files = array();
-		$dir   = trailingslashit( __DIR__ ) . 'includes/standard';
+		$dir   = SC_PLUGIN_DIR . 'includes/standard';
 
 		// Bail if standard directory does not exist
 		if ( ! is_dir( $dir ) ) {

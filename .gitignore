@@ -1,6 +1,10 @@
 # Configuration files with possibly sensitive information
 .htaccess
 
+# Standard files
+/sugar-calendar.php
+/sugar-event-calendar/includes/standard
+
 # Files and folders related to build/test tools
 /phpunit.xml
 /tests/phpunit/build

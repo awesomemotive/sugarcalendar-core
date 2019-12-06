@@ -271,14 +271,17 @@ body.calendar_page_sc-settings .wrap h1.wp-heading-inline {
 	width: 69%;
 	display: inline-block;
 	position: relative;
+	margin-right: 2px;
 }
 
 .sc-license-input-wrapper input[type="text"],
 .sc-license-input-wrapper input[type="password"] {
 	width: 100%;
-	font-family: monospace;
+	font-family: caption;
+	font-size: 18px;
+	line-height: 18px;
+	letter-spacing: 3px;
 	padding: 5px 5px 5px 30px;
-	font-size: 15px;
 }
 
 .sc-license-content .sc-license-input-wrapper button {
@@ -298,7 +301,8 @@ span.sc-license-input span.sc-license-status {
 	background: transparent;
 	position: absolute;
 	display: inline-block;
-	top: 3px;
+	top: 5px;
+	left: 5px;
 	padding: 0;
 	margin: 0;
 	color: #aaa;
@@ -307,10 +311,6 @@ span.sc-license-input span.sc-license-status {
 	height: 25px;
 	width: 25px;
 	font: 400 20px/25px dashicons !important;
-}
-
-span.sc-license-status {
-	left: 3px;
 }
 
 span.sc-license-status.empty:after {

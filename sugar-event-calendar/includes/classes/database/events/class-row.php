@@ -318,16 +318,20 @@ final class Event extends Row {
 			: $this->format_date( 'U', $this->recurrence_end );
 
 		// Break it down
+		$item_year      = $this->start_date( 'Y' );
 		$item_month     = $this->start_date( 'm' );
 		$item_day       = $this->start_date( 'd' );
 		$item_dow       = $this->start_date( 'w' );
+		$item_doy       = $this->start_date( 'z' );
 		$item_woy       = $this->start_date( 'W' );
 		$item_hour      = $this->start_date( 'H' );
 
 		// Break it down
+		$item_end_year  = $this->end_date( 'Y' );
 		$item_end_month = $this->end_date( 'm' );
 		$item_end_day   = $this->end_date( 'd' );
 		$item_end_dow   = $this->end_date( 'w' );
+		$item_end_doy   = $this->end_date( 'z' );
 		$item_end_woy   = $this->end_date( 'W' );
 		$item_end_hour  = $this->end_date( 'H' );
 
@@ -377,33 +381,49 @@ final class Event extends Row {
 							( false === $multi_week )
 							&&
 							(
-								// Starts before end
-								( $item_dow <= $boundaries['end_dow'] )
+								(
+									// Item day of week before/equals end
+									( $item_dow <= $boundaries['end_dow'] )
+
+									&&
+
+									// Item end day of week after/equals start
+									( $item_end_dow >= $boundaries['start_dow'] )
+
+									&&
+
+									// Same start hour or less
+									( $item_hour <= $boundaries['end_hour'] )
+
+									&&
+
+									// Same end hour or more
+									( $item_end_hour >= $boundaries['start_hour'] )
+								)
 
 								&&
 
-								// Ends before start
-								( $item_end_dow >= $boundaries['start_dow'] )
+								(
+									// Last year
+									( $item_year < $boundaries['start_year'] )
 
-								&&
+									||
 
-								// Same start month
-								( $item_hour <= $boundaries['end_hour'] )
+									(
+										// Current year or earlier
+										( $item_year >= $boundaries['start_year'] )
 
-								&&
+										&&
 
-								// Same end month
-								( $item_end_hour >= $boundaries['start_hour'] )
+										// Not earlier week
+										( $item_doy <= $boundaries['end_doy'] )
 
-								&&
+										&&
 
-								// Not earlier week
-								( $item_woy <= $boundaries['start_woy'] )
-
-								&&
-
-								// Not earlier week
-								( $item_end_woy <= $boundaries['end_woy'] )
+										// Not earlier week
+										( $item_end_doy <= $boundaries['end_doy'] )
+									)
+								)
 							)
 						)
 
@@ -641,7 +661,7 @@ final class Event extends Row {
 	}
 
 	/**
-	 * Formate a datetime value.
+	 * Format a datetime value.
 	 *
 	 * @since 2.0.0
 	 *

@@ -344,31 +344,53 @@ function sugar_calendar_get_non_recurring_date_query_args( $mode = 'month', $sta
  */
 function sugar_calendar_get_recurring_date_query_args( $mode = 'month', $start = '', $end = '' ) {
 
-	// Default values
+	// Default date parameters
 	$yearly  = 'm';
 	$monthly = 'j';
-	$weekly  = 'w';
+	$weekly  = 'z';
 
 	// Default keys
 	$year_key  = 'month';
 	$month_key = 'day';
-	$week_key  = 'week';
+	$week_key  = 'dayofyear';
+
+	// Default weekly comparisons
+	$wc_start = '<=';
+	$wc_end   = '>=';
+
+	// Default weekly offset
+	$week_offset = 1;
 
 	// Week mode
 	if ( 'week' === $mode ) {
+
+		// Date parameters
 		$yearly    = 'w';
 		$monthly   = 'w';
+
+		// Query functions
 		$year_key  = 'week';
 		$month_key = 'week';
 
 	// Day mode
 	} elseif ( 'day' === $mode ) {
+
+		// Date parameters
 		$yearly    = 'j';
 		$monthly   = 'j';
+		$weekly    = 'w';
+
+		// Query functions
 		$year_key  = 'day';
 		$month_key = 'day';
+		$week_key  = 'dayofweek';
+
+		// Weekly comparisons
+		$wc_start = '=';
+		$wc_end   = '=';
 	}
 
+	// View boundaries
 	$view_start = strtotime( $start );
 	$view_end   = strtotime( $end   );
 
@@ -492,13 +514,13 @@ function sugar_calendar_get_recurring_date_query_args( $mode = 'month', $start =
 					'relation' => 'OR',
 					array(
 						'column'  => 'start',
-						'compare' => '<=',
-						$week_key => date_i18n( $weekly, $view_end )
+						'compare' => $wc_start,
+						$week_key => date_i18n( $weekly, $view_end ) + $week_offset
 					),
 					array(
 						'column'  => 'end',
-						'compare' => '>=',
-						$week_key => date_i18n( $weekly, $view_start )
+						'compare' => $wc_end,
+						$week_key => date_i18n( $weekly, $view_start ) + $week_offset
 					)
 				)
 			),

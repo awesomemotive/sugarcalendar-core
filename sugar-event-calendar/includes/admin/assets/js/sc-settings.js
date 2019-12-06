@@ -262,7 +262,7 @@ jQuery( document ).ready( function( $ ) {
 				} );
 
 				list.prev( 'input.sc-order' ).val( keys );
-			},
+			}
 		} );
 	}
 } );

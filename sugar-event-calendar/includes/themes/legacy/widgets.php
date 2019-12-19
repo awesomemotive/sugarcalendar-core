@@ -1,6 +1,22 @@
 <?php
 
 /**
+ * Return an array of registered widget IDs.
+ *
+ * @since 2.0.13
+ *
+ * @return array
+ */
+function sc_get_widget_ids() {
+	return array(
+		'sc_calendar_widget',
+		'sc_category_widget',
+		'sc_event_list_widget',
+		'sc_filter_widget'
+	);
+}
+
+/**
  * Register Widgets
  *
  * Registers the Sugar Calendar Widgets.

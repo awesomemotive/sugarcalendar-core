@@ -1664,7 +1664,9 @@ class Base_List_Table extends \WP_List_Table {
 		$pointer_text = array_merge( array_filter( $pointer ) );
 
 		// Remove HTML tags that are not allowed
-		$pointer_text = wp_kses( $pointer_text, $this->get_allowed_pointer_tags() );
+		foreach ( $pointer_text as $key => $value ) {
+			$pointer_text[ $key ] = wp_kses( $value, $this->get_allowed_pointer_tags() );
+		}
 
 		// Combine with line breaks
 		return implode( '<br><br>', $pointer_text );

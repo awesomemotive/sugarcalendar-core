@@ -83,13 +83,16 @@ function sc_content_has_shortcodes( $content = '' ) {
 		}
 	}
 
+	// Get shortcode IDs
+	$shortcode_ids = sc_get_shortcode_ids();
+
 	// Look for Sugar Calendar shortcodes
-	if (
-		has_shortcode( $content, 'sc_events_list' )
-		||
-		has_shortcode( $content, 'sc_events_calendar' )
-	) {
-		return true;
+	if ( ! empty( $shortcode_ids ) ) {
+		foreach ( $shortcode_ids as $id ) {
+			if ( has_shortcode( $content, $id ) ) {
+				return true;
+			}
+		}
 	}
 
 	// No shortcodes found

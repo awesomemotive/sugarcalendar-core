@@ -1,6 +1,20 @@
 <?php
 
 /**
+ * Return an array of registered shortcode IDs.
+ *
+ * @since 2.0.13
+ *
+ * @return array
+ */
+function sc_get_shortcode_ids() {
+	return array(
+		'sc_events_list',
+		'sc_events_calendar'
+	);
+}
+
+/**
  * Add Event Calendar shortcodes
  *
  * @since 2.0.0

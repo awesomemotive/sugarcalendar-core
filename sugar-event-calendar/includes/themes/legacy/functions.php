@@ -935,11 +935,12 @@ function sc_using_widget() {
 	$retval = false;
 
 	// Array of widget IDs
-	$widget_ids = array(
-		'sc_calendar_widget',
-		'sc_category_widget',
-		'sc_filter_widget'
-	);
+	$widget_ids = sc_get_widget_ids();
+
+	// Bail if there are no widgets
+	if ( empty( $widget_ids ) ) {
+		return $retval;
+	}
 
 	// Loop through Legacy widgets, and check if any are active
 	foreach ( $widget_ids as $widget_id ) {

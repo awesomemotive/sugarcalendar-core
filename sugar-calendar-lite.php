@@ -14,11 +14,17 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * This class_exists() check avoids fatal errors when this plugin is activated
+ * in more than one way, and should not be removed.
+ */
+if ( ! class_exists( 'Sugar_Calendar_Requirements_Check' ) ) :
+
+/**
  * The main plugin requirements checker
  *
  * @since 2.0.0
  */
-final class Sugar_Calendar_Requirements_Check {
+class Sugar_Calendar_Requirements_Check {
 
 	/**
 	 * Plugin file
@@ -452,3 +458,6 @@ final class Sugar_Calendar_Requirements_Check {
 
 // Invoke the checker
 new Sugar_Calendar_Requirements_Check();
+
+// End of class_exists() check
+endif;

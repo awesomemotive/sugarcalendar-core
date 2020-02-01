@@ -24,7 +24,7 @@ if ( ! class_exists( 'Sugar_Calendar_Requirements_Check' ) ) :
  *
  * @since 2.0.0
  */
-class Sugar_Calendar_Requirements_Check {
+final class Sugar_Calendar_Requirements_Check {
 
 	/**
 	 * Plugin file

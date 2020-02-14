@@ -30,6 +30,12 @@ function sugar_calendar_post_meta_caps( $caps = array(), $cap = '', $user_id = 0
 
 		// Deleting
 		case 'delete_event' :
+
+			// Bail if no post ID
+			if ( empty( $args[0] ) ) {
+				break;
+			}
+
 			$post = get_post( $args[0] );
 			if ( ! $post ) {
 				$caps[] = 'do_not_allow';
@@ -80,6 +86,12 @@ function sugar_calendar_post_meta_caps( $caps = array(), $cap = '', $user_id = 0
 
 		// Editing
 		case 'edit_event' :
+
+			// Bail if no post ID
+			if ( empty( $args[0] ) ) {
+				break;
+			}
+
 			$post = get_post( $args[0] );
 			if ( empty( $post ) ) {
 				$caps = array( 'do_not_allow' );
@@ -130,6 +142,12 @@ function sugar_calendar_post_meta_caps( $caps = array(), $cap = '', $user_id = 0
 
 		// Reading
 		case 'read_event' :
+
+			// Bail if no post ID
+			if ( empty( $args[0] ) ) {
+				break;
+			}
+
 			$post = get_post( $args[0] );
 			if ( empty( $post ) ) {
 				$caps = array( 'do_not_allow' );

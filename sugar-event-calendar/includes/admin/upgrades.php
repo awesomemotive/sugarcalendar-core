@@ -20,15 +20,21 @@ function page() {
 	// Get the post type
 	$post_type = sugar_calendar_get_event_post_type_id();
 
-	// Count
-	$total_sql = "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s AND post_status != %s";
-	$total     = $wpdb->get_var( $wpdb->prepare( $total_sql, $post_type, 'auto-draft' ) );
-
-	// Upgrade action
+	// Upgrade action & limits
 	$action = isset( $_GET['upgrade'] ) ? sanitize_key( $_GET['upgrade'] ) : '';
 	$step   = isset( $_GET['step']    ) ?        absint( $_GET['step']   ) : 1;
 	$number = isset( $_GET['number']  ) ?        absint( $_GET['number'] ) : 20;
-	$steps  = ! empty( $total ) ? ceil( $total / $number ) : null; ?>
+
+	// Count posts for 2.x migration
+	if ( '20_migration' === $action ) {
+		$total_sql = "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s AND post_status != %s";
+		$total     = $wpdb->get_var( $wpdb->prepare( $total_sql, $post_type, 'auto-draft' ) );
+		$steps     = ! empty( $total ) ? ceil( $total / $number ) : null;
+
+	// All others are a single step
+	} else {
+		$steps = 1;
+	} ?>
 
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Sugar Calendar Upgrades', 'sugar-calendar' ); ?></h1>
@@ -361,39 +367,18 @@ function do_20_migration() {
 			}
 
 			// Get start & end
-			$start = (int) get_post_meta( $post->ID, 'sc_event_date_time',     true );
-			$end   = (int) get_post_meta( $post->ID, 'sc_event_end_date_time', true );
+			$start   = (int) get_post_meta( $post->ID, 'sc_event_date_time',     true );
+			$end     = (int) get_post_meta( $post->ID, 'sc_event_end_date_time', true );
+			$all_day = false;
 
 			// Format the start & end
-			$start_date_time = date( 'Y-m-d H:i:s', $start );
-			$end_date_time   = date( 'Y-m-d H:i:s', $end   );
+			$start = date( 'Y-m-d H:i:s', $start );
+			$end   = date( 'Y-m-d H:i:s', $end   );
 
-			// Format the start & end
-			$start_hours = date( 'H:i:s', $start );
-			$end_hours   = date( 'H:i:s', $end   );
-
-			// Mark as "All Day" if no end date, or start & end are identical
-			if ( empty( $end ) || ( $start === $end ) ) {
-				$all_day = true;
-
-			// Mark as "All Day" if both start & end are midnight
-			} elseif ( ( $start_hours === $end_hours ) && ( '00:00:00' === $start_hours ) ) {
-				$all_day = true;
-
-			// Default to not "All Day"
-			} else {
-				$all_day = false;
-			}
-
-			// Format the start & end
-			$start_day = date( 'Y-m-d', $start );
-			$end_day   = date( 'Y-m-d', $end   );
-
-			// Force empty end time to match start time
-			if ( ( $start_day === $end_day ) && ( '00:00:00' === $end_hours ) ) {
-				$end = $start;
-				$end_date_time = $start_date_time;
-			}
+			// Sanitize start & end to prevent data entry errors
+			$start_date_time = \Sugar_Calendar\Admin\Editor\Meta\sanitize_start( $start, $end, $all_day );
+			$end_date_time   = \Sugar_Calendar\Admin\Editor\Meta\sanitize_end( $end, $start, $all_day );
+			$all_day         = \Sugar_Calendar\Admin\Editor\Meta\sanitize_all_day( $all_day, $start, $end );
 
 			// Recurring
 			$recur_type = get_post_meta( $post->ID, 'sc_event_recurring', true );

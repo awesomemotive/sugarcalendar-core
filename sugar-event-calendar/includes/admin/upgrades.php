@@ -346,6 +346,9 @@ function do_20_migration() {
 	$posts_sql = "SELECT * FROM {$wpdb->posts} WHERE post_type = %s AND post_status != %s ORDER BY %s ASC LIMIT %d, %d";
 	$posts     = $wpdb->get_results( $wpdb->prepare( $posts_sql, $post_type, 'auto-draft', 'ID', $offset, $number ) );
 
+	// Get now, just in case values are missing
+	$now = time();
+
 	// Loop through posts to migrate
 	if ( ! empty( $posts ) && ! is_wp_error( $posts ) ) {
 
@@ -363,6 +366,20 @@ function do_20_migration() {
 			// Get start & end
 			$start = (int) get_post_meta( $post->ID, 'sc_event_date_time',     true );
 			$end   = (int) get_post_meta( $post->ID, 'sc_event_end_date_time', true );
+
+			// Prevent Start Epoch
+			if ( empty( $start ) ) {
+				$start = $now;
+			}
+
+			// Prevent End Epoch
+			if ( empty( $end ) ) {
+				$end = $now;
+
+			// Ends starts after it ends (backwards time)
+			} elseif ( $start > $end ) {
+				$end = $start;
+			}
 
 			// Format the start & end
 			$start_date_time = date( 'Y-m-d H:i:s', $start );

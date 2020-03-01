@@ -7,7 +7,7 @@ Tags:              event calendar, events, simple, events calendar, calendar, Pi
 Requires PHP:      5.6.20
 Requires at least: 5.0
 Tested up to:      5.3
-Stable tag:        2.0.13
+Stable tag:        2.0.14
 
 A sweet, simple event calendar plugin. Create your events and show them on a simple calendar. That's it.
 

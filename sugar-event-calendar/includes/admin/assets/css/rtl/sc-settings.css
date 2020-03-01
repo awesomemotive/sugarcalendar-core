@@ -417,6 +417,93 @@ button.sc-license-refresh {
 	vertical-align: initial;
 }
 
+/* Formatting
+-------------------------------------------------------------- */
+
+span.date-time-text {
+	display: inline-block;
+	min-width: 10em;
+}
+
+.calendar_page_sc-settings input.small-text {
+	width: 75px;
+	margin: -2px 0;
+}
+
+.calendar_page_sc-settings .spinner {
+	float: none;
+	margin: -3px 3px 0;
+}
+
+.sc-date-time-format-table {
+	width: calc(100% + 45px);
+	margin: 10px -12px -5px -40px;
+	border-spacing: 0;
+}
+
+.sc-date-time-format-table pre {
+	margin: 0;
+}
+
+.sc-date-time-format-table thead th {
+	text-align: right;
+	font-style: normal;
+	margin-bottom: 5px;
+	padding: 6px 12px 6px 6px;
+}
+
+.sc-date-time-format-table tbody tr:hover {
+	background-color: #eee;
+	cursor: pointer;
+}
+
+.sc-date-time-format-table tbody th,
+.sc-date-time-format-table tbody td {
+	vertical-align: top;
+	padding: 6px;
+	border-bottom: 1px solid #eee;
+}
+
+.sc-date-time-format-table tbody:last-of-type tr:last-child th,
+.sc-date-time-format-table tbody:last-of-type tr:last-child td {
+	border-bottom: none;
+}
+
+.sc-date-time-format-table tbody th {
+	font-weight: normal;
+	width: 40px;
+}
+
+.sc-date-time-format-table tbody tr td + td {
+	width: 200px;
+}
+
+.sc-settings-content .form-table a.button,
+.sc-settings-content .form-table a.screen-options {
+	margin: 0;
+	min-height: 28px;
+	min-width: 28px;
+}
+
+.sc-settings-content .form-table a.screen-options {
+	padding: 0;
+	text-decoration: none;
+	text-align: center;
+}
+
+.sc-settings-content .form-table a.screen-options .dashicons {
+	color: #b4b9be;
+	padding: 5px;
+	vertical-align: middle;
+	margin-top: -7px;
+	font-size: 25px;
+}
+
+.sc-settings-content .form-table a.screen-options:hover .dashicons {
+	color: #727272;
+}
+
+
 /* Keyframes
 -------------------------------------------------------------- */
 

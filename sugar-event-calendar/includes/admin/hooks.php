@@ -59,11 +59,14 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\Assets\\enqueue' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\Assets\\enqueue' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\Assets\\localize' );
 
-// Admin Help
-add_action( 'admin_head-edit.php',      __NAMESPACE__ . '\\Help\\add_tabs' );
-add_action( 'admin_head-post-new.php',  __NAMESPACE__ . '\\Help\\add_tabs' );
-add_action( 'admin_head-term.php',      __NAMESPACE__ . '\\Help\\add_tabs' );
-add_action( 'admin_head-edit-tags.php', __NAMESPACE__ . '\\Help\\add_tabs' );
+// Admin Help (Calendar)
+add_action( 'admin_head-edit.php',      __NAMESPACE__ . '\\Help\\add_calendar_tabs' );
+add_action( 'admin_head-post-new.php',  __NAMESPACE__ . '\\Help\\add_calendar_tabs' );
+add_action( 'admin_head-term.php',      __NAMESPACE__ . '\\Help\\add_calendar_tabs' );
+add_action( 'admin_head-edit-tags.php', __NAMESPACE__ . '\\Help\\add_calendar_tabs' );
+
+// Admin Help (Settings)
+add_action( 'admin_head-calendar_page_sc-settings', __NAMESPACE__ . '\\Help\\add_settings_tabs' );
 
 // Admin Event taxonomy tab override
 add_action( 'admin_notices', __NAMESPACE__ . '\\Nav\\taxonomy_tabs', 10, 1 );
@@ -79,3 +82,7 @@ add_action( 'load-edit.php', __NAMESPACE__ . '\\Posts\\redirect_old_post_type' )
 
 // Admin Empty Trash
 add_action( 'load-toplevel_page_sugar-calendar', __NAMESPACE__ . '\\Menu\\maybe_empty_trash' );
+
+// Admin AJAX to format custom Date & Time values
+add_action( 'wp_ajax_sc_date_format', __NAMESPACE__ . '\\Settings\\ajax_date_format' );
+add_action( 'wp_ajax_sc_time_format', __NAMESPACE__ . '\\Settings\\ajax_time_format' );

@@ -441,7 +441,37 @@ function display_subsection() {
 	$events_max_num = sc_get_number_of_events();
 	$start_of_week  = sc_get_week_start_day();
 	$sc_date_format = sc_get_date_format();
-	$sc_time_format = sc_get_time_format(); ?>
+	$sc_time_format = sc_get_time_format();
+
+	/**
+	 * Filters the default date formats.
+	 *
+	 * @param string[] $default_date_formats Array of default date formats.
+	 */
+	$date_formats = array_unique( apply_filters( 'date_formats', array(
+		esc_html__( 'F j, Y', 'sugar-calendar' ),
+		'Y-m-d',
+		'm/d/Y',
+		'd/m/Y',
+		'jS F, Y'
+	) ) );
+
+	// Is custom date checked?
+	$custom_date_checked = ! in_array( $sc_date_format, $date_formats, true );
+
+	/**
+	 * Filters the default time formats.
+	 *
+	 * @param string[] $default_time_formats Array of default time formats.
+	 */
+	$time_formats = array_unique( apply_filters( 'time_formats', array(
+		esc_html__( 'g:i a', 'sugar-calendar' ),
+		'g:i A',
+		'H:i'
+	) ) );
+
+	// Is custom time checked?
+	$custom_time_checked = ! in_array( $sc_time_format, $time_formats, true ); ?>
 
 	<table class="form-table">
 		<tbody>
@@ -482,10 +512,52 @@ function display_subsection() {
 					<label for="sc_date_format"><?php esc_html_e( 'Date Format', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
-					<label title="F j, Y"><input type="radio" name="sc_date_format" id="sc_date_format" value="F j, Y" <?php checked('F j, Y', $sc_date_format); ?>> <span><?php echo date( 'F j, Y' ); ?></span></label><br/>
-					<label title="d/m/Y"><input type="radio" name="sc_date_format" value="d/m/Y" <?php checked('d/m/Y', $sc_date_format); ?>> <span><?php echo date( 'd/m/Y' ); ?></span></label><br/>
-					<label title="m/d/Y"><input type="radio" name="sc_date_format" value="m/d/Y" <?php checked('m/d/Y', $sc_date_format); ?>> <span><?php echo date( 'm/d/Y' ); ?></span></label><br/>
-					<label title="Y-m-d"><input type="radio" name="sc_date_format" value="Y-m-d" <?php checked('Y-m-d', $sc_date_format); ?>> <span><?php echo date( 'Y-m-d' ); ?></span></label><br/>
+					<fieldset>
+						<legend class="screen-reader-text">
+							<span><?php esc_html_e( 'Date Format', 'sugar-calendar' ); ?></span>
+						</legend>
+
+						<?php foreach ( $date_formats as $key => $format ) :
+
+							// Radio ID
+							$id = ( 0 === $key )
+								? ' id="sc_date_format"'
+								: '';
+
+							// Checked?
+							$checked = checked( $format, $sc_date_format, false ); ?>
+
+							<label>
+								<input type="radio" <?php echo $id; ?> name="sc_date_format" value="<?php echo esc_attr( $format ); ?>"<?php echo $checked; ?> />
+								<span class="date-time-text format-i18n"><?php echo date_i18n( $format );?></span>
+								<code><?php echo esc_html( $format ); ?></code>
+							</label>
+							<br />
+
+						<?php endforeach; ?>
+
+						<label>
+							<input type="radio" name="sc_date_format" id="sc_date_format_custom_radio" value="<?php echo esc_attr( $sc_date_format ); ?>" <?php checked( $custom_date_checked ); ?> />
+							<span class="date-time-text date-time-custom-text"><?php esc_html_e( 'Custom:', 'sugar-calendar' ); ?>
+								<span class="screen-reader-text"><?php esc_html_e( 'enter a custom date format in the following field', 'sugar-calendar' ); ?></span>
+							</span>
+						</label>
+
+						<label for="sc_date_format_custom" class="screen-reader-text"><?php esc_html_e( 'Custom date format:', 'sugar-calendar' ); ?></label>
+						<input type="text" name="sc_date_format_custom" id="sc_date_format_custom" value="<?php echo esc_attr( $sc_date_format ); ?>" class="small-text" />
+						<a href="#" class="hide-if-no-js screen-options sc-date-help">
+							<span class="screen-reader-text"><?php esc_html_e( 'Options', 'sugar-calendar' ); ?></span>
+							<span aria-hidden="true" class="dashicons dashicons-editor-help"></span>
+						</a>
+
+						<br />
+
+						<p class="description">
+							<strong><?php esc_html_e( 'Looks Like:', 'sugar-calendar' ); ?></strong>
+							<span class="example"><?php echo date_i18n( $sc_date_format ); ?></span>
+							<span class='spinner'></span>
+						</p>
+					</fieldset>
 				</td>
 			</tr>
 
@@ -494,15 +566,76 @@ function display_subsection() {
 					<label for="sc_time_format"><?php esc_html_e( 'Time Format', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
-					<label title="g:i a"><input type="radio" name="sc_time_format" id="sc_time_format" value="g:i a" <?php checked('g:i a', $sc_time_format); ?>> <span><?php echo date( 'g:i a' ); ?></span></label><br/>
-					<label title="g:i A"><input type="radio" name="sc_time_format" value="g:i A" <?php checked('g:i A', $sc_time_format); ?>> <span><?php echo date( 'g:i A' ); ?></span></label><br/>
-					<label title="H:i"><input type="radio" name="sc_time_format" value="H:i" <?php checked('H:i', $sc_time_format); ?>> <span><?php echo date( 'H:i' ); ?></span></label><br/>
+					<fieldset>
+						<legend class="screen-reader-text">
+							<span><?php esc_html_e( 'Time Format', 'sugar-calendar' ); ?></span>
+						</legend>
+
+						<?php foreach ( $time_formats as $key => $format ) :
+
+							// Radio ID
+							$id = ( 0 === $key )
+								? ' id="sc_time_format"'
+								: '';
+
+							// Checked?
+							$checked = checked( $format, $sc_time_format, false ); ?>
+
+							<label>
+								<input type="radio" <?php echo $id; ?> name="sc_time_format" value="<?php echo esc_attr( $format ); ?>"<?php echo $checked; ?> />
+								<span class="date-time-text format-i18n"><?php echo date_i18n( $format );?></span>
+								<code><?php echo esc_html( $format ); ?></code>
+							</label>
+							<br />
+
+						<?php endforeach; ?>
+
+						<label>
+							<input type="radio" name="sc_time_format" id="sc_time_format_custom_radio" value="<?php echo esc_attr( $sc_time_format ); ?>" <?php checked( $custom_time_checked ); ?> />
+							<span class="date-time-text date-time-custom-text"><?php esc_html_e( 'Custom:', 'sugar-calendar' ); ?>
+								<span class="screen-reader-text"><?php esc_html_e( 'enter a custom time format in the following field', 'sugar-calendar' ); ?></span>
+							</span>
+						</label>
+
+						<label for="sc_time_format_custom" class="screen-reader-text"><?php esc_html_e( 'Custom time format:', 'sugar-calendar' ); ?></label>
+						<input type="text" name="sc_time_format_custom" id="sc_time_format_custom" value="<?php echo esc_attr( $sc_time_format ); ?>" class="small-text" />
+						<a href="#" class="hide-if-no-js screen-options sc-time-help">
+							<span class="screen-reader-text"><?php esc_html_e( 'Options', 'sugar-calendar' ); ?></span>
+							<span aria-hidden="true" class="dashicons dashicons-editor-help"></span>
+						</a>
+
+						<br />
+
+						<p class="description">
+							<strong><?php esc_html_e( 'Looks Like:', 'sugar-calendar' ); ?></strong>
+							<span class="example"><?php echo date_i18n( $sc_time_format ); ?></span>
+							<span class='spinner'></span>
+						</p>
+					</fieldset>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 
 <?php
+}
+
+/**
+ * Ajax handler for date formatting.
+ *
+ * @since 2.0.14
+ */
+function ajax_date_format() {
+	wp_die( date_i18n( sanitize_option( 'date_format', wp_unslash( $_POST['sc_date'] ) ) ) );
+}
+
+/**
+ * Ajax handler for time formatting.
+ *
+ * @since 2.0.14
+ */
+function ajax_time_format() {
+	wp_die( date_i18n( sanitize_option( 'time_format', wp_unslash( $_POST['sc_date'] ) ) ) );
 }
 
 /**

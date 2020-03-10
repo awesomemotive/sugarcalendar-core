@@ -1,7 +1,7 @@
 /* Primary Nav
 -------------------------------------------------------------- */
 
-body.sugar-calendar h2.nav-tab-wrapper.sc-tab-clear,
+body.calendar_page_sc-settings h2.nav-tab-wrapper.sc-tab-clear,
 body.sugar-calendar h2.nav-tab-wrapper.sc-tab-clear {
 	margin: -19px 0 0 0;
 }
@@ -10,6 +10,7 @@ body.sugar-calendar h2.nav-tab-wrapper.sc-tab-clear {
 	margin: 10px 2px -12px 20px;
 }
 
+body.calendar_page_sc-settings .sc-tab-wrap h2.sc-nav-tab-wrapper + .notice,
 body.sugar-calendar .sc-tab-wrap h2.sc-nav-tab-wrapper + .notice {
 	margin-top: 22px;
 }

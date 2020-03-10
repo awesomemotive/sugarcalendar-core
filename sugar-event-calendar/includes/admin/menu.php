@@ -57,7 +57,7 @@ function register_page() {
 	// Highlight helper
 	foreach ( $hooks as $hook ) {
 		add_action( "admin_head-{$hook}", 'Sugar_Calendar\\Admin\\Menu\\add_pointers' );
-		add_action( "admin_head-{$hook}", 'Sugar_Calendar\\Admin\\Help\\add_tabs'     );
+		add_action( "admin_head-{$hook}", 'Sugar_Calendar\\Admin\\Help\\add_calendar_tabs' );
 		add_action( "admin_head-{$hook}", 'Sugar_Calendar\\Admin\\Screen\\Options\\add' );
 	}
 }

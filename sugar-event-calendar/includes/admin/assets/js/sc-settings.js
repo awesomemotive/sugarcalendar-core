@@ -265,4 +265,161 @@ jQuery( document ).ready( function( $ ) {
 			}
 		} );
 	}
+
+	/** Date/Time Formatting **************************************************/
+
+	// Date format click
+	$( 'input[name="sc_date_format"]' ).click( function() {
+
+		// Bail on custom click
+		if ( 'sc_date_format_custom_radio' === $( this ).attr( 'id' ) ) {
+			return;
+		}
+
+		// Update the custom value
+		$( 'input[name="sc_date_format_custom"]' )
+			.val(
+				$( this ).val()
+			)
+			.closest( 'fieldset' )
+			.find( '.example' )
+			.text(
+				$( this )
+				.parent( 'label' )
+				.children( '.format-i18n' )
+				.text()
+			);
+	} );
+
+	// Check when clicked
+	$( 'input[name="sc_date_format_custom"]' ).on( 'click input', function() {
+		$( '#sc_date_format_custom_radio' ).prop( 'checked', true );
+	} );
+
+	// Time format click
+	$( 'input[name="sc_time_format"]' ).click( function() {
+
+		// Bail on custom click
+		if ( 'sc_time_format_custom_radio' === $( this ).attr( 'id' ) ) {
+			return;
+		}
+
+		// Update the custom value
+		$( 'input[name="sc_time_format_custom"]' )
+			.val(
+				$( this ).val()
+			)
+			.closest( 'fieldset' )
+			.find( '.example' )
+			.text(
+				$( this )
+				.parent( 'label' )
+				.children( '.format-i18n' )
+				.text()
+			);
+	} );
+
+	// Clicking custom Time
+	$( 'input[name="sc_time_format_custom"]' ).on( 'click input', function() {
+		$( '#sc_time_format_custom_radio' ).prop( 'checked', true );
+	} );
+
+	// Typing in custom Date or Time boxes
+	$( 'input[name="sc_date_format_custom"], input[name="sc_time_format_custom"]' ).on( 'input', function() {
+
+		// Get elements
+		var format   = $( this ),
+			val      = $.trim( format.val() ),
+			fieldset = format.closest( 'fieldset' ),
+			example  = fieldset.find( '.example' ),
+			spinner  = fieldset.find( '.spinner' ),
+			type     = ( 'sc_date_format_custom' === format.attr( 'name' ) )
+				? 'date'
+				: 'time',
+			action   = 'sc_' + type + '_format',
+			radio    = $( '#sc_' + type + '_format_custom_radio' );
+
+		// Bail if empty
+		if ( ! val ) {
+			spinner.removeClass( 'is-active' );
+			example.html( '&mdash;' );
+			return;
+		}
+
+		// Trigger
+		spinner.addClass( 'is-active' );
+
+		// Set the radio value
+		radio.val( val );
+
+		// Debounce the event callback while users are typing.
+		clearTimeout( $.data( this, 'timer' ) );
+
+		$( this ).data( 'timer', setTimeout( function() {
+
+			// If custom date is not empty.
+			if ( ! val ) {
+				return;
+			}
+
+			$.post(
+				sc_vars.ajax_url,
+				{
+					action  : action,
+					sc_date : val
+				},
+				function( d ) {
+					spinner.removeClass( 'is-active' );
+					example.text( d );
+				}
+			);
+		}, 400 ) );
+	} );
+
+	// When a section nav item is clicked.
+	$( '.sc-settings-content .form-table a.screen-options' ).on( 'click', function( j ) {
+
+		// Prevent the default browser action when a link is clicked.
+		j.preventDefault();
+
+		// Click the settings link
+		if ( $( '#contextual-help-wrap' ).is( ':hidden' ) ) {
+			$( '#contextual-help-link' ).click();
+		}
+
+		// Select Date tab
+		if ( $( this ).hasClass( 'sc-date-help' ) ) {
+			$( '#tab-panel-date-formatting' ).trigger( 'click' );
+
+		// Select Time tab
+		} else if ( $( this ).hasClass( 'sc-time-help' ) ) {
+			$( '#tab-panel-time-formatting' ).trigger( 'click' );
+		}
+	} );
+
+	// Help date property clicks
+	$( 'table.sc-custom-date-table tr' ).on( 'click', function() {
+		var val   = $( this ).find( 'code.code' ).text(),
+			input = $( '#sc_date_format_custom' );
+
+		// Append
+		if ( val ) {
+			input.val( input.val() + val );
+			input.trigger( 'input' );
+			$( this ).hide().fadeIn();
+		}
+	} );
+
+	// Help time property clicks
+	$( 'table.sc-custom-time-table tr' ).on( 'click', function() {
+		var val   = $( this ).find( 'code.code' ).text(),
+			input = $( '#sc_time_format_custom' );
+
+		// Append
+		if ( val ) {
+			input.val( input.val() + val );
+			input.trigger( 'input' );
+			$( this ).hide().fadeIn();
+		}
+	} );
 } );

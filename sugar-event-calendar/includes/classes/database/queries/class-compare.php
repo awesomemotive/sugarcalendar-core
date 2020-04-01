@@ -1,12 +1,12 @@
 <?php
 /**
- * Compare Class.
+ * Custom Database Table Compare Query Class.
  *
- * @package     Sugar Calendar
- * @subpackage  Database
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       2.0
+ * @package     Database
+ * @subpackage  Date
+ * @copyright   Copyright (c) 2019
+ * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0.0
  */
 namespace Sugar_Calendar\Database\Queries;
 
@@ -20,16 +20,16 @@ defined( 'ABSPATH' ) || exit;
  * the `Base` query class. It extends `WP_Meta_Query` so the `compare` key accepts
  * the same parameters as the ones passed to `WP_Meta_Query`.
  *
- * @since 3.0
+ * @since 1.0.0
  */
-class Compare extends \WP_Meta_Query {
+class Compare_Query extends \WP_Meta_Query {
 
 	/**
 	 * Generate SQL WHERE clauses for a first-order query clause.
 	 *
 	 * "First-order" means that it's an array with a 'key' or 'value'.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param array  $clause       Query clause (passed by reference).
 	 * @param array  $parent_query Parent query array.

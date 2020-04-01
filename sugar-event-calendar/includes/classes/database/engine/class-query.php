@@ -2,11 +2,11 @@
 /**
  * Base Custom Database Table Query Class.
  *
- * @package     Sugar Calendar
- * @subpackage  Database
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       2.0
+ * @package     Database
+ * @subpackage  Date
+ * @copyright   Copyright (c) 2019
+ * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0.0
  */
 namespace Sugar_Calendar\Database;
 
@@ -16,7 +16,10 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Base class used for querying custom database tables.
  *
- * @since 3.0
+ * This class is intended to be extended for each unique database table,
+ * including global tables for multisite, and users tables.
+ *
+ * @since 1.0.0
  *
  * @see Query::__construct() for accepted arguments.
  *
@@ -32,7 +35,8 @@ defined( 'ABSPATH' ) || exit;
  * @property string $query_clauses
  * @property string $request_clauses
  * @property \WP_Meta_Query $meta_query
- * @property Date_Query $date_query
+ * @property Queries\Date $date_query
+ * @property Queries\Compare $compare
  * @property array $query_vars
  * @property array $query_var_originals
  * @property array $query_var_defaults
@@ -50,7 +54,7 @@ class Query extends Base {
 	/**
 	 * Name of the database table to query.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   string
 	 */
 	protected $table_name = '';
@@ -58,19 +62,19 @@ class Query extends Base {
 	/**
 	 * String used to alias the database table in MySQL statement.
 	 *
-	 * Keep this short, but descriptive. I.E. "oi" for order items.
+	 * Keep this short, but descriptive. I.E. "tr" for term relationships.
 	 *
 	 * This is used to avoid collisions with JOINs.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   string
 	 */
 	protected $table_alias = '';
 
 	/**
-	 * Name of class used to setup the database schema
+	 * Name of class used to setup the database schema.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   string
 	 */
 	protected $table_schema = __NAMESPACE__ . '\\Schema';
@@ -78,13 +82,13 @@ class Query extends Base {
 	/** Item ******************************************************************/
 
 	/**
-	 * Name for a single item
+	 * Name for a single item.
 	 *
-	 * Use underscores between words. I.E. "order_item"
+	 * Use underscores between words. I.E. "term_relationship"
 	 *
 	 * This is used to automatically generate action hooks.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   string
 	 */
 	protected $item_name = '';
@@ -92,11 +96,11 @@ class Query extends Base {
 	/**
 	 * Plural version for a group of items.
 	 *
-	 * Use underscores between words. I.E. "order_item"
+	 * Use underscores between words. I.E. "term_relationships"
 	 *
 	 * This is used to automatically generate action hooks.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   string
 	 */
 	protected $item_name_plural = '';
@@ -106,7 +110,7 @@ class Query extends Base {
 	 *
 	 * This is used when looping through return values to guarantee their shape.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   mixed
 	 */
 	protected $item_shape = __NAMESPACE__ . '\\Row';
@@ -120,7 +124,7 @@ class Query extends Base {
 	 *
 	 * Do not use colons: ":". These are reserved for internal use only.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   string
 	 */
 	protected $cache_group = '';
@@ -128,7 +132,7 @@ class Query extends Base {
 	/**
 	 * The last updated time.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   int
 	 */
 	protected $last_changed = 0;
@@ -136,9 +140,9 @@ class Query extends Base {
 	/** Columns ***************************************************************/
 
 	/**
-	 * Array of all database column objects
+	 * Array of all database column objects.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   array
 	 */
 	protected $columns = array();
@@ -148,7 +152,7 @@ class Query extends Base {
 	/**
 	 * SQL query clauses.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   array
 	 */
 	protected $query_clauses = array(
@@ -163,7 +167,7 @@ class Query extends Base {
 	/**
 	 * Request clauses.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   array
 	 */
 	protected $request_clauses = array(
@@ -178,7 +182,7 @@ class Query extends Base {
 	/**
 	 * Meta query container.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   object|\WP_Meta_Query
 	 */
 	protected $meta_query = false;
@@ -186,10 +190,18 @@ class Query extends Base {
 	/**
 	 * Date query container.
 	 *
-	 * @since 3.0
-	 * @var   Date_Query
+	 * @since 1.0.0
+	 * @var   object|Queries\Date
 	 */
 	protected $date_query = false;
+
+	/**
+	 * Compare query container.
+	 *
+	 * @since 1.0.0
+	 * @var   object|Queries\Compare
+	 */
+	protected $compare_query = false;
 
 	/** Query Variables *******************************************************/
 
@@ -199,7 +211,7 @@ class Query extends Base {
 	 * This is specifically marked as public, to allow byref actions to change
 	 * them from outside the class methods proper and inside filter functions.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   array
 	 */
 	public $query_vars = array();
@@ -210,7 +222,7 @@ class Query extends Base {
 	 * These are the original query variables before any filters are applied,
 	 * and are the results of merging $query_var_defaults with $query_vars.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   array
 	 */
 	protected $query_var_originals = array();
@@ -221,7 +233,7 @@ class Query extends Base {
 	 * These are computed at runtime based on the registered columns for the
 	 * database table this query relates to.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   array
 	 */
 	protected $query_var_defaults = array();
@@ -231,7 +243,7 @@ class Query extends Base {
 	/**
 	 * List of items located by the query.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   array
 	 */
 	public $items = array();
@@ -239,7 +251,7 @@ class Query extends Base {
 	/**
 	 * The amount of found items for the current query.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   int
 	 */
 	protected $found_items = 0;
@@ -247,7 +259,7 @@ class Query extends Base {
 	/**
 	 * The number of pages.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   int
 	 */
 	protected $max_num_pages = 0;
@@ -255,7 +267,7 @@ class Query extends Base {
 	/**
 	 * SQL for database query.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   string
 	 */
 	protected $request = '';
@@ -264,9 +276,9 @@ class Query extends Base {
 
 	/**
 	 * This private variable only exists to temporarily hold onto the SQL used
-	 * in a date query. This is necessary to work around WordPress filters.
+	 * in this query, to work shortcomings in the parent application.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @var   string
 	 */
 	private $date_query_sql = '';
@@ -276,7 +288,7 @@ class Query extends Base {
 	/**
 	 * Sets up the item query, based on the query vars passed.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string|array $query {
 	 *     Optional. Array or query string of item query parameters.
@@ -284,13 +296,13 @@ class Query extends Base {
 	 *
 	 *     @type string       $fields            Site fields to return. Accepts 'ids' (returns an array of item IDs)
 	 *                                           or empty (returns an array of complete item objects). Default empty.
-	 *     @type boolean      $count             Whether to return a item count (true) or array of item objects.
+	 *     @type bool         $count             Whether to return a item count (true) or array of item objects.
 	 *                                           Default false.
-	 *     @type integer      $number            Limit number of items to retrieve. Use 0 for no limit.
+	 *     @type int          $number            Limit number of items to retrieve. Use 0 for no limit.
 	 *                                           Default 100.
-	 *     @type integer      $offset            Number of items to offset the query. Used to build LIMIT clause.
+	 *     @type int          $offset            Number of items to offset the query. Used to build LIMIT clause.
 	 *                                           Default 0.
-	 *     @type boolean      $no_found_rows     Whether to disable the `SQL_CALC_FOUND_ROWS` query.
+	 *     @type bool         $no_found_rows     Whether to disable the `SQL_CALC_FOUND_ROWS` query.
 	 *                                           Default true.
 	 *     @type string|array $orderby           Accepts false, an empty array, or 'none' to disable `ORDER BY` clause.
 	 *                                           Default 'id'.
@@ -300,9 +312,9 @@ class Query extends Base {
 	 *                                           Default empty.
 	 *     @type array        $search_columns    Array of column names to be searched.
 	 *                                           Default empty array.
-	 *     @type boolean      $update_item_cache Whether to prime the cache for found items.
+	 *     @type bool         $update_item_cache Whether to prime the cache for found items.
 	 *                                           Default false.
-	 *     @type boolean      $update_meta_cache Whether to prime the meta cache for found items.
+	 *     @type bool         $update_meta_cache Whether to prime the meta cache for found items.
 	 *                                           Default false.
 	 * }
 	 */
@@ -327,7 +339,7 @@ class Query extends Base {
 	 * This method is public to allow subclasses to perform JIT manipulation
 	 * of the parameters passed into it.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string|array $query Array or URL query string of parameters.
 	 * @return array|int List of items, or number of items when 'count' is passed as a query var.
@@ -345,7 +357,7 @@ class Query extends Base {
 	 *
 	 * We set this locally to avoid inconsistencies between method calls.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function set_last_changed() {
 		$this->last_changed = microtime();
@@ -356,7 +368,7 @@ class Query extends Base {
 	 *
 	 * This happens before prefixes are applied.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function set_alias() {
 		if ( empty( $this->table_alias ) ) {
@@ -370,7 +382,7 @@ class Query extends Base {
 	 * This is to avoid conflicts with other plugins or themes that might be
 	 * doing their own things.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function set_prefix() {
 		$this->table_name  = $this->apply_prefix( $this->table_name       );
@@ -381,7 +393,7 @@ class Query extends Base {
 	/**
 	 * Set columns objects
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function set_columns() {
 
@@ -402,7 +414,7 @@ class Query extends Base {
 	/**
 	 * Set the default item shape if none exists
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function set_item_shape() {
 		if ( empty( $this->item_shape ) || ! class_exists( $this->item_shape ) ) {
@@ -413,7 +425,7 @@ class Query extends Base {
 	/**
 	 * Set default query vars based on columns
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function set_query_var_defaults() {
 
@@ -429,8 +441,8 @@ class Query extends Base {
 			'search_columns'    => array(),
 			'count'             => false,
 			'meta_query'        => null, // See WP_Meta_Query
-			'date_query'        => null, // See Date_Query
-			'compare'           => null, // See WP_Meta_Query
+			'date_query'        => null, // See Queries\Date
+			'compare_query'     => null, // See Queries\Compare
 			'no_found_rows'     => true,
 
 			// Caching
@@ -474,7 +486,7 @@ class Query extends Base {
 	/**
 	 * Set the request clauses
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param array $clauses
 	 */
@@ -532,7 +544,7 @@ class Query extends Base {
 	/**
 	 * Set the request
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function set_request() {
 		$filtered      = array_filter( $this->request_clauses );
@@ -543,7 +555,7 @@ class Query extends Base {
 	/**
 	 * Set items by mapping them through the single item callback.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 * @param array $item_ids
 	 */
 	private function set_items( $item_ids = array() ) {
@@ -568,7 +580,7 @@ class Query extends Base {
 	 * Populates found_items and max_num_pages properties for the current query
 	 * if the limit clause was used.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param  array $item_ids Optional array of item IDs
 	 */
@@ -596,7 +608,7 @@ class Query extends Base {
 			/**
 			 * Filters the query used to retrieve found item count.
 			 *
-			 * @since 3.0
+			 * @since 1.0.0
 			 *
 			 * @param string $found_items_query SQL query. Default 'SELECT FOUND_ROWS()'.
 			 * @param object $item_query        The object instance.
@@ -618,7 +630,7 @@ class Query extends Base {
 	 * This method is used to expose the private query_vars array to hooks,
 	 * allowing them to manipulate query vars just-in-time.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key
 	 * @param string $value
@@ -631,9 +643,11 @@ class Query extends Base {
 	/** Private Getters *******************************************************/
 
 	/**
-	 * Pass-through method to return a new WP_Meta_Query object
+	 * Pass-through method to return a new WP_Meta_Query object.
 	 *
-	 * @since 3.0
+	 * A future version of this will include a custom Meta_Query class.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @param array $args See WP_Meta_Query
 	 * @return \WP_Meta_Query
@@ -643,14 +657,26 @@ class Query extends Base {
 	}
 
 	/**
-	 * Pass-through method to return a new Date_Query object
+	 * Pass-through method to return a new Compare object.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
-	 * @param array  $args   See Date_Query
+	 * @param array $args See Compare
+	 * @return Compare
+	 */
+	private function get_compare_query( $args = array() ) {
+		return new Compare_Query( $args );
+	}
+
+	/**
+	 * Pass-through method to return a new Queries\Date object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array  $args   See Queries\Date
 	 * @param string $column Column to run date query on. Default `date_created`
 	 *
-	 * @return Date_Query
+	 * @return Queries\Date
 	 */
 	private function get_date_query( $args = array(), $column = 'date_created' ) {
 
@@ -670,7 +696,7 @@ class Query extends Base {
 	 *
 	 * This is used by add_item() and update_item()
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -679,9 +705,9 @@ class Query extends Base {
 	}
 
 	/**
-	 * Return the literal table name (with prefix) from $wpdb
+	 * Return the literal table name (with prefix) from the database interface.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -692,7 +718,7 @@ class Query extends Base {
 	/**
 	 * Return array of column names
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return array
 	 */
@@ -703,7 +729,7 @@ class Query extends Base {
 	/**
 	 * Return the primary database column name
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return string Default "id", Primary column name if not empty
 	 */
@@ -714,7 +740,7 @@ class Query extends Base {
 	/**
 	 * Get a column from an array of arguments
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return mixed Column object, or false
 	 */
@@ -732,7 +758,7 @@ class Query extends Base {
 	/**
 	 * Get a column from an array of arguments
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return mixed Column object, or false
 	 */
@@ -750,7 +776,7 @@ class Query extends Base {
 	/**
 	 * Get columns from an array of arguments
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function get_columns( $args = array(), $operator = 'and', $field = false ) {
 
@@ -766,7 +792,7 @@ class Query extends Base {
 	/**
 	 * Get a single database row by any column and value, skipping cache.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $column_name  Name of database column
 	 * @param string $column_value Value to query for
@@ -802,7 +828,7 @@ class Query extends Base {
 	/**
 	 * Retrieves a list of items matching the query vars.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return array|int List of items, or number of items when 'count' is passed as a query var.
 	 */
@@ -811,7 +837,7 @@ class Query extends Base {
 		/**
 		 * Fires before object items are retrieved.
 		 *
-		 * @since 3.0
+		 * @since 1.0.0
 		 *
 		 * @param Query &$this Current instance of Query, passed by reference.
 		 */
@@ -871,7 +897,7 @@ class Query extends Base {
 	/**
 	 * Used internally to get a list of item IDs matching the query vars.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return int|array A single count of item IDs if a count query. An array of item IDs if a full query.
 	 */
@@ -920,7 +946,7 @@ class Query extends Base {
 		/**
 		 * Filters the item query clauses.
 		 *
-		 * @since 3.0
+		 * @since 1.0.0
 		 *
 		 * @param array  $pieces A compacted array of item query clauses.
 		 * @param object &$this  Current instance passed by reference.
@@ -948,7 +974,7 @@ class Query extends Base {
 	/**
 	 * Get the ORDERBY clause.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $order
 	 * @return string
@@ -1029,7 +1055,7 @@ class Query extends Base {
 	/**
 	 * Used internally to generate an SQL string for searching across multiple columns.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $string  Search string.
 	 * @param array  $columns Columns to search.
@@ -1059,7 +1085,7 @@ class Query extends Base {
 	/**
 	 * Parses arguments passed to the item query with default query parameters.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @see Query::__construct()
 	 *
@@ -1079,7 +1105,7 @@ class Query extends Base {
 		/**
 		 * Fires after the item query vars have been parsed.
 		 *
-		 * @since 3.0
+		 * @since 1.0.0
 		 *
 		 * @param Query &$this The Query instance (passed by reference).
 		 */
@@ -1089,7 +1115,7 @@ class Query extends Base {
 	/**
 	 * Parse the where clauses for all known columns
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function parse_where() {
 
@@ -1202,7 +1228,7 @@ class Query extends Base {
 			}
 		}
 
-		// Maybe search if columns are searchable
+		// Maybe search if columns are searchable.
 		if ( ! empty( $searchable ) && strlen( $this->query_vars['search'] ) ) {
 			$search_columns = array();
 
@@ -1222,7 +1248,7 @@ class Query extends Base {
 			/**
 			 * Filters the columns to search in a Query search.
 			 *
-			 * @since 3.0
+			 * @since 1.0.0
 			 *
 			 * @param array  $search_columns Array of column names to be searched.
 			 * @param string $search         Text being searched.
@@ -1234,7 +1260,7 @@ class Query extends Base {
 			$where['search'] = $this->get_search_sql( $this->query_vars['search'], $search_columns );
 		}
 
-		// Maybe perform a meta-query
+		// Maybe perform a meta query.
 		$meta_query = $this->query_vars['meta_query'];
 		if ( ! empty( $meta_query ) && is_array( $meta_query ) ) {
 			$this->meta_query = $this->get_meta_query( $meta_query );
@@ -1252,17 +1278,18 @@ class Query extends Base {
 			}
 		}
 
-		// Maybe perform a compare.
-		$compare = $this->query_vars['compare'];
-		if ( ! empty( $compare ) && is_array( $compare ) ) {
-			$query   = new Queries\Compare( $compare );
-			$table   = $this->apply_prefix( $this->item_name );
-			$clauses = $query->get_sql( $table, $this->table_alias, $this->get_primary_column_name(), $this );
+		// Maybe perform a compare query.
+		$compare_query = $this->query_vars['compare_query'];
+		if ( ! empty( $compare_query ) && is_array( $compare_query ) ) {
+			$this->compare_query = $this->get_compare_query( $compare_query );
+			$table               = $this->apply_prefix( $this->item_name );
+			$clauses             = $this->compare_query->get_sql( $table, $this->table_alias, $this->get_primary_column_name(), $this );
 
+			// Not all objects can compare, so make sure this one exists
 			if ( false !== $clauses ) {
 
 				// Remove " AND " from query where clause.
-				$where['compare'] = preg_replace( $and, '', $clauses['where'] );
+				$where['compare_query'] = preg_replace( $and, '', $clauses['where'] );
 			}
 		}
 
@@ -1271,7 +1298,7 @@ class Query extends Base {
 			? $date_query
 			: $this->query_vars['date_query'];
 
-		// Maybe perform a date-query
+		// Maybe perform a date query
 		if ( ! empty( $date_query ) && is_array( $date_query ) ) {
 			$this->date_query    = $this->get_date_query( $date_query );
 			$where['date_query'] = preg_replace( $and, '', $this->date_query_sql );
@@ -1285,7 +1312,7 @@ class Query extends Base {
 	/**
 	 * Parse which fields to query for
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $fields
 	 * @param bool   $alias
@@ -1321,9 +1348,10 @@ class Query extends Base {
 	/**
 	 * Parses and sanitizes the 'groupby' keys passed into the item query
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $groupby
+	 * @param bool   $alias
 	 * @return string
 	 */
 	private function parse_groupby( $groupby = '', $alias = true ) {
@@ -1333,11 +1361,13 @@ class Query extends Base {
 			return '';
 		}
 
-		// Sanitize keys
-		$groupby = (array) array_map( 'sanitize_key', (array) $groupby );
+		// Sanitize groupby columns
+		$groupby   = (array) array_map( 'sanitize_key', (array) $groupby );
 
-		// Orderby is a literal column name
+		// Re'flip column names back around
 		$columns   = array_flip( $this->get_column_names() );
+
+		// Get the intersection of allowed column names to groupby columns
 		$intersect = array_intersect( $columns, $groupby );
 
 		// Bail if invalid column
@@ -1348,7 +1378,7 @@ class Query extends Base {
 		// Default return value
 		$retval = array();
 
-		// Prepend table alias to key
+		// Maybe prepend table alias to key
 		foreach ( $intersect as $key ) {
 			$retval[] = ( true === $alias )
 				? "{$this->table_alias}.{$key}"
@@ -1362,7 +1392,7 @@ class Query extends Base {
 	/**
 	 * Parses and sanitizes 'orderby' keys passed to the item query.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $orderby Field for the items to be ordered by.
 	 * @return string|false Value to used in the ORDER clause. False otherwise.
@@ -1399,7 +1429,7 @@ class Query extends Base {
 	/**
 	 * Parses an 'order' query variable and cast it to 'ASC' or 'DESC' as necessary.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $order The 'order' query variable.
 	 * @return string The sanitized 'order' query variable.
@@ -1408,7 +1438,7 @@ class Query extends Base {
 
 		// Bail if malformed
 		if ( empty( $order ) || ! is_string( $order ) ) {
-			return `DESC`;
+			return 'DESC';
 		}
 
 		// Ascending or Descending
@@ -1428,7 +1458,7 @@ class Query extends Base {
 	 * If using the `fields` parameter, results will have unique shapes based on
 	 * exactly what was requested.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param array $items
 	 * @return array
@@ -1455,7 +1485,7 @@ class Query extends Base {
 		 *
 		 * Looks like `edd_get_customers`
 		 *
-		 * @since 3.0
+		 * @since 1.0.0
 		 *
 		 * @param array  $retval An array of items.
 		 * @param object &$this  Current instance of Query, passed by reference.
@@ -1471,7 +1501,7 @@ class Query extends Base {
 	/**
 	 * Get specific item fields based on query_vars['fields'].
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param array $items
 	 * @return array
@@ -1511,7 +1541,7 @@ class Query extends Base {
 	/**
 	 * Shape an item ID from an object, array, or numeric value
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param  mixed $item
 	 * @return int
@@ -1538,7 +1568,7 @@ class Query extends Base {
 	/**
 	 * Get a single database row by the primary column ID, possibly from cache
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param int $item_id
 	 * @return mixed False if empty/error, Object if successful
@@ -1558,7 +1588,7 @@ class Query extends Base {
 	/**
 	 * Get a single database row by any column and value, possibly from cache.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $column_name  Name of database column
 	 * @param string $column_value Value to query for
@@ -1615,10 +1645,10 @@ class Query extends Base {
 	/**
 	 * Add an item to the database
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param array $data
-	 * @return boolean
+	 * @return bool
 	 */
 	public function add_item( $data = array() ) {
 
@@ -1706,11 +1736,11 @@ class Query extends Base {
 	/**
 	 * Update an item in the database
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param int $item_id
 	 * @param array $data
-	 * @return boolean
+	 * @return bool
 	 */
 	public function update_item( $item_id = 0, $data = array() ) {
 
@@ -1789,10 +1819,10 @@ class Query extends Base {
 	/**
 	 * Delete an item from the database
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param int $item_id
-	 * @return boolean
+	 * @return bool
 	 */
 	public function delete_item( $item_id = 0 ) {
 
@@ -1845,7 +1875,7 @@ class Query extends Base {
 	 * This method is public to allow subclasses to perform JIT manipulation
 	 * of the parameters passed into it.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param array $item
 	 * @return array
@@ -1858,7 +1888,7 @@ class Query extends Base {
 	 * Shape an item from the database into the type of object it always wanted
 	 * to be when it grew up.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed ID of item, or row from database
 	 * @return mixed False on error, Object of single-object class type on success
@@ -1887,23 +1917,29 @@ class Query extends Base {
 	/**
 	 * Validate an item before it is updated in or added to the database.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param array $item
 	 * @return mixed False on error, Array of validated values on success
 	 */
 	private function validate_item( $item = array() ) {
 
-		// Bail if item is empty
-		if ( empty( $item ) ) {
+		// Bail if item is empty or not an array
+		if ( empty( $item ) || ! is_array( $item ) ) {
 			return $item;
 		}
 
 		// Loop through item attributes
 		foreach ( $item as $key => $value ) {
 
-			// Always strip slashes from all values
-			$value    = stripslashes( $value );
+			// Only allow null if column allows null
+			if ( is_null( $value ) && $this->get_column_field( array( 'name' => $key ), 'allow_null' ) ) {
+				$value = null;
+
+			// Strip slashes from all strings
+			} elseif ( is_string( $value ) ) {
+				$value = stripslashes( $value );
+			}
 
 			// Get callback for column
 			$callback = $this->get_column_field( array( 'name' => $key ), 'validate' );
@@ -1920,7 +1956,12 @@ class Query extends Base {
 				// Update the value
 				$item[ $key ] = $validated;
 
-			// Include basic stripslashes() call
+			/**
+			 * Fallback to using the raw value.
+			 *
+			 * Note: This may change at a later date, so do not rely on this.
+			 *       Please always validate all data.
+			 */
 			} else {
 				$item[ $key ] = $value;
 			}
@@ -1938,7 +1979,7 @@ class Query extends Base {
 	 * any type, and also resets the key values. It looks weird, but is
 	 * currently by design to protect the integrity of the return value.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $method select|insert|update|delete
 	 * @param mixed  $item   Object|Array of keys/values to reduce
@@ -1984,7 +2025,7 @@ class Query extends Base {
 	 * This is used by `add_item()` to populate known default values, to ensure
 	 * new item data is always what we expect it to be.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return array
 	 */
@@ -2012,7 +2053,7 @@ class Query extends Base {
 	 * This method takes the data being saved, looks for any columns that are
 	 * known to transition between values, and fires actions on them.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param array $item
 	 * @return array
@@ -2068,7 +2109,7 @@ class Query extends Base {
 			/**
 			 * Fires after an object value has transitioned.
 			 *
-			 * @since 3.0
+			 * @since 1.0.0
 			 *
 			 * @param mixed $old_value The value being transitioned FROM.
 			 * @param mixed $new_value The value being transitioned TO.
@@ -2083,7 +2124,7 @@ class Query extends Base {
 	/**
 	 * Add meta data to an item
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param int    $item_id
 	 * @param string $meta_key
@@ -2114,11 +2155,11 @@ class Query extends Base {
 	/**
 	 * Get meta data for an item
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param int     $item_id
 	 * @param string  $meta_key
-	 * @param boolean $single
+	 * @param bool    $single
 	 * @return mixed
 	 */
 	protected function get_item_meta( $item_id = 0, $meta_key = '', $single = false ) {
@@ -2144,7 +2185,7 @@ class Query extends Base {
 	/**
 	 * Update meta data for an item
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param int    $item_id
 	 * @param string $meta_key
@@ -2175,7 +2216,7 @@ class Query extends Base {
 	/**
 	 * Delete meta data for an item
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param int    $item_id
 	 * @param string $meta_key
@@ -2206,42 +2247,25 @@ class Query extends Base {
 	/**
 	 * Get registered meta data keys
 	 *
-	 * This is a copy of get_registered_meta_keys() for WordPress versions lower
-	 * than 4.6.0.
-	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $object_subtype The sub-type of meta keys
 	 *
 	 * @return array
 	 */
 	private function get_registered_meta_keys( $object_subtype = '' ) {
-		global $wp_meta_keys;
 
 		// Get the object type
 		$object_type = $this->apply_prefix( $this->item_name );
 
-		// Use function if it exists
-		if ( function_exists( 'get_registered_meta_keys' ) ) {
-			return get_registered_meta_keys( $object_type, $object_subtype );
-		}
-
-		// This code is for versions of WordPress older than 4.6.0 and can be
-		// removed at a later date
-
-		// Bail if not set or not an array
-		if ( ! is_array( $wp_meta_keys ) || ! isset( $wp_meta_keys[ $object_type ] ) ) {
-			return array();
-		}
-
 		// Return the keys
-		return $wp_meta_keys[ $object_type ];
+		return get_registered_meta_keys( $object_type, $object_subtype );
 	}
 
 	/**
 	 * Maybe update meta values on item update/save
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param array $meta
 	 */
@@ -2276,7 +2300,7 @@ class Query extends Base {
 	/**
 	 * Delete all meta data for an item
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param int $item_id
 	 */
@@ -2314,7 +2338,7 @@ class Query extends Base {
 	/**
 	 * Return meta table
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return mixed Table name if exists, False if not
 	 */
@@ -2332,7 +2356,7 @@ class Query extends Base {
 	/**
 	 * Get cache key from query_vars and query_var_defaults.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -2355,7 +2379,7 @@ class Query extends Base {
 	/**
 	 * Get the cache group, or fallback to the primary one.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $group
 	 * @return string
@@ -2380,7 +2404,7 @@ class Query extends Base {
 	/**
 	 * Get array of which database columns have uniquely cached groups
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return array
 	 */
@@ -2421,12 +2445,12 @@ class Query extends Base {
 	 * after an item is inserted in the database, but before items have been
 	 * "shaped" into proper objects, so object properties may not be set yet.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
-	 * @param array   $item_ids
-	 * @param boolean $force
+	 * @param array $item_ids
+	 * @param bool  $force
 	 *
-	 * @return boolean False if empty
+	 * @return bool False if empty
 	 */
 	private function prime_item_caches( $item_ids = array(), $force = false ) {
 
@@ -2477,7 +2501,7 @@ class Query extends Base {
 	 * after an item is already updated in the database, so we want to avoid
 	 * querying for it again. It's just safer this way.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param array $items
 	 */
@@ -2531,11 +2555,11 @@ class Query extends Base {
 	 * after an item is already deleted from the database, so it cannot be
 	 * queried and may not exist in the cache. It's just safer this way.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
-	 * @param array $items
+	 * @param mixed $items Single object item, or Array of object items
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	private function clean_item_cache( $items = array() ) {
 
@@ -2545,7 +2569,11 @@ class Query extends Base {
 		}
 
 		// Make sure items are an array
-		$items  = (array) $items;
+		if ( ! is_array( $items ) ) {
+			$items = array( $items );
+		}
+
+		// Get all cache groups
 		$groups = $this->get_cache_groups();
 
 		// Loop through all items and clean them
@@ -2571,7 +2599,7 @@ class Query extends Base {
 	/**
 	 * Update the last_changed key for the cache group
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function update_last_changed_cache( $group = '' ) {
 
@@ -2590,7 +2618,7 @@ class Query extends Base {
 	/**
 	 * Get the last_changed key for a cache group
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $group Cache group. Defaults to $this->cache_group
 	 *
@@ -2613,7 +2641,7 @@ class Query extends Base {
 	/**
 	 * Get array of non-cached item IDs.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param array  $item_ids Array of item IDs
 	 * @param string $group    Cache group. Defaults to $this->cache_group
@@ -2644,7 +2672,7 @@ class Query extends Base {
 	/**
 	 * Add a cache value for a key and group.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key    Cache key.
 	 * @param mixed  $value  Cache value.
@@ -2673,11 +2701,11 @@ class Query extends Base {
 	/**
 	 * Get a cache value for a key and group.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string  $key   Cache key.
 	 * @param string  $group Cache group. Defaults to $this->cache_group
-	 * @param boolean $force
+	 * @param bool    $force
 	 */
 	private function cache_get( $key = '', $group = '', $force = false ) {
 
@@ -2696,7 +2724,7 @@ class Query extends Base {
 	/**
 	 * Set a cache value for a key and group.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $key    Cache key.
 	 * @param mixed  $value  Cache value.
@@ -2725,9 +2753,9 @@ class Query extends Base {
 	/**
 	 * Delete a cache key for a group.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
-	 * @global boolean $_wp_suspend_cache_invalidation
+	 * @global bool $_wp_suspend_cache_invalidation
 	 *
 	 * @param string $key   Cache key.
 	 * @param string $group Cache group. Defaults to $this->cache_group
@@ -2755,7 +2783,7 @@ class Query extends Base {
 	/**
 	 * Fetch raw results directly from the database.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param array  $cols       Columns for `SELECT`.
 	 * @param array  $where_cols Where clauses. Each key-value pair in the array
@@ -2787,7 +2815,7 @@ class Query extends Base {
 
 		// Ensure valid column names have been passed for the `SELECT` clause.
 		foreach ( $cols as $index => $column ) {
-			if ( ! in_array( $column, $column_names, true ) ) {
+			if ( ! array_key_exists( $column, $column_names ) ) {
 				unset( $cols[ $index ] );
 			}
 		}
@@ -2816,7 +2844,9 @@ class Query extends Base {
 
 				// Basic WHERE clause.
 				if ( ! is_array( $compare ) ) {
-					$query .= " AND {$this->table_alias}.{$column} = {$compare} ";
+					$pattern   = $this->get_column_field( array( 'name' => $column ), 'pattern', '%s' );
+					$statement = " AND {$this->table_alias}.{$column} = {$pattern} ";
+					$query    .= $this->get_db()->prepare( $statement, $compare );
 
 				// More complex WHERE clause.
 				} else {
@@ -2830,8 +2860,8 @@ class Query extends Base {
 					}
 
 					// Default compare clause to equals.
-					$compare_clause = isset( $compare['compare'] )
-						? trim( strtoupper( $compare['compare'] ) )
+					$compare_clause = isset( $compare['compare_query'] )
+						? trim( strtoupper( $compare['compare_query'] ) )
 						: '=';
 
 					// Array (unprepared)

@@ -2,11 +2,11 @@
 /**
  * Base Custom Database Table Class.
  *
- * @package     Sugar Calendar
- * @subpackage  Database
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       2.0
+ * @package     Database
+ * @subpackage  Date
+ * @copyright   Copyright (c) 2019
+ * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0.0
  */
 namespace Sugar_Calendar\Database;
 
@@ -14,13 +14,13 @@ namespace Sugar_Calendar\Database;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * A base WordPress database table class, which facilitates the creation of
- * and schema changes to individual database tables.
+ * A base database table class, which facilitates the creation of (and schema
+ * changes to) individual database tables.
  *
  * This class is intended to be extended for each unique database table,
- * including global multisite tables and users tables.
+ * including global tables for multisite, and users tables.
  *
- * It exists to make managing database tables in WordPress as easy as possible.
+ * It exists to make managing database tables as easy as possible.
  *
  * Extending this class comes with several automatic benefits:
  * - Activation hook makes it great for plugins
@@ -28,107 +28,120 @@ defined( 'ABSPATH' ) || exit;
  * - Tables upgrade via independent upgrade abstract methods
  * - Multisite friendly - site tables switch on "switch_blog" action
  *
- * @since 3.0
+ * @since 1.0.0
  */
 abstract class Table extends Base {
 
 	/**
-	 * @var string Table name, without the global table prefix
+	 * Table name, without the global table prefix.
+	 *
+	 * @since 1.0.0
+	 * @var   string
 	 */
 	protected $name = '';
 
 	/**
-	 * @var string Optional description.
+	 * Optional description.
+	 *
+	 * @since 1.0.0
+	 * @var   string
 	 */
 	protected $description = '';
 
 	/**
-	 * @var mixed Database version
+	 * Database version.
+	 *
+	 * @since 1.0.0
+	 * @var   mixed
 	 */
 	protected $version = '';
 
 	/**
-	 * @var boolean Is this table for a site, or global
+	 * Is this table for a site, or global.
+	 *
+	 * @since 1.0.0
+	 * @var   bool
 	 */
 	protected $global = false;
 
 	/**
-	 * @var string Passed directly into register_activation_hook()
+	 * Passed directly into register_activation_hook()
+	 *
+	 * @since 1.0.0
+	 * @var   string
 	 */
-	protected $file = SC_PLUGIN_FILE;
+	protected $file = '';
 
 	/**
-	 * @var string Database version key (saved in _options or _sitemeta)
+	 * Database version key (saved in _options or _sitemeta)
+	 *
+	 * @since 1.0.0
+	 * @var   string
 	 */
 	protected $db_version_key = '';
 
 	/**
-	 * @var mixed Current database version
+	 * Current database version.
+	 *
+	 * @since 1.0.0
+	 * @var   mixed
 	 */
 	protected $db_version = 0;
 
 	/**
-	 * @var string Table prefix, including the site prefix
+	 * Table prefix, including the site prefix.
+	 *
+	 * @since 1.0.0
+	 * @var   string
 	 */
 	protected $table_prefix = '';
 
 	/**
-	 * @var string Table name
+	 * Table name.
+	 *
+	 * @since 1.0.0
+	 * @var  string
 	 */
 	protected $table_name = '';
 
 	/**
-	 * @var string Table name, prefixed from the base
+	 * Table name, prefixed from the base.
+	 *
+	 * @since 1.0.0
+	 * @var   string
 	 */
 	protected $prefixed_name = '';
 
 	/**
-	 * @var string Table schema
+	 * Table schema.
+	 *
+	 * @since 1.0.0
+	 * @var   string
 	 */
 	protected $schema = '';
 
 	/**
-	 * @var string Database character-set & collation for table
+	 * Database character-set & collation for table.
+	 *
+	 * @since 1.0.0
+	 * @var   string
 	 */
 	protected $charset_collation = '';
 
 	/**
-	 * @var array Key => value array of versions => methods
+	 * Key => value array of versions => methods.
+	 *
+	 * @since 1.0.0
+	 * @var   array
 	 */
 	protected $upgrades = array();
-
-	/** Interfaces ************************************************************/
-
-	/**
-	 * Array of interface objects instantiated during init
-	 *
-	 * @since 3.0
-	 *
-	 * @var array
-	 */
-	private $interfaces = array();
-
-	/**
-	 * Array of interface keys
-	 *
-	 * @since 3.0
-	 *
-	 * @var array
-	 */
-	private $interface_keys = array(
-		'schema' => false,
-		'table'  => false,
-		'query'  => false,
-		'object' => false,
-		'meta'   => false
-	);
 
 	/** Methods ***************************************************************/
 
 	/**
 	 * Hook into queries, admin screens, and more!
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	public function __construct() {
 
@@ -146,7 +159,7 @@ abstract class Table extends Base {
 		// Set the database schema
 		$this->set_schema();
 
-		// Add hooks to WordPress actions
+		// Add hooks
 		$this->add_hooks();
 
 		// Maybe force upgrade if testing
@@ -158,9 +171,9 @@ abstract class Table extends Base {
 	/** Abstract **************************************************************/
 
 	/**
-	 * Setup this database table
+	 * Setup this database table.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	protected abstract function set_schema();
 
@@ -171,7 +184,7 @@ abstract class Table extends Base {
 	 *
 	 * Hooked to the "switch_blog" action.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param int $site_id The site being switched to
 	 */
@@ -193,7 +206,7 @@ abstract class Table extends Base {
 	 *
 	 * Hooked to the `admin_init` action.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	public function maybe_upgrade() {
 
@@ -220,11 +233,11 @@ abstract class Table extends Base {
 	/**
 	 * Return whether this table needs an upgrade.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed $version Database version to check if upgrade is needed
 	 *
-	 * @return boolean True if table needs upgrading. False if not.
+	 * @return bool True if table needs upgrading. False if not.
 	 */
 	public function needs_upgrade( $version = false ) {
 
@@ -248,9 +261,9 @@ abstract class Table extends Base {
 	/**
 	 * Return whether this table can be upgraded.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
-	 * @return boolean True if table can be upgraded. False if not.
+	 * @return bool True if table can be upgraded. False if not.
 	 */
 	public function is_upgradeable() {
 
@@ -269,7 +282,7 @@ abstract class Table extends Base {
 	 * This is public method for accessing a private variable so that it cannot
 	 * be externally modified.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -282,7 +295,7 @@ abstract class Table extends Base {
 	/**
 	 * Install a database table by creating the table and setting the version.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	public function install() {
 		$created = $this->create();
@@ -296,7 +309,7 @@ abstract class Table extends Base {
 	/**
 	 * Destroy a database table by dropping the table and deleting the version.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	public function uninstall() {
 		$dropped = $this->drop();
@@ -310,9 +323,9 @@ abstract class Table extends Base {
 	/** Public Management *****************************************************/
 
 	/**
-	 * Check if table already exists
+	 * Check if table already exists.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -337,9 +350,9 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Check if table already exists
+	 * Check if table already exists.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -364,9 +377,9 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Create the table
+	 * Create the table.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -389,9 +402,9 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Drop the database table
+	 * Drop the database table.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return mixed
 	 */
@@ -414,9 +427,9 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Truncate the database table
+	 * Truncate the database table.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return mixed
 	 */
@@ -439,9 +452,9 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Delete all items from the database table
+	 * Delete all items from the database table.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return mixed
 	 */
@@ -464,9 +477,9 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Count the number of items in the database table
+	 * Count the number of items in the database table.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return mixed
 	 */
@@ -491,11 +504,11 @@ abstract class Table extends Base {
 	/** Upgrades **************************************************************/
 
 	/**
-	 * Upgrade this database table
+	 * Upgrade this database table.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
-	 * return boolean
+	 * return bool
 	 */
 	public function upgrade() {
 		$result = false;
@@ -526,14 +539,14 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Upgrade to a specific database version
+	 * Upgrade to a specific database version.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed  $version Database version to check if upgrade is needed
 	 * @param string $method
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function upgrade_to( $version = '', $method = '' ) {
 
@@ -574,9 +587,9 @@ abstract class Table extends Base {
 	/** Private ***************************************************************/
 
 	/**
-	 * Setup the necessary table variables
+	 * Setup the necessary table variables.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function setup() {
 
@@ -603,12 +616,12 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Set this table up in the database interface, usually the $wpdb global.
+	 * Set this table up in the database interface.
 	 *
-	 * This must be done directly because WordPress does not have a mechanism
-	 * for manipulating them safely
+	 * This must be done directly because the database interface does not
+	 * have a common mechanism for manipulating them safely.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function set_db_interface() {
 
@@ -660,9 +673,9 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Set the database version for the table
+	 * Set the database version for the table.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param mixed $version Database version to set when upgrading/creating
 	 */
@@ -683,9 +696,9 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Get the table version from the database
+	 * Get the table version from the database.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function get_db_version() {
 		$this->db_version = $this->is_global()
@@ -694,9 +707,9 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Delete the table version from the database
+	 * Delete the table version from the database.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function delete_db_version() {
 		$this->db_version = $this->is_global()
@@ -705,9 +718,9 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Add class hooks to WordPress actions
+	 * Add class hooks to the parent application actions.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 */
 	private function add_hooks() {
 
@@ -724,7 +737,7 @@ abstract class Table extends Base {
 	 *
 	 * This is primarily used to skip 'admin_init' and force-install tables.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -741,9 +754,9 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Check if table is global
+	 * Check if table is global.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @return bool
 	 */
@@ -755,10 +768,11 @@ abstract class Table extends Base {
 	 * Try to get a callable upgrade method, with some magic to avoid needing to
 	 * do this dance repeatedly inside subclasses.
 	 *
-	 * @since 3.0
+	 * @since 1.0.0
 	 *
 	 * @param string $method
-	 * @return boolean
+	 *
+	 * @return bool
 	 */
 	private function get_callable( $method = '' ) {
 		$callable = $method;

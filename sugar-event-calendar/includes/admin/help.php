@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Admin help, calendar tabs
  *
- * @since 2.0.0
+ * @since 2.0.14
  */
 function add_calendar_tabs() {
 

@@ -1,12 +1,12 @@
 <?php
 /**
- * Base Custom Database Table Date Query Class.
+ * Custom Database Table Date Query Class.
  *
- * @package     Sugar Calendar
- * @subpackage  Database
- * @copyright   Copyright (c) 2018, Easy Digital Downloads, LLC
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       2.0
+ * @package     Database
+ * @subpackage  Date
+ * @copyright   Copyright (c) 2019
+ * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0.0
  */
 namespace Sugar_Calendar\Database;
 
@@ -16,17 +16,20 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Class for generating SQL clauses that filter a primary query according to date.
  *
+ * Is heavily inspired by the WP_Date_Query class in WordPress, with changes to make
+ * it more flexible for custom tables and their columns.
+ *
  * Date_Query is a helper that allows primary query classes, such as WP_Query, to filter
  * their results by date columns, by generating `WHERE` subclauses to be attached to the
  * primary SQL query string.
  *
  * Attempting to filter by an invalid date value (eg month=13) will generate SQL that will
  * return no results. In these cases, a _doing_it_wrong() error notice is also thrown.
- * See Date_Query::validate_date_values().
+ * See Date::validate_date_values().
  *
  * @link https://codex.wordpress.org/Function_Reference/WP_Query Codex page.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 class Date_Query extends Base {
 
@@ -35,40 +38,40 @@ class Date_Query extends Base {
 	 *
 	 * See Date_Query::__construct() for information on date query arguments.
 	 *
-	 * @since 3.0.0
-	 * @var array
+	 * @since 1.0.0
+	 * @var   array
 	 */
 	public $queries = array();
 
 	/**
 	 * The default relation between top-level queries. Can be either 'AND' or 'OR'.
 	 *
-	 * @since 3.0.0
-	 * @var string
+	 * @since 1.0.0
+	 * @var   string
 	 */
 	public $relation = 'AND';
 
 	/**
 	 * The column to query against. Can be changed via the query arguments.
 	 *
-	 * @since 3.0.0
-	 * @var string
+	 * @since 1.0.0
+	 * @var   string
 	 */
 	public $column = 'date_created';
 
 	/**
 	 * The value comparison operator. Can be changed via the query arguments.
 	 *
-	 * @since 3.0.0
-	 * @var array
+	 * @since 1.0.0
+	 * @var   array
 	 */
 	public $compare = '=';
 
 	/**
 	 * Supported time-related parameter keys.
 	 *
-	 * @since 3.0.0
-	 * @var array
+	 * @since 1.0.0
+	 * @var   array
 	 */
 	public $time_keys = array(
 		'after',
@@ -91,8 +94,8 @@ class Date_Query extends Base {
 	/**
 	 * Supported comparison types
 	 *
-	 * @since 3.0.0
-	 * @var array
+	 * @since 1.0.0
+	 * @var   array
 	 */
 	public $comparisons = array(
 		'=',
@@ -115,7 +118,7 @@ class Date_Query extends Base {
 	 * 'compare'. When 'compare' is 'IN' or 'NOT IN', arrays are accepted; when 'compare' is 'BETWEEN' or 'NOT
 	 * BETWEEN', arrays of two valid values are required. See individual argument descriptions for accepted values.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array $date_query {
 	 *     Array of date query clauses.
@@ -236,7 +239,7 @@ class Date_Query extends Base {
 	 * each first-order clause contains all the necessary keys from
 	 * `$defaults`.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array $queries
 	 * @param array $parent_query
@@ -307,7 +310,7 @@ class Date_Query extends Base {
 	 * Checks to see if the current clause has any time-related keys.
 	 * If so, it's first-order.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param  array $query Query clause.
 	 * @return bool True if this is a first-order clause.
@@ -321,7 +324,7 @@ class Date_Query extends Base {
 	/**
 	 * Determines and validates what comparison operator to use.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array $query A date query or a date subquery.
 	 * @return string The comparison operator.
@@ -341,7 +344,7 @@ class Date_Query extends Base {
 	 * continue (though of course no items will be found for impossible dates).
 	 * This method only generates debug notices for these cases.
 	 *
-	 * @since  3.0.0
+	 * @since  1.0.0
 	 *
 	 * @param  array $date_query The date_query array.
 	 * @return bool  True if all values in the query are valid, false if one or more fail.
@@ -390,7 +393,7 @@ class Date_Query extends Base {
 
 			$max_days_of_year = date( 'z', mktime( 0, 0, 0, 12, 31, $_year ) ) + 1;
 
-		// otherwise we use the max of 366 (leap-year)
+		// Otherwise we use the max of 366 (leap-year)
 		} else {
 			$max_days_of_year = 366;
 		}
@@ -518,7 +521,7 @@ class Date_Query extends Base {
 	 * Prefixed column names (such as 'wp_posts.date_created') bypass this whitelist check,
 	 * and are only sanitized to remove illegal characters.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $column The user-supplied column name.
 	 * @return string A validated column name value.
@@ -530,7 +533,7 @@ class Date_Query extends Base {
 	/**
 	 * Generate WHERE clause to be appended to a main query.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return string MySQL WHERE clause.
 	 */
@@ -541,7 +544,7 @@ class Date_Query extends Base {
 		/**
 		 * Filters the date query WHERE clause.
 		 *
-		 * @since 3.0.0
+		 * @since 1.0.0
 		 *
 		 * @param string     $where WHERE clause of the date query.
 		 * @param Date_Query $this  The Date_Query instance.
@@ -555,7 +558,7 @@ class Date_Query extends Base {
 	 * Called by the public Date_Query::get_sql(), this method is abstracted
 	 * out to maintain parity with the other Query classes.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @return array {
 	 *     Array containing JOIN and WHERE SQL clauses to append to the main query.
@@ -580,7 +583,7 @@ class Date_Query extends Base {
 	 * If nested subqueries are found, this method recurses the tree to
 	 * produce the properly nested SQL.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param array $query Query to parse.
 	 * @param int   $depth Optional. Number of tree levels deep we currently are.
@@ -669,7 +672,7 @@ class Date_Query extends Base {
 	/**
 	 * Turns a first-order date query into SQL for a WHERE clause.
 	 *
-	 * @since  3.0.0
+	 * @since  1.0.0
 	 *
 	 * @param  array $query        Date query clause.
 	 * @param  array $parent_query Parent query of the current date query.
@@ -780,7 +783,7 @@ class Date_Query extends Base {
 	/**
 	 * Builds and validates a value string based on the comparison operator.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $compare The compare operator to use
 	 * @param string|array $value The value
@@ -838,7 +841,7 @@ class Date_Query extends Base {
 	/**
 	 * Builds and validates a value string based on the comparison operator.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $compare The compare operator to use
 	 * @param string|array $value The value
@@ -899,7 +902,7 @@ class Date_Query extends Base {
 	 * either the maximum or minimum values (controlled by the $default_to parameter). Alternatively you can
 	 * pass a string that will be run through strtotime().
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string|array $datetime       An array of parameters or a strtotime() string
 	 * @param bool         $default_to_max Whether to round up incomplete dates. Supported by values
@@ -1011,7 +1014,7 @@ class Date_Query extends Base {
 	 * However if multiple values are passed, a pseudo-decimal time will be created
 	 * in order to be able to accurately compare against.
 	 *
-	 * @since 3.0.0
+	 * @since 1.0.0
 	 *
 	 * @param string $column The column to query against. Needs to be pre-validated!
 	 * @param string $compare The comparison operator. Needs to be pre-validated!

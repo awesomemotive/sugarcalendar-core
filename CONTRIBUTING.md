@@ -81,5 +81,5 @@ By making a contribution to this project, I certify that:
 # Additional Resources
 * [Developer's API](https://sugarcalendar.com/docs/developers/)
 * [General GitHub Documentation](https://help.github.com/)
-* [GitHub Pull Request documentation](https://help.github.com/send-pull-requests/)
+* [GitHub Pull Request documentation](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests)
 * [PHPUnit Tests Guide](https://phpunit.de/manual/current/en/writing-tests-for-phpunit.html)

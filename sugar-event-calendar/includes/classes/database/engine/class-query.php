@@ -3,7 +3,7 @@
  * Base Custom Database Table Query Class.
  *
  * @package     Database
- * @subpackage  Date
+ * @subpackage  Query
  * @copyright   Copyright (c) 2019
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.0
@@ -34,7 +34,7 @@ defined( 'ABSPATH' ) || exit;
  * @property string $columns
  * @property string $query_clauses
  * @property string $request_clauses
- * @property \WP_Meta_Query $meta_query
+ * @property Queries\Meta $meta_query
  * @property Queries\Date $date_query
  * @property Queries\Compare $compare
  * @property array $query_vars
@@ -183,7 +183,7 @@ class Query extends Base {
 	 * Meta query container.
 	 *
 	 * @since 1.0.0
-	 * @var   object|\WP_Meta_Query
+	 * @var   object|Queries\Meta
 	 */
 	protected $meta_query = false;
 
@@ -440,7 +440,7 @@ class Query extends Base {
 			'search'            => '',
 			'search_columns'    => array(),
 			'count'             => false,
-			'meta_query'        => null, // See WP_Meta_Query
+			'meta_query'        => null, // See Queries\Meta
 			'date_query'        => null, // See Queries\Date
 			'compare_query'     => null, // See Queries\Compare
 			'no_found_rows'     => true,
@@ -643,17 +643,17 @@ class Query extends Base {
 	/** Private Getters *******************************************************/
 
 	/**
-	 * Pass-through method to return a new WP_Meta_Query object.
+	 * Pass-through method to return a new Meta object.
 	 *
 	 * A future version of this will include a custom Meta_Query class.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args See WP_Meta_Query
-	 * @return \WP_Meta_Query
+	 * @param array $args See Meta
+	 * @return Meta
 	 */
 	private function get_meta_query( $args = array() ) {
-		return new \WP_Meta_Query( $args );
+		return new Queries\Meta( $args );
 	}
 
 	/**
@@ -665,7 +665,7 @@ class Query extends Base {
 	 * @return Compare
 	 */
 	private function get_compare_query( $args = array() ) {
-		return new Compare_Query( $args );
+		return new Queries\Compare( $args );
 	}
 
 	/**
@@ -680,7 +680,7 @@ class Query extends Base {
 	 */
 	private function get_date_query( $args = array(), $column = 'date_created' ) {
 
-		$date_query = new Date_Query( $args, $column );
+		$date_query = new Queries\Date( $args, $column );
 		$table      = $this->get_table_name();
 
 		$date_query->column = "{$table}.{$column}";
@@ -959,9 +959,14 @@ class Query extends Base {
 
 		// Return count
 		if ( ! empty( $this->query_vars['count'] ) ) {
-			return empty( $this->query_vars['groupby'] )
+
+			// Get vars or results
+			$retval = empty( $this->query_vars['groupby'] )
 				? $this->get_db()->get_var( $this->request )
 				: $this->get_db()->get_results( $this->request, ARRAY_A );
+
+			// Return vars or results
+			return $retval;
 		}
 
 		// Get IDs
@@ -2694,7 +2699,7 @@ class Query extends Base {
 		// Get the cache group
 		$group = $this->get_cache_group( $group );
 
-		// Delete the cache
+		// Add to the cache
 		wp_cache_add( $key, $value, $group, $expire );
 	}
 
@@ -2717,7 +2722,7 @@ class Query extends Base {
 		// Get the cache group
 		$group = $this->get_cache_group( $group );
 
-		// Delete the cache
+		// Get from the cache
 		return wp_cache_get( $key, $group, $force );
 	}
 
@@ -2746,7 +2751,7 @@ class Query extends Base {
 		// Get the cache group
 		$group = $this->get_cache_group( $group );
 
-		// Delete the cache
+		// Set to the cache
 		wp_cache_set( $key, $value, $group, $expire );
 	}
 
@@ -2776,7 +2781,7 @@ class Query extends Base {
 		// Get the cache group
 		$group = $this->get_cache_group( $group );
 
-		// Delete the cache
+		// Delete from the cache
 		wp_cache_delete( $key, $group );
 	}
 
@@ -2833,9 +2838,9 @@ class Query extends Base {
 			$columns = array_keys( $where_cols );
 
 			// Loop through columns and unset any invalid names
-			foreach ( $columns as $column ) {
+			foreach ( $columns as $index => $column ) {
 				if ( ! array_key_exists( $column, $column_names ) ) {
-					unset( $where_cols[ $column ] );
+					unset( $where_cols[ $index ] );
 				}
 			}
 

@@ -234,6 +234,7 @@ final class Plugin {
 		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/class-schema.php';
 
 		// Database Queries
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/queries/class-meta.php';
 		require_once SC_PLUGIN_DIR . 'includes/classes/database/queries/class-compare.php';
 		require_once SC_PLUGIN_DIR . 'includes/classes/database/queries/class-date.php';
 

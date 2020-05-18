@@ -75,6 +75,9 @@ class Basic extends Base_List_Table {
 		if ( ! empty( $args['list_table'] ) ) {
 			$this->set_list_table( $args['list_table'] );
 		}
+
+		// Filter the Date_Query arguments for this List Table
+		$this->filter_date_query_arguments();
 	}
 
 	/**
@@ -89,46 +92,49 @@ class Basic extends Base_List_Table {
 	}
 
 	/**
-	 * Override date-query arguments with custom recurring criteria.
+	 * Juggle the filters used on Date_Query arguments, so that the List Table
+	 * of Events only shows current-year, including ones that may cross over
+	 * between multiple years, but not their recurrences.
 	 *
-	 * @since 2.0.0
-	 *
-	 * @return array
+	 * @since 2.0.15
 	 */
-	protected function get_date_query_args() {
-		return array(
-			'relation'      => 'OR',
-			'recurring'     => $this->get_recurring_query_args(),
-			'non-recurring' => sugar_calendar_get_non_recurring_date_query_args( $this->mode, $this->view_start, $this->view_end ),
-		);
+	protected function filter_date_query_arguments() {
+
+		/**
+		 * First, we need to remove the Recurring arguments that may exist in
+		 * Standard Recurring, included in non-Lite versions.
+		 */
+		remove_filter( 'sugar_calendar_get_recurring_date_query_args', 'Sugar_Calendar\\Standard\\Recurring\\query_args', 10, 4 );
+
+		/**
+		 * Last, we need to add a new filter for Recurring arguments so that
+		 * they conform better to a List Table view (vs. a Calendar view.)
+		 */
+		add_filter( 'sugar_calendar_get_recurring_date_query_args', array( $this, 'filter_recurring_query_args' ), 10 );
 	}
 
 	/**
 	 * Return array of recurring query arguments, used in Date_Query.
 	 *
-	 * These change based on the boundaries, and should be overridden in each
-	 * individual subclass that has a unique view_start and view_end approach.
+	 * This method is only made public so that it can use WordPress hooks. Do
+	 * not rely on calling this method directly. Consider it private.
 	 *
 	 * Recurring events
 	 * - recurrence starts before the view ends
 	 * - recurrence ends after the view starts
 	 * - start and end do not matter
 	 *
-	 * @since 2.0.0
+	 * @since 2.0.15
+	 *
+	 * @access private
 	 *
 	 * @return array
 	 */
-	protected function get_recurring_query_args() {
-		return array(
+	public function filter_recurring_query_args( $args = array() ) {
+
+		// Override filtered query arguments completely
+		$args = array(
 			'relation' => 'AND',
-
-			// Recurrence
-			array(
-				'column'  => 'recurrence',
-				'compare' => 'IN',
-				'value'   => array_keys( $this->get_recurrence_types() )
-			),
-
 
 			// Recurring Ends
 			array(
@@ -150,12 +156,12 @@ class Basic extends Base_List_Table {
 				)
 			),
 
-			// Make sure events
+			// Make sure events are only for this year
 			array(
 				'relation' => 'AND',
 				array(
 					'column'  => 'start',
-					'compare' => '<=',
+					'compare' => '>=',
 					'year'    => $this->year
 				),
 				array(
@@ -165,6 +171,9 @@ class Basic extends Base_List_Table {
 				)
 			),
 		);
+
+		// Return the newly filtered query arguments
+		return $args;
 	}
 
 	/**

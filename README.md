@@ -1,13 +1,13 @@
-# [Sugar Calendar (Lite)](https://sugarcalendar.com) #
+# [Sugar Calendar (Standard)](https://sugarcalendar.com) #
 
-[![Build Status](https://travis-ci.org/sugarcalendar/lite.svg?branch=master)](https://travis-ci.org/sugarcalendar/lite)
+[![Build Status](https://travis-ci.com/sugarcalendar/standard.svg?token=pCgdaxJzNCxcntGxFEaj&branch=master)](https://travis-ci.com/sugarcalendar/standard)
 
-Sugar Calendar (Lite) is the free version of a commercial WordPress plugin by [Sandhills Development](https://sandhillsdevelopment.com).
+Sugar Calendar is a commercial WordPress plugin by [Sandhills Development](https://sandhillsdevelopment.com).
 
-Unlock all features with a license key at [SugarCalendar.com](https://sugarcalendar.com) or use Lite for free from [WordPress.org](https://wordpress.org/plugins/sugar-calendar-lite/).
+A license key must be purchased at [SugarCalendar.com](https://sugarcalendar.com). (Looking for [Lite](https://github.com/sugarcalendar/lite/)?)
 
-Lite development happens here in a public GitHub repository to better facilitate contributions from an active community of users, developers, designers, and you. If you have a suggestion, bug report, patch, or pull request, please feel free to submit it here.
+Development happens here in a private GitHub repository to better facilitate contributions from a dedicated community of users, developers, designers, and you. If you have a suggestion, bug report, patch, or pull request, please feel free to submit it here.
 
-If you are using Sugar Calendar on a live site, please consider purchasing a license key from the [Sugar Calendar website](https://sugarcalendar.com).
+If you are using Sugar Calendar on a live site, you must obtain a license key from the [Sugar Calendar website](https://sugarcalendar.com).
 
 As a matter of policy, we only provide support to users with valid license keys, and do not provide support otherwise.

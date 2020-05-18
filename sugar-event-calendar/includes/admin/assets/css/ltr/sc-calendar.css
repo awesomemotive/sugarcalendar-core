@@ -344,13 +344,13 @@ table.month tbody td a.day-number {
 	border-bottom-right-radius: 5px;
 }
 
-table.month tbody a.add-event-for-day {
+table.month tbody td a.add-event-for-day {
 	border-left: 1px solid #e1e1e1;
 	right: 0;
 	visibility: hidden;
 }
 
-table.month tbody a.add-event-for-day:hover,
+table.month tbody td a.add-event-for-day:hover,
 table.month tbody td a.day-number:hover {
 	background: rgba(245, 245, 245, 0.8);
 }
@@ -362,16 +362,6 @@ table.month tbody td:hover a.add-event-for-day {
 table.month tbody td:hover a.day-number,
 table.month tbody td:hover a.add-event-for-day {
 	border-color: #ccc;
-}
-
-table.month tbody td.today {
-	background: #ffe;
-}
-
-table.month tbody a i {
-	line-height: 1.9em;
-	font-size: 15px;
-	overflow: hidden;
 }
 
 table.month tbody td {
@@ -393,9 +383,19 @@ table.month tbody tr td:nth-child(8) {
 	border-right: none;
 }
 
+table.calendar.month tbody td.today {
+	background: #ffe;
+}
+
 table.month div.events-for-cell {
 	margin: 30px 0 5px;
 	min-height: 80px;
+}
+
+table.month tbody td a i {
+	line-height: 1.9em;
+	font-size: 15px;
+	overflow: hidden;
 }
 
 .wp-pointer-content h3 a {
@@ -467,16 +467,16 @@ table.day tbody tr:not(.multi-day) th:first-of-type {
 	border-bottom: none;
 }
 
-table.week tbody tr.this-hour td,
-table.day tbody tr.this-hour td {
-	background: #ffe !important;
-}
-
 table.calendar.day tr.multi-day td,
 table.calendar.day tr.all-day td,
 table.calendar.week tr.multi-day td,
 table.calendar.week tr.all-day td {
 	background-color: #efe;
+}
+
+table.calendar.week tbody tr.this-hour td,
+table.calendar.day tbody tr.this-hour td {
+	background: #ffe;
 }
 
 table.week tr.multi-day th,

@@ -133,10 +133,81 @@ final class Event_Query extends Query {
 	 *                                                 Default 'id'.
 	 *     @type string       $order                   How to order results. Accepts 'ASC', 'DESC'. Default 'DESC'.
 	 *     @type string       $search                  Search term(s) to retrieve matching events for. Default empty.
-	 *     @type bool         $update_cache            Whether to prime the cache for found events. Default false.
+	 *     @type bool         $update_item_cache       Whether to prime the cache for found items.
+	 *                                                 Default true.
+	 *     @type bool         $update_meta_cache       Whether to prime the meta cache for found items.
+	 *                                                 Default true.
 	 * }
 	 */
 	public function __construct( $query = array() ) {
 		parent::__construct( $query );
+	}
+
+	/**
+	 * Queries the database and retrieves items or counts.
+	 *
+	 * This method overrides the parent class to perform JIT manipulation of the
+	 * parameters passed into it, and may be removed at a later date.
+	 *
+	 * @since 2.0.15
+	 *
+	 * @param string|array $query Array or URL query string of parameters.
+	 * @return array|int List of items, or number of items when 'count' is passed as a query var.
+	 */
+	public function query( $query = array() ) {
+
+		// Do the query
+		$retval = parent::query( $query );
+
+		// Maybe prime object ID caches, for non-count queries
+		if ( empty( $query['count'] ) ) {
+			$this->maybe_prime_object_id_caches( $retval );
+		}
+
+		// Return queried items
+		return $retval;
+	}
+
+	/**
+	 * Maybe prime the object ID caches for related Events.
+	 *
+	 * This method is private because relative-object cache-priming will
+	 * eventually be handled upstream in Berlin. It is shimmed here now, so we
+	 * get the performance benefits right away.
+	 *
+	 * @since 2.0.15
+	 *
+	 * @param array $events
+	 */
+	private function maybe_prime_object_id_caches( $events = array() ) {
+
+		// Maybe prime the post cache if there are more than 2 post objects
+		if ( empty( $events ) ) {
+			return;
+		}
+
+		// Extract post IDs from queried events
+		$post_ids = wp_filter_object_list(
+			$events,
+			array(
+				'object_type' => 'post'
+			),
+			'and',
+			'object_id'
+		);
+
+		// Only do this query if there is more than 1 post to prime, otherwise
+		// there is no benefit.
+		if ( count( $post_ids ) > 1 ) {
+
+			// Query for posts to prime the caches
+			new \WP_Query( array(
+				'post_type'      => sugar_calendar_get_event_post_type_id(),
+				'post_status'    => 'any',
+				'post__in'       => $post_ids,
+				'posts_per_page' => -1,
+				'no_found_rows'  => true
+			) );
+		}
 	}
 }

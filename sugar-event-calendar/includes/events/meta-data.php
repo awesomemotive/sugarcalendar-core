@@ -10,13 +10,16 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Add meta data to an event.
+ * Add metadata to an event.
+ *
+ * Event ID is *not* of type: Post, Term, Comment, or User. It is the ID of the
+ * Event from a Sugar_Calendar\Event() object from the sc_events database table.
  *
  * @since 2.0.0
  *
- * @param int    $id         Alias ID.
- * @param string $meta_key   Meta data name.
- * @param mixed  $meta_value Meta data value. Must be serializable if non-scalar.
+ * @param int    $id         Event ID, from the sc_events database table.
+ * @param string $meta_key   Metadata name.
+ * @param mixed  $meta_value Metadata value. Must be serializable if non-scalar.
  * @param bool   $unique     Optional. Whether the same key should not be added.
  *                           Default false.
  * @return int|false Meta ID on success, false on failure.
@@ -26,17 +29,20 @@ function add_event_meta( $id, $meta_key, $meta_value, $unique = false ) {
 }
 
 /**
- * Remove from an event, meta data matching key and/or value.
+ * Remove from an event, metadata matching key and/or value.
+ *
+ * Event ID is *not* of type: Post, Term, Comment, or User. It is the ID of the
+ * Event from a Sugar_Calendar\Event() object from the sc_events database table.
  *
  * You can match based on the key, or key and value. Removing based on key and
- * value, will keep from removing duplicate meta data with the same key. It also
- * allows removing all meta data matching key, if needed.
+ * value, will keep from removing duplicate metadata with the same key. It also
+ * allows removing all metadata matching key, if needed.
  *
  * @since 2.0.0
  *
- * @param int    $id         Alias ID.
- * @param string $meta_key   Meta data name.
- * @param mixed  $meta_value Optional. Meta data value. Must be serializable if
+ * @param int    $id         Event ID, from the sc_events database table.
+ * @param string $meta_key   Metadata name.
+ * @param mixed  $meta_value Optional. Metadata value. Must be serializable if
  *                           non-scalar. Default empty.
  * @return bool True on success, false on failure.
  */
@@ -45,11 +51,14 @@ function delete_event_meta( $id, $meta_key, $meta_value = '' ) {
 }
 
 /**
- * Retrieve from an event, meta data value by key.
+ * Retrieve from an event, metadata value by key.
+ *
+ * Event ID is *not* of type: Post, Term, Comment, or User. It is the ID of the
+ * Event from a Sugar_Calendar\Event() object from the sc_events database table.
  *
  * @since 2.0.0
  *
- * @param int    $id        Alias ID.
+ * @param int    $id        Event ID, from the sc_events database table.
  * @param string $meta_key  Optional. The meta key to retrieve. By default, returns
  *                          data for all keys. Default empty.
  * @param bool   $single    Optional. Whether to return a single value. Default false.
@@ -61,7 +70,10 @@ function get_event_meta( $id, $meta_key = '', $single = false ) {
 }
 
 /**
- * Update meta data for an event ID, and/or key, and/or value.
+ * Update metadata for an event ID, and/or key, and/or value.
+ *
+ * Event ID is *not* of type: Post, Term, Comment, or User. It is the ID of the
+ * Event from a Sugar_Calendar\Event() object from the sc_events database table.
  *
  * Use the $prev_value parameter to differentiate between meta fields with the
  * same key and event ID.
@@ -70,9 +82,9 @@ function get_event_meta( $id, $meta_key = '', $single = false ) {
  *
  * @since 2.0.0
  *
- * @param int    $id         Alias ID.
- * @param string $meta_key   Meta data key.
- * @param mixed  $meta_value Meta data value. Must be serializable if non-scalar.
+ * @param int    $id         Event ID, from the sc_events database table.
+ * @param string $meta_key   Metadata key.
+ * @param mixed  $meta_value Metadata value. Must be serializable if non-scalar.
  * @param mixed  $prev_value Optional. Previous value to check before removing.
  *                           Default empty.
  * @return int|bool Meta ID if the key didn't exist, true on successful update,
@@ -83,10 +95,10 @@ function update_event_meta( $id, $meta_key, $meta_value, $prev_value = '' ) {
 }
 
 /**
- * Updates meta data cache for list of event IDs.
+ * Updates metadata cache for list of event IDs.
  *
- * Performs SQL query to retrieve the meta data for the event IDs and
- * updates the meta data cache for the events. Therefore, the functions,
+ * Performs SQL query to retrieve the metadata for the event IDs and
+ * updates the metadata cache for the events. Therefore, the functions,
  * which call this function, do not need to perform SQL queries on their own.
  *
  * @since 2.0.0
@@ -100,9 +112,9 @@ function update_eventmeta_cache( $ids ) {
 }
 
 /**
- * Register meta data keys & sanitization callbacks
+ * Register metadata keys & sanitization callbacks
  *
- * Note: Calendar Color meta data is saved in Sugar_Calendar\Term_Meta_UI
+ * Note: Calendar Color metadata is saved in Sugar_Calendar\Term_Meta_UI
  *
  * @since 2.0.0
  */

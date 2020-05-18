@@ -267,7 +267,6 @@ class Box {
 				<div class="section-wrap">
 					<?php $this->display_all_section_contents( $sections ); ?>
 				</div>
-				<br class="clear">
 			</div>
 			<?php $this->nonce_field(); ?>
 			<input type="hidden" name="sc-event-id" value="<?php echo esc_attr( $event_id ); ?>" />

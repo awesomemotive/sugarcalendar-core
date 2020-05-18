@@ -8,10 +8,12 @@
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.0
  */
-namespace Sugar_Calendar\Database;
+namespace Sugar_Calendar\Database\Queries;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
+
+use Sugar_Calendar\Database\Base;
 
 /**
  * Class for generating SQL clauses that filter a primary query according to date.
@@ -19,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
  * Is heavily inspired by the WP_Date_Query class in WordPress, with changes to make
  * it more flexible for custom tables and their columns.
  *
- * Date_Query is a helper that allows primary query classes, such as WP_Query, to filter
+ * Queries\Date is a helper that allows primary query classes, such as WP_Query, to filter
  * their results by date columns, by generating `WHERE` subclauses to be attached to the
  * primary SQL query string.
  *
@@ -31,7 +33,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.0.0
  */
-class Date_Query extends Base {
+class Date extends Base {
 
 	/**
 	 * Array of date queries.

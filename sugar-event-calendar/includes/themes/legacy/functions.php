@@ -58,21 +58,6 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 	// Query for events
 	$events = sugar_calendar_get_events( $args );
 
-	// Maybe prime the post cache if there are more than 2 post objects
-	if ( ! empty( $events ) ) {
-		$post_ids = wp_filter_object_list( $events, array( 'object_type' => 'post' ), 'and', 'object_id' );
-
-		// Only prime if there are more than 2 to query
-		if ( 2 > count( $post_ids ) ) {
-			new WP_Query( array(
-				'post_type'      => sugar_calendar_get_event_post_type_id(),
-				'post_status'    => 'any',
-				'post__in'       => $post_ids,
-				'posts_per_page' => -1
-			) );
-		}
-	}
-
 	// Return the events
 	return $events;
 }
@@ -134,6 +119,51 @@ function sc_filter_events_for_day( $events = array(), $day = '01', $month = '01'
 	}
 
 	// Return events for day
+	return $retval;
+}
+
+/**
+ * Get the HTML class attribute contents for an item in a theme-side calendar
+ * cell. It exists to encapsulate a term-cache check, and code that was repeated
+ * a few times in calendar functions defined in this file.
+ *
+ * This new function is in the legacy theme folder, and as such should not be
+ * used in new code anywhere else. If this kind of functionality is needed
+ * elsewhere, please consider writing a newer better function that does not
+ * accept a post ID only.
+ *
+ * @since 2.0.15
+ *
+ * @param int $object_id
+ * @return string
+ */
+function sc_get_event_class( $object_id = false ) {
+
+	// This function only accepts a post ID
+	if ( empty( $object_id ) || ! is_int( $object_id ) ) {
+		return '';
+	}
+
+	// Check term cache first
+	$terms = get_object_term_cache( $object_id, 'sc_event_category' );
+
+	// No cache, so query for terms
+	if ( false === $terms ) {
+		$terms = wp_get_object_terms( $object_id, 'sc_event_category' );
+	}
+
+	// Bail if no terms
+	if ( empty( $terms ) || is_wp_error( $terms ) ) {
+		return '';
+	}
+
+	// Pluck the slugs
+	$slugs  = array_unique( wp_list_pluck( $terms, 'slug' ) );
+
+	// Sanitize and string'ify slugs
+	$retval = implode( ' ', array_map( 'sanitize_html_class', $slugs ) );
+
+	// Return the string
 	return $retval;
 }
 
@@ -231,7 +261,7 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
 		$cal_event = '';
 		$today = ( $today_day == $list_day && $today_month == $month && $today_year == $year )
 			? 'today'
-			: ( ( $today_day > $list_day && $today_month >= $month && $today_year >= $year ) 
+			: ( ( $today_day > $list_day && $today_month >= $month && $today_year >= $year )
 				? 'past'
 				: 'upcoming' );
 
@@ -241,26 +271,10 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
 		// Loop through events
 		if ( ! empty( $events ) ) {
 			foreach ( $events as $event ) {
-				$categories = array();
-
-				// Collect event categories for css classes
-				$event_categories = wp_get_object_terms( $event->object_id, 'sc_event_category', array( 'fields' => 'slugs' ) );
-				if ( ! empty( $event_categories ) ) {
-					if ( ! is_wp_error( $event_categories ) ) {
-						foreach ( $event_categories as $slug ) {
-							$categories[] = $slug;
-						}
-					}
-				}
-
-				$categories = array_unique( $categories );
-				$category_string = implode( ' ', $categories );
-
-				if ( $size == 'small' ) {
-					$link = '<a href="' . get_permalink( $event->object_id ) . '" class="' . $category_string . '" title="' . esc_html( get_the_title( $event->object_id ) ) . '">&bull;</a>';
-				} else {
-					$link = '<a href="' . get_permalink( $event->object_id ) . '" class="' . $category_string . '">' . get_the_title( $event->object_id ) . '</a><br/>';
-				}
+				$class = sc_get_event_class( $event->object_id );
+				$link  = ( $size === 'small' )
+					? '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '" title="' . esc_attr( strip_tags( get_the_title( $event->object_id ) ) ) . '">&bull;</a>'
+					: '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '">' . esc_html( get_the_title( $event->object_id ) ) . '</a><br/>';
 
 				$cal_event .= apply_filters( 'sc_event_calendar_link', $link, $event->object_id, $size );
 			}
@@ -409,7 +423,7 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 		$cal_event = '';
 		$today = ( $today_day == $display_day && $today_month == $display_month && $today_year == $display_year )
 			? 'today'
-			: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year ) 
+			: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year )
 				? 'past'
 				: 'upcoming' );
 
@@ -419,26 +433,10 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 		// Loop through events
 		if ( ! empty( $events ) ) {
 			foreach ( $events as $event ) {
-				$categories = array();
-
-				// Collect event categories for css classes
-				$event_categories = wp_get_object_terms( $event->object_id, 'sc_event_category', array( 'fields' => 'slugs' ) );
-				if ( ! empty( $event_categories ) ) {
-					if ( ! is_wp_error( $event_categories ) ) {
-						foreach ( $event_categories as $slug ) {
-							$categories[] = $slug;
-						}
-					}
-				}
-
-				$categories = array_unique( $categories );
-				$category_string = implode( ' ', $categories );
-
-				if ( $size == 'small' ) {
-					$link = '<a href="' . get_permalink( $event->object_id ) . '" class="' . $category_string . '" title="' . get_the_title( $event->object_id ) . '">&bull;</a>';
-				} else {
-					$link = '<a href="' . get_permalink( $event->object_id ) . '" class="' . $category_string . '">' . get_the_title( $event->object_id ) . '</a><br/>';
-				}
+				$class = sc_get_event_class( $event->object_id );
+				$link  = ( $size === 'small' )
+					? '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '" title="' . esc_attr( strip_tags( get_the_title( $event->object_id ) ) ) . '">&bull;</a>'
+					: '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '">' . esc_html( get_the_title( $event->object_id ) ) . '</a><br/>';
 
 				$cal_event .= apply_filters( 'sc_event_calendar_link', $link, $event->object_id, $size );
 			}
@@ -554,7 +552,7 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 		$cal_event = '';
 		$today = ( $today_day == $display_day && $today_month == $display_month && $today_year == $display_year )
 			? 'today'
-			: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year ) 
+			: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year )
 				? 'past'
 				: 'upcoming' );
 
@@ -564,26 +562,10 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 		// Loop through events
 		if ( ! empty( $events ) ) {
 			foreach ( $events as $event ) {
-				$categories = array();
-
-				// Collect event categories for css classes
-				$event_categories = wp_get_object_terms( $event->object_id, 'sc_event_category', array( 'fields' => 'slugs' ) );
-				if ( ! empty( $event_categories ) ) {
-					if ( ! is_wp_error( $event_categories ) ) {
-						foreach ( $event_categories as $slug ) {
-							$categories[] = $slug;
-						}
-					}
-				}
-
-				$categories = array_unique( $categories );
-				$category_string = implode( ' ', $categories );
-
-				if ( $size == 'small' ) {
-					$link = '<a href="' . get_permalink( $event->object_id ) . '" class="' . $category_string . '" title="' . get_the_title( $event->object_id ) . '">&bull;</a>';
-				} else {
-					$link = '<a href="' . get_permalink( $event->object_id ) . '" class="' . $category_string . '">' . get_the_title( $event->object_id ) . '</a><br/>';
-				}
+				$class = sc_get_event_class( $event->object_id );
+				$link  = ( $size === 'small' )
+					? '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '" title="' . esc_attr( strip_tags( get_the_title( $event->object_id ) ) ) . '">&bull;</a>'
+					: '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '">' . esc_html( get_the_title( $event->object_id ) ) . '</a><br/>';
 
 				$cal_event .= apply_filters( 'sc_event_calendar_link', $link, $event->object_id, $size );
 			}
@@ -690,7 +672,7 @@ function sc_draw_calendar_day( $display_time, $size = 'large', $category = null 
 	// output current day
 	$today = ( $today_day == $display_day && $today_month == $display_month && $today_year == $display_year )
 		? 'today'
-		: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year ) 
+		: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year )
 			? 'past'
 			: 'upcoming' );
 
@@ -701,26 +683,10 @@ function sc_draw_calendar_day( $display_time, $size = 'large', $category = null 
 
 	if ( ! empty( $events ) ) {
 		foreach ( $events as $event ) {
-			$categories = array();
-
-			// Collect event categories for css classes
-			$event_categories = wp_get_object_terms( $event->object_id, 'sc_event_category', array( 'fields' => 'slugs' ) );
-			if ( ! empty( $event_categories ) ) {
-				if ( ! is_wp_error( $event_categories ) ) {
-					foreach ( $event_categories as $slug ) {
-						$categories[] = $slug;
-					}
-				}
-			}
-
-			$categories = array_unique( $categories );
-			$category_string = implode( ' ', $categories );
-
-			if ( $size == 'small' ) {
-				$link = '<a href="' . get_permalink( $event->object_id ) . '" class="' . $category_string . '" title="' . esc_html( get_the_title( $event->object_id ) ) . '">&bull;</a>';
-			} else {
-				$link = '<a href="' . get_permalink( $event->object_id ) . '" class="' . $category_string . '">' . get_the_title( $event->object_id ) . '</a><br/>';
-			}
+			$class = sc_get_event_class( $event->object_id );
+			$link  = ( $size === 'small' )
+				? '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '" title="' . esc_attr( strip_tags( get_the_title( $event->object_id ) ) ) . '">&bull;</a>'
+				: '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '">' . esc_html( get_the_title( $event->object_id ) ) . '</a><br/>';
 
 			$cal_event .= apply_filters( 'sc_event_calendar_link', $link, $event->object_id, $size );
 		}
@@ -825,7 +791,7 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 		$cal_event = '';
 		$today = ( $today_day == $display_day && $today_month == $display_month && $today_year == $display_year )
 			? 'today'
-			: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year ) 
+			: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year )
 				? 'past'
 				: 'upcoming' );
 
@@ -835,26 +801,10 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 		// Loop through events
 		if ( ! empty( $events ) ) {
 			foreach ( $events as $event ) {
-				$categories = array();
-
-				// Collect event categories for css classes
-				$event_categories = wp_get_object_terms( $event->object_id, 'sc_event_category', array( 'fields' => 'slugs' ) );
-				if ( ! empty( $event_categories ) ) {
-					if ( ! is_wp_error( $event_categories ) ) {
-						foreach ( $event_categories as $slug ) {
-							$categories[] = $slug;
-						}
-					}
-				}
-
-				$categories = array_unique( $categories );
-				$category_string = implode( ' ', $categories );
-
-				if ( $size == 'small' ) {
-					$link = '<a href="' . get_permalink( $event->object_id ) . '" class="' . $category_string . '" title="' . esc_html( get_the_title( $event->object_id ) ) . '">&bull;</a>';
-				} else {
-					$link = '<a href="' . get_permalink( $event->object_id ) . '" class="' . $category_string . '">' . get_the_title( $event->object_id ) . '</a><br/>';
-				}
+				$class = sc_get_event_class( $event->object_id );
+				$link  = ( $size === 'small' )
+					? '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '" title="' . esc_attr( strip_tags( get_the_title( $event->object_id ) ) ) . '">&bull;</a>'
+					: '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '">' . esc_html( get_the_title( $event->object_id ) ) . '</a><br/>';
 
 				$cal_event .= apply_filters( 'sc_event_calendar_link', $link, $event->object_id, $size );
 			}

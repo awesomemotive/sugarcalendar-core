@@ -2340,16 +2340,38 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Get event terms
 		$taxos = get_object_taxonomies( $this->get_primary_post_type() );
-		$terms = wp_get_object_terms( $event->object_id, $taxos );
-		if ( ! empty( $terms ) ) {
-			foreach ( $terms as $term ) {
-				$classes[] = "tax-{$term->taxonomy}";
-				$classes[] = "term-{$term->slug}";
+
+		// Maybe loop through taxonomies, and add terms
+		if ( ! empty( $taxos ) && is_array( $taxos ) ) {
+
+			// Loop through taxonomies...
+			foreach ( $taxos as $tax ) {
+
+				// Check term cache first
+				$terms = get_object_term_cache( $event->object_id, $tax );
+
+				// No cache, so query for terms
+				if ( false === $terms ) {
+					$terms = wp_get_object_terms( $event->object_id, $tax );
+				}
+
+				// Bail if no terms in this taxonomy
+				if ( empty( $terms ) ) {
+					continue;
+				}
+
+				// Add taxonomy to classes
+				$classes[] = "tax-{$tax}";
+
+				// Loop through terms and add them, too
+				foreach ( $terms as $term ) {
+					$classes[] = "term-{$term->slug}";
+				}
 			}
 		}
 
 		// Filter the event classes
-		$classes = get_post_class( $classes, $event->object_id );
+		$classes = array_unique( get_post_class( $classes, $event->object_id ) );
 
 		// Join & return
 		return trim( join( ' ', $classes ) );

@@ -289,13 +289,28 @@ function sugar_calendar_format_counts( $counts = array(), $groupby = '' ) {
  * @param string $start
  * @param string $end
  *
- * @return type
+ * @return array
  */
 function sugar_calendar_get_date_query_args( $mode = 'month', $start = '', $end = '' ) {
-	return array(
+
+	// Get recurring & non-recurring query arguments
+	$recurring     = sugar_calendar_get_recurring_date_query_args( $mode, $start, $end );
+	$non_recurring = sugar_calendar_get_non_recurring_date_query_args( $mode, $start, $end );
+
+	// Setup the return value for all query arguments
+	$r = array(
 		'relation'      => 'OR',
-		'recurring'     => sugar_calendar_get_recurring_date_query_args( $mode, $start, $end ),
-		'non-recurring' => sugar_calendar_get_non_recurring_date_query_args( $mode, $start, $end )
+		'recurring'     => $recurring,
+		'non-recurring' => $non_recurring
+	);
+
+	// Filter, cast, and return
+	return (array) apply_filters(
+		'sugar_calendar_get_date_query_args',
+		$r,
+		$mode,
+		$start,
+		$end
 	);
 }
 
@@ -311,23 +326,53 @@ function sugar_calendar_get_date_query_args( $mode = 'month', $start = '', $end 
  * @return array
  */
 function sugar_calendar_get_non_recurring_date_query_args( $mode = 'month', $start = '', $end = '' ) {
-	return array(
-		'relation' => 'AND',
-		array(
+
+	// Non-recurring date query arguments do not currently change between modes.
+	// We mute it here just to be safe.
+	$mode = '';
+
+	// Setup the return value for non-recurring query arguments
+	$r = array(
+		'relation'      => 'AND',
+
+		// Not recurring
+		'not_recurring' => array(
 			'column'  => 'recurrence',
 			'compare' => 'NOT EXISTS',
 			'value'   => ''
 		),
-		array(
+
+		// Starts before it ends
+		'start_before_end' => array(
 			'column'    => 'start',
 			'inclusive' => true,
 			'before'    => $end
 		),
-		array(
+
+		// Ends after it starts
+		'end_after_start' => array(
 			'column'    => 'end',
 			'inclusive' => true,
 			'after'     => $start
 		)
+	);
+
+	/**
+	 * By default Sugar Calendar includes support for non-recurring events.
+	 *
+	 * This filter is also how Advanced Recurring works, so use extreme caution
+	 * when modifying it in the future.
+	 *
+	 * @since 2.0.15
+	 *
+	 * @return array
+	 */
+	return (array) apply_filters(
+		'sugar_calendar_get_non_recurring_date_query_args',
+		$r,
+		$mode,
+		$start,
+		$end
 	);
 }
 
@@ -344,198 +389,25 @@ function sugar_calendar_get_non_recurring_date_query_args( $mode = 'month', $sta
  */
 function sugar_calendar_get_recurring_date_query_args( $mode = 'month', $start = '', $end = '' ) {
 
-	// Default date parameters
-	$yearly  = 'm';
-	$monthly = 'j';
-	$weekly  = 'z';
+	// Default return value
+	$r = array();
 
-	// Default keys
-	$year_key  = 'month';
-	$month_key = 'day';
-	$week_key  = 'dayofyear';
-
-	// Default weekly comparisons
-	$wc_start = '<=';
-	$wc_end   = '>=';
-
-	// Default weekly offset
-	$week_offset = 1;
-
-	// Week mode
-	if ( 'week' === $mode ) {
-
-		// Date parameters
-		$yearly    = 'w';
-		$monthly   = 'w';
-
-		// Query functions
-		$year_key  = 'week';
-		$month_key = 'week';
-
-	// Day mode
-	} elseif ( 'day' === $mode ) {
-
-		// Date parameters
-		$yearly    = 'j';
-		$monthly   = 'j';
-		$weekly    = 'w';
-
-		// Query functions
-		$year_key  = 'day';
-		$month_key = 'day';
-		$week_key  = 'dayofweek';
-
-		// Weekly comparisons
-		$wc_start = '=';
-		$wc_end   = '=';
-	}
-
-	// View boundaries
-	$view_start = strtotime( $start );
-	$view_end   = strtotime( $end   );
-
-	// Return array
-	return array(
-
-		/** All ***************************************************************/
-
-		'relation' => 'AND',
-
-		// Always starts before the end
-		array(
-			'column'    => 'start',
-			'inclusive' => true,
-			'before'    => $end
-		),
-
-		// Recurring Ends
-		array(
-			'relation' => 'OR',
-
-			// No end (recurs forever) - exploits math in Date_Query
-			// This might break someday. Works great now though!
-			array(
-				'column'    => 'recurrence_end',
-				'inclusive' => true,
-				'before'    => '0000-01-01 00:00:00'
-			),
-
-			// Ends after the beginning of this view
-			array(
-				'column'    => 'recurrence_end',
-				'inclusive' => true,
-				'after'     => $start
-			)
-		),
-
-		/** Types *************************************************************/
-
-		// Different recurrence types
-		array(
-			'relation' => 'OR',
-
-			/** Yearly ********************************************************/
-
-			// Starts or ends this month
-			array(
-				'relation' => 'AND',
-				array(
-					'column'  => 'recurrence',
-					'compare' => '=',
-					'value'   => 'yearly'
-				),
-				array(
-					'relation' => 'OR',
-					array(
-						'relation' => 'AND',
-						array(
-							'column'  => 'start',
-							'compare' => '<=',
-							$year_key => date_i18n( $yearly, $view_end )
-						),
-						array(
-							'column'  => 'start',
-							'compare' => '=',
-							'month'   => date_i18n( 'm', $view_end )
-						)
-					),
-					array(
-						'relation' => 'AND',
-						array(
-							'column'  => 'end',
-							'compare' => '>=',
-							$year_key => date_i18n( $yearly, $view_start )
-						),
-						array(
-							'column'  => 'end',
-							'compare' => '=',
-							'month'   => date_i18n( 'm', $view_end )
-						)
-					)
-				)
-			),
-
-			/** Monthly *******************************************************/
-
-			// Starts before the end or ends after the start
-			array(
-				'relation' => 'AND',
-				array(
-					'column'  => 'recurrence',
-					'compare' => '=',
-					'value'   => 'monthly'
-				),
-				array(
-					'relation' => 'OR',
-					array(
-						'column'   => 'start',
-						'compare'  => '<=',
-						$month_key => date_i18n( $monthly, $view_end )
-					),
-					array(
-						'column'   => 'end',
-						'compare'  => '>=',
-						$month_key => date_i18n( $monthly, $view_start )
-					)
-				)
-			),
-
-			/** Weekly ********************************************************/
-
-			// Starts or ends this month
-			array(
-				'relation' => 'AND',
-				array(
-					'column'  => 'recurrence',
-					'compare' => '=',
-					'value'   => 'weekly'
-				),
-				array(
-					'relation' => 'OR',
-					array(
-						'column'  => 'start',
-						'compare' => $wc_start,
-						$week_key => date_i18n( $weekly, $view_end ) + $week_offset
-					),
-					array(
-						'column'  => 'end',
-						'compare' => $wc_end,
-						$week_key => date_i18n( $weekly, $view_start ) + $week_offset
-					)
-				)
-			),
-
-			/** Daily *********************************************************/
-
-			// Daily event
-			array(
-				'relation' => 'AND',
-				array(
-					'column'  => 'recurrence',
-					'compare' => '=',
-					'value'   => 'daily'
-				)
-			)
-		)
+	/**
+	 * By default Sugar Calendar (Lite) does not include support for recurring
+	 * events. It is added via a drop-in, using the filter below.
+	 *
+	 * This filter is also how Advanced Recurring works, so use extreme caution
+	 * when modifying it in the future.
+	 *
+	 * @since 2.0.15
+	 *
+	 * @return array
+	 */
+	return (array) apply_filters(
+		'sugar_calendar_get_recurring_date_query_args',
+		$r,
+		$mode,
+		$start,
+		$end
 	);
 }

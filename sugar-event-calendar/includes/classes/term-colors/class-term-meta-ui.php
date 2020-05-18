@@ -10,7 +10,7 @@ namespace JJJ\WP\Term\Meta;
  * and handle the sanitization & saving of values.
  *
  * @since   2.0.0
- * @version 3.1.0
+ * @version 4.0.0
  */
 
 // Exit if accessed directly
@@ -32,7 +32,7 @@ class UI {
 	/**
 	 * @var string Database version
 	 */
-	protected $db_version = 201905301644;
+	protected $db_version = 202004020001;
 
 	/**
 	 * @var string Database version
@@ -137,6 +137,9 @@ class UI {
 		if ( empty( $this->taxonomies ) ) {
 			return;
 		}
+
+		// Setup Labels
+		$this->setup_labels();
 
 		// Register Meta
 		$this->register_meta();
@@ -379,6 +382,16 @@ class UI {
 	 * @since 2.0.0
 	 */
 	public function ajax_update() {}
+
+	/**
+	 * Setup the singular, plural, and description labels.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	public function setup_labels() {}
 
 	/**
 	 * Return the taxonomies used by this plugin

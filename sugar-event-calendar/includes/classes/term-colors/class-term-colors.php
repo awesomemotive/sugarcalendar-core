@@ -23,12 +23,12 @@ final class Term_Colors extends UI {
 	/**
 	 * @var string Plugin version
 	 */
-	public $version = '2.0.0';
+	public $version = '4.0.0';
 
 	/**
 	 * @var string Database version
 	 */
-	public $db_version = 201810110001;
+	public $db_version = 202004020001;
 
 	/**
 	 * @var string Database version
@@ -47,13 +47,6 @@ final class Term_Colors extends UI {
 	 */
 	public function __construct( $file = '' ) {
 
-		// Setup the labels
-		$this->labels = array(
-			'singular'    => esc_html__( 'Color',  'sugar-calendar' ),
-			'plural'      => esc_html__( 'Colors', 'sugar-calendar' ),
-			'description' => esc_html__( 'Assign calendars a custom color to visually separate them from each-other.', 'sugar-calendar' )
-		);
-
 		// Filter taxonomies
 		add_filter( 'wp_term_color_get_taxonomies', array( $this, 'filter_taxonomies' ) );
 
@@ -65,6 +58,24 @@ final class Term_Colors extends UI {
 	}
 
 	/** Taxonomy **************************************************************/
+
+	/**
+	 * Setup the labels.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	public function setup_labels() {
+
+		// Setup the labels
+		$this->labels = array(
+			'singular'    => esc_html__( 'Color',  'sugar-calendar' ),
+			'plural'      => esc_html__( 'Colors', 'sugar-calendar' ),
+			'description' => esc_html__( 'Assign calendars a custom color to visually separate them from each-other.', 'sugar-calendar' )
+		);
+	}
 
 	/**
 	 * Only add colors to taxonomies that support them.

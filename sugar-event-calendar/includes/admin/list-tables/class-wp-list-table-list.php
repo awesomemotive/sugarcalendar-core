@@ -395,15 +395,28 @@ class Basic extends Base_List_Table {
 			}
 		}
 
+		// Get the columns
+		$columns = $this->get_columns();
+
 		// Row actions
 		$row_actions = $this->get_row_actions( $item ); ?>
 
 		<tr id="event-<?php echo $item->id; ?>" class="">
-			<td><?php echo $title . $this->row_actions( $row_actions ); ?></td>
-			<td><?php echo $start; ?></td>
-			<td><?php echo $end; ?></td>
-			<td><?php echo $duration; ?></td>
-			<td><?php echo $recurrence; ?></td>
+			<td class="column-primary"><?php
+				echo $title . $this->row_actions( $row_actions );
+			?></td>
+			<td data-colname="<?php echo wp_strip_all_tags( $columns['start'] ); ?>"><?php
+				echo $start;
+			?></td>
+			<td data-colname="<?php echo wp_strip_all_tags( $columns['end'] ); ?>"><?php
+				echo $end;
+			?></td>
+			<td data-colname="<?php echo wp_strip_all_tags( $columns['duration'] ); ?>"><?php
+				echo $duration;
+			?></td>
+			<td data-colname="<?php echo wp_strip_all_tags( $columns['repeat'] ); ?>"><?php
+				echo $recurrence;
+			?></td>
 		</tr>
 
 		<?php

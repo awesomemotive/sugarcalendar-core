@@ -318,6 +318,14 @@ table.calendar a.status-draft {
 	table.calendar:not(.list) #the-list tr:last-child td:not(:last-child) {
 		border-bottom: 1px solid #e1e1e1 !important;
 	}
+
+	/* @hotfix WordPress 5.4 */
+	table.calendar:not(.list) tr:not(.inline-edit-row):not(.no-items):not(.unspam):not(.untrash) td:not(.check-column) {
+		display: block;
+	}
+	table.calendar.list tr:not(.inline-edit-row):not(.no-items):not(.unspam):not(.untrash) td:not(.column-primary)::before {
+		right: 32px;
+	}
 }
 
 /** Month *********************************************************************/

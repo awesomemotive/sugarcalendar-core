@@ -58,7 +58,9 @@ class Day extends Base_List_Table {
 	/**
 	 * Setup the list-table columns
 	 *
-	 * @see WP_List_Table::single_row_columns()
+	 * Overrides base class to add the "week" column.
+	 *
+	 * @since 2.0.0
 	 *
 	 * @return array An associative array containing column information
 	 */
@@ -147,6 +149,24 @@ class Day extends Base_List_Table {
 	}
 
 	/**
+	 * Return the class for the "hour" column.
+	 *
+	 * @since 2.0.15
+	 *
+	 * @return string
+	 */
+	protected function get_hour_class() {
+
+		// Hour column
+		$columns = $this->get_hidden_columns();
+
+		// Return
+		return in_array( 'hour', $columns, true )
+			? ' hidden'
+			: '';
+	}
+
+	/**
 	 * Start the week with a table row, and a th to show the time
 	 *
 	 * @since 2.0.0
@@ -160,7 +180,9 @@ class Day extends Base_List_Table {
 		ob_start(); ?>
 
 		<tr class="all-day">
-			<th><?php esc_html_e( 'All-day', 'sugar-calendar' ); ?></th><?php
+			<th class="column-hour<?php echo $this->get_hour_class(); ?>">
+				<?php esc_html_e( 'All-day', 'sugar-calendar' ); ?>
+			</th><?php
 
 			// Set the current cell
 			$this->set_current_cell( array(
@@ -193,7 +215,9 @@ class Day extends Base_List_Table {
 		ob_start(); ?>
 
 		<tr class="multi-day">
-			<th><?php esc_html_e( 'Multi-day', 'sugar-calendar' ); ?></th><?php
+			<th class="column-hour<?php echo $this->get_hour_class(); ?>">
+				<?php esc_html_e( 'Multi-day', 'sugar-calendar' ); ?>
+			</th><?php
 
 			// Set the current cell
 			$this->set_current_cell( array(
@@ -259,7 +283,10 @@ class Day extends Base_List_Table {
 		// Start an output buffer
 		ob_start(); ?>
 
-		<tr class="<?php echo implode( ' ', $classes ); ?>"><th><?php echo date_i18n( 'g:i a', $start ); ?></th>
+		<tr class="<?php echo implode( ' ', $classes ); ?>">
+			<th class="column-hour<?php echo $this->get_hour_class(); ?>">
+				<?php echo date_i18n( 'g:i a', $start ); ?>
+			</th>
 
 		<?php
 

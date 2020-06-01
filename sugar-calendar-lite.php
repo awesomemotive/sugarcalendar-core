@@ -1,13 +1,15 @@
 <?php
 /**
- * Plugin Name: Sugar Calendar (Lite)
- * Plugin URI:  https://sugarcalendar.com
- * Description: A calendar with a sweet disposition.
- * Author:      Sandhills Development, LLC
- * Author URI:  https://sandhillsdev.com
- * Version:     2.0.15-alpha-1
- * Text Domain: sugar-calendar
- * Domain Path: /sugar-event-calendar/includes/languages/
+ * Plugin Name:       Sugar Calendar (Lite)
+ * Plugin URI:        https://sugarcalendar.com
+ * Description:       A calendar with a sweet disposition.
+ * Author:            Sandhills Development, LLC
+ * Author URI:        https://sandhillsdev.com
+ * Version:           2.0.15
+ * Text Domain:       sugar-calendar
+ * Domain Path:       /sugar-event-calendar/includes/languages/
+ * Requires PHP:      5.6.20
+ * Requires at least: 5.0
  */
 
 // Exit if accessed directly

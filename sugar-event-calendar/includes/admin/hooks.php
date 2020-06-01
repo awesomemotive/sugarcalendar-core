@@ -80,9 +80,13 @@ add_action( 'sugar_calendar_screen_options', __NAMESPACE__ . '\\Screen\\Options\
 // Admin Post Type Redirect
 add_action( 'load-edit.php', __NAMESPACE__ . '\\Posts\\redirect_old_post_type' );
 
-// Admin Empty Trash
-add_action( 'load-toplevel_page_sugar-calendar', __NAMESPACE__ . '\\Menu\\maybe_empty_trash' );
-
 // Admin AJAX to format custom Date & Time values
 add_action( 'wp_ajax_sc_date_format', __NAMESPACE__ . '\\Settings\\ajax_date_format' );
 add_action( 'wp_ajax_sc_time_format', __NAMESPACE__ . '\\Settings\\ajax_time_format' );
+
+// Get the page ID
+$page = sugar_calendar_get_admin_page_id();
+
+// Page ID specific actions
+add_action( "load-{$page}", __NAMESPACE__ . '\\Menu\\maybe_empty_trash' );
+add_action( "load-{$page}", __NAMESPACE__ . '\\Menu\\preload_list_table' );

@@ -50,14 +50,42 @@ class Month extends Base_List_Table {
 
 		// Set the view
 		$this->set_view( $view_start, $view_end );
+
+		// Filter the default hidden columns
+		add_filter( 'default_hidden_columns', array( $this, 'hide_week_column' ), 10, 2 );
+	}
+
+	/**
+	 * Maybe hide the week column in Month view.
+	 *
+	 * It's hidden by default in Month view, but could be made optionally
+	 * visible at a later date.
+	 *
+	 * @since 2.0.15
+	 *
+	 * @param array  $columns The columns that are hidden by default
+	 * @param object $screen  The current screen object
+	 *
+	 * @return array
+	 */
+	public function hide_week_column( $columns = array(), $screen = false ) {
+
+		// Bail if not on the correct screen
+		if ( sugar_calendar_get_admin_page_id() !== $screen->id ) {
+			return $columns;
+		}
+
+		// Add Week column to default hidden columns
+		array_push( $columns, 'week');
+
+		// Return merged columns
+		return $columns;
 	}
 
 	/**
 	 * Setup the list-table columns.
 	 *
-	 * Overrides base class to add the "week" column.
-	 *
-	 * @see WP_List_Table::single_row_columns()
+	 * Overrides base class to add the hidden "week" column.
 	 *
 	 * @since 2.0.0
 	 *
@@ -94,8 +122,20 @@ class Month extends Base_List_Table {
 	 */
 	protected function get_row_start() {
 
-		// Hour for row
-		$week = date_i18n( 'W', $this->get_current_cell( 'start' ) );
+		// Get cells
+		$start = $this->get_current_cell( 'start' );
+		$day   = $this->get_current_cell( 'start_day' );
+
+		// Week for row
+		$week = date_i18n( 'W', $start );
+
+		// Calculate link to week view
+		$link_to_day  = add_query_arg( array(
+			'mode' => 'week',
+			'cy'   => $this->year,
+			'cm'   => $this->month,
+			'cd'   => $day
+		), $this->get_base_url() );
 
 		// No row classes
 		$classes = array(
@@ -109,14 +149,20 @@ class Month extends Base_List_Table {
 		}
 
 		// Week column
-		$hidden = in_array( 'week', $this->get_hidden_columns(), true )
+		$columns = $this->get_hidden_columns();
+		$hidden  = in_array( 'week', $columns, true )
 			? 'hidden'
 			: '';
 
 		// Start an output buffer
 		ob_start(); ?>
 
-		<tr class="<?php echo implode( ' ', $classes ); ?>"><th class="week <?php echo esc_attr( $hidden ); ?>"><?php echo esc_html( $week ); ?></th>
+		<tr class="<?php echo implode( ' ', $classes ); ?>">
+			<th class="week column-week <?php echo esc_attr( $hidden ); ?>">
+				<a href="<?php echo esc_url( $link_to_day ); ?>">
+					<span><?php echo esc_html( $week ); ?></span>
+				</a>
+			</th>
 
 		<?php
 

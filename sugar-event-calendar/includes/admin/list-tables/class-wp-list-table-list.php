@@ -46,6 +46,15 @@ class Basic extends Base_List_Table {
 	private $list_end = 0;
 
 	/**
+	 * Whether an item has an end
+	 *
+	 * @since 2.0.15
+	 *
+	 * @var bool
+	 */
+	private $item_ends = false;
+
+	/**
 	 * The main constructor method
 	 *
 	 * @since 2.0.0
@@ -181,20 +190,20 @@ class Basic extends Base_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $object
+	 * @param object $item
 	 */
-    private function set_list_table( $object = false ) {
+    private function set_list_table( $item = false ) {
 
 		// Bail if no object passed
-		if ( empty( $object ) ) {
+		if ( empty( $item ) ) {
 			return;
 		}
 
 		// Set the old list table
-		$this->old_list_table = $object;
+		$this->old_list_table = $item;
 
 		// Loop through object vars and set the key/value
-        foreach ( get_object_vars( $object ) as $key => $value ) {
+        foreach ( get_object_vars( $item ) as $key => $value ) {
 			if ( ! isset( $this->{$key} ) ) {
 				$this->{$key} = $value;
 			}
@@ -256,23 +265,153 @@ class Basic extends Base_List_Table {
 	}
 
 	/**
-	 * Output the title for the event
+	 * Return the contents for the "Title" column.
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $object
+	 * @param object $item
+	 * @return string
 	 */
-	public function column_title( $object = null ) {
+	public function column_title( $item = null ) {
 
 		// Get the for event color
-		$color = $this->get_item_color( $object );
+		$color = $this->get_item_color( $item );
+
+		// Start an output buffer to make syntax easier to read
+		ob_start();
 
 		// Wrap output in a helper div
-		?><div data-color="<?php echo esc_attr( $color ); ?>"><?php
+		?><div data-color="<?php echo esc_attr( $color ); ?>">
 
-			parent::column_title( $object );
+			<strong><?php echo $this->get_event_link( $item ); ?></strong>
 
-		?></div><?php
+		</div><?php
+
+		// Output the row actions
+		echo $this->row_actions(
+			$this->get_row_actions( $item )
+		);
+
+		// Return the buffer
+		return ob_get_clean();
+	}
+
+	/**
+	 * Return the contents for the "Start" column.
+	 *
+	 * @since 2.0.15
+	 *
+	 * @param object $item
+	 * @return string
+	 */
+	public function column_start( $item = null ) {
+
+		// Default return value
+		$retval = '&mdash;';
+
+		// Start
+		if ( ! $item->is_empty_date( $item->start ) ) {
+			$dt     = $item->format_date( 'Y-m-d\TH:i:s\Z', $item->start );
+			$retval = '<time datetime="' . esc_attr( $dt ) . '">' . $this->get_event_date( $item->start );
+
+			// Maybe add time if not all-day
+			if ( ! $item->is_all_day() ) {
+				 $retval .= '<br><span>' . $this->get_event_time( $item->start ) . '</span>';
+			}
+		}
+
+		return $retval;
+	}
+
+	/**
+	 * Return the contents for the "End" column.
+	 *
+	 * @since 2.0.15
+	 *
+	 * @param object $item
+	 * @return string
+	 */
+	public function column_end( $item = null ) {
+
+		// Default return value
+		$retval = '&mdash;';
+
+		// End
+		if ( ! $item->is_empty_date( $item->end ) && ! ( $item->format_date( 'Y-m-d', $item->start ) === $item->format_date( 'Y-m-d', $item->end ) ) ) {
+			$dt              = $item->format_date( 'Y-m-d\TH:i:s\Z', $item->end );
+			$retval          = '<time datetime="' . esc_attr( $dt ) . '">' . $this->get_event_date( $item->end );
+			$this->item_ends = true;
+
+			// Maybe add time if not all-day
+			if ( ! $item->is_all_day() ) {
+				 $retval .= '<br><span>' . $this->get_event_time( $item->end ) . '</span>';
+			}
+
+			$retval .= '</time>';
+		}
+
+		// Return the end date & time
+		return $retval;
+	}
+
+	/**
+	 * Return the contents for the "Duration" column.
+	 *
+	 * @since 2.0.15
+	 *
+	 * @param object $item
+	 * @return string
+	 */
+	public function column_duration( $item = null ) {
+
+		// Default return value
+		$retval = '&mdash;';
+
+		// Duration
+		if ( $item->is_all_day() ) {
+			$duration = esc_html__( 'All Day', 'sugar-calendar' );
+
+			// Maybe add duration if mulitple all-day days
+			if ( $item->is_multi() ) {
+				$duration .= '<br>' . $this->get_human_diff_time( $item->start, $item->end );
+			}
+
+		// Get diff only if end exists
+		} elseif ( true === $this->item_ends ) {
+			$duration = $this->get_human_diff_time( $item->start, $item->end );
+		}
+
+		// Return the duration
+		return $retval;
+	}
+
+	/**
+	 * Return the contents for the "Repeats" column.
+	 *
+	 * @todo Abstract for Advanced Recurring
+	 *
+	 * @since 2.0.15
+	 *
+	 * @param object $item
+	 * @return string
+	 */
+	public function column_repeat( $item = null ) {
+
+		// Default return value
+		$retval = '&mdash;';
+
+		// Get recurrence type
+		if ( ! empty( $item->recurrence ) ) {
+			$intervals = $this->get_recurrence_types();
+
+			// Interval is known
+			if ( isset( $intervals[ $item->recurrence ] ) ) {
+				$retval = $intervals[ $item->recurrence ];
+			}
+		}
+
+		// Return the repeat
+		return $retval;
 	}
 
 	/**
@@ -325,8 +464,14 @@ class Basic extends Base_List_Table {
 	 * @since 2.0.0
 	 */
 	public function no_items() {
-		?>
-		<tr><td colspan="<?php echo count( $this->get_columns() ); ?>"><?php esc_html_e( 'No events found.', 'sugar-calendar' ); ?></td></tr>
+
+		// Get the column count
+		$count = $this->get_column_count(); ?>
+		<tr>
+			<td colspan="<?php echo absint( $count ); ?>"><?php
+				esc_html_e( 'No events found.', 'sugar-calendar' );
+			?></td>
+		</tr>
 		<?php
 	}
 
@@ -339,84 +484,11 @@ class Basic extends Base_List_Table {
 	 */
 	public function single_row( $item ) {
 
-		// Defaults
-		$title = $start = $end = $duration = $recurrence = '&mdash;';
-		$ends = false;
-
-		// Title
-		$title = '<strong>' . $this->get_event_link( $item ) . '</strong>';
-
-		// Start
-		if ( ! $item->is_empty_date( $item->start ) ) {
-			$dt   = $item->format_date( 'Y-m-d\TH:i:s\Z', $item->start );
-			$start = '<time datetime="' . esc_attr( $dt ) . '">' . $this->get_event_date( $item->start );
-
-			// Maybe add time if not all-day
-			if ( ! $item->is_all_day() ) {
-				 $start .= '<br><span>' . $this->get_event_time( $item->start ) . '</span>';
-			}
-		}
-
-		// End
-		if ( ! $item->is_empty_date( $item->end ) && ! ( $item->format_date( 'Y-m-d', $item->start ) === $item->format_date( 'Y-m-d', $item->end ) ) ) {
-			$dt   = $item->format_date( 'Y-m-d\TH:i:s\Z', $item->end );
-			$end  = '<time datetime="' . esc_attr( $dt ) . '">' . $this->get_event_date( $item->end );
-			$ends = true;
-
-			// Maybe add time if not all-day
-			if ( ! $item->is_all_day() ) {
-				 $end .= '<br><span>' . $this->get_event_time( $item->end ) . '</span>';
-			}
-
-			$end .= '</time>';
-		}
-
-		// Duration
-		if ( $item->is_all_day() ) {
-			$duration = esc_html__( 'All Day', 'sugar-calendar' );
-
-			// Maybe add duration if mulitple all-day days
-			if ( $item->is_multi() ) {
-				$duration .= '<br>' . $this->get_human_diff_time( $item->start, $item->end );
-			}
-
-		// Get diff only if end exists
-		} elseif ( true === $ends ) {
-			$duration = $this->get_human_diff_time( $item->start, $item->end );
-		}
-
-		// Get recurrence type
-		if ( ! empty( $item->recurrence ) ) {
-			$intervals = $this->get_recurrence_types();
-
-			// Interval is known
-			if ( isset( $intervals[ $item->recurrence ] ) ) {
-				$recurrence = $intervals[ $item->recurrence ];
-			}
-		}
-
-		// Get the columns
-		$columns = $this->get_columns();
-
-		// Row actions
-		$row_actions = $this->get_row_actions( $item ); ?>
+		// Default item end back to false, for "Duration" column
+		$this->item_ends = false; ?>
 
 		<tr id="event-<?php echo $item->id; ?>" class="">
-			<td class="column-primary"><?php
-				echo $title . $this->row_actions( $row_actions );
-			?></td>
-			<td data-colname="<?php echo wp_strip_all_tags( $columns['start'] ); ?>"><?php
-				echo $start;
-			?></td>
-			<td data-colname="<?php echo wp_strip_all_tags( $columns['end'] ); ?>"><?php
-				echo $end;
-			?></td>
-			<td data-colname="<?php echo wp_strip_all_tags( $columns['duration'] ); ?>"><?php
-				echo $duration;
-			?></td>
-			<td data-colname="<?php echo wp_strip_all_tags( $columns['repeat'] ); ?>"><?php
-				echo $recurrence;
-			?></td>
+			<?php $this->single_row_columns( $item ); ?>
 		</tr>
 
 		<?php

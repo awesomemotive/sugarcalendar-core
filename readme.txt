@@ -7,7 +7,7 @@ Tags:              simple calendar, event calendar, event management, event list
 Requires PHP:      5.6.20
 Requires at least: 5.0
 Tested up to:      5.3
-Stable tag:        2.0.14
+Stable tag:        2.0.15
 
 You can easily manage events with this lightweight calendar. No complicated configuration. Simple to use. Sweeeet!
 
@@ -15,7 +15,7 @@ You can easily manage events with this lightweight calendar. No complicated conf
 
 We believe that it should be easy to get a calendar on your website and start managing events! Sugar Calendar will quickly and easily enable you to do that.
 
-Most event calendar plugins are either way too simple, or overly complex and bloated. Sugar Event Calendar is lightweight and provides the major features you need for event management.
+Most event calendar plugins are either way too simple, or overly complex and bloated. Sugar Calendar is lightweight and provides the major features you need for event management.
 
 = Simple is sweet. =
 
@@ -78,9 +78,9 @@ If you purchase a premium license to Sugar Calendar you have access to:
 
 Extend Sugar Calendar with these free add-ons. We keep the plugin lightweight by letting you add what you need only if you need it!
 
-- **[Google Maps](https://sugarcalendar.com/downloads/google-maps/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This is an add-on plugin for Sugar Event Calendar that lets you easily display a Google Map of the event location on the event details page.
-- **[Ninja Forms Form Embed](https://sugarcalendar.com/downloads/ninja-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on to Sugar Events Calendar allows you to add a Ninja Forms form to your event pages, so that you can easily add registration forms. If you have one of [Ninja Forms](https://ninjaforms.com/)’ payment gateway add-ons installed ([Stripe](http://ninjaforms.com/downloads/stripe/) or [Paypal Express](http://ninjaforms.com/downloads/paypal-express/)), you can even take payment for event registrations.
-- **[Gravity Forms Form Embed](https://sugarcalendar.com/downloads/gravity-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on to Sugar Events Calendar allows you to add a [Gravity Forms](https://gravityforms.com/) form to your event pages, so that you can easily add registration forms. If you have one of [Gravity Forms’ payment gateway add-ons](https://www.gravityforms.com/add-ons/) installed , you can even take payment for event registrations.
+- **[Google Maps](https://sugarcalendar.com/downloads/google-maps/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This is an add-on plugin for Sugar Calendar that lets you easily display a Google Map of the event location on the event details page.
+- **[Ninja Forms Form Embed](https://sugarcalendar.com/downloads/ninja-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on to Sugar Calendar allows you to add a Ninja Forms form to your event pages, so that you can easily add registration forms. If you have one of [Ninja Forms](https://ninjaforms.com/)’ payment gateway add-ons installed ([Stripe](http://ninjaforms.com/downloads/stripe/) or [Paypal Express](http://ninjaforms.com/downloads/paypal-express/)), you can even take payment for event registrations.
+- **[Gravity Forms Form Embed](https://sugarcalendar.com/downloads/gravity-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on to Sugar Calendar allows you to add a [Gravity Forms](https://gravityforms.com/) form to your event pages, so that you can easily add registration forms. If you have one of [Gravity Forms’ payment gateway add-ons](https://www.gravityforms.com/add-ons/) installed , you can even take payment for event registrations.
 
 = Pro add-ons =
 

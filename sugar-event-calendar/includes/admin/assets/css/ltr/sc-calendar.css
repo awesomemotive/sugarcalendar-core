@@ -260,6 +260,15 @@ table.calendar a.all-day:before {
 	content: '\f469';
 }
 
+.wp-pointer.sugar-calendar .wp-pointer-content p strong,
+.wp-pointer.sugar-calendar .wp-pointer-content p span {
+	display: block;
+}
+
+.wp-pointer.sugar-calendar .wp-pointer-content p span {
+	margin-bottom: 20px;
+}
+
 .wp-pointer-actions {
 	border-top: 1px solid #ddd;
 	background-color: #f4f4f4;
@@ -373,7 +382,6 @@ table.month tbody td:hover a.add-event-for-day {
 }
 
 table.month tbody td {
-	min-height: 110px;
 	position: relative;
 }
 
@@ -404,6 +412,34 @@ table.month tbody td a i {
 	line-height: 1.9em;
 	font-size: 15px;
 	overflow: hidden;
+}
+
+table.month th.column-week {
+	border-right: 1px solid #e1e1e1;
+}
+
+table.month tbody th.column-week {
+	border-bottom: none;
+	background-color: #fff;
+	position: relative;
+	text-align: center;
+	z-index: 1;
+}
+
+table.month tbody th.column-week a {
+	margin: auto auto;
+	padding: 10px;
+	border: 1px solid transparent;
+	border-radius: 5px;
+	font-weight: 600;
+	color: #aaa;
+	background-color: rgba(255, 255, 255, 0.8);
+	z-index: 3;
+}
+
+table.month tbody th.column-week a:hover {
+	background-color: #f1f1f1;
+	border: 1px solid #e1e1e1;
 }
 
 .wp-pointer-content h3 a {
@@ -437,6 +473,14 @@ input#year {
 }
 
 /** Week/Day ******************************************************************/
+
+table.week th,
+table.day th,
+table.week td div.events-for-cell,
+table.day td div.events-for-cell {
+	min-height: 34px;
+	position: relative;
+}
 
 table.week th,
 table.day th {
@@ -554,9 +598,28 @@ table.day th.column-sunday {
 	table.day tr:not(.inline-edit-row):not(.no-items) td:not(.check-column) {
 		min-height: 35px;
 	}
+
+	/* Always hide week columns on small screens */
+	table.month th.column-week {
+		display: none;
+	}
 }
 
 /** Screen Options ************************************************************/
+
+body.sugar-calendar form#adv-settings .metabox-prefs label {
+	display: block;
+	margin-top: -8px;
+	margin-left: 200px;
+}
+
+body.sugar-calendar form#adv-settings .metabox-prefs legend + label {
+	margin-top: -30px;
+}
+
+body.sugar-calendar form#adv-settings .metabox-prefs {
+	margin-bottom: 10px;
+}
 
 body.sugar-calendar form#adv-settings table.form-table {
 	margin: 0;

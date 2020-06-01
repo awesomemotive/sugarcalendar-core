@@ -104,39 +104,78 @@ function fix_menu_highlight() {
 }
 
 /**
+ * This wrapper function is hooked early in the page load process, ensuring that
+ * the List Table is invoked correctly so commonly used filters are fired.
+ *
+ * The get_list_table() function maintains a local static variable of this List
+ * Table for later reuse.
+ *
+ * @since 2.0.15
+ */
+function preload_list_table() {
+	get_list_table();
+}
+
+/**
+ * Get the List Table object for the current view mode.
+ *
+ * @since 2.0.15
+ *
+ * @staticvar object $retval
+ *
+ * @return object
+ */
+function get_list_table() {
+	static $retval = null;
+
+	// Avoid overriding the current list table
+	if ( is_null( $retval ) ) {
+
+		// Get the current view mode
+		$mode = sugar_calendar_get_admin_view_mode();
+
+		// Load the list table based on the mode
+		switch ( $mode ) {
+			case 'day' :
+				$retval = new \Sugar_Calendar\Admin\Mode\Day;
+				break;
+			case 'week' :
+				$retval = new \Sugar_Calendar\Admin\Mode\Week;
+				break;
+			case 'month' :
+				$retval = new \Sugar_Calendar\Admin\Mode\Month;
+				break;
+			case 'list' :
+			default :
+				$retval = new \Sugar_Calendar\Admin\Mode\Basic;
+				break;
+		}
+	}
+
+	// Return the list table
+	return $retval;
+}
+
+/**
  * Output the admin calendar page
  *
  * @since 2.0.0
  */
 function calendar_page() {
 
-	// Get the post type for easy caps checking
-	$mode             = sugar_calendar_get_admin_view_mode();
+	// Setup necessary vars for the Search Box
 	$post_type        = sugar_calendar_get_admin_post_type();
 	$post_type_object = get_post_type_object( $post_type );
+	$search_label     = $post_type_object->labels->search_items;
 
-	// Load the list table based on the mode
-	switch ( $mode ) {
-		case 'day' :
-			$wp_list_table = new \Sugar_Calendar\Admin\Mode\Day();
-			break;
-		case 'week' :
-			$wp_list_table = new \Sugar_Calendar\Admin\Mode\Week();
-			break;
-		case 'month' :
-			$wp_list_table = new \Sugar_Calendar\Admin\Mode\Month();
-			break;
-		case 'list' :
-		default :
-			$wp_list_table = new \Sugar_Calendar\Admin\Mode\Basic();
-			break;
-	}
+	// Get the list table
+	$list_table = get_list_table();
 
 	// Query for calendar content
-	$wp_list_table->prepare_items();
+	$list_table->prepare_items();
 
 	// Set the help tabs
-	$wp_list_table->set_help_tabs(); ?>
+	$list_table->set_help_tabs(); ?>
 
 	<div class="wrap">
 		<h1 class="wp-heading-inline"><?php esc_html_e( 'Events', 'sugar-calendar' ); ?></h1>
@@ -147,15 +186,15 @@ function calendar_page() {
 
 		<div id="sugar-calendar-admin-calendar-wrapper">
 
-			<?php $wp_list_table->views(); ?>
+			<?php $list_table->views(); ?>
 
 			<form id="posts-filter" method="get">
 
-				<?php $wp_list_table->search_box( $post_type_object->labels->search_items, $post_type ); ?>
+				<?php $list_table->search_box( $search_label, $post_type ); ?>
 
 				<input type="hidden" name="page" value="sugar-calendar" />
 
-				<?php $wp_list_table->display(); ?>
+				<?php $list_table->display(); ?>
 
 			</form>
 

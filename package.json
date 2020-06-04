@@ -1,6 +1,6 @@
 {
 	"name": "sugar-calendar",
-	"version": "2.0.15-alpha-1",
+	"version": "2.0.16",
 	"description": "A calendar with a sweet disposition.",
 	"private": true,
 	"license": "GPL-2.0-or-later",

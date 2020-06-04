@@ -24,7 +24,7 @@ add_action( 'rss2_item',     'sc_add_fields_to_rss' );
 add_action( 'pre_get_posts', 'sc_modify_events_archive', 999 );
 
 // Front-end Hooks
-if ( ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) || wp_doing_ajax() ) {
+if ( wp_using_themes() || wp_doing_ajax() ) {
 
 	// Load front-end scripts
 	add_action( 'wp_enqueue_scripts', 'sc_load_front_end_scripts' );

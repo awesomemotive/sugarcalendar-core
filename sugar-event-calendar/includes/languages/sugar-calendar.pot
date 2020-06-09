@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Sugar Calendar (Lite) package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Sugar Calendar (Lite) 2.0.16\n"
+"Project-Id-Version: Sugar Calendar (Lite) 2.0.17\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com/\n"
-"POT-Creation-Date: 2020-06-04 17:03:12+00:00\n"
+"POT-Creation-Date: 2020-06-09 18:42:07+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -250,7 +250,7 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/help.php:554
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1766
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-list.php:372
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:391
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:404
 #: sugar-event-calendar/includes/post/functions.php:159
 msgid "All Day"
 msgstr ""
@@ -714,7 +714,7 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1785
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1792
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1803
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:404
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:417
 msgid "Start"
 msgstr ""
 
@@ -725,13 +725,13 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1787
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1794
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1809
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:438
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:451
 msgid "End"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1878
 #: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:86
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:498
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:511
 msgid "Location"
 msgstr ""
 
@@ -814,7 +814,7 @@ msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-day.php:184
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-week.php:210
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:397
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:410
 #: sugar-event-calendar/includes/themes/legacy/event-display.php:144
 #: sugar-event-calendar/includes/themes/legacy/events-list.php:126
 msgid "All-day"
@@ -929,22 +929,26 @@ msgstr ""
 msgid "Duration"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:410
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:444
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:98
+msgid "Other"
+msgstr ""
+
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:423
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:457
 msgid " at "
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:428
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:462
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:441
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:475
 msgid "AM"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:429
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:463
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:442
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:476
 msgid "PM"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:503
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:516
 msgid "(Optional)"
 msgstr ""
 

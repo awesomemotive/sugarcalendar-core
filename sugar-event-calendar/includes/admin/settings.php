@@ -449,7 +449,7 @@ function display_subsection() {
 	 * @param string[] $default_date_formats Array of default date formats.
 	 */
 	$date_formats = array_unique( apply_filters( 'date_formats', array(
-		esc_html__( 'F j, Y', 'sugar-calendar' ),
+		__( 'F j, Y', 'sugar-calendar' ),
 		'Y-m-d',
 		'm/d/Y',
 		'd/m/Y',
@@ -465,7 +465,7 @@ function display_subsection() {
 	 * @param string[] $default_time_formats Array of default time formats.
 	 */
 	$time_formats = array_unique( apply_filters( 'time_formats', array(
-		esc_html__( 'g:i a', 'sugar-calendar' ),
+		__( 'g:i a', 'sugar-calendar' ),
 		'g:i A',
 		'H:i'
 	) ) );

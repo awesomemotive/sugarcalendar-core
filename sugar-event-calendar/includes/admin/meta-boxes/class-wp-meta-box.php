@@ -89,6 +89,19 @@ class Box {
 			'callback' => array( $this, 'section_location' )
 		) );
 
+		// Legacy support
+		if ( has_action( 'sc_event_meta_box_before' ) || has_action( 'sc_event_meta_box_after' ) ) {
+
+			// Legacy
+			$this->add_section( array(
+				'id'       => 'legacy',
+				'label'    => esc_html__( 'Other', 'sugar-calendar' ),
+				'icon'     => 'admin-settings',
+				'order'    => 200,
+				'callback' => array( $this, 'section_legacy' )
+			) );
+		}
+
 		// Allow actions to add sections
 		do_action( 'sugar_calendar_admin_meta_box_setup_sections', $this );
 	}
@@ -506,6 +519,34 @@ class Box {
 					</tr>
 
 				<?php endif; ?>
+			</tbody>
+		</table>
+
+		<?php
+
+		// End & flush the output buffer
+		echo ob_get_clean();
+	}
+
+	/**
+	 * Output the event legacy meta-box
+	 *
+	 * @since 2.0.17
+	 *
+	 * @param Event $event
+	 */
+	public function section_legacy( $event = null ) {
+
+		// Start an output buffer
+		ob_start(); ?>
+
+		<table class="form-table rowfat">
+			<tbody>
+
+				<?php do_action( 'sc_event_meta_box_before' ); ?>
+
+				<?php do_action( 'sc_event_meta_box_after' ); ?>
+
 			</tbody>
 		</table>
 

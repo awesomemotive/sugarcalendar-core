@@ -5,10 +5,9 @@ jQuery( document ).ready( function( $ ) {
 		search_contains: true,
 		inherit_select_classes: true,
 		single_backstroke_delete: false,
-		placeholder_text_single: '', // to localize
-		placeholder_text_multiple: '', // to localize
-		no_results_text: '', // to localize
-		width: 'inherit'
+		placeholder_text_single: '',
+		placeholder_text_multiple: '',
+		no_results_text: ''
 	};
 
 	/**

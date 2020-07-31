@@ -3,7 +3,7 @@
  * Events Row Class.
  *
  * @package     Sugar Calendar
- * @subpackage  Database\Schemas
+ * @subpackage  Database\Rows
  * @since       2.0
  */
 namespace Sugar_Calendar;
@@ -39,9 +39,9 @@ final class Event extends Row {
 	public $object_id = 0;
 
 	/**
-	 * Type of event.
+	 * The type of object this Event is related to.
 	 *
-	 * @since 3.0.0
+	 * @since 2.0.0
 	 * @access public
 	 * @var string
 	 */
@@ -68,7 +68,7 @@ final class Event extends Row {
 	/**
 	 * The status of the event.
 	 *
-	 * @since 3.0.0
+	 * @since 2.0.0
 	 * @access public
 	 * @var string
 	 */
@@ -81,12 +81,12 @@ final class Event extends Row {
 	 * @access public
 	 * @var string Date in MySQL's datetime format.
 	 */
-	public $start = '';
+	public $start = '0000-00-00 00:00:00';
 
 	/**
 	 * The time zone for the start date & time.
 	 *
-	 * @since 3.0.0
+	 * @since 2.0.0
 	 * @access public
 	 * @var string
 	 */
@@ -99,21 +99,22 @@ final class Event extends Row {
 	 * @access public
 	 * @var string Date in MySQL's datetime format.
 	 */
-	public $end = '';
+	public $end = '0000-00-00 00:00:00';
 
 	/**
 	 * The time zone for the end date & time.
 	 *
-	 * @since 3.0.0
+	 * @since 2.0.0
 	 * @access public
 	 * @var string
 	 */
 	public $end_tz = '';
 
 	/**
-	 * All day.
+	 * The flag to specify if this Event spans the entire 24 hour period for any
+	 * days that it happens to overlap, including recurrences.
 	 *
-	 * @since 3.0.0
+	 * @since 2.0.0
 	 * @access public
 	 * @var bool
 	 */
@@ -122,11 +123,11 @@ final class Event extends Row {
 	/**
 	 * Type of event recurrence.
 	 *
-	 * @since 3.0.0
+	 * @since 2.0.0
 	 * @access public
 	 * @var string
 	 */
-	public $recurrence = null;
+	public $recurrence = '';
 
 	/**
 	 * The recurrence interval, how often to recur.
@@ -147,18 +148,18 @@ final class Event extends Row {
 	public $recurrence_count = 0;
 
 	/**
-	 * The recurrence end date and time in ISO 8601 date format.
+	 * The recurrence end date and time, when to stop recurring.
 	 *
-	 * @since 3.0.0
+	 * @since 2.0.0
 	 * @access public
-	 * @var mixed null|DateTime
+	 * @var string Date in ISO 8601 date format.
 	 */
-	public $recurrence_end = null;
+	public $recurrence_end = '0000-00-00 00:00:00';
 
 	/**
 	 * The time zone for the recurrence end date & time.
 	 *
-	 * @since 3.0.0
+	 * @since 2.0.0
 	 * @access public
 	 * @var string
 	 */
@@ -265,8 +266,6 @@ final class Event extends Row {
 
 	/**
 	 * Does an event overlap a specific start & end time?
-	 *
-	 * This check includes recurrence.
 	 *
 	 * @since 2.0.1
 	 *

@@ -33,6 +33,14 @@ final class Plugin {
 	private $file = '';
 
 	/**
+	 * Current version.
+	 *
+	 * @since 1.0.0
+	 * @var string
+	 */
+	private $version = '2.0.18';
+
+	/**
 	 * Main instance.
 	 *
 	 * Insures that only one instance exists in memory at any one time.
@@ -144,7 +152,7 @@ final class Plugin {
 
 		// Plugin Version.
 		if ( ! defined( 'SC_PLUGIN_VERSION' ) ) {
-			define( 'SC_PLUGIN_VERSION', '2.0.17' );
+			define( 'SC_PLUGIN_VERSION', $this->version );
 		}
 
 		// Plugin Root File.
@@ -252,6 +260,9 @@ final class Plugin {
 		require_once SC_PLUGIN_DIR . 'includes/classes/term-colors/class-term-meta-ui.php';
 		require_once SC_PLUGIN_DIR . 'includes/classes/term-colors/class-term-colors.php';
 
+		// Utilities
+		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/ical-to-array.php';
+
 		// Event files
 		require_once SC_PLUGIN_DIR . 'includes/events/capabilities.php';
 		require_once SC_PLUGIN_DIR . 'includes/events/functions.php';
@@ -312,6 +323,7 @@ final class Plugin {
 
 		// Meta boxes
 		require_once SC_PLUGIN_DIR . 'includes/admin/meta-boxes/class-wp-meta-box.php';
+		require_once SC_PLUGIN_DIR . 'includes/admin/meta-boxes/class-wp-meta-box-section.php';
 		require_once SC_PLUGIN_DIR . 'includes/admin/meta-boxes/class-wp-walker-category-radio.php';
 
 		// Legacy

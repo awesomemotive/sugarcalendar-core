@@ -1,6 +1,6 @@
 <?php
 /**
- * Event Metaboxes
+ * Event Meta-boxes
  *
  * @package Plugins/Site/Event/Admin/Metaboxes
  */
@@ -10,7 +10,7 @@ namespace Sugar_Calendar\Admin\Editor\Meta;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Event Types Metabox
+ * Event Types Meta-box
  * Output radio buttons instead of the default WordPress mechanism
  *
  * @since 2.0.0
@@ -58,7 +58,7 @@ function checklist_args( $args = array() ) {
 }
 
 /**
- * Event Metabox
+ * Event Meta-box
  *
  * @since 2.0.0
 */
@@ -104,7 +104,7 @@ function box( $post = null ) {
 }
 
 /**
- * Output the event duration metabox
+ * Output the event duration meta-box
  *
  * @since 2.0.0
  *
@@ -200,7 +200,7 @@ function can_save_meta_box( $object_id = 0, $object = null ) {
 }
 
 /**
- * Metabox save
+ * Meta-box save
  *
  * @since 2.0.0
  *
@@ -727,4 +727,279 @@ function calendars( $post, $box ) {
 	</div>
 
 	<?php
+}
+
+/**
+ * Output the event duration meta-box section
+ *
+ * @since  2.0.0
+ *
+ * @param Event $event The event object
+ */
+function section_duration( $event = null ) {
+
+	// Setup empty Event if malformed
+	if ( ! is_object( $event ) ) {
+		$event = new Sugar_Calendar\Event();
+	}
+
+	// Defaults
+	$date = $hour = $minute = $end_date = $end_hour = $end_minute = '';
+
+	// Default AM/PM
+	$am_pm = $end_am_pm = '';
+
+	/** All Day ***********************************************************/
+
+	$all_day = ! empty( $event->all_day )
+		? (bool) $event->all_day
+		: false;
+
+	$hidden = ( true === $all_day )
+		? ' style="display: none;"'
+		: '';
+
+	/** Ends **************************************************************/
+
+	// Get date_time
+	$end_date_time = ! $event->is_empty_date( $event->end ) && ( $event->start !== $event->end )
+		? strtotime( $event->end )
+		: null;
+
+	// Only if end isn't empty
+	if ( ! empty( $end_date_time ) ) {
+
+		// Date
+		$end_date = date( 'Y-m-d', $end_date_time );
+
+		// Only if not all-day
+		if ( empty( $all_day ) ) {
+
+			// Hour
+			$end_hour = date( 'h', $end_date_time );
+			if ( empty( $end_hour ) ) {
+				$end_hour = '';
+			}
+
+			// Minute
+			$end_minute = date( 'i', $end_date_time );
+			if ( empty( $end_hour ) || empty( $end_minute )) {
+				$end_minute = '';
+			}
+
+			// Day/night
+			$end_am_pm = date( 'a', $end_date_time );
+			if ( empty( $end_hour ) && empty( $end_minute ) ) {
+				$end_am_pm = '';
+			}
+		}
+	}
+
+	/** Starts ************************************************************/
+
+	// Get date_time
+	if ( ! empty( $_GET['start_day'] ) ) {
+		$date_time = (int) $_GET['start_day'];
+	} else {
+		$date_time = ! $event->is_empty_date( $event->start )
+			? strtotime( $event->start )
+			: null;
+	}
+
+	// Date
+	if ( ! empty( $date_time ) ) {
+		$date = date( 'Y-m-d', $date_time );
+
+		// Only if not all-day
+		if ( empty( $all_day ) ) {
+
+			// Hour
+			$hour = date( 'h', $date_time );
+			if ( empty( $hour ) ) {
+				$hour = '';
+			}
+
+			// Minute
+			$minute = date( 'i', $date_time );
+			if ( empty( $hour ) || empty( $minute ) ) {
+				$minute = '';
+			}
+
+			// Day/night
+			$am_pm = date( 'a', $date_time );
+			if ( empty( $hour ) && empty( $minute ) ) {
+				$am_pm = '';
+			}
+
+		// All day
+		} elseif ( $date === $end_date ) {
+			$end_date = '';
+		}
+	}
+
+	/** Let's Go! *********************************************************/
+
+	// Start an output buffer
+	ob_start(); ?>
+
+	<table class="form-table rowfat">
+		<tbody>
+			<tr>
+				<th>
+					<label for="all_day" class="screen-reader-text"><?php esc_html_e( 'All Day', 'sugar-calendar' ); ?></label>
+				</th>
+
+				<td>
+					<label>
+						<input type="checkbox" name="all_day" id="all_day" value="1" <?php checked( $all_day ); ?> />
+						<?php esc_html_e( 'All-day', 'sugar-calendar' ); ?>
+					</label>
+				</td>
+			</tr>
+
+			<tr>
+				<th>
+					<label for="start_date"><?php esc_html_e( 'Start', 'sugar-calendar'); ?></label>
+				</th>
+
+				<td>
+					<input type="text" class="sugar_calendar_datepicker" name="start_date" id="start_date" value="<?php echo esc_attr( $date ); ?>" placeholder="yyyy-mm-dd" />
+					<div class="event-time" <?php echo $hidden; ?>>
+						<span class="sc-time-separator"><?php esc_html_e( ' at ', 'sugar-calendar' ); ?></span>
+						<?php sugar_calendar_time_dropdown( array(
+							'first'    => '&nbsp;',
+							'id'       => 'start_time_hour',
+							'name'     => 'start_time_hour',
+							'items'    => sugar_calendar_get_hours(),
+							'selected' => $hour
+						) ); ?>
+						<span class="sc-time-separator">:</span>
+						<?php sugar_calendar_time_dropdown( array(
+							'first'    => '&nbsp;',
+							'id'       => 'start_time_minute',
+							'name'     => 'start_time_minute',
+							'items'    => sugar_calendar_get_minutes(),
+							'selected' => $minute
+						) ); ?>
+						<select id="start_time_am_pm" name="start_time_am_pm" class="sc-select-chosen sc-time">
+							<option value="">&nbsp;</option>
+							<option value="am" <?php selected( $am_pm, 'am' ); ?>><?php esc_html_e( 'AM', 'sugar-calendar' ); ?></option>
+							<option value="pm" <?php selected( $am_pm, 'pm' ); ?>><?php esc_html_e( 'PM', 'sugar-calendar' ); ?></option>
+						</select>
+					</div>
+				</td>
+
+			</tr>
+
+			<tr>
+				<th>
+					<label for="end_date"><?php esc_html_e( 'End', 'sugar-calendar'); ?></label>
+				</th>
+
+				<td>
+					<input type="text" class="sugar_calendar_datepicker" name="end_date" id="end_date" value="<?php echo esc_attr( $end_date ); ?>" placeholder="yyyy-mm-dd" />
+					<div class="event-time" <?php echo $hidden; ?>>
+						<span class="sc-time-separator"><?php esc_html_e( ' at ', 'sugar-calendar' ); ?></span>
+						<?php sugar_calendar_time_dropdown( array(
+							'first'    => '&nbsp;',
+							'id'       => 'end_time_hour',
+							'name'     => 'end_time_hour',
+							'items'    => sugar_calendar_get_hours(),
+							'selected' => $end_hour
+						) ); ?>
+						<span class="sc-time-separator">:</span>
+						<?php sugar_calendar_time_dropdown( array(
+							'first'    => '&nbsp;',
+							'id'       => 'end_time_minute',
+							'name'     => 'end_time_minute',
+							'items'    => sugar_calendar_get_minutes(),
+							'selected' => $end_minute
+						) ); ?>
+						<select id="end_time_am_pm" name="end_time_am_pm" class="sc-select-chosen sc-time">
+							<option value="">&nbsp;</option>
+							<option value="am" <?php selected( $end_am_pm, 'am' ); ?>><?php esc_html_e( 'AM', 'sugar-calendar' ); ?></option>
+							<option value="pm" <?php selected( $end_am_pm, 'pm' ); ?>><?php esc_html_e( 'PM', 'sugar-calendar' ); ?></option>
+						</select>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<?php
+
+	echo ob_get_clean();
+}
+
+/**
+ * Output the event location meta-box section
+ *
+ * @since  2.0.0
+ *
+ * @param Event $event The event object
+*/
+function section_location( $event = null ) {
+
+	// Setup empty Event if malformed
+	if ( ! is_object( $event ) ) {
+		$event = new Sugar_Calendar\Event();
+	}
+
+	// Location
+	$location = $event->location;
+
+	// Start an output buffer
+	ob_start(); ?>
+
+	<table class="form-table rowfat">
+		<tbody>
+
+			<?php if ( apply_filters( 'sugar_calendar_location', true ) ) : ?>
+
+				<tr>
+					<th>
+						<label for="location"><?php esc_html_e( 'Location', 'sugar-calendar' ); ?></label>
+					</th>
+
+					<td>
+						<label>
+							<textarea name="location" id="location" placeholder="<?php esc_html_e( '(Optional)', 'sugar-calendar' ); ?>"><?php echo esc_textarea( $location ); ?></textarea>
+						</label>
+					</td>
+				</tr>
+
+			<?php endif; ?>
+		</tbody>
+	</table>
+
+	<?php
+
+	// End & flush the output buffer
+	echo ob_get_clean();
+}
+
+/**
+ * Output the event legacy meta-box section
+ *
+ * @since  2.0.17
+ */
+function section_legacy() {
+
+	// Start an output buffer
+	ob_start(); ?>
+
+	<table class="form-table rowfat">
+		<tbody>
+
+			<?php do_action( 'sc_event_meta_box_before' ); ?>
+
+			<?php do_action( 'sc_event_meta_box_after' ); ?>
+
+		</tbody>
+	</table>
+
+	<?php
+
+	// End & flush the output buffer
+	echo ob_get_clean();
 }

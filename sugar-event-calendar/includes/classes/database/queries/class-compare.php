@@ -1,10 +1,10 @@
 <?php
 /**
- * Custom Database Table Compare Query Class.
+ * Base Custom Database Table Compare Query Class.
  *
  * @package     Database
- * @subpackage  Date
- * @copyright   Copyright (c) 2019
+ * @subpackage  Compare
+ * @copyright   Copyright (c) 2020
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.0
  */
@@ -17,8 +17,8 @@ defined( 'ABSPATH' ) || exit;
  * Class used for generating SQL for compare clauses.
  *
  * This class is used to generate the SQL when a `compare` argument is passed to
- * the `Base` query class. It extends `Meta` so the `compare` key accepts the
- * same parameters as the ones passed to `Meta`.
+ * the `Base` query class. It extends `Meta` so the `compare` key accepts
+ * the same parameters as the ones passed to `Meta`.
  *
  * @since 1.0.0
  */

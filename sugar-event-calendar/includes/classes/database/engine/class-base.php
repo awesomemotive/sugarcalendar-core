@@ -1,10 +1,10 @@
 <?php
 /**
- * Base Custom Database Table Class.
+ * Base Custom Database Class.
  *
  * @package     Database
- * @subpackage  Date
- * @copyright   Copyright (c) 2019
+ * @subpackage  Base
+ * @copyright   Copyright (c) 2020
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.0
  */

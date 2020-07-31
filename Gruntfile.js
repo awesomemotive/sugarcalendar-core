@@ -1,4 +1,5 @@
 module.exports = function( grunt ) {
+
 	// Load multiple grunt tasks using globbing patterns
 	require( 'load-grunt-tasks' )( grunt );
 
@@ -16,6 +17,7 @@ module.exports = function( grunt ) {
 				},
 				saveUnmodified: false,
 			},
+
 			target: {
 				files: [
 					{
@@ -75,6 +77,49 @@ module.exports = function( grunt ) {
 						ext: '.css',
 					},
 				],
+			},
+		},
+
+		replace: {
+
+			// /README.md
+			readme_md: {
+				src: [ 'README.md' ],
+				overwrite: true,
+				replacements: [{
+					from: /Current Version:\s*(.*)/,
+					to: "Current Version: <%= pkg.version %>",
+				}],
+			},
+
+			// /readme.txt
+			readme_txt: {
+				src: [ 'readme.txt' ],
+				overwrite: true,
+				replacements: [{
+					from: /Stable tag:\s*(.*)/,
+					to: "Stable tag:        <%= pkg.version %>",
+				}],
+			},
+
+			// /sugar-calendar.php
+			bootstrap_php: {
+				src: [ '<%= pkg.name %>.php' ],
+				overwrite: true,
+				replacements: [{
+					from: /Version:\s*(.*)/,
+					to: "Version:           <%= pkg.version %>",
+				}],
+			},
+
+			// /sugar-event-calendar/sugar-calendar.php
+			loader_php: {
+				src: [ 'sugar-event-calendar/<%= pkg.name %>.php' ],
+				overwrite: true,
+				replacements: [{
+					from: /private\s*\$version\s*=\s*'(.*)'/,
+					to: "private $version = '<%= pkg.version %>'",
+				}],
 			},
 		},
 
@@ -205,7 +250,7 @@ module.exports = function( grunt ) {
 
 		checktextdomain: {
 			options: {
-				text_domain: 'sugar-calendar',
+				text_domain: '<%= pkg.name %>',
 				keywords: [
 					'__:1,2d',
 					'_e:1,2d',
@@ -229,11 +274,43 @@ module.exports = function( grunt ) {
 			},
 			files: {
 				src: [
-					'**/*.php', // Include all files
-					'!node_modules/**', // Exclude node_modules/
-					'!build/**', // Exclude build/
+					'*.php',
+					'**/*.php',
+					'!\.git/**/*',
+					'!bin/**/*',
+					'!node_modules/**/*',
+					'!tests/**/*',
+					'!build/**/*'
 				],
 				expand: true,
+			},
+		},
+
+		addtextdomain: {
+			options: {
+				textdomain: '<%= pkg.name %>',
+			},
+			update_all_domains: {
+				options: {
+					updateDomains: true
+				},
+				src: [
+					'*.php',
+					'**/*.php',
+					'!\.git/**/*',
+					'!bin/**/*',
+					'!node_modules/**/*',
+					'!tests/**/*',
+					'!build/**/*'
+				]
+			}
+		},
+
+		wp_readme_to_markdown: {
+			your_target: {
+				files: {
+					'README.md': 'readme.txt'
+				}
 			},
 		},
 
@@ -242,8 +319,8 @@ module.exports = function( grunt ) {
 				options: {
 					domainPath: '/sugar-event-calendar/includes/languages/', // Where to save the POT file.
 					exclude: [ 'build/.*' ],
-					mainFile: '<%= pkg.mainFile %>', // Main project file.
-					potFilename: 'sugar-calendar.pot', // Name of the POT file.
+					mainFile: '<%= pkg.name %>.php', // Main project file.
+					potFilename: '<%= pkg.name %>.pot', // Name of the POT file.
 					potHeaders: {
 						poedit: true, // Includes common Poedit headers.
 						'x-poedit-keywordslist': true, // Include a list of all possible gettext functions.
@@ -251,7 +328,7 @@ module.exports = function( grunt ) {
 					type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
 					updateTimestamp: true, // Whether the POT-Creation-Date should be updated without other changes.
 					processPot: function( pot, options ) {
-						pot.headers[ 'report-msgid-bugs-to' ] = 'https://sugarcalendar.com/';
+						pot.headers[ 'report-msgid-bugs-to' ] = '<%= pkg.homepage %>';
 						pot.headers[ 'last-translator' ] = 'WP-Translations (http://wp-translations.org/)';
 						pot.headers[ 'language-team' ] = 'WP-Translations <wpt@wp-translations.org>';
 						pot.headers.language = 'en_US';
@@ -278,7 +355,7 @@ module.exports = function( grunt ) {
 
 		// Clean up build directory
 		clean: {
-			main: [ 'build/sugar-event-calendar' ],
+			main: [ 'build/<%= pkg.name %>' ],
 		},
 
 		// Copy the plugin into the build directory
@@ -289,7 +366,7 @@ module.exports = function( grunt ) {
 					'*.php',
 					'*.txt',
 				],
-				dest: 'build/sugar-event-calendar/',
+				dest: 'build/<%= pkg.name %>/',
 			},
 		},
 
@@ -301,14 +378,51 @@ module.exports = function( grunt ) {
 					archive: './build/<%= pkg.name %>.zip',
 				},
 				expand: true,
-				cwd: 'build/sugar-event-calendar/',
+				cwd: 'build/<%= pkg.name %>/',
 				src: [ '**/*' ],
 				dest: '<%= pkg.name %>/',
 			},
 		},
 	} );
 
-	// Build task(s).
-	grunt.registerTask( 'update', [ 'cssmin:ltr', 'rtlcss', 'cssmin:rtl', 'force:checktextdomain', 'makepot', 'compress' ] );
-	grunt.registerTask( 'build', [ 'cssmin:ltr', 'rtlcss', 'cssmin:rtl', 'force:checktextdomain', 'makepot', 'clean', 'copy', 'compress' ] );
+	// Default
+	grunt.registerTask( 'default', [
+		'i18n'
+	] );
+
+	// Internationalization
+	grunt.registerTask( 'i18n', [
+		'addtextdomain',
+		'makepot'
+	] );
+
+	// Read Me
+	grunt.registerTask( 'readme', [
+		'wp_readme_to_markdown'
+	] );
+
+	// Bump versions
+	grunt.registerTask( 'bump', [
+		'replace'
+	] );
+
+	// Bump assets
+	grunt.registerTask( 'update', [
+		'bump',
+		'cssmin:ltr',
+		'rtlcss',
+		'cssmin:rtl',
+		'force:checktextdomain',
+		'makepot'
+	] );
+
+	// Build the .zip to ship somewhere
+	grunt.registerTask( 'build', [
+		'update',
+		'clean',
+		'copy',
+		'compress'
+	] );
+
+	grunt.util.linefeed = '\n';
 };

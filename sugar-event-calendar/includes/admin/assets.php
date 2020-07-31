@@ -18,7 +18,7 @@ function register() {
 
 	// URL & Version
 	$url  = SC_PLUGIN_URL . 'includes/admin/assets/';
-	$ver  = SC_PLUGIN_VERSION;
+	$ver  = sugar_calendar_get_assets_version();
 	$deps = array();
 	$js_chos = array( 'sugar_calendar_admin_chosen' );
 	$js_deps = array( 'sugar_calendar_admin_general' );

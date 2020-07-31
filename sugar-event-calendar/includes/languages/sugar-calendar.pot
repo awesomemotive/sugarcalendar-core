@@ -1,10 +1,10 @@
 # Copyright (C) 2020 Sandhills Development, LLC
-# This file is distributed under the same license as the Sugar Calendar (Lite) package.
+# This file is distributed under the same license as the Sugar Calendar package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Sugar Calendar (Lite) 2.0.17\n"
-"Report-Msgid-Bugs-To: https://sugarcalendar.com/\n"
-"POT-Creation-Date: 2020-06-09 18:42:07+00:00\n"
+"Project-Id-Version: Sugar Calendar 2.0.18\n"
+"Report-Msgid-Bugs-To: <%= pkg.homepage %>\n"
+"POT-Creation-Date: 2020-07-30 18:23:35+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,23 +24,23 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: sugar-calendar-lite.php:191
+#: sugar-calendar.php:191
 msgid "This plugin is not fully active."
 msgstr ""
 
-#: sugar-calendar-lite.php:201
+#: sugar-calendar.php:201
 msgid "Requires %s (%s), but (%s) is installed."
 msgstr ""
 
-#: sugar-calendar-lite.php:211
+#: sugar-calendar.php:211
 msgid "Requires %s (%s), but it appears to be missing."
 msgstr ""
 
-#: sugar-calendar-lite.php:221
+#: sugar-calendar.php:221
 msgid "Requirements"
 msgstr ""
 
-#: sugar-calendar-lite.php:231
+#: sugar-calendar.php:231
 msgid "Sugar Calendar Requirements"
 msgstr ""
 
@@ -49,6 +49,7 @@ msgid "Verifying"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/assets.php:150
+#: sugar-event-calendar/includes/standard/license.php:742
 msgid "Verify"
 msgstr ""
 
@@ -57,6 +58,7 @@ msgid "Verifying..."
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/assets.php:152
+#: sugar-event-calendar/includes/standard/license.php:571
 msgid "Please enter a valid license key."
 msgstr ""
 
@@ -250,7 +252,7 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/help.php:554
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1766
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-list.php:372
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:404
+#: sugar-event-calendar/includes/admin/meta-boxes.php:849
 #: sugar-event-calendar/includes/post/functions.php:159
 msgid "All Day"
 msgstr ""
@@ -714,7 +716,7 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1785
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1792
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1803
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:417
+#: sugar-event-calendar/includes/admin/meta-boxes.php:862
 msgid "Start"
 msgstr ""
 
@@ -725,13 +727,13 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1787
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1794
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1809
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:451
+#: sugar-event-calendar/includes/admin/meta-boxes.php:896
 msgid "End"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1878
 #: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:86
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:511
+#: sugar-event-calendar/includes/admin/meta-boxes.php:961
 msgid "Location"
 msgstr ""
 
@@ -814,7 +816,7 @@ msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-day.php:184
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-week.php:210
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:410
+#: sugar-event-calendar/includes/admin/meta-boxes.php:855
 #: sugar-event-calendar/includes/themes/legacy/event-display.php:144
 #: sugar-event-calendar/includes/themes/legacy/events-list.php:126
 msgid "All-day"
@@ -933,22 +935,26 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:423
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:457
+#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:312
+msgid "Event Options"
+msgstr ""
+
+#: sugar-event-calendar/includes/admin/meta-boxes.php:868
+#: sugar-event-calendar/includes/admin/meta-boxes.php:902
 msgid " at "
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:441
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:475
+#: sugar-event-calendar/includes/admin/meta-boxes.php:886
+#: sugar-event-calendar/includes/admin/meta-boxes.php:920
 msgid "AM"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:442
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:476
+#: sugar-event-calendar/includes/admin/meta-boxes.php:887
+#: sugar-event-calendar/includes/admin/meta-boxes.php:921
 msgid "PM"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:516
+#: sugar-event-calendar/includes/admin/meta-boxes.php:966
 msgid "(Optional)"
 msgstr ""
 
@@ -1457,6 +1463,172 @@ msgstr ""
 msgid "Event scheduled."
 msgstr ""
 
+#: sugar-event-calendar/includes/standard/beta-updates.php:40
+msgid "Updates"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/beta-updates.php:74
+msgid "Software Updates"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/beta-updates.php:79
+msgid "Get Beta Versions"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/beta-updates.php:82
+msgid "Receive update notifications about beta versions instead."
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:262
+msgid "License"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:537
+msgid "This is a lifetime license. That is amazing!"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:543
+msgid " until: <time datetime=\"%s\">%s (at %s)</time>"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:572
+msgid "Empty"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:579
+msgid "This license key is valid%s."
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:580
+msgid "Valid"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:587
+msgid "This license key is expired"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:588
+msgid "Expired"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:595
+#: sugar-event-calendar/includes/standard/license.php:603
+msgid "This license key is disabled."
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:596
+msgid "Disabled"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:604
+msgid "Revoked"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:611
+msgid "This license key is not valid."
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:612
+#: sugar-event-calendar/includes/standard/license.php:660
+msgid "Invalid"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:619
+#: sugar-event-calendar/includes/standard/license.php:627
+#: sugar-event-calendar/includes/standard/license.php:643
+msgid "This license key is saved but has not been verified."
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:620
+#: sugar-event-calendar/includes/standard/license.php:628
+#: sugar-event-calendar/includes/standard/license.php:644
+msgid "Site Inactive"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:635
+msgid "This license key could not be deactivated."
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:636
+msgid "Failed"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:651
+#: sugar-event-calendar/includes/standard/license.php:659
+msgid "This license key appears to be for another product."
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:652
+msgid "Mismatch"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:667
+msgid "This license key has reached its activation limit."
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:668
+msgid "Out of Activations"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:728
+msgid "License Key"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:729
+msgid "Enter a valid license key to enable automatic updates"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:732
+msgid ""
+"Look for your license key in your <a "
+"href=\"https://sugarcalendar.com/account/\">SugarCalendar.com account</a>. "
+"Don't have one? <a href=\"https://sugarcalendar.com/pricing/\">Purchase one "
+"today!</a>"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:743
+msgid "Deactivate"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/license.php:748
+msgid "Refresh Status"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/recurring.php:654
+msgid "Recurrence"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/recurring.php:690
+msgid "Repeat"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/recurring.php:695
+#: sugar-event-calendar/includes/standard/recurring.php:717
+msgid "Never"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/recurring.php:713
+msgid "End Repeat"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/updater.php:238
+msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/updater.php:246
+msgid ""
+"There is a new version of %1$s available. %2$sView version %3$s details%4$s "
+"or %5$supdate now%6$s."
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/updater.php:489
+msgid "You do not have permission to install plugin updates"
+msgstr ""
+
+#: sugar-event-calendar/includes/standard/updater.php:489
+msgid "Error"
+msgstr ""
+
 #: sugar-event-calendar/includes/themes/legacy/calendar.php:150
 msgid "Go"
 msgstr ""
@@ -1699,8 +1871,8 @@ msgstr ""
 msgid "DESC"
 msgstr ""
 
-#: sugar-event-calendar/sugar-calendar.php:78
-#: sugar-event-calendar/sugar-calendar.php:89
+#: sugar-event-calendar/sugar-calendar.php:86
+#: sugar-event-calendar/sugar-calendar.php:97
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 

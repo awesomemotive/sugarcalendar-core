@@ -1,36 +1,37 @@
 /* WP Chosen
 -------------------------------------------------------------- */
 
+/* Prevent stutter from JavaScript UI replacement */
+body.js select {
+	min-width: 58px;
+	max-width: 300px;
+}
 body.js div.chosen-container {
 	min-width: 58px;
 	max-width: 300px;
 }
 
+/* WordPress Core overrides */
 .wrap .actions:not(.bulkactions),
 .media-toolbar,
 .tablenav .actions {
-	overflow: visible !important; /* Core override */
+	overflow: visible !important;
 }
 
+/* WordPress Customizer select widths look better like this for now */
 .chosen-container.chosen-container-multi,
 #customize-theme-controls .chosen-container {
 	width: 100% !important;
 }
 
+/* Match WordPress Core styling */
 .chosen-container {
-	font-size: 14px;
 	vertical-align: middle;
-	padding-top: 1px;
 	margin: 0 1px;
 }
 
-/* This stinks */
-.form-table .chosen-container {
-	padding-top: 0;
-}
-
-.chosen-container-single .chosen-single div b {
-	background-image: none;
+.chosen-container-single .chosen-single {
+	padding: 2px 0 2px 8px;
 }
 
 .chosen-container-single .chosen-single div b:before {
@@ -71,13 +72,12 @@ body.js div.chosen-container {
 .chosen-container-multi .chosen-choices,
 .chosen-container-single .chosen-single,
 .chosen-container-active.chosen-with-drop .chosen-single {
-	background: #fff url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 50%;
+	background: #fff url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
 	background-size: 16px 16px;
 	border-radius: 4px;
 	border: 1px solid #7e8993;
 	box-shadow: 0 0 0 transparent;
 	color: #32373c;
-	padding: 1px 7px;
 }
 
 .chosen-container-single .chosen-default {
@@ -86,7 +86,8 @@ body.js div.chosen-container {
 
 .chosen-container-single .chosen-single,
 .chosen-container-single.chosen-container-active.chosen-with-drop .chosen-single {
-	min-height: 28px;
+	min-height: 30px;
+	height: 100%;
 }
 
 .chosen-container-active.chosen-with-drop .chosen-single {
@@ -107,16 +108,6 @@ body.js div.chosen-container {
 	width: auto !important;
 }
 
-.chosen-container-multi .chosen-choices,
-.chosen-container-single .chosen-single {
-	box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.07 );
-}
-
-.chosen-container-multi.chosen-with-drop .chosen-choices,
-.chosen-container-active.chosen-with-drop .chosen-single {
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-}
-
 .chosen-container-multi.chosen-with-drop .chosen-choices {
 	border-bottom-color: transparent;
 }
@@ -129,10 +120,8 @@ body.js div.chosen-container {
 }
 
 .chosen-container .chosen-drop {
-	font-size: 13px;
 	position: absolute;
 	top: 100%;
-	z-index: 1010;
 	width: 100%;
 	border-radius: 0 0 4px 4px;
 	border-width: 0 1px 0 1px;
@@ -141,13 +130,17 @@ body.js div.chosen-container {
 	outline: 2px solid transparent;
 }
 
+.chosen-container.chosen-dropup .chosen-drop {
+	border-width: 0 1px;
+	bottom: calc( 100% - 1px );
+}
+
 .chosen-container-single .chosen-search input[type=text] {
 	margin: 1px 0;
 	padding: 4px 24px 4px 5px;
 	width: 100% !important;
 	height: auto;
 	outline: 0;
-	font-size: 13px;
 	line-height: normal;
 	border: 1px solid #ddd;
 	border-radius: 4px;
@@ -159,13 +152,12 @@ body.js div.chosen-container {
 	position: relative;
 	overflow-x: hidden;
 	overflow-y: auto;
-	margin: 0 4px 4px 0 !important;
-	padding: 0 0 0 4px !important;
+	margin: 4px !important;
+	padding: 0 !important;
 	max-height: 240px;
 }
 
 .chosen-container .chosen-results li.highlighted {
-	background-image: none;
 	color: #fff;
 }
 
@@ -181,16 +173,20 @@ body.js div.chosen-container {
 	cursor: default;
 }
 
-.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
-	position: absolute;
-	top: 4px;
-	right: 3px;
-	display: block;
+.chosen-container .search-choice-close {
 	width: 15px;
 	height: 15px;
+	padding: 0;
+	display: block;
 }
 
-.chosen-container-multi .chosen-choices li.search-choice .search-choice-close:before {
+.chosen-container .search-choice-close,
+.chosen-container .search-choice-close:hover,
+.chosen-container .search-choice-close:active {
+	background: none;
+}
+
+.chosen-container .search-choice-close:before {
 	height: 15px;
 	width: 15px;
 	position: absolute;
@@ -203,8 +199,17 @@ body.js div.chosen-container {
 	line-height: 15px;
 }
 
-.chosen-container-multi .chosen-choices li.search-choice .search-choice-close:hover:before {
+.chosen-container .search-choice-close:hover:before {
 	color: #aaa;
+}
+
+.chosen-container-single .chosen-single .search-choice-close {
+	right: 22px;
+}
+
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+	top: 4px;
+	right: 3px;
 }
 
 .chosen-container-multi .spinner {
@@ -240,6 +245,7 @@ body.js div.chosen-container {
 
 /* Force on all screen sizes & resolutions */
 .chosen-rtl .chosen-search input[type=text],
+.chosen-container .chosen-results li.highlighted
 .chosen-container-single .chosen-single abbr,
 .chosen-container-single .chosen-single div b,
 .chosen-container-single .chosen-search input[type=text],
@@ -359,9 +365,11 @@ body.admin-color-fresh .chosen-container .chosen-drop {
 	border-color: #007cba;
 	box-shadow: 0 1px 0 1px #007cba;
 }
+body.admin-color-fresh .chosen-container.chosen-dropup .chosen-drop {
+	box-shadow: 0 -1px 0 1px #007cba;
+}
 body.admin-color-fresh .chosen-container .chosen-results li.highlighted {
 	background-color: #007cba;
-	border-radius: 4px;
 }
 
 /* Blue */
@@ -372,6 +380,9 @@ body.admin-color-blue .chosen-container-active .chosen-single {
 body.admin-color-blue .chosen-container .chosen-drop {
 	border-color: #096484;
 	box-shadow: 0 1px 0 1px #096484;
+}
+body.admin-color-blue .chosen-container.chosen-dropup .chosen-drop {
+	box-shadow: 0 -1px 0 1px #096484;
 }
 body.admin-color-blue .chosen-container .chosen-results li.highlighted {
 	background-color: #007cba;
@@ -386,6 +397,9 @@ body.admin-color-coffee .chosen-container .chosen-drop {
 	border-color: #c7a589;
 	box-shadow: 0 1px 0 1px #c7a589;
 }
+body.admin-color-coffee .chosen-container.chosen-dropup .chosen-drop {
+	box-shadow: 0 -1px 0 1px #c7a589;
+}
 body.admin-color-coffee .chosen-container .chosen-results li.highlighted {
 	background-color: #c7a589;
 }
@@ -398,6 +412,9 @@ body.admin-color-ectoplasm .chosen-container-active .chosen-single {
 body.admin-color-ectoplasm .chosen-container .chosen-drop {
 	border-color: #a3b745;
 	box-shadow: 0 1px 0 1px #a3b745;
+}
+body.admin-color-ectoplasm .chosen-container.chosen-dropup .chosen-drop {
+	box-shadow: 0 -1px 0 1px #a3b745;
 }
 body.admin-color-ectoplasm .chosen-container .chosen-results li.highlighted {
 	background-color: #a3b745;
@@ -412,6 +429,9 @@ body.admin-color-midnight .chosen-container .chosen-drop {
 	border-color: #e14d43;
 	box-shadow: 0 1px 0 1px #e14d43;
 }
+body.admin-color-midnight .chosen-container.chosen-dropup .chosen-drop {
+	box-shadow: 0 -1px 0 1px #e14d43;
+}
 body.admin-color-midnight .chosen-container .chosen-results li.highlighted {
 	background-color: #e14d43;
 }
@@ -424,6 +444,9 @@ body.admin-color-ocean .chosen-container-active .chosen-single {
 body.admin-color-ocean .chosen-container .chosen-drop {
 	border-color: #9ebaa0;
 	box-shadow: 0 1px 0 1px #9ebaa0;
+}
+body.admin-color-ocean .chosen-container.chosen-dropup .chosen-drop {
+	box-shadow: 0 -1px 0 1px #9ebaa0;
 }
 body.admin-color-ocean .chosen-container .chosen-results li.highlighted {
 	background-color: #9ebaa0;
@@ -438,6 +461,9 @@ body.admin-color-sunrise .chosen-container .chosen-drop {
 	border-color: #dd823b;
 	box-shadow: 0 1px 0 1px #dd823b;
 }
+body.admin-color-sunrise .chosen-container.chosen-dropup .chosen-drop {
+	box-shadow: 0 -1px 0 1px #dd823b;
+}
 body.admin-color-sunrise .chosen-container .chosen-results li.highlighted {
 	background-color: #dd823b;
 }
@@ -450,6 +476,9 @@ body.admin-color-light .chosen-container-active .chosen-single {
 body.admin-color-light .chosen-container .chosen-drop {
 	border-color: #04a4cc;
 	box-shadow: 0 1px 0 1px #04a4cc;
+}
+body.admin-color-light .chosen-container.chosen-dropup .chosen-drop {
+	box-shadow: 0 -1px 0 1px #04a4cc;
 }
 body.admin-color-light .chosen-container .chosen-results li.highlighted {
 	background-color: #04a4cc;
@@ -466,6 +495,9 @@ body.admin-color-evergreen .chosen-container .chosen-drop {
 	border-color: #36533f;
 	box-shadow: 0 1px 0 1px #36533f;
 }
+body.admin-color-evergreen .chosen-container.chosen-dropup .chosen-drop {
+	box-shadow: 0 -1px 0 1px #36533f;
+}
 body.admin-color-evergreen .chosen-container .chosen-results li.highlighted {
 	background-color: #36533f;
 }
@@ -479,43 +511,9 @@ body.admin-color-mint .chosen-container .chosen-drop {
 	border-color: #4f6d59;
 	box-shadow: 0 1px 0 1px #4f6d59;
 }
+body.admin-color-mint .chosen-container.chosen-dropup .chosen-drop {
+	box-shadow: 0 -1px 0 1px #4f6d59;
+}
 body.admin-color-mint .chosen-container .chosen-results li.highlighted {
 	background-color: #4f6d59;
-}
-
-/* Sugar Calendar Overrides
--------------------------------------------------------------- */
-
-/* Default SELECT styling, inherited by Chosen */
-body.sugar-calendar.js select.sc-select-chosen {
-	height: 28px;
-	opacity: 0.2;
-	width: auto;
-	min-width: 58px;
-	max-width: 300px;
-}
-
-/* Min/Max widths for wrapper divs */
-body.sugar-calendar div.sc-select-chosen {
-	min-width: 58px;
-	max-width: 125px;
-}
-
-/* Time pickers have explicit max-widths */
-body.sugar-calendar .sc-select-chosen.sc-time {
-	max-width: 58px;
-}
-
-/* Filters & Tablenavs have explicit widths */
-body.sugar-calendar div.filter-items div.sc-select-chosen,
-body.sugar-calendar div.tablenav.top div.sc-select-chosen {
-	min-width: 125px;
-	max-width: 125px;
-}
-
-/* Make sure certain wrappers allow dropdowns to appear outside their rects */
-body.sugar-calendar .wrap .actions:not(.bulkactions),
-body.sugar-calendar .media-toolbar,
-body.sugar-calendar .tablenav .actions {
-	overflow: visible !important;
 }

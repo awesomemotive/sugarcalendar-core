@@ -121,6 +121,26 @@ module.exports = function( grunt ) {
 					to: "private $version = '<%= pkg.version %>'",
 				}],
 			},
+
+			// /sugar-calendar-lite.php
+			lite_main: {
+				src: [ 'sugar-calendar-lite.php' ],
+				overwrite: true,
+				replacements: [{
+					from: /Plugin Name:\s*(.*)/,
+					to: "Plugin Name:       Sugar Calendar (Lite)",
+				}],
+			},
+
+			// /sugar-calendar.php
+			standard_main: {
+				src: [ 'sugar-calendar.php' ],
+				overwrite: true,
+				replacements: [{
+					from: /Plugin Name:\s*(.*)/,
+					to: "Plugin Name:       Sugar Calendar",
+				}],
+			},
 		},
 
 		cssmin: {
@@ -353,14 +373,45 @@ module.exports = function( grunt ) {
 			},
 		},
 
-		// Clean up build directory
-		clean: {
-			main: [ 'build/<%= pkg.name %>' ],
+		gitclone: {
+
+			// Shallow clone into /standard directory
+			standard: {
+				options: {
+					repository: 'git@github.com:sugarcalendar/standard.git',
+					branch: 'main',
+					directory: 'sugar-event-calendar/includes/standard',
+					depth: 1
+				},
+			},
 		},
 
-		// Copy the plugin into the build directory
+		clean: {
+
+			// Build
+			main: [
+				'build/',
+			],
+
+			// For Lite
+			lite: [
+				'sugar-calendar.php',
+				'sugar-event-calendar/includes/standard/',
+			],
+
+			// For Standard
+			standard_before_clone: [
+				'sugar-event-calendar/includes/standard/',
+			],
+			standard_after_clone: [
+				'sugar-event-calendar/includes/standard/.git',
+			],
+		},
+
 		copy: {
-			main: {
+
+			// Copy the plugin into the build directory
+			build: {
 				src: [
 					'sugar-event-calendar/**',
 					'*.php',
@@ -368,6 +419,14 @@ module.exports = function( grunt ) {
 				],
 				dest: 'build/<%= pkg.name %>/',
 			},
+
+			// For Standard
+			standard: {
+				src: [
+					'sugar-calendar-lite.php',
+				],
+				dest: 'sugar-calendar.php',
+			}
 		},
 
 		// Compress build directory into <name>.zip and <name>-<version>.zip
@@ -387,23 +446,26 @@ module.exports = function( grunt ) {
 
 	// Default
 	grunt.registerTask( 'default', [
-		'i18n'
+		'i18n',
 	] );
 
 	// Internationalization
 	grunt.registerTask( 'i18n', [
 		'addtextdomain',
-		'makepot'
+		'makepot',
 	] );
 
 	// Read Me
 	grunt.registerTask( 'readme', [
-		'wp_readme_to_markdown'
+		'wp_readme_to_markdown',
 	] );
 
 	// Bump versions
 	grunt.registerTask( 'bump', [
-		'replace'
+		'replace:readme_md',
+		'replace:readme_txt',
+		'replace:bootstrap_php',
+		'replace:loader_php',
 	] );
 
 	// Bump assets
@@ -413,15 +475,57 @@ module.exports = function( grunt ) {
 		'rtlcss',
 		'cssmin:rtl',
 		'force:checktextdomain',
-		'makepot'
+		'makepot',
 	] );
 
-	// Build the .zip to ship somewhere
+	/** Lite ******************************************************************/
+
+	// Convert the files in this repository to Lite
+	grunt.registerTask( 'liteize', [
+		'replace:lite_main',
+		'clean:lite',
+	] );
+
+	// Build the Lite .zip to ship somewhere
 	grunt.registerTask( 'build', [
 		'update',
-		'clean',
-		'copy',
-		'compress'
+		'clean:build',
+		'clean:lite',
+		'copy:build',
+		'compress',
+	] );
+
+	/** Standard **************************************************************/
+
+	// Clone Standard files for "standardize" task
+	grunt.registerTask( 'clone-standard', function() {
+
+		// Clean /standard directory
+		grunt.task.run( 'clean:standard_before_clone' );
+
+		// Make /standard directory
+		grunt.file.mkdir( 'sugar-event-calendar/includes/standard' );
+
+		// Clone files into /standard directory
+		grunt.task.run( 'gitclone:standard' );
+
+		// Clean .git directory from /standard
+		grunt.task.run( 'clean:standard_after_clone' );
+	} );
+
+	// Convert the files in this repository to Standard
+	grunt.registerTask( 'standardize', [
+		'copy:standard',
+		'replace:standard_main',
+		'clone-standard'
+	] );
+
+	// Build the Standard .zip to ship somewhere
+	grunt.registerTask( 'build-standard', [
+		'update',
+		'clean:build',
+		'standardize',
+		'compress',
 	] );
 
 	grunt.util.linefeed = '\n';

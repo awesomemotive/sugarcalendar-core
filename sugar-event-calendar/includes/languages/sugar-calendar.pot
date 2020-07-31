@@ -1,10 +1,10 @@
-# Copyright (C) 2020 Sandhills Development, LLC
-# This file is distributed under the same license as the Sugar Calendar package.
+# Copyright (C) 2020
+# This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Sugar Calendar 2.0.18\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: <%= pkg.homepage %>\n"
-"POT-Creation-Date: 2020-07-30 18:23:35+00:00\n"
+"POT-Creation-Date: 2020-07-31 05:08:13+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,23 +24,23 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: sugar-calendar.php:191
+#: sugar-calendar-lite.php:191
 msgid "This plugin is not fully active."
 msgstr ""
 
-#: sugar-calendar.php:201
+#: sugar-calendar-lite.php:201
 msgid "Requires %s (%s), but (%s) is installed."
 msgstr ""
 
-#: sugar-calendar.php:211
+#: sugar-calendar-lite.php:211
 msgid "Requires %s (%s), but it appears to be missing."
 msgstr ""
 
-#: sugar-calendar.php:221
+#: sugar-calendar-lite.php:221
 msgid "Requirements"
 msgstr ""
 
-#: sugar-calendar.php:231
+#: sugar-calendar-lite.php:231
 msgid "Sugar Calendar Requirements"
 msgstr ""
 
@@ -1874,10 +1874,6 @@ msgstr ""
 #: sugar-event-calendar/sugar-calendar.php:86
 #: sugar-event-calendar/sugar-calendar.php:97
 msgid "Cheatin&#8217; huh?"
-msgstr ""
-
-#. Description of the plugin/theme
-msgid "A calendar with a sweet disposition."
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:961

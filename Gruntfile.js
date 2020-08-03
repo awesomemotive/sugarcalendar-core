@@ -102,9 +102,19 @@ module.exports = function( grunt ) {
 				}],
 			},
 
+			// /sugar-calendar-lite.php
+			bootstrap_lite_php: {
+				src: [ 'sugar-calendar-lite.php' ],
+				overwrite: true,
+				replacements: [{
+					from: /Version:\s*(.*)/,
+					to: "Version:           <%= pkg.version %>",
+				}],
+			},
+
 			// /sugar-calendar.php
-			bootstrap_php: {
-				src: [ '<%= pkg.name %>.php' ],
+			bootstrap_standard_php: {
+				src: [ 'sugar-calendar.php' ],
 				overwrite: true,
 				replacements: [{
 					from: /Version:\s*(.*)/,
@@ -464,7 +474,8 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'bump', [
 		'replace:readme_md',
 		'replace:readme_txt',
-		'replace:bootstrap_php',
+		'replace:bootstrap_lite_php',
+		'replace:bootstrap_standard_php',
 		'replace:loader_php',
 	] );
 

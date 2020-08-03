@@ -5,11 +5,11 @@
  * Description:       A calendar with a sweet disposition.
  * Author:            Sandhills Development, LLC
  * Author URI:        https://sandhillsdev.com
- * Version:           2.1.0
  * Text Domain:       sugar-calendar
  * Domain Path:       /sugar-event-calendar/includes/languages/
  * Requires PHP:      5.6.20
- * Requires at least: 5.0
+ * Requires at least: 5.1
+ * Version:           2.1.0
  */
 
 // Exit if accessed directly
@@ -65,7 +65,7 @@ final class Sugar_Calendar_Requirements_Check {
 
 		// WordPress
 		'wp' => array(
-			'minimum' => '5.0.0',
+			'minimum' => '5.1.0',
 			'name'    => 'WordPress',
 			'exists'  => true,
 			'current' => false,

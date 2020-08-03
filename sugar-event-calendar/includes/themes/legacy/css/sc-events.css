@@ -14,11 +14,11 @@
 	-moz-hyphens: none;
 	-ms-hyphens: none;
 	hyphens: none;
-	text-overflow: ellipses;
 }
 
 #sc_calendar table {
 	width: 100%;
+	table-layout: fixed;
 	border-collapse: collapse;
 	float: left;
 	padding-top: 0;
@@ -31,15 +31,18 @@
 	border: 1px solid #ddd;
 	text-align: center;
 	text-transform: capitalize;
-	padding: 3px 4px!important;
-	font-size: 1.2rem;
+	padding: 3px 4px;
+	font-size: 15px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 #sc_calendar td {
 	width: 13.25%;
 	border: 1px solid #ddd;
 	font-size: 11px;
-	padding: 0!important;
+	padding: 0;
 }
 
 #sc_calendar td.calendar-day {
@@ -49,6 +52,15 @@
 
 #sc_calendar td.calendar-day-np {
 	background: #f0f0f0;
+}
+
+#sc_calendar td div.sc_day_div a {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	display: block;
+	border: none;
+	text-align: left;
 }
 
 #sc_calendar td div.sc_day_div {
@@ -83,13 +95,18 @@
 #sc_events_calendar_head h2 {
 	text-align: center;
 	line-height: 26px;
-	font-size: 1.8rem;
+	font-size: 26px;
+}
+
+#sc_events_calendar_head h2:before,
+#sc_events_calendar_head h2:after {
+	content: none;
 }
 
 #sc_events_calendar_head select {
-	font-size: .7rem;
+	font-size: 13px;
 	max-height: 30px;
-	width: auto !important;
+	width: auto;
 	max-width: 33%;
 	overflow: hidden;
 	white-space: nowrap;
@@ -97,8 +114,8 @@
 }
 
 #sc_events_calendar_head input {
-	font-size: 1rem !important;
-	padding: 5px 10px !important;
+	font-size: 13px;
+	padding: 5px 10px;
 }
 
 #sc_events_calendar select,
@@ -213,10 +230,6 @@
 	#sc_calendar td.calendar-day {
 		height: auto;
 		overflow: hidden;
-	}
-
-	#sc_calendar .sc-table td.calendar-day-np {
-		display: none;
 	}
 
 	#sc_calendar td div.day-number {

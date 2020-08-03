@@ -1,10 +1,10 @@
 <?php
 /**
- * Custom Database Table Meta Query Class.
+ * Base Custom Database Table Meta Query Class.
  *
  * @package     Database
  * @subpackage  Meta
- * @copyright   Copyright (c) 2019
+ * @copyright   Copyright (c) 2020
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.1.0
  */
@@ -13,6 +13,7 @@ namespace Sugar_Calendar\Database\Queries;
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+// @todo Remove the need for this dependency
 use \WP_Meta_Query;
 
 /**

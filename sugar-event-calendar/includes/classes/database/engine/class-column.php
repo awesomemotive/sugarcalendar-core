@@ -3,8 +3,8 @@
  * Base Custom Database Table Column Class.
  *
  * @package     Database
- * @subpackage  Date
- * @copyright   Copyright (c) 2019
+ * @subpackage  Column
+ * @copyright   Copyright (c) 2020
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.0
  */
@@ -801,9 +801,6 @@ class Column extends Base {
 	 * This uses the v4 algorithm to generate a UUID that is used to uniquely
 	 * and universally identify a given database row without any direct
 	 * connection or correlation to the data in that row.
-	 *
-	 * If you require a custom format for your own unique row identifier, you
-	 * will need to create your own string column and validator.
 	 *
 	 * From http://php.net/manual/en/function.uniqid.php#94959
 	 *

@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 function sc_load_calendar_via_ajax() {
 
 	// Bail if no nonce
-	if ( ! isset( $_POST[ 'sc_nonce' ] ) ) {
+	if ( empty( $_POST[ 'sc_nonce' ] ) ) {
 		return;
 	}
 
@@ -28,13 +28,13 @@ function sc_load_calendar_via_ajax() {
 	}
 
 	// Get calendar attributes
-	$category = isset( $_REQUEST[ 'sc_event_category' ] )
+	$category = ! empty( $_REQUEST[ 'sc_event_category' ] )
 		? sanitize_text_field( $_REQUEST[ 'sc_event_category' ] )
 		: '';
-	$type     = isset( $_POST[ 'type' ] )
+	$type     = ! empty( $_POST[ 'type' ] )
 		? sanitize_text_field( $_POST[ 'type' ] )
 		: '';
-	$size     = isset( $_POST[ 'sc_calendar_size' ] ) && ( 'small' === sanitize_key( $_POST[ 'sc_calendar_size' ] ) )
+	$size     = ! empty( $_POST[ 'sc_calendar_size' ] ) && ( 'small' === sanitize_key( $_POST[ 'sc_calendar_size' ] ) )
 		? 'small'
 		: 'large';
 

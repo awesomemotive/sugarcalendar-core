@@ -5,9 +5,9 @@ Author URI:        https://sandhillsdev.com
 Plugin URI:        https://sugarcalendar.com
 Tags:              simple calendar, event calendar, event management, event list, schedule
 Requires PHP:      5.6.20
-Requires at least: 5.0
-Tested up to:      5.5
-Stable tag:        2.0.15
+Requires at least: 5.1
+Tested up to:      5.4
+Stable tag:        2.1.0
 
 You can easily manage events with this lightweight calendar. No complicated configuration. Simple to use. Sweeeet!
 

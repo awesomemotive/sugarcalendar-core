@@ -86,6 +86,7 @@ Extend Sugar Calendar with these free add-ons. We keep the plugin lightweight by
 
 If you purchase an [Ultimate or Professional license](https://sugarcalendar.com/pricing/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) to Sugar Calendar you get access to all current and future pro add-ons.
 
+- **[Event Tickets](https://sugarcalendar.com/downloads/event-tickets/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - Easily sell tickets to your virtual or in-person events with Stripe. ([Learn More](https://sugarcalendar.com/downloads/event-tickets/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page))
 - **[Calendar Feeds](https://sugarcalendar.com/downloads/calendar-feeds/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - With this Calendar Feeds Pro add-on, you can easily subscribe to Events feeds for any of your calendars in Sugar Calendar from Google Calendar, iCal, Gnome Calendar, or just about any other calendar application. ([Learn More](https://sugarcalendar.com/downloads/calendar-feeds/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page))
 
 = Upgrade from Sugar Calendar (Lite) =

@@ -1,7 +1,30 @@
 module.exports = function( grunt ) {
 
+	// Force Unix newlines
+	grunt.util.linefeed = '\n';
+
 	// Load multiple grunt tasks using globbing patterns
 	require( 'load-grunt-tasks' )( grunt );
+
+	// Look for "lite" & "standard" options - default "lite"
+	var lite     = grunt.option( 'lite' ),
+		standard = grunt.option( 'standard' ),
+		type     = 'lite';
+
+	// Override to standard if option is set
+	if ( standard && ! lite ) {
+		type = 'standard';
+	}
+
+	// Set main file name
+	var file = ( 'lite' === type )
+		? 'sugar-calendar-lite.php'
+		: 'sugar-calendar.php';
+
+	// Set main name string
+	var name = ( 'lite' === type )
+		? 'Sugar Calendar (Lite)'
+		: 'Sugar Calendar';
 
 	// Project configuration.
 	grunt.initConfig( {
@@ -80,79 +103,6 @@ module.exports = function( grunt ) {
 			},
 		},
 
-		replace: {
-
-			// /README.md
-			readme_md: {
-				src: [ 'README.md' ],
-				overwrite: true,
-				replacements: [{
-					from: /Current Version:\s*(.*)/,
-					to: "Current Version: <%= pkg.version %>",
-				}],
-			},
-
-			// /readme.txt
-			readme_txt: {
-				src: [ 'readme.txt' ],
-				overwrite: true,
-				replacements: [{
-					from: /Stable tag:\s*(.*)/,
-					to: "Stable tag:        <%= pkg.version %>",
-				}],
-			},
-
-			// /sugar-calendar-lite.php
-			bootstrap_lite_php: {
-				src: [ 'sugar-calendar-lite.php' ],
-				overwrite: true,
-				replacements: [{
-					from: /Version:\s*(.*)/,
-					to: "Version:           <%= pkg.version %>",
-				}],
-			},
-
-			// /sugar-calendar.php
-			bootstrap_standard_php: {
-				src: [ 'sugar-calendar.php' ],
-				overwrite: true,
-				replacements: [{
-					from: /Version:\s*(.*)/,
-					to: "Version:           <%= pkg.version %>",
-				}],
-			},
-
-			// /sugar-event-calendar/sugar-calendar.php
-			loader_php: {
-				src: [ 'sugar-event-calendar/<%= pkg.name %>.php' ],
-				overwrite: true,
-				replacements: [{
-					from: /private\s*\$version\s*=\s*'(.*)'/,
-					to: "private $version = '<%= pkg.version %>'",
-				}],
-			},
-
-			// /sugar-calendar-lite.php
-			lite_main: {
-				src: [ 'sugar-calendar-lite.php' ],
-				overwrite: true,
-				replacements: [{
-					from: /Plugin Name:\s*(.*)/,
-					to: "Plugin Name:       Sugar Calendar (Lite)",
-				}],
-			},
-
-			// /sugar-calendar.php
-			standard_main: {
-				src: [ 'sugar-calendar.php' ],
-				overwrite: true,
-				replacements: [{
-					from: /Plugin Name:\s*(.*)/,
-					to: "Plugin Name:       Sugar Calendar",
-				}],
-			},
-		},
-
 		cssmin: {
 			options: {
 				mergeIntoShorthands: false,
@@ -214,7 +164,8 @@ module.exports = function( grunt ) {
 						src: [ 'sc-settings.css' ],
 						dest: 'sugar-event-calendar/includes/admin/assets/css/min/ltr',
 						ext: '.css',
-					},				],
+					},
+				],
 			},
 			rtl: {
 				files: [
@@ -336,21 +287,13 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		wp_readme_to_markdown: {
-			your_target: {
-				files: {
-					'README.md': 'readme.txt'
-				}
-			},
-		},
-
 		makepot: {
 			target: {
 				options: {
 					domainPath: '/sugar-event-calendar/includes/languages/', // Where to save the POT file.
 					exclude: [ 'build/.*' ],
-					mainFile: '<%= pkg.name %>.php', // Main project file.
-					potFilename: '<%= pkg.name %>.pot', // Name of the POT file.
+					mainFile: 'sugar-calendar-lite.php', // Main project file.
+					potFilename: 'sugar-calendar.pot', // Name of the POT file.
 					potHeaders: {
 						poedit: true, // Includes common Poedit headers.
 						'x-poedit-keywordslist': true, // Include a list of all possible gettext functions.
@@ -358,10 +301,11 @@ module.exports = function( grunt ) {
 					type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
 					updateTimestamp: true, // Whether the POT-Creation-Date should be updated without other changes.
 					processPot: function( pot, options ) {
-						pot.headers[ 'report-msgid-bugs-to' ] = '<%= pkg.homepage %>';
+						pot.headers[ 'report-msgid-bugs-to' ] = 'https://sugarcalendar.com';
 						pot.headers[ 'last-translator' ] = 'WP-Translations (http://wp-translations.org/)';
 						pot.headers[ 'language-team' ] = 'WP-Translations <wpt@wp-translations.org>';
 						pot.headers.language = 'en_US';
+
 						let translation, // Exclude meta data from pot.
 							excluded_meta = [
 								'Plugin Name of the plugin/theme',
@@ -369,14 +313,15 @@ module.exports = function( grunt ) {
 								'Author of the plugin/theme',
 								'Author URI of the plugin/theme',
 							];
+
 						for ( translation in pot.translations[ '' ] ) {
 							if ( 'undefined' !== typeof pot.translations[ '' ][ translation ].comments.extracted ) {
 								if ( excluded_meta.indexOf( pot.translations[ '' ][ translation ].comments.extracted ) >= 0 ) {
-									console.log( 'Excluded meta: ' + pot.translations[ '' ][ translation ].comments.extracted );
 									delete pot.translations[ '' ][ translation ];
 								}
 							}
 						}
+
 						return pot;
 					},
 				},
@@ -396,17 +341,25 @@ module.exports = function( grunt ) {
 			},
 		},
 
+		wp_readme_to_markdown: {
+			your_target: {
+				files: {
+					'README.md': 'readme.txt'
+				}
+			},
+		},
+
 		clean: {
 
-			// Build
+			// All temporary directories
 			main: [
 				'build/',
+				'sugar-event-calendar/includes/standard/',
 			],
 
-			// For Lite
-			lite: [
-				'sugar-calendar.php',
-				'sugar-event-calendar/includes/standard/',
+			// Build
+			build: [
+				'build/' + type + '/'
 			],
 
 			// For Standard
@@ -415,28 +368,104 @@ module.exports = function( grunt ) {
 			],
 			standard_after_clone: [
 				'sugar-event-calendar/includes/standard/.git',
+				'sugar-event-calendar/includes/standard/README.md',
 			],
+			standard_after_build: [
+				'sugar-event-calendar/includes/standard/',
+			]
 		},
 
 		copy: {
 
-			// Copy the plugin into the build directory
-			build: {
-				src: [
-					'sugar-event-calendar/**',
-					'*.php',
-					'*.txt',
-				],
-				dest: 'build/<%= pkg.name %>/',
-			},
-
-			// For Standard
-			standard: {
+			// Copy the main plugin file
+			bootstrap: {
 				src: [
 					'sugar-calendar-lite.php',
 				],
-				dest: 'sugar-calendar.php',
-			}
+				dest: 'build/' + type + '/' + file,
+			},
+
+			// Copy the plugin contents
+			contents: {
+				src: [
+					'sugar-event-calendar/**',
+					'*.txt',
+				],
+				dest: 'build/' + type + '/',
+			},
+		},
+
+		replace: {
+
+			// README.md
+			readme_md: {
+				src: [ 'README.md' ],
+				overwrite: true,
+				replacements: [{
+					from: /Current Version:\s*(.*)/,
+					to: "Current Version: <%= pkg.version %>",
+				}],
+			},
+
+			// readme.txt
+			readme_txt: {
+				src: [ 'readme.txt' ],
+				overwrite: true,
+				replacements: [{
+					from: /Stable tag:\s*(.*)/,
+					to: "Stable tag:        <%= pkg.version %>",
+				}],
+			},
+
+			// sugar-calendar-lite.php
+			bootstrap_php: {
+				src: [ 'sugar-calendar-lite.php' ],
+				overwrite: true,
+				replacements: [{
+					from: /Version:\s*(.*)/,
+					to: "Version:           <%= pkg.version %>",
+				}],
+			},
+
+			// sugar-event-calendar/sugar-calendar.php
+			loader_php: {
+				src: [ 'sugar-event-calendar/sugar-calendar.php' ],
+				overwrite: true,
+				replacements: [{
+					from: /private\s*\$version\s*=\s*'(.*)'/,
+					to: "private $version = '<%= pkg.version %>'",
+				}],
+			},
+
+			// Standard/Lite build bootstrap
+			build_bootstrap_php: {
+				src: [ 'build/' + type + '/' + file ],
+				overwrite: true,
+				replacements: [{
+					from: /Plugin Name:\s*(.*)/,
+					to: "Plugin Name:       " + name,
+				}],
+			},
+
+			// POT Main file
+			build_pot_bootstrap: {
+				src: [ 'build/' + type + '/sugar-event-calendar/includes/languages/sugar-calendar.pot' ],
+				overwrite: true,
+				replacements: [{
+					from: 'sugar-calendar-lite.php',
+					to: file,
+				}],
+			},
+
+			// POT Name
+			build_pot_name: {
+				src: [ 'build/' + type + '/sugar-event-calendar/includes/languages/sugar-calendar.pot' ],
+				overwrite: true,
+				replacements: [{
+					from: 'Sugar Calendar (Lite)',
+					to: name,
+				}],
+			},
 		},
 
 		// Compress build directory into <name>.zip and <name>-<version>.zip
@@ -444,10 +473,10 @@ module.exports = function( grunt ) {
 			main: {
 				options: {
 					mode: 'zip',
-					archive: './build/<%= pkg.name %>.zip',
+					archive: './build/' + type + '/<%= pkg.name %>.zip',
 				},
 				expand: true,
-				cwd: 'build/<%= pkg.name %>/',
+				cwd: 'build/' + type + '/<%= pkg.name %>/',
 				src: [ '**/*' ],
 				dest: '<%= pkg.name %>/',
 			},
@@ -474,8 +503,7 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'bump', [
 		'replace:readme_md',
 		'replace:readme_txt',
-		'replace:bootstrap_lite_php',
-		'replace:bootstrap_standard_php',
+		'replace:bootstrap_php',
 		'replace:loader_php',
 	] );
 
@@ -489,25 +517,6 @@ module.exports = function( grunt ) {
 		'makepot',
 	] );
 
-	/** Lite ******************************************************************/
-
-	// Convert the files in this repository to Lite
-	grunt.registerTask( 'liteize', [
-		'replace:lite_main',
-		'clean:lite',
-	] );
-
-	// Build the Lite .zip to ship somewhere
-	grunt.registerTask( 'build', [
-		'update',
-		'clean:build',
-		'clean:lite',
-		'copy:build',
-		'compress',
-	] );
-
-	/** Standard **************************************************************/
-
 	// Clone Standard files for "standardize" task
 	grunt.registerTask( 'clone-standard', function() {
 
@@ -517,27 +526,54 @@ module.exports = function( grunt ) {
 		// Make /standard directory
 		grunt.file.mkdir( 'sugar-event-calendar/includes/standard' );
 
-		// Clone files into /standard directory
-		grunt.task.run( 'gitclone:standard' );
+		// Ordered tasks
+		grunt.task.run(
 
-		// Clean .git directory from /standard
-		grunt.task.run( 'clean:standard_after_clone' );
+			// Clone files into /standard directory
+			'gitclone:standard',
+
+			// Clean .git directory from /standard
+			'clean:standard_after_clone'
+		);
 	} );
 
-	// Convert the files in this repository to Standard
-	grunt.registerTask( 'standardize', [
-		'copy:standard',
-		'replace:standard_main',
-		'clone-standard'
-	] );
-
 	// Build the Standard .zip to ship somewhere
-	grunt.registerTask( 'build-standard', [
-		'update',
-		'clean:build',
-		'standardize',
-		'compress',
-	] );
+	grunt.registerTask( 'build', function() {
 
-	grunt.util.linefeed = '\n';
+		// Default tasks
+		var tasks = [ 'clean:build' ];
+
+		// Maybe standardize
+		if ( 'standard' === type ) {
+			tasks.push( 'clone-standard' );
+		}
+
+		// Update
+		tasks.push( 'update' );
+
+		// Copy files
+		tasks.push( 'copy:bootstrap' );
+		tasks.push( 'copy:contents' );
+
+		// Maybe replace name
+		tasks.push( 'replace:build_bootstrap_php' );
+
+		//
+		if ( 'standard' === type ) {
+			tasks.push( 'replace:build_pot_bootstrap' );
+			tasks.push( 'replace:build_pot_name' );
+		}
+
+		// Compress
+		tasks.push( 'compress' );
+
+		// Clean up
+		if ( 'standard' === type ) {
+			tasks.push( 'clean:standard_after_build' );
+			tasks.push( 'makepot' );
+		}
+
+		// Run all the tasks
+		grunt.task.run( tasks );
+	} );
 };

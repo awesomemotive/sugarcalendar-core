@@ -485,13 +485,13 @@ module.exports = function( grunt ) {
 
 	// Default
 	grunt.registerTask( 'default', [
-		'i18n',
+		'update',
 	] );
 
 	// Internationalization
 	grunt.registerTask( 'i18n', [
 		'addtextdomain',
-		'makepot',
+		'force:checktextdomain',
 	] );
 
 	// Read Me
@@ -513,7 +513,7 @@ module.exports = function( grunt ) {
 		'cssmin:ltr',
 		'rtlcss',
 		'cssmin:rtl',
-		'force:checktextdomain',
+		'i18n',
 		'makepot',
 	] );
 

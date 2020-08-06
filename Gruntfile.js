@@ -1,5 +1,7 @@
 module.exports = function( grunt ) {
 
+	'use strict';
+
 	// Force Unix newlines
 	grunt.util.linefeed = '\n';
 

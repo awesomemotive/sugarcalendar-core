@@ -21,6 +21,11 @@ module.exports = function( grunt ) {
 		? 'sugar-calendar-lite.php'
 		: 'sugar-calendar.php';
 
+	// Set plugin slug
+	var slug = ( 'lite' === type )
+		? 'sugar-calendar-lite'
+		: 'sugar-calendar';
+
 	// Set main name string
 	var name = ( 'lite' === type )
 		? 'Sugar Calendar (Lite)'
@@ -385,11 +390,18 @@ module.exports = function( grunt ) {
 				dest: 'build/' + type + '/' + file,
 			},
 
+			// Copy the readme
+			readme: {
+				src: [
+					'readme.txt',
+				],
+				dest: 'build/' + type + '/readme.txt',
+			},
+
 			// Copy the plugin contents
 			contents: {
 				src: [
 					'sugar-event-calendar/**',
-					'*.txt',
 				],
 				dest: 'build/' + type + '/',
 			},
@@ -473,12 +485,12 @@ module.exports = function( grunt ) {
 			main: {
 				options: {
 					mode: 'zip',
-					archive: './build/' + type + '/<%= pkg.name %>.zip',
+					archive: './build/' + type + '/' + slug + '-<%= pkg.version %>.zip',
 				},
 				expand: true,
-				cwd: 'build/' + type + '/<%= pkg.name %>/',
+				cwd: 'build/' + type + '/',
 				src: [ '**/*' ],
-				dest: '<%= pkg.name %>/',
+				dest: slug + '/',
 			},
 		},
 	} );
@@ -555,10 +567,15 @@ module.exports = function( grunt ) {
 		tasks.push( 'copy:bootstrap' );
 		tasks.push( 'copy:contents' );
 
+		// Only Lite gets a readme
+		if ( 'lite' === type ) {
+			tasks.push( 'copy:readme' );
+		}
+
 		// Maybe replace name
 		tasks.push( 'replace:build_bootstrap_php' );
 
-		//
+		// Strip "Lite" from Standard files
 		if ( 'standard' === type ) {
 			tasks.push( 'replace:build_pot_bootstrap' );
 			tasks.push( 'replace:build_pot_name' );

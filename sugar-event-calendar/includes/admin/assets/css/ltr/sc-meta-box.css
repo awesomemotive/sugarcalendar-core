@@ -1,9 +1,22 @@
-.sugar-calendar-wrap {
-	margin: -6px -12px -12px -12px;
+body.sugar-calendar.js div.sugar-calendar-wrap div.chosen-container {
+	min-width: 125px;
 }
 
-.user-cellular-preferences .chosen-container.chosen-container-multi {
-	width: 25em !important;
+/* Try to control some element replacement UI stutter */
+body.sugar-calendar.js select.sc-select-chosen,
+body.sugar-calendar div.sc-select-chosen {
+	min-width: 58px;
+	max-width: 300px;
+}
+
+/* Time pickers have explicit min/max-widths */
+body.sugar-calendar.js div.sugar-calendar-wrap div.chosen-container.sc-time {
+	min-width: 58px;
+	max-width: 58px;
+}
+
+.sugar-calendar-wrap {
+	margin: -6px -12px -12px -12px;
 }
 
 .sugar-calendar-wrap .section-content h4 {
@@ -78,6 +91,10 @@ tr.sugar-calendar-post-header th {
 	.sugar-calendar-wrap .section-content th label {
 		padding: 0;
 	}
+
+	body.sugar-calendar.js div.sugar-calendar-wrap div.chosen-container {
+		min-width: 140px;
+	}
 }
 
 /* Tools Styles
@@ -115,15 +132,19 @@ tr.sugar-calendar-post-header th {
 	flex-basis: 80%;
 }
 
-.sc-vertical-sections .section-nav li {
+.sc-vertical-sections .section-nav button {
 	margin: 0;
 	padding: 0;
 	position: relative;
 	white-space: nowrap;
-	background-color: #f5f5f5;
+	background-color: #f4f4f4;
+	border: none;
+	width: 100%;
+	text-align: left;
+	outline: none;
 }
 
-.sc-vertical-sections .section-nav li a {
+.sc-vertical-sections .section-nav button {
 	display: block;
 	margin: 0;
 	padding: 9px;
@@ -131,94 +152,99 @@ tr.sugar-calendar-post-header th {
 	box-shadow: inset 0 -1px 0 #ccd0d4;
 	text-decoration: none;
 	text-overflow: ellipsis;
-	overflow: auto;
+	overflow: hidden;
 	transition-property: border, background, color;
 	transition-duration: .1s;
 	transition-timing-function: ease-in-out;
+	cursor: pointer;
 }
 
-.sc-vertical-sections .section-nav li a > .dashicons {
+.sc-vertical-sections .section-nav button > .dashicons {
 	color: #82878c;
 }
 
-.sc-vertical-sections .section-nav li a:hover {
+.sc-vertical-sections .section-nav button:hover,
+.sc-vertical-sections .section-nav button:focus {
 	background-color: #fafafa;
 }
 
-.sc-vertical-sections .section-nav li a:hover,
-.sc-vertical-sections .section-nav li a:hover > .dashicons,
-.sc-vertical-sections .section-nav li a:hover > span {
+.sc-vertical-sections .section-nav button:hover,
+.sc-vertical-sections .section-nav button:hover > .dashicons,
+.sc-vertical-sections .section-nav button:hover > span,
+.sc-vertical-sections .section-nav button:focus,
+.sc-vertical-sections .section-nav button:focus > .dashicons,
+.sc-vertical-sections .section-nav button:focus > span {
 	color: #096484;
 }
 
-.sc-vertical-sections .section-nav li a .dashicons {
+.sc-vertical-sections .section-nav button .dashicons {
 	line-height: 20px;
 	margin-right: 3px;
 }
 
-.sc-vertical-sections .section-nav li[aria-selected="true"] a {
+.sc-vertical-sections .section-nav button[aria-selected="true"] {
 	position: relative;
 	font-weight: bold;
 	background-color: #fff;
-	border-right: none;
-	margin-right: -1px;
+	border-right-color: #fff;
+	width: calc( 100% + 1.5px );
 }
 
-.sc-vertical-sections .section-nav li[aria-selected="true"] a,
-.sc-vertical-sections .section-nav li[aria-selected="true"] a .dashicons,
-.sc-vertical-sections .section-nav li[aria-selected="true"] a span {
+.sc-vertical-sections .section-nav button[aria-selected="true"],
+.sc-vertical-sections .section-nav button[aria-selected="true"] .dashicons,
+.sc-vertical-sections .section-nav button[aria-selected="true"] span {
 	color: #23282d;
 }
 
 /* Fresh */
-.sc-vertical-sections .section-nav li[aria-selected="true"] a {
+.sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-left: 5px solid #096484;
 }
 
 /* Blue */
-.admin-color-blue .sc-vertical-sections .section-nav li[aria-selected="true"] a {
+.admin-color-blue .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-left: 5px solid #096484;
 }
 
 /* Coffee */
-.admin-color-coffee .sc-vertical-sections .section-nav li[aria-selected="true"] a {
+.admin-color-coffee .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-left: 5px solid #096484;
 }
 
 /* Ectoplasm */
-.admin-color-ectoplasm .sc-vertical-sections .section-nav li[aria-selected="true"] a {
+.admin-color-ectoplasm .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-left: 5px solid #a3b745;
 }
 
 /* Midnight */
-.admin-color-midnight .sc-vertical-sections .section-nav li[aria-selected="true"] a {
+.admin-color-midnight .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-left: 5px solid #26292c;
 }
 
 /* Ocean */
-.admin-color-ocean .sc-vertical-sections .section-nav li[aria-selected="true"] a {
+.admin-color-ocean .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-left: 5px solid #627c83;
 }
 
 /* Sunrise */
-.admin-color-sunrise .sc-vertical-sections .section-nav li[aria-selected="true"] a {
+.admin-color-sunrise .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-left: 5px solid #be3631;
 }
 
 /* Light */
-.admin-color-light .sc-vertical-sections .section-nav li[aria-selected="true"] a {
+.admin-color-light .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-left: 5px solid #888;
 }
 
 /* bbPress Color Schemes */
 
 /* Evergreen */
-.admin-color-evergreen .sc-vertical-sections .section-nav li[aria-selected="true"] a {
+.admin-color-evergreen .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-left: 5px solid #36533f;
 }
 
 /* Mint */
-.admin-color-mint .sc-vertical-sections .section-nav li[aria-selected="true"] a {
+.admin-color-mint .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-left: 5px solid #4f6d59;
 }
 
@@ -232,10 +258,10 @@ tr.sugar-calendar-post-header th {
 		max-width: 48px;
 	}
 
-	.sc-vertical-sections .section-nav li a {
+	.sc-vertical-sections .section-nav button {
 		text-align: center;
 	}
-	.sc-vertical-sections .section-nav li a .dashicons {
+	.sc-vertical-sections .section-nav button .dashicons {
 		width: 24px;
 		height: 24px;
 		font-size: 24px;
@@ -243,12 +269,12 @@ tr.sugar-calendar-post-header th {
 		margin: 0;
 	}
 
-	.section-nav li .dashicons::before {
+	.section-nav button .dashicons::before {
 		width: 24px;
 		height: 24px;
 	}
 
-	.section-nav li .label {
+	.section-nav button .label {
 		overflow: hidden;
 		position: absolute;
 		top: -1000em;

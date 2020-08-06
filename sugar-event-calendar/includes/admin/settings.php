@@ -492,7 +492,7 @@ function display_subsection() {
 					<label for="sc_start_of_week"><?php esc_html_e( 'Start of Week', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
-					<select name="sc_start_of_week" id="sc_start_of_week">
+					<select name="sc_start_of_week" id="sc_start_of_week" class="sc-select-chosen">
 						<option value="0" <?php selected( $start_of_week, 0); ?>><?php esc_html_e( 'Sunday', 'sugar-calendar' ); ?></option>
 						<option value="1" <?php selected( $start_of_week, 1); ?>><?php esc_html_e( 'Monday', 'sugar-calendar' ); ?></option>
 						<option value="2" <?php selected( $start_of_week, 2); ?>><?php esc_html_e( 'Tuesday', 'sugar-calendar' ); ?></option>

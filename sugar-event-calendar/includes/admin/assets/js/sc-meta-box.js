@@ -89,16 +89,16 @@ jQuery( document ).ready( function ( $ ) {
 	$( '.sc-vertical-sections .section-content:first-child' ).show();
 
 	// Makes the 'aria-selected' attribute true for the first section nav item.
-	$( '.section-nav li' ).attr( 'aria-selected', 'false' );
+	$( '.section-nav button' ).attr( 'aria-selected', 'false' );
 
 	// Makes the 'aria-selected' attribute true for the first section nav item.
-	$( '.section-nav li:first-child' ).attr( 'aria-selected', 'true' );
+	$( '.section-nav button:first-child' ).attr( 'aria-selected', 'true' );
 
 	// Copies the current section item title to the box header.
 	$( '.which-section' ).text( $( '.section-nav :first-child a' ).text() );
 
 	// When a section nav item is clicked.
-	$( '.section-nav li a' ).on( 'click',
+	$( '.section-nav button' ).on( 'click',
 		function( j ) {
 
 			// Prevent the default browser action when a link is clicked.
@@ -106,20 +106,21 @@ jQuery( document ).ready( function ( $ ) {
 
 			// Get the `href` attribute of the item.
 			var them  = $( this ),
-				href  = them.attr( 'href' ),
-				rents = them.parents( '.sc-vertical-sections' );
+				href  = them.attr( 'aria-controls' ),
+				rents = them.parents( '.sc-vertical-sections' ),
+				sibs  = them.siblings();
 
 			// Hide all section content.
 			rents.find( '.section-content' ).hide();
 
 			// Find the section content that matches the section nav item and show it.
-			rents.find( href ).show();
+			rents.find( '#' + href ).show();
 
 			// Set the `aria-selected` attribute to false for all section nav items.
-			rents.find( '.section-title' ).attr( 'aria-selected', 'false' );
+			sibs.attr( 'aria-selected', 'false' );
 
 			// Set the `aria-selected` attribute to true for this section nav item.
-			them.parent().attr( 'aria-selected', 'true' );
+			them.attr( 'aria-selected', 'true' );
 
 			// Copy the current section item title to the box header.
 			$( '.which-section' ).text( them.text() );

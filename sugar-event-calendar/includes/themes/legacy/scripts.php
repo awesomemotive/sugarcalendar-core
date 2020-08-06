@@ -21,7 +21,7 @@ function sc_register_assets() {
 		'sc-ajax',
 		SC_PLUGIN_URL . 'includes/themes/legacy/js/sc-ajax.js',
 		array( 'jquery' ),
-		SC_PLUGIN_VERSION,
+		sugar_calendar_get_assets_version(),
 		false
 	);
 
@@ -30,7 +30,7 @@ function sc_register_assets() {
 		'sc-events',
 		SC_PLUGIN_URL . 'includes/themes/legacy/css/sc-events.css',
 		array(),
-		SC_PLUGIN_VERSION
+		sugar_calendar_get_assets_version()
 	);
 }
 

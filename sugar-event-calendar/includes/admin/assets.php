@@ -18,7 +18,7 @@ function register() {
 
 	// URL & Version
 	$url  = SC_PLUGIN_URL . 'includes/admin/assets/';
-	$ver  = SC_PLUGIN_VERSION;
+	$ver  = sugar_calendar_get_assets_version();
 	$deps = array();
 	$js_chos = array( 'sugar_calendar_admin_chosen' );
 	$js_deps = array( 'sugar_calendar_admin_general' );
@@ -101,8 +101,14 @@ function enqueue() {
 
 	// Settings Pages
 	if ( \Sugar_Calendar\Admin\Settings\in() ) {
-		wp_enqueue_style( 'sugar_calendar_admin_settings' );
+
+		// Settings
 		wp_enqueue_script( 'sugar_calendar_admin_settings' );
+		wp_enqueue_style( 'sugar_calendar_admin_settings' );
+
+		// Chosen
+		wp_enqueue_script( 'sugar_calendar_admin_chosen' );
+		wp_enqueue_style( 'sugar_calendar_admin_chosen_sc' );
 	}
 
 	// Events Pages
@@ -123,15 +129,13 @@ function enqueue() {
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 
 		// Calendar styling
+		wp_enqueue_script( 'sugar_calendar_admin_calendar' );
 		wp_enqueue_style( 'sugar_calendar_admin_calendar' );
 		wp_enqueue_style( 'sugar_calendar_admin_datepicker' );
 
 		// Meta-box
-		wp_enqueue_style( 'sugar_calendar_admin_meta_box' );
 		wp_enqueue_script( 'sugar_calendar_admin_meta_box' );
-
-		// Calendar
-		wp_enqueue_script( 'sugar_calendar_admin_calendar' );
+		wp_enqueue_style( 'sugar_calendar_admin_meta_box' );
 	}
 }
 

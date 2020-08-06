@@ -376,14 +376,23 @@ button.sc-license-refresh {
 
 .sc-sortable-list li {
 	margin: 0;
-	padding: 0;
+	padding: 5px 7px 5px 10px;
 	position: relative;
-	height: 28px;
+	border: 1px solid transparent;
+}
+
+.sc-sortable-list li:hover {
+	background-color: #fafafa;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+}
+
+.sc-sortable-list li label {
 	cursor: move;
 }
 
-.sc-sortable-list li label * {
-	vertical-align: middle;
+.sc-sortable-list li label input[type="checkbox"] {
+	margin-top: -2px;
 }
 
 .sc-sortable-list li label:after {
@@ -391,19 +400,19 @@ button.sc-license-refresh {
 	width: 17px;
 	height: 17px;
 	position: absolute;
+	margin: auto;
 	left: 6px;
-	top: 0px;
+	top: -5px;
+	bottom: 0;
 	color: #aaa;
 	font-family: dashicons;
-	font-size: 17px;
+	font-size: 18px;
 	content: '\f228';
 	cursor: move;
 }
 
 .form-table .sc-sortable-list li label {
 	display: block;
-	height: 28px;
-	padding: 0;
 	margin: 0;
 }
 

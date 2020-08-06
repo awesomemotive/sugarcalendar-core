@@ -518,7 +518,7 @@ module.exports = function( grunt ) {
 	] );
 
 	// Clone Standard files for "standardize" task
-	grunt.registerTask( 'clone-standard', function() {
+	grunt.registerTask( 'standardize', function() {
 
 		// Clean /standard directory
 		grunt.task.run( 'clean:standard_before_clone' );
@@ -545,7 +545,7 @@ module.exports = function( grunt ) {
 
 		// Maybe standardize
 		if ( 'standard' === type ) {
-			tasks.push( 'clone-standard' );
+			tasks.push( 'standardize' );
 		}
 
 		// Update

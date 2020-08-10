@@ -12,7 +12,7 @@ body.sugar-calendar h2.nav-tab-wrapper.sc-tab-clear {
 
 body.calendar_page_sc-settings .sc-tab-wrap h2.sc-nav-tab-wrapper + .notice,
 body.sugar-calendar .sc-tab-wrap h2.sc-nav-tab-wrapper + .notice {
-	margin-top: 22px;
+	margin-top: 10px;
 }
 
 body.sugar-calendar:not(.post-new-php):not(.post-php) .wrap > .wp-heading-inline,

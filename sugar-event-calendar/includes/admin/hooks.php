@@ -70,6 +70,7 @@ add_action( 'admin_head-calendar_page_sc-settings', __NAMESPACE__ . '\\Help\\add
 
 // Admin Event taxonomy tab override
 add_action( 'admin_notices', __NAMESPACE__ . '\\Nav\\taxonomy_tabs', 10, 1 );
+add_action( 'sugar_calendar_admin_nav_after_items', __NAMESPACE__ . '\\Nav\\add_new' );
 
 // Admin remove quick/bulk edit admin screen
 add_action( 'admin_print_footer_scripts', __NAMESPACE__ . '\\Posts\\hide_quick_bulk_edit' );

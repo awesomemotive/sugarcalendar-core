@@ -20,14 +20,13 @@ function display() {
 	// Initial tab array
 	$tabs = array(
 		'sugar-calendar' => array(
-			'name' => __( 'Events', 'sugar-calendar' ),
+			'name' => esc_html__( 'Events', 'sugar-calendar' ),
 			'url'  => sugar_calendar_get_admin_url()
 		)
 	);
 
-	// Get the post type object
-	$post_type        = sugar_calendar_get_event_post_type_id();
-	$post_type_object = get_post_type_object( $post_type );
+	// Get the post type
+	$post_type = sugar_calendar_get_event_post_type_id();
 
 	// Get the taxonomies
 	$taxonomies = get_object_taxonomies( $post_type, 'objects' );
@@ -64,41 +63,148 @@ function display() {
 		$active_tab = 'sugar-calendar';
 	}
 
+	// Output the tabs
+	echo get( $tabs, $active_tab );
+}
+
+/**
+ * Get the product tabs for Events, Calendars, and more.
+ *
+ * @since 2.0.0
+ *
+ * @param array $navs Array of navigational items
+ * @param string $selected ID of the currently selected nav item
+ *
+ * @return string HTML for the nav
+ */
+function get( $navs = array(), $selected = false ) {
+
+	// Fallback to a "General" nav if none passed in (don't rely on this!)
+	if ( empty( $navs ) ) {
+		$navs = array(
+			'general' => array(
+				'name' => esc_html__( 'General', 'sugar-calendar' ),
+				'url'  => esc_url_raw( $_SERVER['REQUEST_URI'] )
+			)
+		);
+	}
+
+	// Maybe default to first nav item key
+	if ( empty( $selected ) ) {
+		$selected = array_key_first( $navs );
+	}
+
+	/**
+	 * Filter the navigation items before they are used to generate HTML.
+	 *
+	 * @since 2.0.19
+	 */
+	$navs = (array) apply_filters( 'sugar_calendar_admin_nav_items', $navs, $selected );
+
 	// Start a buffer
-	ob_start() ?>
+	ob_start();
+
+	/**
+	 * Fires before the admin navigation.
+	 *
+	 * @since 2.0.19
+	 */
+	do_action( 'sugar_calendar_admin_nav_before_wrapper', $navs, $selected ); ?>
 
 	<div class="clear"></div>
 	<h2 class="nav-tab-wrapper sc-nav-tab-wrapper sc-tab-clear"><?php
 
+		/**
+		 * Fires before the admin navigation inside the wrapper.
+		 *
+		 * @since 2.0.19
+		 */
+		do_action( 'sugar_calendar_admin_nav_before_items', $navs, $selected );
+
 		// Loop through tabs, and output links
-		foreach ( $tabs as $tab_id => $tab ) :
+		foreach ( $navs as $nav_id => $nav ) :
 
-			// Setup the class to denote a tab is active
-			$active_class = ( $active_tab === $tab_id )
-				? 'nav-tab-active'
-				: '';
+			/**
+			 * This PHP is written this way to avoid whitespace between links.
+			 *
+			 * Do not attempt to clean this up without first testing the output.
+			 */
+			?><a href="<?php echo esc_url( $nav['url'] ); ?>" class="nav-tab <?php selected_class( $selected, $nav_id ); ?>"><?php
 
-			?><a href="<?php echo esc_url( $tab['url'] ); ?>" class="nav-tab <?php echo esc_attr( $active_class ); ?>"><?php
-				echo esc_html( $tab['name'] );
+				// May contain HTML
+				echo $nav['name'];
+
 			?></a><?php
 
 		endforeach;
 
-		if ( current_user_can( $post_type_object->cap->create_posts ) ) :
-
-			?><a href="<?php echo esc_url( add_query_arg( array( 'post_type' => $post_type ), admin_url( 'post-new.php' ) ) ); ?>" class="page-title-action">
-				<?php esc_html_e( 'Add New', 'sugar-calendar' ); ?>
-			</a><?php
-
-		endif;
-
+		/**
+		 * Fires after the admin navigation inside the wrapper.
+		 *
+		 * @since 2.0.19
+		 */
+		do_action( 'sugar_calendar_admin_nav_after_items', $navs, $selected );
 	?></h2>
-	<br>
 
 	<?php
 
-	// Output the current buffer
-	echo ob_get_clean();
+	/**
+	 * Fires after the admin navigation.
+	 *
+	 * @since 2.0.19
+	 */
+	do_action( 'sugar_calendar_admin_nav_after_wrapper', $navs, $selected );
+
+	// Get the current buffer
+	$retval = ob_get_clean();
+
+	// Filter & return
+	return (string) apply_filters( 'sugar_calendar_admin_get_nav', $retval, $navs, $selected );
+}
+
+/**
+ * Output the appropriate class for the selected nav item.
+ *
+ * @since 2.0.19
+ *
+ * @param string $selected
+ * @param string $nav
+ *
+ * @return string
+ */
+function selected_class( $selected = '', $nav = '' ) {
+	echo ( $selected === $nav )
+		? 'nav-tab-active'
+		: '';
+}
+
+/**
+ * Maybe add the "Add New" button to the end of the navigation.
+ *
+ * This function is a necessary abstraction to allow this API to be reused in
+ * "Settings" and by external add-ons. See "Event Ticketing" for usage details.
+ *
+ * @since 2.0.19
+ */
+function add_new() {
+
+	// Bail if not an admin-area Events page
+	if ( ! sugar_calendar_admin_is_events_page() ) {
+		return;
+	}
+
+	// Get the post type object
+	$post_type        = sugar_calendar_get_event_post_type_id();
+	$post_type_object = get_post_type_object( $post_type );
+
+	// Bail if user cannot add a new Event
+	if ( ! current_user_can( $post_type_object->cap->create_posts ) ) {
+		return;
+	}
+
+	?><a href="<?php echo esc_url( add_query_arg( array( 'post_type' => $post_type ), admin_url( 'post-new.php' ) ) ); ?>" class="page-title-action">
+		<?php esc_html_e( 'Add New', 'sugar-calendar' ); ?>
+	</a><?php
 }
 
 /**

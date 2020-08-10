@@ -230,9 +230,9 @@ class Box {
 				? 'aria-selected="true"'
 				: 'aria-selected="false"'; ?>
 
-			<button type="button" id="tab-<?php echo esc_attr( $section->id ); ?>" role="tab" aria-controls="<?php echo esc_attr( $section->id ); ?>" <?php echo $selected; ?>>
+			<button type="button" id="sc-tab-<?php echo esc_attr( $section->id ); ?>" role="tab" aria-labelledby="sc-label-<?php echo esc_attr( $section->id ); ?>" aria-controls="sc-section-<?php echo esc_attr( $section->id ); ?>" <?php echo $selected; ?>>
 				<i class="dashicons dashicons-<?php echo esc_attr( $section->icon ); ?>"></i>
-				<span class="label"><?php echo esc_attr( $section->label ); ?></span>
+				<span class="label" id="sc-label-<?php echo esc_attr( $section->id ); ?>"><?php echo esc_attr( $section->label ); ?></span>
 			</button>
 
 		<?php endforeach;
@@ -261,7 +261,7 @@ class Box {
 				? 'style="display: none;"'
 				: ''; ?>
 
-			<div id="<?php echo esc_attr( $section->id ); ?>" role="tabpanel" tabindex="0" aria-labelledby="tab-<?php echo esc_attr( $section->id ); ?>" class="section-content" <?php echo $selected; ?>><?php
+			<div id="sc-section-<?php echo esc_attr( $section->id ); ?>" role="tabpanel" tabindex="0" aria-labelledby="sc-tab-<?php echo esc_attr( $section->id ); ?>" class="section-content" <?php echo $selected; ?>><?php
 
 				$this->get_section_contents( $section );
 

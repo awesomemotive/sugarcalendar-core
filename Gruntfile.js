@@ -510,6 +510,13 @@ module.exports = function( grunt ) {
 		'update',
 	] );
 
+	// Stylesheets
+	grunt.registerTask( 'css', [
+		'cssmin:ltr',
+		'rtlcss',
+		'cssmin:rtl',
+	] );
+
 	// Internationalization
 	grunt.registerTask( 'i18n', [
 		'addtextdomain',
@@ -532,9 +539,7 @@ module.exports = function( grunt ) {
 	// Bump assets
 	grunt.registerTask( 'update', [
 		'bump',
-		'cssmin:ltr',
-		'rtlcss',
-		'cssmin:rtl',
+		'css',
 		'i18n',
 		'makepot',
 	] );

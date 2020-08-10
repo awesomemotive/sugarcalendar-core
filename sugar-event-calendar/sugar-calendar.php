@@ -98,9 +98,19 @@ final class Plugin {
 	}
 
 	/**
-	 * Backwards compatibility for some database properties
+	 * Public magic isset method allows checking any key from any scope.
 	 *
-	 * This is probably still not working right, so don't count on it yet.
+	 * @since 2.0.0
+	 *
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function __isset( $key = '' ) {
+		return (bool) isset( $this->{$key} );
+	}
+
+	/**
+	 * Public magic get method allows getting any value from any scope.
 	 *
 	 * @since 2.0.0
 	 *
@@ -108,7 +118,7 @@ final class Plugin {
 	 * @return mixed
 	 */
 	public function __get( $key = '' ) {
-		return isset( $this->{$key} )
+		return $this->__isset( $key )
 			? $this->{$key}
 			: null;
 	}

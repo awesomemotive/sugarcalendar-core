@@ -219,32 +219,11 @@ function primary_nav( $section = 'sc-settings' ) {
 	// Get sections
 	$tabs = get_sections();
 
-	// Start a buffer
-	ob_start() ?>
+	// Get the nav
+	$nav  = \Sugar_Calendar\Admin\Nav\get( $tabs, $section );
 
-	<div class="clear"></div>
-	<h2 class="nav-tab-wrapper sc-nav-tab-wrapper sc-tab-clear"><?php
-
-		// Loop through tabs, and output links
-		foreach ( $tabs as $tab_id => $tab ) :
-
-			// Setup the class to denote a tab is active
-			$active_class = ( $section === $tab_id )
-				? 'nav-tab-active'
-				: '';
-
-			?><a href="<?php echo esc_url( $tab['url'] ); ?>" class="nav-tab <?php echo esc_attr( $active_class ); ?>"><?php
-				echo $tab['name']; // May contain HTML
-			?></a><?php
-
-		endforeach;
-
-	?></h2>
-
-	<?php
-
-	// Output the current buffer
-	echo ob_get_clean();
+	// Output the nav
+	echo $nav;
 }
 
 /**

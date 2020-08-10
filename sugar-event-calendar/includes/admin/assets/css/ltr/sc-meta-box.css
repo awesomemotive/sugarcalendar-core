@@ -125,11 +125,13 @@ tr.sugar-calendar-post-header th {
 	min-width: 90px;
 	border-right: 1px solid #ccd0d4;
 	margin-bottom: -1px;
+	z-index: 1;
 }
 
 .sc-vertical-sections .section-wrap {
 	background: #fff;
 	flex-basis: 80%;
+	z-index: 2;
 }
 
 .sc-vertical-sections .section-nav button {
@@ -187,7 +189,7 @@ tr.sugar-calendar-post-header th {
 	font-weight: bold;
 	background-color: #fff;
 	border-right-color: #fff;
-	width: calc( 100% + 1.5px );
+	width: calc( 100% + 2px );
 }
 
 .sc-vertical-sections .section-nav button[aria-selected="true"],

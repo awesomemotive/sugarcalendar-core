@@ -109,41 +109,40 @@ Sugar Calendar Lite has been translated into:
 * Serbian
 * Swedish
 
-= Meet the team =
-
-Sugar Calendar is built by [Sandhills Development](https://sandhillsdev.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page). We make [popular WordPress plugins](https://sandhillsdev.com/projects/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) used by hundreds of thousands of people just like you. [Get to know us here](https://sandhillsdev.com/about/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)!
-
 = Get help =
 
 Sugar Calendar (Lite) is backed by top-notch technical support from our globally distributed full-time support team. We also have an extensive [documentation site](https://docs.sugarcalendar.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) available. If you’re looking for faster support via email, we encourage you to purchase a [premium Sugar Calendar license](https://sugarcalendar.com/pricing/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page).
 
+= Meet the team =
+
+Sugar Calendar is built by [Sandhills Development](https://sandhillsdev.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page). We make [popular WordPress plugins](https://sandhillsdev.com/projects/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) used by hundreds of thousands of people just like you. [Get to know us here](https://sandhillsdev.com/about/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)!
+
 = From our blog =
 
-Check out the Sugar Calendar blog for developer updates and more.
+Check out some of our popular posts and release announcements.
 
-- [March 2020 - 2.0.14 and more!](https://sugarcalendar.com/2-0-14-and-more/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [Jan. 2020 - Preview of the upcoming Advanced Recurring add-on](https://sugarcalendar.com/preview-of-the-upcoming-advanced-recurring-add-on/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [Aug. 2019 - Calendar Feeds pro add-on released](https://sugarcalendar.com/calendar-feeds-pro-add-on-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [March 2019 - Version 2.0 released!](https://sugarcalendar.com/version2-0-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Professional add-on released for Event Ticketing](https://sugarcalendar.com/new-professional-add-on-released-for-event-ticketing/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [WP All Import add-on released](https://sugarcalendar.com/wp-all-import-add-on-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Preview of the upcoming Advanced Recurring add-on](https://sugarcalendar.com/preview-of-the-upcoming-advanced-recurring-add-on/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Calendar Feeds pro add-on released](https://sugarcalendar.com/calendar-feeds-pro-add-on-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Version 2.0 released!](https://sugarcalendar.com/version2-0-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
 
-[Subscribe to our newsletter](https://sugarcalendar.com/subscribe/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) to get posts like these in your inbox as soon as they’re published.
+**[Subscribe to our newsletter](https://sugarcalendar.com/subscribe/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** to get posts like these in your inbox as soon as they’re published.
 
 = Contribute to Sugar Calendar (Lite) =
 
+Development for this plugin happens in a public GitHub repository to better facilitate contributions from an active community of users, developers and designers. If you have a suggestion, bug report, patch, or pull request, please feel free to [contribute here](https://github.com/sugarcalendar/core).
+
 Lite development happens in a public GitHub repository to better facilitate contributions from an active community of users, developers, designers, and you.
-
-If you have a suggestion, bug report, patch, or pull request, please feel free to submit it [there](https://github.com/sugarcalendar/lite).
-
-- [https://github.com/sugarcalendar/lite](https://github.com/sugarcalendar/lite)
 
 = Looking for something else? =
 
-Check out our other goodies!  We are here to help you build your online business with WordPress.
+If Sugar Calendar doesn’t quite fit your needs, take a look at some of our other projects.
 
-- **[Easy Digital Downloads](https://easydigitaldownloads.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - The easiest (and best) way to sell digital products with WordPress
-- **[AffiliateWP](https://affiliatewp.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - Easily create your full-featured affiliate program on WordPress
-- **[Restrict Content Pro](https://restrictcontentpro.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - A powerful membership solution for WordPress. Or check out the free version ([Restrict Content](https://wordpress.org/plugins/restrict-content/)).
-- **[WP Simple Pay](https://wpsimplepay.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - In a few simple steps you can start accepting credit card payments with Stripe Checkout on your WordPress site. Or check out the free version ([WP Simple Pay Lite](https://wordpress.org/plugins/stripe/)).
+- [Easy Digital Downloads](https://easydigitaldownloads.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - Sell digital products with WordPress
+- [AffiliateWP](https://affiliatewp.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - A full-featured affiliate marketing solution
+- [Restrict Content Pro](https://restrictcontentpro.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - A powerful membership plugin for WordPress
+- [WP Simple Pay](https://wpsimplepay.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - A lightweight Stripe payments plugin
 
 == Installation ==
 

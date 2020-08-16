@@ -6,7 +6,7 @@ Plugin URI:        https://sugarcalendar.com
 Tags:              simple calendar, event calendar, event management, event list, schedule
 Requires PHP:      5.6.20
 Requires at least: 5.1
-Tested up to:      5.4
+Tested up to:      5.6
 Stable tag:        2.0.18
 
 You can easily manage events with this lightweight calendar. No complicated configuration. Simple to use. Sweeeet!
@@ -133,9 +133,7 @@ Check out some of our popular posts and release announcements.
 
 = Contribute to Sugar Calendar (Lite) =
 
-Development for this plugin happens in a public GitHub repository to better facilitate contributions from an active community of users, developers and designers. If you have a suggestion, bug report, patch, or pull request, please feel free to [contribute here](https://github.com/sugarcalendar/core).
-
-Lite development happens in a public GitHub repository to better facilitate contributions from an active community of users, developers, designers, and you.
+Development for this plugin happens in a public GitHub repository to better facilitate contributions from an active community of users, developers, designers, and you. If you have a suggestion, bug report, patch, or pull request, please feel free to [contribute here](https://github.com/sugarcalendar/core).
 
 = Looking for something else? =
 

@@ -185,7 +185,7 @@ Yes, there is a [free add-on](https://wordpress.org/extend/plugins/simple-google
 
 = Can I have event registration forms? =
 
-We have built free add-ons that provides integration with two popular form builders:
+We have built free add-ons that provide integration with two popular form builders:
 
 - [Gravity Forms Form Embed](https://sugarcalendar.com/downloads/gravity-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
 - [Ninja Forms form Embed](https://sugarcalendar.com/downloads/ninja-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)

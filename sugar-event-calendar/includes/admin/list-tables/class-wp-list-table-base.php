@@ -2525,7 +2525,7 @@ class Base_List_Table extends \WP_List_Table {
 		foreach ( $taxonomies as $tax ) {
 
 			// Skip if private
-			if ( ! $tax->public ) {
+			if ( empty( $tax->public ) ) {
 				continue;
 			}
 

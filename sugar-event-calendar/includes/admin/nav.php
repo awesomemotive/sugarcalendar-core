@@ -36,23 +36,23 @@ function display() {
 
 	// Maybe add taxonomies to tabs array
 	if ( ! empty( $taxonomies ) ) {
-		foreach ( $taxonomies as $tax => $details ) {
+		foreach ( $taxonomies as $tax ) {
 
 			// Skip if private
-			if ( ! $details->public ) {
+			if ( empty( $tax->public ) ) {
 				continue;
 			}
 
 			// Skip if current user cannot manage
-			if ( ! current_user_can( $details->cap->manage_terms ) ) {
+			if ( ! current_user_can( $tax->cap->manage_terms ) ) {
 				continue;
 			}
 
 			// Add taxonomy to tabs
-			$tabs[ $tax ] = array(
-				'name' => $details->labels->menu_name,
+			$tabs[ $tax->name ] = array(
+				'name' => $tax->labels->menu_name,
 				'url'  => add_query_arg( array(
-					'taxonomy'  => $tax,
+					'taxonomy'  => $tax->name,
 					'post_type' => $post_type
 				), admin_url( 'edit-tags.php' ) )
 			);

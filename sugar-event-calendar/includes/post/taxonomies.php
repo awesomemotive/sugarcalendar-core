@@ -30,6 +30,9 @@ function sugar_calendar_get_calendar_taxonomy_id() {
  */
 function sugar_calendar_register_calendar_taxonomy() {
 
+	// Get the taxonomy ID
+	$tax = sugar_calendar_get_calendar_taxonomy_id();
+
 	// Labels
 	$labels = array(
 		'name'                       => esc_html__( 'Calendars',                           'sugar-calendar' ),
@@ -74,7 +77,7 @@ function sugar_calendar_register_calendar_taxonomy() {
 		'rewrite'               => $rewrite,
 		'capabilities'          => $caps,
 		'update_count_callback' => '_update_post_term_count',
-		'query_var'             => sugar_calendar_get_calendar_taxonomy_id(),
+		'query_var'             => $tax,
 		'show_tagcloud'         => true,
 		'hierarchical'          => true,
 		'show_in_nav_menus'     => false,
@@ -87,7 +90,7 @@ function sugar_calendar_register_calendar_taxonomy() {
 
 	// Register
 	register_taxonomy(
-		sugar_calendar_get_calendar_taxonomy_id(),
+		$tax,
 		sugar_calendar_get_event_post_type_id(),
 		$args
 	);

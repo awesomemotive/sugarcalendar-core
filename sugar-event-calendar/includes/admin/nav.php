@@ -38,6 +38,11 @@ function display() {
 	if ( ! empty( $taxonomies ) ) {
 		foreach ( $taxonomies as $tax => $details ) {
 
+			// Skip if private
+			if ( ! $details->public ) {
+				continue;
+			}
+
 			// Skip if current user cannot manage
 			if ( ! current_user_can( $details->cap->manage_terms ) ) {
 				continue;

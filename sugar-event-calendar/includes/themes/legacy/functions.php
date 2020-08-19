@@ -85,6 +85,28 @@ function sc_is_event_for_day( $event, $day = '01', $month = '01', $year = '1970'
 }
 
 /**
+ * Return if doing events, either singular, archive, or related taxonomy
+ *
+ * @since 2.0.19
+ *
+ * @return boolean
+ */
+function sc_doing_events() {
+
+	// Get post types and taxonomies
+	$pts = sugar_calendar_allowed_post_types();
+	$tax = sugar_calendar_get_object_taxonomies( $pts );
+
+	// Return true if single event, event archive, or allowed taxonomy archive
+	if ( is_singular( $pts ) || is_post_type_archive( $pts ) || is_tax( $tax ) ) {
+		return true;
+	}
+
+	// Default false
+	return false;
+}
+
+/**
  * Retrieves recurring events
  *
  * @since 2.0.0
@@ -1392,7 +1414,7 @@ function sc_update_recurring_events( $event_id = 0 ) {
 	} else {
 		$events = get_posts( array(
 			'numberposts' => - 1,
-			'post_type'   => 'sc_event',
+			'post_type'   => sugar_calendar_get_event_post_type_id(),
 			'post_status' => 'publish',
 			'fields'      => 'ids',
 			'order'       => 'asc'
@@ -1460,7 +1482,7 @@ function sc_calculate_recurring( $event_id ) {
 function sc_get_all_events( $category = null ) {
 	$args = array(
 		'numberposts' => -1,
-		'post_type'   => 'sc_event',
+		'post_type'   => sugar_calendar_get_event_post_type_id(),
 		'post_status' => 'publish',
 		'orderby'     => 'meta_value_num',
 		'fields'      => 'ids',
@@ -1576,7 +1598,7 @@ function sc_get_recurring_events( $time, $type, $category = null ) {
 	}
 
 	$args = array(
-		'post_type'      => 'sc_event',
+		'post_type'      => sugar_calendar_get_event_post_type_id(),
 		'posts_per_page' => -1,
 		'post_status'    => 'publish',
 		'fields'         => 'ids',
@@ -1674,7 +1696,7 @@ function sc_get_events_for_day( $display_day, $display_month, $display_year, $ca
 
 	$args = array(
 		'numberposts' => -1,
-		'post_type'   => 'sc_event',
+		'post_type'   => sugar_calendar_get_event_post_type_id(),
 		'post_status' => 'publish',
 		'orderby'     => 'meta_value_num',
 		'order'       => 'asc',

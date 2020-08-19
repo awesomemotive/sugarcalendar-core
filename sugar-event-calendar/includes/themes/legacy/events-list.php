@@ -80,7 +80,8 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 		);
 	}
 
-	// Get the taxonomy ID
+	// Get the IDs
+	$pt  = sugar_calendar_get_event_post_type_id();
 	$tax = sugar_calendar_get_calendar_taxonomy_id();
 
 	// Maybe filter by taxonomy term
@@ -110,7 +111,7 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 		// Get the object ID and use it for the event ID (for back compat)
 		$event_id = $event->object_id;
 
-		echo '<li class="' . str_replace( 'hentry', '', implode( ' ', get_post_class( 'sc_event',$event_id ) ) ) . '">';
+		echo '<li class="' . str_replace( 'hentry', '', implode( ' ', get_post_class( $pt, $event_id ) ) ) . '">';
 
 		do_action( 'sc_before_event_list_item', $event_id );
 

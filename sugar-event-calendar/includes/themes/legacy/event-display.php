@@ -30,12 +30,8 @@ function sc_event_content_hooks( $content = '' ) {
 		return $content;
 	}
 
-	// Get post types and taxonomies
-	$pts = sugar_calendar_allowed_post_types();
-	$tax = sugar_calendar_get_object_taxonomies( $pts );
-
-	// Bail if not single event, event archive, or calendar archive
-	if ( ! ( is_singular( $pts ) || is_post_type_archive( $pts ) || is_tax( $tax ) ) ) {
+	// Bail if not doing events
+	if ( ! sc_doing_events() ) {
 		return $content;
 	}
 

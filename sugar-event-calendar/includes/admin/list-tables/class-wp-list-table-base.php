@@ -2516,6 +2516,12 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Loop through taxonomies and setup the dropdowns
 		foreach ( $taxonomies as $tax ) {
+
+			// Skip if private
+			if ( ! $tax->public ) {
+				continue;
+			}
+
 			$current = $this->get_tax_term( $tax->name );
 
 			// Label for dropdown

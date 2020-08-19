@@ -30,12 +30,12 @@ function sc_event_content_hooks( $content = '' ) {
 		return $content;
 	}
 
-	// Get IDs
-	$post_type = sugar_calendar_get_event_post_type_id();
-	$tax       = sugar_calendar_get_calendar_taxonomy_id();
+	// Get post types and taxonomies
+	$pts = sugar_calendar_allowed_post_types();
+	$tax = sugar_calendar_get_object_taxonomies( $pts );
 
 	// Bail if not single event, event archive, or calendar archive
-	if ( ! ( is_singular( $post_type ) || is_post_type_archive( $post_type ) || is_tax( $tax ) ) ) {
+	if ( ! ( is_singular( $pts ) || is_post_type_archive( $pts ) || is_tax( $tax ) ) ) {
 		return $content;
 	}
 

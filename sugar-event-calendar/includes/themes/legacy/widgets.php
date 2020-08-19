@@ -111,6 +111,7 @@ class sc_events_widget extends WP_Widget {
 	 * @return string|void
 	 */
 	public function form( $instance ) {
+		$tax      = sugar_calendar_get_calendar_taxonomy_id();
 		$title    = isset($instance['title']) ? $instance['title'] : '';
 		$size     = isset($instance['size']) ? $instance['size'] : '';
 		$category = isset($instance['category']) ? $instance['category'] : '';
@@ -132,7 +133,7 @@ class sc_events_widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Calendar:', 'sugar-calendar'); ?></label>
 			<select class="widefat <?php echo $this->get_field_name('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>" id="<?php echo $this->get_field_id('category'); ?>">
 				<option value="0" <?php selected(0, $category); ?>><?php _e('All', 'sugar-calendar'); ?></option><?php
-					$terms = get_terms('sc_event_category');
+					$terms = get_terms( $tax );
 					if ($terms) {
 						foreach ($terms as $term) {
 							echo '<option value="' . $term->slug . '" ' . selected($term->slug, $category, false) . '>' . esc_html( $term->name ) . '</option>';
@@ -221,6 +222,7 @@ class sc_events_list_widget extends WP_Widget
 	 * @return string|void
 	 */
 	public function form( $instance ) {
+		$tax             = sugar_calendar_get_calendar_taxonomy_id();
 		$title           = isset($instance['title']) ? esc_attr($instance['title']) : '';
 		$display         = isset($instance['display']) ? esc_attr($instance['display']) : '';
 		$display_order   = ( 'past' === $display ) ? 'DESC' : 'ASC';
@@ -273,7 +275,7 @@ class sc_events_list_widget extends WP_Widget
 			<select class="widefat <?php echo $this->get_field_name('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>" id="<?php echo $this->get_field_id('category'); ?>">
 				<option value="0" <?php selected(0, $category); ?>><?php _e('All Calendars', 'sugar-calendar'); ?></option>
 				<?php
-				$terms = get_terms('sc_event_category');
+				$terms = get_terms( $tax );
 				if (count( $terms) ) {
 					foreach ($terms as $term) {
 						echo '<option value="' . $term->slug . '" ' . selected($term->slug, $category, false) . '>' . $term->name . '</option>';
@@ -354,6 +356,7 @@ class sc_event_categories_widget extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
+		$tax           = sugar_calendar_get_calendar_taxonomy_id();
 		$before_widget = isset($args['before_widget']) ? $args['before_widget'] : '';
 		$before_title  = isset($args['before_title']) ? $args['before_title'] : '';
 		$after_title   = isset($args['after_title']) ? $args['after_title'] : '';
@@ -367,7 +370,7 @@ class sc_event_categories_widget extends WP_Widget {
 		}
 
 		do_action('sc_before_category_widget');
-		$terms = get_terms('sc_event_category');
+		$terms = get_terms( $tax );
 
 		if ( is_wp_error( $terms ) ) {
 			return;

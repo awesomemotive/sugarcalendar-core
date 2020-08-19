@@ -80,9 +80,12 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 		);
 	}
 
+	// Get the taxonomy ID
+	$tax = sugar_calendar_get_calendar_taxonomy_id();
+
 	// Maybe filter by taxonomy term
 	if ( ! empty( $category ) ) {
-		$args[ sugar_calendar_get_calendar_taxonomy_id() ] = $category;
+		$args[ $tax ] = $category;
 	}
 
 	// Query for events
@@ -132,7 +135,7 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 		}
 
 		if ( ! empty( $show['categories'] ) ) {
-			$event_categories = get_the_terms( $event_id, 'sc_event_category' );
+			$event_categories = get_the_terms( $event_id, $tax );
 
 			if ( $event_categories ) {
 				$categories = wp_list_pluck( $event_categories, 'name' );

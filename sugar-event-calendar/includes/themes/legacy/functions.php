@@ -144,12 +144,14 @@ function sc_get_event_class( $object_id = false ) {
 		return '';
 	}
 
+	$tax = sugar_calendar_get_calendar_taxonomy_id();
+
 	// Check term cache first
-	$terms = get_object_term_cache( $object_id, 'sc_event_category' );
+	$terms = get_object_term_cache( $object_id, $tax );
 
 	// No cache, so query for terms
 	if ( false === $terms ) {
-		$terms = wp_get_object_terms( $object_id, 'sc_event_category' );
+		$terms = wp_get_object_terms( $object_id, $tax );
 	}
 
 	// Bail if no terms
@@ -1466,7 +1468,8 @@ function sc_get_all_events( $category = null ) {
 	);
 
 	if ( ! is_null( $category ) ) {
-		$args[ 'sc_event_category' ] = $category;
+		$tax          = sugar_calendar_get_calendar_taxonomy_id();
+		$args[ $tax ] = $category;
 	}
 
 	$full_list = array();
@@ -1645,7 +1648,8 @@ function sc_get_recurring_events( $time, $type, $category = null ) {
 	}
 
 	if ( ! is_null( $category ) ) {
-		$args[ 'sc_event_category' ] = $category;
+		$tax          = sugar_calendar_get_calendar_taxonomy_id();
+		$args[ $tax ] = $category;
 	}
 
 	return get_posts( apply_filters( 'sc_recurring_events_query', $args ) );
@@ -1690,8 +1694,9 @@ function sc_get_events_for_day( $display_day, $display_month, $display_year, $ca
 		),
 	);
 
-	if ( !is_null( $category ) ) {
-		$args[ 'sc_event_category' ] = $category;
+	if ( ! is_null( $category ) ) {
+		$tax          = sugar_calendar_get_calendar_taxonomy_id();
+		$args[ $tax ] = $category;
 	}
 
 	$single = get_posts( apply_filters( 'sc_calendar_query_args', $args ) );

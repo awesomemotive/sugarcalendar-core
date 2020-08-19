@@ -10,7 +10,7 @@ namespace Sugar_Calendar\Admin\Nav;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Get the product tabs for Events, Calendars, and more.
+ * Display the tabs for Events, Calendars, and more.
  *
  * @since 2.0.0
  */
@@ -29,7 +29,10 @@ function display() {
 	$post_type = sugar_calendar_get_event_post_type_id();
 
 	// Get the taxonomies
-	$taxonomies = get_object_taxonomies( $post_type, 'objects' );
+	$taxonomies = sugar_calendar_get_object_taxonomies(
+		$post_type,
+		'objects'
+	);
 
 	// Maybe add taxonomies to tabs array
 	if ( ! empty( $taxonomies ) ) {
@@ -225,7 +228,8 @@ function taxonomy_tabs() {
 
 	// Get taxonomies
 	$taxonomy   = sanitize_key( $taxnow );
-	$taxonomies = get_object_taxonomies( sugar_calendar_get_event_post_type_id() );
+	$post_type  = sugar_calendar_get_event_post_type_id();
+	$taxonomies = sugar_calendar_get_object_taxonomies( $post_type );
 
 	// Bail if current taxonomy is not an event taxonomy
 	if ( empty( $taxonomies ) || ! in_array( $taxonomy, $taxonomies, true ) ) {

@@ -118,6 +118,58 @@ function sugar_calendar_relate_taxonomy_to_post_types() {
 }
 
 /**
+ * Get all taxonomies for all supported Event relationships.
+ *
+ * @since 2.0.19
+ *
+ * @param string|array $types
+ * @return array
+ */
+function sugar_calendar_get_object_taxonomies( $types = '', $output = 'names' ) {
+
+	// Default return value
+	$retval = array();
+
+	// Fallback types to an array of post types that support Events
+	if ( empty( $types ) ) {
+		$types = sugar_calendar_allowed_post_types();
+	}
+
+	// Bail if no post types allow Events (weird!)
+	if ( empty( $types ) ) {
+		return $retval;
+	}
+
+	// Default output to names
+	if ( ! in_array( $output, array( 'objects', 'names' ), true ) ) {
+		$output = 'names';
+	}
+
+	// Cast strings to array
+	if ( is_string( $types ) ) {
+		$types = (array) $types;
+	}
+
+	// Loop through types
+	foreach ( $types as $type ) {
+
+		// Get taxonomies for post type
+		$taxonomies = get_object_taxonomies( $type, $output );
+
+		// Skip if empty
+		if ( empty( $taxonomies ) ) {
+			continue;
+		}
+
+		// Merge
+		$retval = array_merge( $retval, $taxonomies );
+	}
+
+	// Filter & return
+	return (array) apply_filters( 'sugar_calendar_get_taxonomies', $retval );
+}
+
+/**
  * Get the color of a calendar
  *
  * @since 2.0.0

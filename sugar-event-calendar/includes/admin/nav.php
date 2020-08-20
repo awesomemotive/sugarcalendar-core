@@ -43,6 +43,11 @@ function display() {
 				continue;
 			}
 
+			// Skip if private
+			if ( ! $details->public ) {
+				continue;
+			}
+
 			// Skip if current user cannot manage
 			if ( ! current_user_can( $tax->cap->manage_terms ) ) {
 				continue;

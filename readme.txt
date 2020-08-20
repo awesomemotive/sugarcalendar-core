@@ -7,7 +7,7 @@ Tags:              simple calendar, event calendar, event management, event list
 Requires PHP:      5.6.20
 Requires at least: 5.1
 Tested up to:      5.6
-Stable tag:        2.0.18
+Stable tag:        2.0.19
 
 You can easily manage events with this lightweight calendar. No complicated configuration. Simple to use. Sweeeet!
 
@@ -123,11 +123,11 @@ Sugar Calendar is built by [Sandhills Development](https://sandhillsdev.com/?utm
 
 Check out some of our popular posts and release announcements.
 
-- [Professional add-on released for Event Ticketing](https://sugarcalendar.com/new-professional-add-on-released-for-event-ticketing/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Professional add-on released: Event URLs](https://sugarcalendar.com/new-professional-add-on-released-event-urls/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Professional add-on released: Event Ticketing](https://sugarcalendar.com/new-professional-add-on-released-for-event-ticketing/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
 - [WP All Import add-on released](https://sugarcalendar.com/wp-all-import-add-on-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
 - [Preview of the upcoming Advanced Recurring add-on](https://sugarcalendar.com/preview-of-the-upcoming-advanced-recurring-add-on/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
 - [Calendar Feeds pro add-on released](https://sugarcalendar.com/calendar-feeds-pro-add-on-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [Version 2.0 released!](https://sugarcalendar.com/version2-0-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
 
 **[Subscribe to our newsletter](https://sugarcalendar.com/subscribe/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** to get posts like these in your inbox as soon as they’re published.
 

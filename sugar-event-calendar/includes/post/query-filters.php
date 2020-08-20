@@ -28,12 +28,20 @@ function sc_modify_events_archive( $query = false ) {
 		return $query;
 	}
 
-	// Primary type & tax
-	$post_type = sugar_calendar_get_event_post_type_id();
-	$tax       = sugar_calendar_get_calendar_taxonomy_id();
+	// Get post types and taxonomies
+	$pts = sugar_calendar_allowed_post_types();
+	$tax = sugar_calendar_get_object_taxonomies( $pts );
 
 	// Only proceed if an Event post type or Calendar taxonomy
-	if ( is_post_type_archive( $post_type ) || is_tax( $tax ) ) {
+	if ( is_post_type_archive( $pts ) || is_tax( $tax ) ) {
+
+		// Get the current post type
+		$post_type = $query->get( 'post_type' );
+
+		// Fallback to default post type
+		if ( empty( $post_type ) ) {
+			$post_type = sugar_calendar_get_event_post_type_id();
+		}
 
 		// Events table alias
 		$alias = 'sce';

@@ -794,7 +794,9 @@ class Base_List_Table extends \WP_List_Table {
 		$retval = array();
 
 		// Get the taxonomies
-		$taxonomies = get_object_taxonomies( $this->get_primary_post_type() );
+		$taxonomies = sugar_calendar_get_object_taxonomies(
+			$this->get_primary_post_type()
+		);
 
 		// Maybe add taxonomies to tabs array
 		if ( empty( $taxonomies ) ) {
@@ -2359,8 +2361,10 @@ class Base_List_Table extends \WP_List_Table {
 			}
 		}
 
-		// Get event terms
-		$taxos = get_object_taxonomies( $this->get_primary_post_type() );
+		// Get taxonomies
+		$taxos = sugar_calendar_get_object_taxonomies(
+			$this->get_primary_post_type()
+		);
 
 		// Maybe loop through taxonomies, and add terms to
 		if ( ! empty( $taxos ) && is_array( $taxos ) ) {
@@ -2504,7 +2508,10 @@ class Base_List_Table extends \WP_List_Table {
 		}
 
 		// Get taxonomies for this post type
-		$taxonomies = get_object_taxonomies( $post_type, 'objects' );
+		$taxonomies = sugar_calendar_get_object_taxonomies(
+			$post_type,
+			'objects'
+		);
 
 		// Bail if no taxonomies
 		if ( empty( $taxonomies ) ) {
@@ -2516,6 +2523,12 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Loop through taxonomies and setup the dropdowns
 		foreach ( $taxonomies as $tax ) {
+
+			// Skip if private
+			if ( empty( $tax->public ) ) {
+				continue;
+			}
+
 			$current = $this->get_tax_term( $tax->name );
 
 			// Label for dropdown

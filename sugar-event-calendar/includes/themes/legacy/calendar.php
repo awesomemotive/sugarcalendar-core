@@ -42,9 +42,11 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 		}
 	}
 
+	$tax = sugar_calendar_get_calendar_taxonomy_id();
+
 	// Category
-	$category = ! empty( $_REQUEST['sc_event_category'] )
-		? sanitize_text_field( $_REQUEST['sc_event_category'] )
+	$category = ! empty( $_REQUEST[ $tax ] )
+		? sanitize_text_field( $_REQUEST[ $tax ] )
 		: $category;
 
 	// Year can be set via function parameter
@@ -78,14 +80,16 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 		12 => sc_month_num_to_name(12)
 	);
 
+	$tax = sugar_calendar_get_calendar_taxonomy_id();
+
 	// Arguments for category dropdown
 	$args = apply_filters( 'sc_calendar_dropdown_categories_args', array(
-		'name'             => 'sc_event_category',
-		'id'               => 'sc_event_category',
+		'name'             => $tax,
+		'id'               => $tax,
 		'show_option_all'  => __( 'All Calendars', 'sugar-calendar' ),
 		'selected'         => $category,
 		'value_field'      => 'slug',
-		'taxonomy'         => 'sc_event_category',
+		'taxonomy'         => $tax,
 		'show_option_none' => __( 'No Calendars', 'sugar-calendar' ),
 	) );
 
@@ -144,7 +148,7 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 
 				?></select>
 
-				<label for="sc_event_category" style="display:none"><?php esc_html_e( 'Calendar', 'sugar-calendar' ); ?></label>
+				<label for="<?php echo esc_attr( $tax ); ?>" style="display:none"><?php esc_html_e( 'Calendar', 'sugar-calendar' ); ?></label>
 				<?php wp_dropdown_categories( $args ); ?>
 
 				<input type="submit" id="sc_submit" class="sc_calendar_submit" value="<?php esc_attr_e( 'Go', 'sugar-calendar' ); ?>">
@@ -202,6 +206,8 @@ function sc_calendar_next_prev( $display_month, $display_year, $size = 'large', 
 	// Formally deprecated
 	_deprecated_function( __FUNCTION__, '1.1.0', 'sc_get_next_prev' );
 
+	$tax = sugar_calendar_get_calendar_taxonomy_id();
+
 	// Next
 	$next_month = $display_month + 1;
 	$next_month = $next_month > 12 ? 1 : $next_month;
@@ -223,7 +229,7 @@ function sc_calendar_next_prev( $display_month, $display_year, $size = 'large', 
 			<input name="sc_nonce" type="hidden" value="<?php echo wp_create_nonce('sc_calendar_nonce'); ?>">
 			<input type="hidden" name="action" value="sc_load_calendar">
 			<input type="hidden" name="action_2" value="prev_month">
-			<input type="hidden" name="sc_event_category" value="<?php echo is_null( $category ) ? 0 : $category; ?>">
+			<input type="hidden" name="<?php echo esc_attr( $tax ); ?>" value="<?php echo is_null( $category ) ? 0 : $category; ?>">
 			<?php if($size == 'small') { ?><input type="hidden" name="sc_calendar_size" value="small"><?php } ?>
 			<input type="hidden" name="type" value="month">
 		</form>
@@ -235,7 +241,7 @@ function sc_calendar_next_prev( $display_month, $display_year, $size = 'large', 
 			<input name="sc_nonce" type="hidden" value="<?php echo wp_create_nonce('sc_calendar_nonce') ?>">
 			<input type="hidden" name="action" value="sc_load_calendar">
 			<input type="hidden" name="action_2" value="next_month">
-			<input type="hidden" name="sc_event_category" value="<?php echo is_null( $category ) ? 0 : $category; ?>">
+			<input type="hidden" name="<?php echo esc_attr( $tax ); ?>" value="<?php echo is_null( $category ) ? 0 : $category; ?>">
 			<?php if($size == 'small') { ?><input type="hidden" name="sc_calendar_size" value="small"><?php } ?>
 			<input type="hidden" name="type" value="month">
 		</form>
@@ -255,6 +261,8 @@ function sc_calendar_next_prev( $display_month, $display_year, $size = 'large', 
  * @param string $type
  */
 function sc_get_next_prev( $display_time, $size = 'large', $category = null, $type = 'month' ) {
+
+	$tax = sugar_calendar_get_calendar_taxonomy_id();
 
 	switch ( $type ) {
 		case 'day':
@@ -291,7 +299,7 @@ function sc_get_next_prev( $display_time, $size = 'large', $category = null, $ty
 			<input type="hidden" name="display_time" value="<?php echo esc_attr( $prev_display_time ); ?>">
 			<input type="hidden" name="type" value="<?php echo esc_attr( $prev_display_time ); ?>">
 			<input type="hidden" name="action" value="sc_load_calendar">
-			<input type="hidden" name="sc_event_category" value="<?php echo is_null( $category ) ? 0 : esc_attr( $category ); ?>">
+			<input type="hidden" name="<?php echo esc_attr( $tax ); ?>" value="<?php echo is_null( $category ) ? 0 : esc_attr( $category ); ?>">
 			<?php if ( 'small' === $size ) : ?>
 				<input type="hidden" name="sc_calendar_size" value="small">
 			<?php endif; ?>
@@ -302,7 +310,7 @@ function sc_get_next_prev( $display_time, $size = 'large', $category = null, $ty
 			<input name="sc_nonce" type="hidden" value="<?php echo wp_create_nonce('sc_calendar_nonce') ?>">
 			<input type="hidden" name="display_time" value="<?php echo esc_attr( $next_display_time ); ?>">
 			<input type="hidden" name="action" value="sc_load_calendar">
-			<input type="hidden" name="sc_event_category" value="<?php echo is_null( $category ) ? 0 : esc_attr( $category ); ?>">
+			<input type="hidden" name="<?php echo esc_attr( $tax ); ?>" value="<?php echo is_null( $category ) ? 0 : esc_attr( $category ); ?>">
 			<?php if ( 'small' === $size ) : ?>
 				<input type="hidden" name="sc_calendar_size" value="small">
 			<?php endif; ?>

@@ -47,7 +47,7 @@ function sc_load_front_end_scripts() {
 		||
 		sc_using_widget()
 		||
-		is_singular( 'sc_event' )
+		sc_doing_events()
 		||
 		sc_content_has_shortcodes()
 	) {

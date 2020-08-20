@@ -8,6 +8,8 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+/** Posts *********************************************************************/
+
 /**
  * Transition event statuses when a post of the primary type also updates.
  *
@@ -18,8 +20,8 @@ function sugar_calendar_transition_post_status( $new_status = '', $old_status = 
 	// Get the post type being transitioned
 	$post_type = get_post_type( $post );
 
-	// Bail if not our post type
-	if ( sugar_calendar_get_event_post_type_id() !== $post_type ) {
+	// Bail if not supported post type
+	if ( in_array( $post_type, sugar_calendar_allowed_post_types(), true ) ) {
 		return;
 	}
 
@@ -36,6 +38,26 @@ function sugar_calendar_transition_post_status( $new_status = '', $old_status = 
 		'status' => $post->post_status
 	) );
 }
+
+/**
+ * Delete events for a given post ID.
+ *
+ * This is hooked to the `deleted_posts` action to ensure that all events
+ * related to a post ID are deleted when the post is also deleted.
+ *
+ * @since 2.0.0
+ *
+ * @param int $post_id
+ * @return array
+ */
+function sugar_calendar_delete_post_events( $post_id = 0 ) {
+	return sugar_calendar_delete_events( array(
+		'object_id'   => $post_id,
+		'object_type' => 'post'
+	) );
+}
+
+/** Taxonomies ****************************************************************/
 
 /**
  * Get which taxonomy term is being queried.
@@ -68,6 +90,48 @@ function sugar_calendar_get_taxonomy_term_for_query( $taxonomy = '', $query = fa
 }
 
 /**
+ * Get all of the requested terms being queried for.
+ *
+ * Eventually gets fed into WP_Tax_Query.
+ *
+ * @since 2.0.19
+ *
+ * @param object $query
+ * @return array
+ */
+function sugar_calendar_get_requested_terms( $query = false ) {
+
+	// Default return value
+	$retval = array();
+
+	// Get the taxonomies
+	$taxos = sugar_calendar_get_object_taxonomies( '', 'names' );
+
+	// Bail if no taxonomies
+	if ( empty( $taxos ) ) {
+		return $retval;
+	}
+
+	// Get the term slug
+	foreach ( $taxos as $tax ) {
+
+		// Look for requested term in query
+		$term = sugar_calendar_get_taxonomy_term_for_query( $tax, $query );
+
+		// Break out of loop if term found for query
+		if ( ! empty( $term ) ) {
+			array_push( $retval, array(
+				'tax'  => $tax,
+				'term' => $term
+			) );
+		}
+	}
+
+	// Filter & return
+	return (array) apply_filters( 'sugar_calendar_get_requested_terms', $retval, $query );
+}
+
+/**
  * Filter events query variables and maybe add the taxonomy and term.
  *
  * This filter is necessary to ensure events queries are cached using the
@@ -79,26 +143,24 @@ function sugar_calendar_get_taxonomy_term_for_query( $taxonomy = '', $query = fa
  */
 function sugar_calendar_pre_get_events_by_taxonomy( $query ) {
 
-	// Get the taxonomy ID
-	$tax = sugar_calendar_get_calendar_taxonomy_id();
+	// Get the requested term
+	$terms = sugar_calendar_get_requested_terms( $query );
 
-	// Get the term slug
-	$term = sugar_calendar_get_taxonomy_term_for_query( $tax, $query );
-
-	// Bail if sanitized term is empty
-	if ( empty( $term ) ) {
+	// Bail if terms are empty
+	if ( empty( $terms ) ) {
 		return;
 	}
 
-	// Add the taxonomy & term to query vars
-	$query->set_query_var( $tax, $term );
+	// Loop through terms and add them to primary query vars
+	foreach ( $terms as $term ) {
+
+		// Add the taxonomy & term to query vars
+		$query->set_query_var( $term['tax'], $term['term'] );
+	}
 }
 
 /**
  * Filter events queries and maybe JOIN by taxonomy term relationships
- *
- * This is hard-coded (for now) to provide back-compat with the built-in
- * post-type & taxonomy. It can be expanded to support any/all in future versions.
  *
  * @since 2.0.0
  *
@@ -109,39 +171,48 @@ function sugar_calendar_pre_get_events_by_taxonomy( $query ) {
  */
 function sugar_calendar_join_by_taxonomy_term( $clauses = array(), $query = false ) {
 
-	// Get the taxonomy ID
-	$tax = sugar_calendar_get_calendar_taxonomy_id();
+	// Get the requested terms
+	$terms = sugar_calendar_get_requested_terms( $query );
 
-	// Get the term slug
-	$term = sugar_calendar_get_taxonomy_term_for_query( $tax, $query );
-
-	// Bail if sanitized term is empty
-	if ( empty( $term ) ) {
+	// Bail if terms are empty
+	if ( empty( $terms ) ) {
 		return $clauses;
 	}
 
-	// No calendar (NOT EXISTS)
-	if ( in_array( $term, array( '-1', '__sc_none__' ), true ) ) {
-		$args = array(
-			'taxonomy' => $tax,
-			'operator' => 'NOT EXISTS'
-		);
+	// Default arguments
+	$args = array();
 
-	// Specific calendar
-	} else {
-		$args = array(
-			'taxonomy' => $tax,
-			'terms'    => $term,
-			'field'    => 'slug'
-		);
+	// Loop through terms
+	foreach ( $terms as $term ) {
+
+		// No term (NOT EXISTS)
+		if ( in_array( $term['term'], array( '-1', '__sc_none__' ), true ) ) {
+			array_push( $args, array(
+				'taxonomy' => $term['tax'],
+				'operator' => 'NOT EXISTS'
+			) );
+
+		// Specific term
+		} elseif ( ! empty( $term['tax'] ) && ! empty( $term['term'] ) ) {
+			array_push( $args, array(
+				'taxonomy' => $term['tax'],
+				'terms'    => $term['term'],
+				'field'    => 'slug'
+			) );
+		}
+	}
+
+	// Bail if no arguments
+	if ( empty( $args ) ) {
+		return;
 	}
 
 	// Get a taxonomy query object
-	$tax_query = new WP_Tax_Query( array( $args ) );
+	$tax_query = new WP_Tax_Query( $args );
 
 	// Get clauses
 	$sql_clauses   = $tax_query->get_sql( 'sc_e', 'object_id' );
-	$join_clauses  = array( $clauses['join'], $sql_clauses['join'] );
+	$join_clauses  = array( $clauses['join'],  $sql_clauses['join']  );
 	$where_clauses = array( $clauses['where'], $sql_clauses['where'] );
 
 	// Join clauses
@@ -150,22 +221,4 @@ function sugar_calendar_join_by_taxonomy_term( $clauses = array(), $query = fals
 
 	// Return new clauses
 	return $clauses;
-}
-
-/**
- * Delete events for a given post ID.
- *
- * This is hooked to the `deleted_posts` action to ensure that all events
- * related to a post ID are deleted when the post is also deleted.
- *
- * @since 2.0.0
- *
- * @param int $post_id
- * @return array
- */
-function sugar_calendar_delete_post_events( $post_id = 0 ) {
-	return sugar_calendar_delete_events( array(
-		'object_id'   => $post_id,
-		'object_type' => 'post'
-	) );
 }

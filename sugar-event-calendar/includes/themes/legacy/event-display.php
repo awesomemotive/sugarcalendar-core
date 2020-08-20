@@ -30,8 +30,8 @@ function sc_event_content_hooks( $content = '' ) {
 		return $content;
 	}
 
-	// Bail if not single event, event archive, or calendar archive
-	if ( ! ( is_singular( 'sc_event' ) || is_post_type_archive( 'sc_event' ) || is_tax( 'sc_event_category' ) ) ) {
+	// Bail if not doing events
+	if ( ! sc_doing_events() ) {
 		return $content;
 	}
 

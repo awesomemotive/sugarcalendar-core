@@ -9,7 +9,7 @@
  * Domain Path:       /sugar-event-calendar/includes/languages/
  * Requires PHP:      5.6.20
  * Requires at least: 5.1
- * Version:           2.0.18
+ * Version:           2.0.19
  */
 
 // Exit if accessed directly

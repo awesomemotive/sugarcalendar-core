@@ -132,7 +132,40 @@ function redirect_old_post_type() {
 
 	// Redirect if global post-type matches our Event post type
 	if ( sugar_calendar_get_event_post_type_id() === $typenow ) {
-		wp_safe_redirect( sugar_calendar_get_admin_base_url() );
+
+		// Get base
+		$base = sugar_calendar_get_admin_base_url();
+
+		// Setup default redirection
+		$redirect = $base;
+
+		// Default arguments
+		$args = array();
+
+		// Get allowed keys
+		$taxos = sugar_calendar_get_object_taxonomies();
+
+		// Loop through taxonomies looking for terms
+		if ( ! empty( $taxos ) ) {
+
+			// Loop
+			foreach ( $taxos as $tax ) {
+
+				// Look for terms in URL
+				if ( isset( $_GET[ $tax ] ) ) {
+
+					// Add to allowed args
+					$args[ $tax ] = sanitize_key( $_GET[ $tax ] );
+				}
+			}
+
+			// Maybe add arguments to base
+			if ( ! empty( $args ) ) {
+				$redirect = add_query_arg( $args, $base );
+			}
+		}
+
+		wp_safe_redirect( $redirect );
 		exit();
 	}
 }

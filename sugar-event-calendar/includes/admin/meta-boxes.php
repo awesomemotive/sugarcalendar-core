@@ -386,13 +386,17 @@ function prepare_date_time( $prefix = 'start' ) {
 		? sanitize_text_field( $_POST[ $prefix . 'time_second' ] )
 		: 0;
 
-	// Day/night
-	$am_pm = ! empty( $_POST[ $prefix . 'time_am_pm' ] )
-		? sanitize_text_field( $_POST[ $prefix . 'time_am_pm' ] )
-		: 'am';
+	// Maybe adjust for meridiem
+	if ( '12' === sugar_calendar_get_clock_type() ) {
 
-	// Maybe tweak hours
-	$hour = adjust_hour_for_meridiem( $hour, $am_pm );
+		// Day/night
+		$am_pm = ! empty( $_POST[ $prefix . 'time_am_pm' ] )
+			? sanitize_text_field( $_POST[ $prefix . 'time_am_pm' ] )
+			: 'am';
+
+		// Maybe tweak hours
+		$hour = adjust_hour_for_meridiem( $hour, $am_pm );
+	}
 
 	// Make timestamp from pieces
 	$timestamp = mktime(
@@ -738,6 +742,16 @@ function calendars( $post, $box ) {
  */
 function section_duration( $event = null ) {
 
+	// Get clock type, hours, and minutes
+	$clock   = sugar_calendar_get_clock_type();
+	$hours   = sugar_calendar_get_hours();
+	$minutes = sugar_calendar_get_minutes();
+
+	// Get the hour format based on the clock type
+	$hour_format = ( '12' === $clock )
+		? 'h'
+		: 'H';
+
 	// Setup empty Event if malformed
 	if ( ! is_object( $event ) ) {
 		$event = new Sugar_Calendar\Event();
@@ -776,7 +790,7 @@ function section_duration( $event = null ) {
 		if ( empty( $all_day ) ) {
 
 			// Hour
-			$end_hour = date( 'h', $end_date_time );
+			$end_hour = date( $hour_format, $end_date_time );
 			if ( empty( $end_hour ) ) {
 				$end_hour = '';
 			}
@@ -814,7 +828,7 @@ function section_duration( $event = null ) {
 		if ( empty( $all_day ) ) {
 
 			// Hour
-			$hour = date( 'h', $date_time );
+			$hour = date( $hour_format, $date_time );
 			if ( empty( $hour ) ) {
 				$hour = '';
 			}
@@ -870,7 +884,7 @@ function section_duration( $event = null ) {
 							'first'    => '&nbsp;',
 							'id'       => 'start_time_hour',
 							'name'     => 'start_time_hour',
-							'items'    => sugar_calendar_get_hours(),
+							'items'    => $hours,
 							'selected' => $hour
 						) ); ?>
 						<span class="sc-time-separator">:</span>
@@ -878,14 +892,17 @@ function section_duration( $event = null ) {
 							'first'    => '&nbsp;',
 							'id'       => 'start_time_minute',
 							'name'     => 'start_time_minute',
-							'items'    => sugar_calendar_get_minutes(),
+							'items'    => $minutes,
 							'selected' => $minute
-						) ); ?>
-						<select id="start_time_am_pm" name="start_time_am_pm" class="sc-select-chosen sc-time">
-							<option value="">&nbsp;</option>
-							<option value="am" <?php selected( $am_pm, 'am' ); ?>><?php esc_html_e( 'AM', 'sugar-calendar' ); ?></option>
-							<option value="pm" <?php selected( $am_pm, 'pm' ); ?>><?php esc_html_e( 'PM', 'sugar-calendar' ); ?></option>
-						</select>
+						) );
+
+						if ( '12' === $clock ) : ?>
+							<select id="start_time_am_pm" name="start_time_am_pm" class="sc-select-chosen sc-time">
+								<option value="">&nbsp;</option>
+								<option value="am" <?php selected( $am_pm, 'am' ); ?>><?php esc_html_e( 'AM', 'sugar-calendar' ); ?></option>
+								<option value="pm" <?php selected( $am_pm, 'pm' ); ?>><?php esc_html_e( 'PM', 'sugar-calendar' ); ?></option>
+							</select>
+						<?php endif; ?>
 					</div>
 				</td>
 
@@ -904,7 +921,7 @@ function section_duration( $event = null ) {
 							'first'    => '&nbsp;',
 							'id'       => 'end_time_hour',
 							'name'     => 'end_time_hour',
-							'items'    => sugar_calendar_get_hours(),
+							'items'    => $hours,
 							'selected' => $end_hour
 						) ); ?>
 						<span class="sc-time-separator">:</span>
@@ -912,14 +929,17 @@ function section_duration( $event = null ) {
 							'first'    => '&nbsp;',
 							'id'       => 'end_time_minute',
 							'name'     => 'end_time_minute',
-							'items'    => sugar_calendar_get_minutes(),
+							'items'    => $minutes,
 							'selected' => $end_minute
-						) ); ?>
-						<select id="end_time_am_pm" name="end_time_am_pm" class="sc-select-chosen sc-time">
-							<option value="">&nbsp;</option>
-							<option value="am" <?php selected( $end_am_pm, 'am' ); ?>><?php esc_html_e( 'AM', 'sugar-calendar' ); ?></option>
-							<option value="pm" <?php selected( $end_am_pm, 'pm' ); ?>><?php esc_html_e( 'PM', 'sugar-calendar' ); ?></option>
-						</select>
+						) );
+
+						if ( '12' === $clock ) : ?>
+							<select id="end_time_am_pm" name="end_time_am_pm" class="sc-select-chosen sc-time">
+								<option value="">&nbsp;</option>
+								<option value="am" <?php selected( $end_am_pm, 'am' ); ?>><?php esc_html_e( 'AM', 'sugar-calendar' ); ?></option>
+								<option value="pm" <?php selected( $end_am_pm, 'pm' ); ?>><?php esc_html_e( 'PM', 'sugar-calendar' ); ?></option>
+							</select>
+						<?php endif; ?>
 					</div>
 				</td>
 			</tr>

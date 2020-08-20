@@ -254,38 +254,102 @@ function sugar_calendar_get_recurrence_types() {
 }
 
 /**
+ * Get the clock type, based on the user's preference and the site setting.
+ *
+ * Future versions of this may be able to guess a better default based on the
+ * timezone or locale.
+ *
+ * @since 2.0.19
+ *
+ * @return string
+ */
+function sugar_calendar_get_clock_type() {
+
+	// Get user time format preference
+	$pref = sugar_calendar_get_user_preference( 'time_format', 'g:i a' );
+
+	// Base clock type on time format preference
+	$retval = strstr( strtolower( $pref ), 'a' )
+		? '12'
+		: '24';
+
+	// Filter & return
+	return apply_filters( 'sugar_calendar_get_clock_type', $retval, $pref );
+}
+
+/**
  * Return array of hours
  *
- * @since 0.2.4
+ * @since 2.0.0
  *
  * @return array
  */
 function sugar_calendar_get_hours() {
-	return apply_filters( 'sugar_calendar_get_hours', array(
-		'01',
-		'02',
-		'03',
-		'04',
-		'05',
-		'06',
-		'07',
-		'08',
-		'09',
-		'10',
-		'11',
-		'12'
-	) );
+
+	// Get the clock type
+	$clock = sugar_calendar_get_clock_type();
+
+	// 12 hour clock
+	if ( '12' === $clock ) {
+		$retval = array(
+			'01',
+			'02',
+			'03',
+			'04',
+			'05',
+			'06',
+			'07',
+			'08',
+			'09',
+			'10',
+			'11',
+			'12'
+		);
+
+	// 24 hour clock
+	} else {
+		$retval = array(
+			'01',
+			'02',
+			'03',
+			'04',
+			'05',
+			'06',
+			'07',
+			'08',
+			'09',
+			'10',
+			'11',
+			'12',
+			'13',
+			'14',
+			'15',
+			'16',
+			'17',
+			'18',
+			'19',
+			'20',
+			'21',
+			'22',
+			'23'
+		);
+	}
+
+	// Filter & return
+	return (array) apply_filters( 'sugar_calendar_get_hours', $retval, $clock );
 }
 
 /**
  * Return array of minutes
  *
- * @since 0.2.4
+ * @since 2.0.0
  *
  * @return array
  */
 function sugar_calendar_get_minutes() {
-	return apply_filters( 'sugar_calendar_get_minutes', array(
+
+	// Filter & return
+	return (array) apply_filters( 'sugar_calendar_get_minutes', array(
 		'00',
 		'05',
 		'10',
@@ -304,7 +368,7 @@ function sugar_calendar_get_minutes() {
 /**
  * Output a select dropdown for hours & minutes
  *
- * @since 0.2.4
+ * @since 2.0.0
  *
  * @param array $args
  */

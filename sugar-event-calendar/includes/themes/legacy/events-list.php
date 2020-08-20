@@ -80,9 +80,13 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 		);
 	}
 
+	// Get the IDs
+	$pt  = sugar_calendar_get_event_post_type_id();
+	$tax = sugar_calendar_get_calendar_taxonomy_id();
+
 	// Maybe filter by taxonomy term
 	if ( ! empty( $category ) ) {
-		$args[ sugar_calendar_get_calendar_taxonomy_id() ] = $category;
+		$args[ $tax ] = $category;
 	}
 
 	// Query for events
@@ -107,7 +111,7 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 		// Get the object ID and use it for the event ID (for back compat)
 		$event_id = $event->object_id;
 
-		echo '<li class="' . str_replace( 'hentry', '', implode( ' ', get_post_class( 'sc_event',$event_id ) ) ) . '">';
+		echo '<li class="' . str_replace( 'hentry', '', implode( ' ', get_post_class( $pt, $event_id ) ) ) . '">';
 
 		do_action( 'sc_before_event_list_item', $event_id );
 
@@ -132,7 +136,7 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 		}
 
 		if ( ! empty( $show['categories'] ) ) {
-			$event_categories = get_the_terms( $event_id, 'sc_event_category' );
+			$event_categories = get_the_terms( $event_id, $tax );
 
 			if ( $event_categories ) {
 				$categories = wp_list_pluck( $event_categories, 'name' );

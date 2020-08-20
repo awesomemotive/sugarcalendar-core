@@ -10,7 +10,7 @@ namespace Sugar_Calendar\Admin\Nav;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Get the product tabs for Events, Calendars, and more.
+ * Display the tabs for Events, Calendars, and more.
  *
  * @since 2.0.0
  */
@@ -29,22 +29,30 @@ function display() {
 	$post_type = sugar_calendar_get_event_post_type_id();
 
 	// Get the taxonomies
-	$taxonomies = get_object_taxonomies( $post_type, 'objects' );
+	$taxonomies = sugar_calendar_get_object_taxonomies(
+		$post_type,
+		'objects'
+	);
 
 	// Maybe add taxonomies to tabs array
 	if ( ! empty( $taxonomies ) ) {
-		foreach ( $taxonomies as $tax => $details ) {
+		foreach ( $taxonomies as $tax ) {
+
+			// Skip if private
+			if ( empty( $tax->public ) ) {
+				continue;
+			}
 
 			// Skip if current user cannot manage
-			if ( ! current_user_can( $details->cap->manage_terms ) ) {
+			if ( ! current_user_can( $tax->cap->manage_terms ) ) {
 				continue;
 			}
 
 			// Add taxonomy to tabs
-			$tabs[ $tax ] = array(
-				'name' => $details->labels->menu_name,
+			$tabs[ $tax->name ] = array(
+				'name' => $tax->labels->menu_name,
 				'url'  => add_query_arg( array(
-					'taxonomy'  => $tax,
+					'taxonomy'  => $tax->name,
 					'post_type' => $post_type
 				), admin_url( 'edit-tags.php' ) )
 			);
@@ -225,7 +233,8 @@ function taxonomy_tabs() {
 
 	// Get taxonomies
 	$taxonomy   = sanitize_key( $taxnow );
-	$taxonomies = get_object_taxonomies( sugar_calendar_get_event_post_type_id() );
+	$post_type  = sugar_calendar_get_event_post_type_id();
+	$taxonomies = sugar_calendar_get_object_taxonomies( $post_type );
 
 	// Bail if current taxonomy is not an event taxonomy
 	if ( empty( $taxonomies ) || ! in_array( $taxonomy, $taxonomies, true ) ) {

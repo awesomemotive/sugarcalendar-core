@@ -27,9 +27,11 @@ function sc_load_calendar_via_ajax() {
 		return;
 	}
 
+	$tax = sugar_calendar_get_calendar_taxonomy_id();
+
 	// Get calendar attributes
-	$category = ! empty( $_REQUEST[ 'sc_event_category' ] )
-		? sanitize_text_field( $_REQUEST[ 'sc_event_category' ] )
+	$category = ! empty( $_REQUEST[ $tax ] )
+		? sanitize_text_field( $_REQUEST[ $tax ] )
 		: '';
 	$type     = ! empty( $_POST[ 'type' ] )
 		? sanitize_text_field( $_POST[ 'type' ] )

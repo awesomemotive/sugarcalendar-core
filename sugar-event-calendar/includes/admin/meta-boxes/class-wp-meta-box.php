@@ -85,7 +85,7 @@ class Box {
 			'id'       => 'location',
 			'label'    => esc_html__( 'Location', 'sugar-calendar' ),
 			'icon'     => 'location',
-			'order'    => 80,
+			'order'    => 50,
 			'callback' => __NAMESPACE__ . '\\section_location'
 		) );
 

@@ -108,7 +108,8 @@ function sc_add_event_details( $post_id = 0 ) {
 function sc_add_date_time_details( $post_id = 0 ) {
 
 	// Support 1.x
-	$all_day    = sugar_calendar_get_event_by_object( $post_id )->is_all_day();
+	$event      = sugar_calendar_get_event_by_object( $post_id );
+	$all_day    = $event->is_all_day();
 	$start_date = sc_get_event_date( $post_id );
 	$start_time = sc_get_event_start_time( $post_id );
 	$end_time   = sc_get_event_end_time( $post_id );
@@ -130,7 +131,7 @@ function sc_add_date_time_details( $post_id = 0 ) {
 
 			esc_html_e( 'Date:', 'sugar-calendar' );
 
-			echo ' ' . $start_date;
+			echo ' ' . $start_date; // Contains HTML - do not escape
 
 		?></div>
 
@@ -138,6 +139,9 @@ function sc_add_date_time_details( $post_id = 0 ) {
 
 	// Start & end TIMES
 	if ( ! empty( $start_time ) ) :
+
+		// Get start datetime
+		$dt = $event->format_date( 'Y-m-d\TH:i:s\Z', $event->start );
 
 		// Set to all-day and noop the end time
 		if ( ! empty( $all_day ) ) :
@@ -147,19 +151,29 @@ function sc_add_date_time_details( $post_id = 0 ) {
 
 		// Output start (or all-day)
 		?><div class="sc_event_time">
-			<span class="sc_event_start_time"><?php
+			<span class="sc_event_start_time">
+				<?php esc_html_e( 'Time:', 'sugar-calendar' ); ?>
 
-				esc_html_e( 'Time:', 'sugar-calendar' );
-
-				echo ' ' . $start_time;
-
-			?></span><?php
+				<time datetime="<?php echo esc_attr( $dt ); ?>">
+					<?php echo esc_html( $start_time ); ?>
+				</time>
+			</span><?php
 
 			// Maybe output a separator and the end time
-			if ( ! empty( $end_time ) && ( $end_time !== $start_time ) ) : ?>
+			if ( ! empty( $end_time ) && ( $end_time !== $start_time ) ) :
 
-				<span class="sc_event_time_sep">&nbsp;<?php _e( 'to', 'sugar-calendar' ); ?>&nbsp;</span>
-				<span class="sc_event_end_time"><?php echo $end_time; ?></span>
+				// Get end datetime
+				$dt = $event->format_date( 'Y-m-d\TH:i:s\Z', $event->end ); ?>
+
+				<span class="sc_event_time_sep">
+					<?php esc_html_e( 'to', 'sugar-calendar' ); ?>
+				</span>
+
+				<span class="sc_event_end_time">
+					<time datetime="<?php echo esc_attr( $dt ); ?>">
+						<?php echo esc_html( $end_time ); ?>
+					</time>
+				</span>
 
 			<?php endif; ?>
 

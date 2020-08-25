@@ -158,6 +158,7 @@ body.js div.chosen-container {
 }
 
 .chosen-container .chosen-results li.highlighted {
+	background-color: #00a0d2;
 	color: #fff;
 }
 
@@ -325,6 +326,11 @@ body.js div.chosen-container {
 	background-color: #26292c;
 }
 
+/* Modern */
+.admin-color-modern .chosen-container .chosen-results li.highlighted {
+	background-color: #3858e9;
+}
+
 /* Ocean */
 .admin-color-ocean .chosen-container .chosen-results li.highlighted {
 	background-color: #627c83;
@@ -434,6 +440,22 @@ body.admin-color-midnight .chosen-container.chosen-dropup .chosen-drop {
 }
 body.admin-color-midnight .chosen-container .chosen-results li.highlighted {
 	background-color: #e14d43;
+}
+
+/* Modern */
+body.admin-color-modern .chosen-container-active .chosen-single {
+	border-color: #3858e9;
+	box-shadow: 0 0 0 1px #3858e9;
+}
+body.admin-color-modern .chosen-container .chosen-drop {
+	border-color: #3858e9;
+	box-shadow: 0 1px 0 1px #3858e9;
+}
+body.admin-color-modern .chosen-container.chosen-dropup .chosen-drop {
+	box-shadow: 0 -1px 0 1px #3858e9;
+}
+body.admin-color-modern .chosen-container .chosen-results li.highlighted {
+	background-color: #3858e9;
 }
 
 /* Ocean */

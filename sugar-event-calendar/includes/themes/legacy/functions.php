@@ -973,10 +973,14 @@ function sc_get_event_date( $event_id = 0, $formatted = true ) {
 		return $retval;
 	}
 
+	// Get the event
+	$event      = sugar_calendar_get_event_by_object( $event_id );
+
 	// Get the date format, and format start
 	$format     = sc_get_date_format();
+	$dt         = $event->format_date( 'Y-m-d', $event->start );
 	$start_date = date_i18n( $format, $retval );
-	$start_html = '<span class="sc-date-start">' . $start_date . '</span>';
+	$start_html = '<span class="sc-date-start"><time datetime="' . esc_attr( $dt ) . '">' . esc_html( $start_date ) . '</time></span>';
 
 	// Get the end date
 	$end = get_post_meta( $event_id, 'sc_event_end_date_time', true );
@@ -991,7 +995,8 @@ function sc_get_event_date( $event_id = 0, $formatted = true ) {
 
 	// Add end to start, with separator
 	if ( $end_date !== $start_date ) {
-		$end_html = '<span class="sc-date-start-end-sep"> - </span><span class="sc-date-end">' . $end_date . '</span>';
+		$dt       = $event->format_date( 'Y-m-d', $event->end );
+		$end_html = '<span class="sc-date-start-end-sep"> - </span><span class="sc-date-end"><time datetime="' . esc_attr( $dt ) . '">' . esc_html( $end_date ) . '</time></span>';
 		$retval   = $start_html . $end_html;
 
 	// Just the start

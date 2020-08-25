@@ -59,6 +59,7 @@ body.sugar-calendar .wrap .nav-tab-wrapper .page-title-action {
 	padding-bottom: 9px;
 }
 
+/* Fresh */
 .admin-color-fresh .sc-settings-sub-nav a.current {
 	border-bottom-color: #00a0d2;
 }
@@ -81,6 +82,11 @@ body.sugar-calendar .wrap .nav-tab-wrapper .page-title-action {
 /* Midnight */
 .admin-color-midnight .sc-settings-sub-nav a.current {
 	border-bottom-color: #26292c;
+}
+
+/* Modern */
+.admin-color-modern .sc-settings-sub-nav a.current {
+	border-bottom-color: #3858e9;
 }
 
 /* Ocean */

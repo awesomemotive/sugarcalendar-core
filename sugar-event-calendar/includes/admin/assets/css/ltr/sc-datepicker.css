@@ -11,28 +11,17 @@
 	width: auto;
 	z-index: 1000 !important;
 }
-
-body.wp-admin:not(.rtl) .sc-datepicker {
-	margin-left: -1px;
-}
-
-body.wp-admin.rtl .sc-datepicker {
-	margin-right: -1px;
-}
-
 .sc-datepicker * {
 	padding: 0;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	border-radius: 0;
 }
-
 .sc-datepicker table {
 	font-size: 13px;
 	margin: 0;
 	border: none;
 	border-collapse: collapse;
 }
-
 .sc-datepicker .ui-widget-header,
 .sc-datepicker .ui-datepicker-header {
 	background-image: none;
@@ -40,13 +29,11 @@ body.wp-admin.rtl .sc-datepicker {
 	color: #fff;
 	font-weight: normal;
 }
-
 .sc-datepicker .ui-datepicker-header .ui-state-hover {
 	background: transparent;
 	border-color: transparent;
 	cursor: pointer;
 }
-
 .sc-datepicker .ui-datepicker-title {
 	margin: 0;
 	padding: 10px 0;
@@ -55,7 +42,6 @@ body.wp-admin.rtl .sc-datepicker {
 	line-height: 14px;
 	text-align: center;
 }
-
 .sc-datepicker .ui-datepicker-prev,
 .sc-datepicker .ui-datepicker-next {
 	position: relative;
@@ -63,38 +49,32 @@ body.wp-admin.rtl .sc-datepicker {
 	height: 34px;
 	width: 34px;
 }
-
-.sc-datepicker .ui-state-hover.ui-datepicker-prev,
-.sc-datepicker .ui-state-hover.ui-datepicker-next {
+.sc-datepicker .ui-state-hover.ui-datepicker-prev, .sc-datepicker .ui-state-hover.ui-datepicker-next {
 	border: none;
 }
-
 .sc-datepicker .ui-datepicker-prev,
 .sc-datepicker .ui-datepicker-prev-hover {
 	left: 0;
 }
-
 .sc-datepicker .ui-datepicker-next,
 .sc-datepicker .ui-datepicker-next-hover {
 	right: 0;
 }
-
-.sc-datepicker .ui-datepicker-next span,
-.sc-datepicker .ui-datepicker-prev span {
+.sc-datepicker .ui-datepicker-next span {
 	display: none;
 }
-
 .sc-datepicker .ui-datepicker-prev {
 	float: left;
 }
-
+.sc-datepicker .ui-datepicker-prev span {
+	display: none;
+}
 .sc-datepicker .ui-datepicker-next {
 	float: right;
 }
-
 .sc-datepicker .ui-datepicker-prev:before,
 .sc-datepicker .ui-datepicker-next:before {
-	font: normal 20px/34px 'dashicons';
+	font: normal 20px/34px "dashicons";
 	padding-left: 7px;
 	color: #fff;
 	speak: none;
@@ -103,60 +83,46 @@ body.wp-admin.rtl .sc-datepicker {
 	width: 34px;
 	height: 34px;
 }
-
 .sc-datepicker .ui-datepicker-prev:before {
-	content: '\f341';
+	content: "\f341";
 }
-
 .sc-datepicker .ui-datepicker-next:before {
-	content: '\f345';
+	content: "\f345";
 }
-
 .sc-datepicker .ui-datepicker-prev-hover:before,
 .sc-datepicker .ui-datepicker-next-hover:before {
 	opacity: 0.7;
 }
-
-.sc-datepicker select.ui-datepicker-month,
-.sc-datepicker select.ui-datepicker-year {
+.sc-datepicker select.ui-datepicker-month, .sc-datepicker select.ui-datepicker-year {
 	width: 33%;
 }
-
 .sc-datepicker thead {
 	color: #fff;
 	font-weight: 600;
 }
-
 .sc-datepicker th {
 	padding: 10px;
 }
-
 .sc-datepicker td {
 	padding: 0;
 	border: 1px solid #f4f4f4;
 }
-
 .sc-datepicker td.ui-datepicker-other-month {
 	border: transparent;
 }
-
 .sc-datepicker tr:first-of-type td {
 	border-top: 1px solid #f0f0f0;
 }
-
 .sc-datepicker td.ui-datepicker-week-end {
 	background-color: #f4f4f4;
 	border: 1px solid #f0f0f0;
 }
-
 .sc-datepicker td.ui-datepicker-today {
 	background-color: #f0f0c0;
 }
-
 .sc-datepicker td.ui-datepicker-current-day {
 	background: #bbdd88;
 }
-
 .sc-datepicker td .ui-state-default {
 	background: transparent;
 	border: none;
@@ -168,40 +134,34 @@ body.wp-admin.rtl .sc-datepicker {
 	font-weight: normal;
 	color: #444;
 }
-
 .sc-datepicker td.ui-state-disabled .ui-state-default {
 	opacity: 0.2;
 	background: #dfdfdf;
 	cursor: default;
 }
 
-/* Default Color Scheme */
+/* WordPress Color Schemes */
+/* Default/Unknown */
 .sc-datepicker .ui-widget-header,
 .sc-datepicker .ui-datepicker-header {
 	background: #00a0d2;
 }
-
 .sc-datepicker thead {
 	background: #32373c;
 }
-
 .sc-datepicker td .ui-state-hover {
 	background: #0073aa;
 	color: #fff;
 }
-
-/* WordPress Color Schemes */
 
 /* Fresh */
 .admin-color-fresh .sc-datepicker .ui-widget-header,
 .admin-color-fresh .sc-datepicker .ui-datepicker-header {
 	background: #00a0d2;
 }
-
 .admin-color-fresh .sc-datepicker thead {
 	background: #32373c;
 }
-
 .admin-color-fresh .sc-datepicker td .ui-state-hover {
 	background: #0073aa;
 	color: #fff;
@@ -212,11 +172,9 @@ body.wp-admin.rtl .sc-datepicker {
 .admin-color-blue .sc-datepicker .ui-datepicker-header {
 	background: #52accc;
 }
-
 .admin-color-blue .sc-datepicker thead {
 	background: #4796b3;
 }
-
 .admin-color-blue .sc-datepicker td .ui-state-hover {
 	background: #096484;
 	color: #fff;
@@ -227,11 +185,9 @@ body.wp-admin.rtl .sc-datepicker {
 .admin-color-coffee .sc-datepicker .ui-datepicker-header {
 	background: #59524c;
 }
-
 .admin-color-coffee .sc-datepicker thead {
 	background: #46403c;
 }
-
 .admin-color-coffee .sc-datepicker td .ui-state-hover {
 	background: #c7a589;
 	color: #fff;
@@ -242,11 +198,9 @@ body.wp-admin.rtl .sc-datepicker {
 .admin-color-ectoplasm .sc-datepicker .ui-datepicker-header {
 	background: #523f6d;
 }
-
 .admin-color-ectoplasm .sc-datepicker thead {
 	background: #413256;
 }
-
 .admin-color-ectoplasm .sc-datepicker td .ui-state-hover {
 	background: #a3b745;
 	color: #fff;
@@ -257,11 +211,9 @@ body.wp-admin.rtl .sc-datepicker {
 .admin-color-midnight .sc-datepicker .ui-datepicker-header {
 	background: #363b3f;
 }
-
 .admin-color-midnight .sc-datepicker thead {
 	background: #26292c;
 }
-
 .admin-color-midnight .sc-datepicker td .ui-state-hover {
 	background: #e14d43;
 	color: #fff;
@@ -272,11 +224,9 @@ body.wp-admin.rtl .sc-datepicker {
 .admin-color-modern .sc-datepicker .ui-datepicker-header {
 	background: #3858e9;
 }
-
 .admin-color-modern .sc-datepicker thead {
 	background: #26292c;
 }
-
 .admin-color-modern .sc-datepicker td .ui-state-hover {
 	background: #3858e9;
 	color: #fff;
@@ -287,11 +237,9 @@ body.wp-admin.rtl .sc-datepicker {
 .admin-color-ocean .sc-datepicker .ui-datepicker-header {
 	background: #738e96;
 }
-
 .admin-color-ocean .sc-datepicker thead {
 	background: #627c83;
 }
-
 .admin-color-ocean .sc-datepicker td .ui-state-hover {
 	background: #9ebaa0;
 	color: #fff;
@@ -302,11 +250,9 @@ body.wp-admin.rtl .sc-datepicker {
 .admin-color-sunrise .sc-datepicker .ui-datepicker-header {
 	background: #cf4944;
 }
-
 .admin-color-sunrise .sc-datepicker thead {
 	background: #be3631;
 }
-
 .admin-color-sunrise .sc-datepicker td .ui-state-hover {
 	background: #dd823b;
 	color: #fff;
@@ -317,32 +263,24 @@ body.wp-admin.rtl .sc-datepicker {
 .admin-color-light .sc-datepicker .ui-datepicker-header {
 	background: #888;
 }
-
 .admin-color-light .sc-datepicker thead {
 	background: #555;
 }
-
 .admin-color-light .sc-datepicker td .ui-state-hover {
 	background: #888;
 	color: #fff;
-}
-
-.admin-color-light .sc-datepicker td .ui-state-hover {
 	background: #888;
 }
 
 /* bbPress Color Schemes */
-
 /* Evergreen */
 .admin-color-bbp-evergreen .sc-datepicker .ui-widget-header,
 .admin-color-bbp-evergreen .sc-datepicker .ui-datepicker-header {
 	background: #56b274;
 }
-
 .admin-color-bbp-evergreen .sc-datepicker thead {
 	background: #36533f;
 }
-
 .admin-color-bbp-evergreen .sc-datepicker td .ui-state-hover {
 	background: #446950;
 	color: #fff;
@@ -353,12 +291,20 @@ body.wp-admin.rtl .sc-datepicker {
 .admin-color-bbp-mint .sc-datepicker .ui-datepicker-header {
 	background: #4ca26a;
 }
-
 .admin-color-bbp-mint .sc-datepicker thead {
 	background: #4f6d59;
 }
-
 .admin-color-bbp-mint .sc-datepicker td .ui-state-hover {
 	background: #5fb37c;
 	color: #fff;
 }
+
+/* Parent Input Alignment */
+body.wp-admin:not(.rtl) .sc-datepicker {
+	margin-left: -1px;
+}
+body.wp-admin.rtl .sc-datepicker {
+	margin-right: -1px;
+}
+
+/*# sourceMappingURL=datepicker.css.map */

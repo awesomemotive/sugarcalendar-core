@@ -176,7 +176,7 @@ tr.sugar-calendar-post-header th {
 .sc-vertical-sections .section-nav button:focus,
 .sc-vertical-sections .section-nav button:focus > .dashicons,
 .sc-vertical-sections .section-nav button:focus > span {
-	color: #096484;
+	color: #007cba;
 }
 
 .sc-vertical-sections .section-nav button .dashicons {
@@ -198,8 +198,15 @@ tr.sugar-calendar-post-header th {
 	color: #23282d;
 }
 
-/* Fresh */
+/* WordPress Color Schemes */
+
+/* Default/Unknown */
 .sc-vertical-sections .section-nav button[aria-selected="true"] {
+	border-right: 5px solid #23282d;
+}
+
+/* Fresh */
+.admin-color-fresh .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-right: 5px solid #096484;
 }
 
@@ -221,6 +228,11 @@ tr.sugar-calendar-post-header th {
 /* Midnight */
 .admin-color-midnight .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-right: 5px solid #26292c;
+}
+
+/* Modern */
+.admin-color-modern .sc-vertical-sections .section-nav button[aria-selected="true"] {
+	border-right: 5px solid #3858e9;
 }
 
 /* Ocean */

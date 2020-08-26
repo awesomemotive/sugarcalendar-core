@@ -250,7 +250,7 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/help.php:554
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1768
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-list.php:372
-#: sugar-event-calendar/includes/admin/meta-boxes.php:863
+#: sugar-event-calendar/includes/admin/meta-boxes.php:894
 #: sugar-event-calendar/includes/post/functions.php:159
 msgid "All Day"
 msgstr ""
@@ -679,7 +679,7 @@ msgid "&mdash; Full"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:255
-#: sugar-event-calendar/includes/admin/meta-boxes.php:70
+#: sugar-event-calendar/includes/admin/meta-boxes.php:73
 msgid "Event"
 msgstr ""
 
@@ -699,7 +699,7 @@ msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1703
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1713
-#: sugar-event-calendar/includes/admin/meta-boxes.php:80
+#: sugar-event-calendar/includes/admin/meta-boxes.php:87
 msgid "Details"
 msgstr ""
 
@@ -714,7 +714,7 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1787
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1794
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1805
-#: sugar-event-calendar/includes/admin/meta-boxes.php:876
+#: sugar-event-calendar/includes/admin/meta-boxes.php:907
 msgid "Start"
 msgstr ""
 
@@ -725,13 +725,13 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1789
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1796
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1811
-#: sugar-event-calendar/includes/admin/meta-boxes.php:913
+#: sugar-event-calendar/includes/admin/meta-boxes.php:944
 msgid "End"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1880
 #: sugar-event-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:86
-#: sugar-event-calendar/includes/admin/meta-boxes.php:981
+#: sugar-event-calendar/includes/admin/meta-boxes.php:1012
 msgid "Location"
 msgstr ""
 
@@ -789,8 +789,8 @@ msgid "Previous year"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2729
-#: sugar-event-calendar/includes/admin/settings.php:528
-#: sugar-event-calendar/includes/admin/settings.php:582
+#: sugar-event-calendar/includes/admin/settings.php:537
+#: sugar-event-calendar/includes/admin/settings.php:591
 msgid "Options"
 msgstr ""
 
@@ -814,7 +814,7 @@ msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-day.php:184
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-week.php:210
-#: sugar-event-calendar/includes/admin/meta-boxes.php:869
+#: sugar-event-calendar/includes/admin/meta-boxes.php:900
 #: sugar-event-calendar/includes/themes/legacy/event-display.php:148
 #: sugar-event-calendar/includes/themes/legacy/events-list.php:130
 msgid "All-day"
@@ -937,27 +937,27 @@ msgstr ""
 msgid "Event Options"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes.php:882
-#: sugar-event-calendar/includes/admin/meta-boxes.php:919
+#: sugar-event-calendar/includes/admin/meta-boxes.php:913
+#: sugar-event-calendar/includes/admin/meta-boxes.php:950
 msgid " at "
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes.php:902
-#: sugar-event-calendar/includes/admin/meta-boxes.php:939
+#: sugar-event-calendar/includes/admin/meta-boxes.php:933
+#: sugar-event-calendar/includes/admin/meta-boxes.php:970
 msgid "AM"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes.php:903
-#: sugar-event-calendar/includes/admin/meta-boxes.php:940
+#: sugar-event-calendar/includes/admin/meta-boxes.php:934
+#: sugar-event-calendar/includes/admin/meta-boxes.php:971
 msgid "PM"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/meta-boxes.php:986
+#: sugar-event-calendar/includes/admin/meta-boxes.php:1017
 msgid "(Optional)"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/nav.php:94
-#: sugar-event-calendar/includes/admin/settings.php:202
+#: sugar-event-calendar/includes/admin/settings.php:208
 msgid "General"
 msgstr ""
 
@@ -1005,17 +1005,17 @@ msgid "Event draft updated."
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:77
-#: sugar-event-calendar/includes/admin/settings.php:459
+#: sugar-event-calendar/includes/admin/settings.php:468
 msgid "Maximum Events"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:86
-#: sugar-event-calendar/includes/admin/settings.php:471
+#: sugar-event-calendar/includes/admin/settings.php:480
 msgid "Start of Week"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:90
-#: sugar-event-calendar/includes/admin/settings.php:475
+#: sugar-event-calendar/includes/admin/settings.php:484
 #: sugar-event-calendar/includes/themes/legacy/functions.php:214
 #: sugar-event-calendar/includes/themes/legacy/functions.php:384
 #: sugar-event-calendar/includes/themes/legacy/functions.php:513
@@ -1025,7 +1025,7 @@ msgid "Sunday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:91
-#: sugar-event-calendar/includes/admin/settings.php:476
+#: sugar-event-calendar/includes/admin/settings.php:485
 #: sugar-event-calendar/includes/themes/legacy/functions.php:215
 #: sugar-event-calendar/includes/themes/legacy/functions.php:385
 #: sugar-event-calendar/includes/themes/legacy/functions.php:514
@@ -1035,7 +1035,7 @@ msgid "Monday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:92
-#: sugar-event-calendar/includes/admin/settings.php:477
+#: sugar-event-calendar/includes/admin/settings.php:486
 #: sugar-event-calendar/includes/themes/legacy/functions.php:216
 #: sugar-event-calendar/includes/themes/legacy/functions.php:386
 #: sugar-event-calendar/includes/themes/legacy/functions.php:515
@@ -1045,7 +1045,7 @@ msgid "Tuesday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:93
-#: sugar-event-calendar/includes/admin/settings.php:478
+#: sugar-event-calendar/includes/admin/settings.php:487
 #: sugar-event-calendar/includes/themes/legacy/functions.php:217
 #: sugar-event-calendar/includes/themes/legacy/functions.php:387
 #: sugar-event-calendar/includes/themes/legacy/functions.php:516
@@ -1055,7 +1055,7 @@ msgid "Wednesday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:94
-#: sugar-event-calendar/includes/admin/settings.php:479
+#: sugar-event-calendar/includes/admin/settings.php:488
 #: sugar-event-calendar/includes/themes/legacy/functions.php:218
 #: sugar-event-calendar/includes/themes/legacy/functions.php:388
 #: sugar-event-calendar/includes/themes/legacy/functions.php:517
@@ -1065,7 +1065,7 @@ msgid "Thursday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:95
-#: sugar-event-calendar/includes/admin/settings.php:480
+#: sugar-event-calendar/includes/admin/settings.php:489
 #: sugar-event-calendar/includes/themes/legacy/functions.php:219
 #: sugar-event-calendar/includes/themes/legacy/functions.php:389
 #: sugar-event-calendar/includes/themes/legacy/functions.php:518
@@ -1075,7 +1075,7 @@ msgid "Friday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:96
-#: sugar-event-calendar/includes/admin/settings.php:481
+#: sugar-event-calendar/includes/admin/settings.php:490
 #: sugar-event-calendar/includes/themes/legacy/functions.php:220
 #: sugar-event-calendar/includes/themes/legacy/functions.php:390
 #: sugar-event-calendar/includes/themes/legacy/functions.php:519
@@ -1085,19 +1085,19 @@ msgid "Saturday"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:99
-#: sugar-event-calendar/includes/admin/settings.php:484
+#: sugar-event-calendar/includes/admin/settings.php:493
 msgid "Select the first day of the week"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:106
-#: sugar-event-calendar/includes/admin/settings.php:491
-#: sugar-event-calendar/includes/admin/settings.php:496
+#: sugar-event-calendar/includes/admin/settings.php:500
+#: sugar-event-calendar/includes/admin/settings.php:505
 msgid "Date Format"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/screen-options.php:118
-#: sugar-event-calendar/includes/admin/settings.php:545
-#: sugar-event-calendar/includes/admin/settings.php:550
+#: sugar-event-calendar/includes/admin/settings.php:554
+#: sugar-event-calendar/includes/admin/settings.php:559
 msgid "Time Format"
 msgstr ""
 
@@ -1108,7 +1108,7 @@ msgstr ""
 #: sugar-event-calendar/includes/admin/settings.php:20
 #: sugar-event-calendar/includes/admin/settings.php:21
 #: sugar-event-calendar/includes/admin/settings.php:112
-#: sugar-event-calendar/includes/admin/settings.php:358
+#: sugar-event-calendar/includes/admin/settings.php:364
 msgid "Settings"
 msgstr ""
 
@@ -1116,68 +1116,88 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:352
+#: sugar-event-calendar/includes/admin/settings.php:161
+msgid "Editing"
+msgstr ""
+
+#: sugar-event-calendar/includes/admin/settings.php:358
 msgid "Settings updated."
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:431
+#: sugar-event-calendar/includes/admin/settings.php:440
 msgid "F j, Y"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:447
+#: sugar-event-calendar/includes/admin/settings.php:456
 msgid "g:i a"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:464
+#: sugar-event-calendar/includes/admin/settings.php:473
 msgid ""
 "Number of events to include in any theme-side calendar. Default "
 "<code>30</code>. Use <code>0</code> for no limit."
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:520
-#: sugar-event-calendar/includes/admin/settings.php:574
+#: sugar-event-calendar/includes/admin/settings.php:529
+#: sugar-event-calendar/includes/admin/settings.php:583
 msgid "Custom:"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:521
+#: sugar-event-calendar/includes/admin/settings.php:530
 msgid "enter a custom date format in the following field"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:525
+#: sugar-event-calendar/includes/admin/settings.php:534
 msgid "Custom date format:"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:535
-#: sugar-event-calendar/includes/admin/settings.php:589
+#: sugar-event-calendar/includes/admin/settings.php:544
+#: sugar-event-calendar/includes/admin/settings.php:598
 msgid "Looks Like:"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:575
+#: sugar-event-calendar/includes/admin/settings.php:584
 msgid "enter a custom time format in the following field"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:579
+#: sugar-event-calendar/includes/admin/settings.php:588
 msgid "Custom time format:"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:680
+#: sugar-event-calendar/includes/admin/settings.php:625
+msgid "Editor Type"
+msgstr ""
+
+#: sugar-event-calendar/includes/admin/settings.php:629
+msgid "Blocks"
+msgstr ""
+
+#: sugar-event-calendar/includes/admin/settings.php:630
+msgid "Classic"
+msgstr ""
+
+#: sugar-event-calendar/includes/admin/settings.php:633
+msgid "Which interface to use when adding or editing Events."
+msgstr ""
+
+#: sugar-event-calendar/includes/admin/settings.php:721
 msgid ""
 "Save 25% on all Sugar Calendar purchases <strong>this week</strong>, "
 "including renewals and upgrades!"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:684
+#: sugar-event-calendar/includes/admin/settings.php:725
 msgid "Use code at checkout:"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:686
+#: sugar-event-calendar/includes/admin/settings.php:727
 msgid ""
 "Sale ends 23:59 PM December 6th CST. Save 25% on <a "
 "href=\"https://sandhillsdev.com/projects/\" target=\"_blank\">our other "
 "plugins</a>."
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:690
+#: sugar-event-calendar/includes/admin/settings.php:731
 msgid "Upgrade Now!"
 msgstr ""
 

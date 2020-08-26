@@ -88,7 +88,7 @@ function sugar_calendar_register_post_types() {
 	) );
 
 	// Supports
-	$supports = apply_filters( 'sc_event_supports', array(
+	$supports = array(
 		'title',
 		'thumbnail',
 		'revisions',
@@ -98,7 +98,18 @@ function sugar_calendar_register_post_types() {
 		'genesis-seo',
 		'genesis-layouts',
 		'genesis-simple-sidebars'
-	) );
+	);
+
+	// Get the editor type
+	$editor = get_option( 'sc_editor_type', 'classic' );
+
+	// Maybe supports the editor
+	if ( 'block' === $editor ) {
+		array_push( $supports, 'editor' );
+	}
+
+	// Filter supports
+	$supports = apply_filters( 'sc_event_supports', $supports );
 
 	// Capability types
 	$cap_types = apply_filters( 'sc_event_capability_type', array(
@@ -166,6 +177,11 @@ function sugar_calendar_register_post_types() {
 		'delete_with_user'     => false,
 		'source'               => 'sugar-calendar'
 	);
+
+	// Maybe supports the block editor
+	if ( 'block' === $editor ) {
+		$args['show_in_rest'] = true;
+	}
 
 	// Register the event type
 	register_post_type(

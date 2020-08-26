@@ -262,6 +262,17 @@ tr.sugar-calendar-post-header th {
 	border-left: 5px solid #4f6d59;
 }
 
+/* Block Editor
+-------------------------------------------------------------- */
+
+.edit-post-layout__metaboxes #sugar_calendar_editor_event_details .postbox-header h2 {
+	border-bottom: none;
+}
+
+.edit-post-layout__metaboxes #sugar_calendar_editor_event_details .sugar-calendar-wrap {
+	margin: -6px -14px -14px -14px;
+}
+
 @media only screen and ( max-width: 782px ) {
 
 	.sc-vertical-sections .section-nav {

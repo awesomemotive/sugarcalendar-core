@@ -168,6 +168,24 @@ abstract class Table extends Base {
 		}
 	}
 
+	/**
+	 * Compatibility for clone() method for PHP versions less than 7.0.
+	 *
+	 * See: https://github.com/sugarcalendar/core/issues/105
+	 *
+	 * This shim will be removed at a later date.
+	 *
+	 * @since 2.0.20
+	 *
+	 * @param string $function
+	 * @param array  $args
+	 */
+	public function __call( $function = '', $args = array() ) {
+		if ( 'clone' === $function ) {
+			call_user_func_array( array( $this, '_clone' ), $args );
+		}
+	}
+
 	/** Abstract **************************************************************/
 
 	/**
@@ -487,7 +505,7 @@ abstract class Table extends Base {
 	 *
 	 * @return mixed
 	 */
-	public function clone( $new_table_name = '' ) {
+	public function _clone( $new_table_name = '' ) {
 
 		// Get the database interface
 		$db = $this->get_db();

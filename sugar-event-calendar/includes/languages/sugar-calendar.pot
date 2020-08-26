@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.0.20\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2020-08-26 19:04:59+00:00\n"
+"POT-Creation-Date: 2020-08-26 19:08:32+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1164,40 +1164,40 @@ msgstr ""
 msgid "Custom time format:"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:625
+#: sugar-event-calendar/includes/admin/settings.php:628
 msgid "Editor Type"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:629
-msgid "Blocks"
-msgstr ""
-
-#: sugar-event-calendar/includes/admin/settings.php:630
-msgid "Classic"
+#: sugar-event-calendar/includes/admin/settings.php:632
+msgid "Block Editor"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/settings.php:633
-msgid "Which interface to use when adding or editing Events."
+msgid "Classic Editor"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:721
+#: sugar-event-calendar/includes/admin/settings.php:636
+msgid "The interface to use when adding or editing Events."
+msgstr ""
+
+#: sugar-event-calendar/includes/admin/settings.php:724
 msgid ""
 "Save 25% on all Sugar Calendar purchases <strong>this week</strong>, "
 "including renewals and upgrades!"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:725
+#: sugar-event-calendar/includes/admin/settings.php:728
 msgid "Use code at checkout:"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:727
+#: sugar-event-calendar/includes/admin/settings.php:730
 msgid ""
 "Sale ends 23:59 PM December 6th CST. Save 25% on <a "
 "href=\"https://sandhillsdev.com/projects/\" target=\"_blank\">our other "
 "plugins</a>."
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/settings.php:731
+#: sugar-event-calendar/includes/admin/settings.php:734
 msgid "Upgrade Now!"
 msgstr ""
 

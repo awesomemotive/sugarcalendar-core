@@ -38,7 +38,7 @@ final class Plugin {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	private $version = '2.0.19';
+	private $version = '2.0.20';
 
 	/**
 	 * Main instance.

@@ -60,17 +60,15 @@
 .sc-datepicker .ui-datepicker-next-hover {
 	right: 0;
 }
-.sc-datepicker .ui-datepicker-next span {
-	display: none;
-}
 .sc-datepicker .ui-datepicker-prev {
 	float: left;
 }
-.sc-datepicker .ui-datepicker-prev span {
-	display: none;
-}
 .sc-datepicker .ui-datepicker-next {
 	float: right;
+}
+.sc-datepicker .ui-datepicker-next span,
+.sc-datepicker .ui-datepicker-prev span {
+	display: none;
 }
 .sc-datepicker .ui-datepicker-prev:before,
 .sc-datepicker .ui-datepicker-next:before {

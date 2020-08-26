@@ -616,7 +616,10 @@ function display_subsection() {
 function editing_subsection() {
 
 	// Get the settings
-	$type = get_option( 'sc_editor_type', 'classic' ); ?>
+	$type = get_option( 'sc_editor_type', 'classic' );
+
+	// Maybe disable the "Block Editor" option on older WordPress versions
+	$dis  = ! function_exists( 'register_block_type' ); ?>
 
 	<table class="form-table">
 		<tbody>
@@ -626,11 +629,11 @@ function editing_subsection() {
 				</th>
 				<td>
 					<select name="sc_editor_type" id="sc_editor_type" class="sc-select-chosen">
-						<option value="block" <?php selected( $type, 'block' ); ?>><?php esc_html_e( 'Blocks', 'sugar-calendar' ); ?></option>
-						<option value="classic" <?php selected( $type, 'classic' ); ?>><?php esc_html_e( 'Classic', 'sugar-calendar' ); ?></option>
+						<option value="block" <?php selected( $type, 'block' ); ?> <?php disabled( $dis ); ?>><?php esc_html_e( 'Block Editor', 'sugar-calendar' ); ?></option>
+						<option value="classic" <?php selected( $type, 'classic' ); ?>><?php esc_html_e( 'Classic Editor', 'sugar-calendar' ); ?></option>
 					</select>
 					<p class="description">
-						<?php esc_html_e( 'Which interface to use when adding or editing Events.', 'sugar-calendar' ); ?>
+						<?php esc_html_e( 'The interface to use when adding or editing Events.', 'sugar-calendar' ); ?>
 					</p>
 				</td>
 			</tr>

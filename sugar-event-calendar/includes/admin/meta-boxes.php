@@ -64,25 +64,56 @@ function checklist_args( $args = array() ) {
 */
 function add() {
 
+	// Get the supported post types
+	$supported = get_post_types_by_support( array( 'events' ) );
+
 	// Sections
 	add_meta_box(
-		'sugar_calendar_event_details',
+		'sugar_calendar_editor_event_details',
 		esc_html__( 'Event', 'sugar-calendar' ),
 		'Sugar_Calendar\\Admin\\Editor\\Meta\\box',
-		sugar_calendar_allowed_post_types(),
-		'above_event_editor',
+		$supported,
+		'normal',
 		'high'
 	);
 
+	// Events post-type specific meta-box
+	$pt = sugar_calendar_get_event_post_type_id();
+
 	// Details
-	add_meta_box(
-		'sugar_calendar_details',
-		esc_html__( 'Details', 'sugar-calendar' ),
-		'Sugar_Calendar\\Admin\\Editor\\Meta\\details',
-		sugar_calendar_get_event_post_type_id(),
-		'above_event_editor',
-		'default'
-	);
+	if ( ! post_type_supports( $pt, 'editor' ) ) {
+		add_meta_box(
+			'sugar_calendar_details',
+			esc_html__( 'Details', 'sugar-calendar' ),
+			'Sugar_Calendar\\Admin\\Editor\\Meta\\details',
+			$pt,
+			'normal',
+			'high'
+		);
+	}
+}
+
+/**
+ * Filters the user option for Event meta-box ordering, and overrides it when
+ * editing with Blocks.
+ *
+ * This ensures that users who have customized their meta-box layouts will still
+ * be able to see meta-boxes no matter the Editing Type (block, classic).
+ *
+ * @since 2.0.20
+ *
+ * @param array $original
+ * @return mixed
+ */
+function noop_user_option( $original = array() ) {
+
+	// Bail if using Classic Editor
+	if ( 'classic' === get_option( 'sc_editor_type', 'classic' ) ) {
+		return $original;
+	}
+
+	// Return false
+	return false;
 }
 
 /**

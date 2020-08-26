@@ -31,9 +31,12 @@ add_action( 'save_post',               __NAMESPACE__ . '\\Editor\\Meta\\save',  
 add_filter( 'register_taxonomy_args',  __NAMESPACE__ . '\\Editor\\Meta\\taxonomy_args',  10, 2 );
 add_filter( 'wp_terms_checklist_args', __NAMESPACE__ . '\\Editor\\Meta\\checklist_args', 10, 1 );
 
-// Admin Meta-box Save
+// Admin meta box Save
 add_filter( 'sugar_calendar_event_to_save', __NAMESPACE__ . '\\Editor\\Meta\\add_location_to_save' );
 add_filter( 'sugar_calendar_event_to_save', __NAMESPACE__ . '\\Editor\\Meta\\add_color_to_save'    );
+
+// Admin meta box filter
+add_filter( 'get_user_option_meta-box-order_sc_event', __NAMESPACE__ . '\\Editor\\Meta\\noop_user_option' );
 
 // Admin New/Edit
 add_action( 'edit_form_after_title',  __NAMESPACE__ . '\\Editor\\above' );

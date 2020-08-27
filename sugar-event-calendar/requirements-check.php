@@ -156,7 +156,7 @@ final class Requirements_Check {
 	 * @since 2.0.0
 	 */
 	public function bootstrap() {
-		Sugar_Calendar\Plugin::instance( $this->file );
+		Plugin::instance( $this->file );
 	}
 
 	/**

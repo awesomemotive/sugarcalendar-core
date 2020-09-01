@@ -59,7 +59,6 @@ add_filter( 'admin_body_class', __NAMESPACE__ . '\\Menu\\body_class' );
 
 // Admin Scripts
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\Assets\\enqueue' );
-add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\Assets\\enqueue' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\Assets\\localize' );
 
 // Admin Help (Calendar)

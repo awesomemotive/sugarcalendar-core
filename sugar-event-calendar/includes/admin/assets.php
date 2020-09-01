@@ -9,6 +9,8 @@ namespace Sugar_Calendar\Admin\Assets;
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+use Sugar_Calendar\Core\Common\Assets as Assets;
+
 /**
  * Register assets.
  *
@@ -16,74 +18,54 @@ defined( 'ABSPATH' ) || exit;
  */
 function register() {
 
-	// URL & Version
+	// URL, Version, and Path
 	$url  = SC_PLUGIN_URL . 'includes/admin/assets/';
-	$ver  = sugar_calendar_get_assets_version();
-	$deps = array();
-	$js_chos = array( 'sugar_calendar_admin_chosen' );
-	$js_deps = array( 'sugar_calendar_admin_general' );
+	$ver  = Assets\get_version();
+	$path = Assets\get_css_path();
 
-	// Suffixes
-	$debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
-
-	// Default CSS path
-	$css_path = '';
-
-	// Minify?
-	if ( empty( $debug ) ) {
-		$css_path = trailingslashit( 'min' );
-	}
-
-	// Right-to-Left?
-	if ( is_rtl() ) {
-		$css_path .= 'rtl';
-	} else {
-		$css_path .= 'ltr';
-	}
-
-	// Maybe add a trailing slash
-	if ( ! empty( $css_path ) ) {
-		$css_path = trailingslashit( $css_path );
-	}
+	// Dependencies
+	$deps    = array();
+	$chosen  = array( 'sugar_calendar_admin_chosen' );
+	$general = array( 'sugar_calendar_admin_general' );
 
 	/** Scripts ***************************************************************/
 
 	// Chosen
-	wp_register_script( 'sugar_calendar_admin_chosen',    "{$url}js/chosen.js",      array(), $ver, false );
+	wp_register_script( 'sugar_calendar_admin_chosen',    "{$url}js/chosen.js",      $deps,    $ver, false );
 
 	// Admin
-	wp_register_script( 'sugar_calendar_admin_general',   "{$url}js/sc-admin.js",    $js_chos,  $ver, false );
+	wp_register_script( 'sugar_calendar_admin_general',   "{$url}js/sc-admin.js",    $chosen,  $ver, false );
 
 	// Meta Box
-	wp_register_script( 'sugar_calendar_admin_meta_box',  "{$url}js/sc-meta-box.js", $js_deps, $ver, false );
+	wp_register_script( 'sugar_calendar_admin_meta_box',  "{$url}js/sc-meta-box.js", $general, $ver, false );
 
 	// Calendar
-	wp_register_script( 'sugar_calendar_admin_calendar',  "{$url}js/sc-calendar.js", $js_deps, $ver, false );
+	wp_register_script( 'sugar_calendar_admin_calendar',  "{$url}js/sc-calendar.js", $general, $ver, false );
 
 	// Calendar
-	wp_register_script( 'sugar_calendar_admin_settings',  "{$url}js/sc-settings.js", $js_deps, $ver, false );
+	wp_register_script( 'sugar_calendar_admin_settings',  "{$url}js/sc-settings.js", $general, $ver, false );
 
 	/** Styles ****************************************************************/
 
 	// Chosen
-	wp_register_style( 'sugar_calendar_admin_chosen',     "{$url}css/{$css_path}chosen.css",     $deps,   $ver, 'all' );
-	wp_register_style( 'sugar_calendar_admin_chosen_sc',  "{$url}css/{$css_path}sc-chosen.css", array( 'sugar_calendar_admin_chosen' ), $ver, 'all' );
+	wp_register_style( 'sugar_calendar_admin_chosen',     "{$url}css/{$path}chosen.css",        $deps,   $ver, 'all' );
+	wp_register_style( 'sugar_calendar_admin_chosen_sc',  "{$url}css/{$path}sc-chosen.css",     $chosen, $ver, 'all' );
 
 	// Menu
-	wp_register_style( 'sugar_calendar_admin_menu',       "{$url}css/{$css_path}sc-menu.css",       $deps,   $ver, 'all' );
+	wp_register_style( 'sugar_calendar_admin_menu',       "{$url}css/{$path}sc-menu.css",       $deps,   $ver, 'all' );
 
 	// Nav
-	wp_register_style( 'sugar_calendar_admin_nav',        "{$url}css/{$css_path}sc-nav.css",        $deps,   $ver, 'all' );
+	wp_register_style( 'sugar_calendar_admin_nav',        "{$url}css/{$path}sc-nav.css",        $deps,   $ver, 'all' );
 
 	// Calendar
-	wp_register_style( 'sugar_calendar_admin_calendar',   "{$url}css/{$css_path}sc-calendar.css",   $deps,   $ver, 'all' );
-	wp_register_style( 'sugar_calendar_admin_datepicker', "{$url}css/{$css_path}sc-datepicker.css", $deps,   $ver, 'all' );
+	wp_register_style( 'sugar_calendar_admin_calendar',   "{$url}css/{$path}sc-calendar.css",   $deps,   $ver, 'all' );
+	wp_register_style( 'sugar_calendar_admin_datepicker', "{$url}css/{$path}sc-datepicker.css", $deps,   $ver, 'all' );
 
 	// Meta-box
-	wp_register_style( 'sugar_calendar_admin_meta_box',   "{$url}css/{$css_path}sc-meta-box.css",   $deps,   $ver, 'all' );
+	wp_register_style( 'sugar_calendar_admin_meta_box',   "{$url}css/{$path}sc-meta-box.css",   $deps,   $ver, 'all' );
 
 	// Settings
-	wp_register_style( 'sugar_calendar_admin_settings',   "{$url}css/{$css_path}sc-settings.css",   $deps,   $ver, 'all' );
+	wp_register_style( 'sugar_calendar_admin_settings',   "{$url}css/{$path}sc-settings.css",   $deps,   $ver, 'all' );
 }
 
 /**

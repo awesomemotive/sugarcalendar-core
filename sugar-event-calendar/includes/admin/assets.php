@@ -18,8 +18,10 @@ use Sugar_Calendar\Core\Common\Assets as Assets;
  */
 function register() {
 
-	// URL, Version, and Path
-	$url  = SC_PLUGIN_URL . 'includes/admin/assets/';
+	// URL
+	$url  = Assets\get_url() . 'includes/admin/assets/';
+
+	// Version, and Path
 	$ver  = Assets\get_version();
 	$path = Assets\get_css_path();
 

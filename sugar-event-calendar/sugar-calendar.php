@@ -1,8 +1,8 @@
 <?php
 /**
- * Main Sugar_Calendar Plugin Class.
+ * Main Plugin Class.
  *
- * @since 2.0.0
+ * @since 1.0.0
  */
 namespace Sugar_Calendar;
 
@@ -10,7 +10,7 @@ namespace Sugar_Calendar;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Main Sugar_Calendar Plugin Class.
+ * Main Plugin Class.
  *
  * @since 2.0.0
  */
@@ -35,10 +35,18 @@ final class Plugin {
 	/**
 	 * Current version.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 * @var string
 	 */
 	private $version = '2.0.20';
+
+	/**
+	 * Prefix.
+	 *
+	 * @since 2.0.0
+	 * @var string
+	 */
+	private $prefix = 'sc';
 
 	/**
 	 * Main instance.
@@ -46,11 +54,10 @@ final class Plugin {
 	 * Insures that only one instance exists in memory at any one time.
 	 * Also prevents needing to define globals all over the place.
 	 *
-	 * @since 2.0.0 Accepts $file parameter to work with Sugar_Calendar_Requirements_Check
+	 * @since 2.0.0
 	 *
 	 * @static
 	 * @staticvar array $instance
-	 * @see Sugar_Calendar_Requirements_Check()
 	 * @return object|Plugin
 	 */
 	public static function instance( $file = '' ) {
@@ -73,6 +80,46 @@ final class Plugin {
 	}
 
 	/**
+	 * Main installer.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function install() {
+
+	}
+
+	/**
+	 * Main uninstaller.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function uninstall() {
+
+	}
+
+	/**
+	 * Main activator, fired as a WordPress activation hook.
+	 *
+	 * (As a general rule, try to avoid using this if you can.)
+	 *
+	 * @since 2.0.0
+	 */
+	public static function activate() {
+
+	}
+
+	/**
+	 * Main deactivator, fired as a WordPress deactivation hook.
+	 *
+	 * (As a general rule, try to avoid using this if you can.)
+	 *
+	 * @since 2.0.0
+	 */
+	public static function deactivate() {
+
+	}
+
+	/**
 	 * Throw error on object clone.
 	 *
 	 * The whole idea of the singleton design pattern is that there is a single
@@ -82,8 +129,7 @@ final class Plugin {
 	 * @return void
 	 */
 	public function __clone() {
-		// Cloning instances of the class is forbidden.
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'sugar-calendar' ), '2.0' );
+		_doing_it_wrong( __FUNCTION__, __NAMESPACE__, '2.0' );
 	}
 
 	/**
@@ -93,8 +139,7 @@ final class Plugin {
 	 * @return void
 	 */
 	public function __wakeup() {
-		// Unserializing instances of the class is forbidden.
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'sugar-calendar' ), '2.0' );
+		_doing_it_wrong( __FUNCTION__, __NAMESPACE__, '2.0' );
 	}
 
 	/**
@@ -160,29 +205,36 @@ final class Plugin {
 	 */
 	private function setup_constants() {
 
+		// Uppercase
+		$prefix = strtoupper( $this->prefix );
+
 		// Plugin Version.
-		if ( ! defined( 'SC_PLUGIN_VERSION' ) ) {
-			define( 'SC_PLUGIN_VERSION', $this->version );
+		if ( ! defined( "{$prefix}_PLUGIN_VERSION" ) ) {
+			define( "{$prefix}_PLUGIN_VERSION", $this->version );
 		}
 
 		// Plugin Root File.
-		if ( ! defined( 'SC_PLUGIN_FILE' ) ) {
-			define( 'SC_PLUGIN_FILE', $this->file );
+		if ( ! defined( "{$prefix}_PLUGIN_FILE" ) ) {
+			define( "{$prefix}_PLUGIN_FILE", $this->file );
 		}
 
+		// Prepare file & directory
+		$file = constant( "{$prefix}_PLUGIN_FILE" );
+		$dir  = basename( __DIR__ );
+
 		// Plugin Base Name.
-		if ( ! defined( 'SC_PLUGIN_BASE' ) ) {
-			define( 'SC_PLUGIN_BASE', plugin_basename( SC_PLUGIN_FILE ) );
+		if ( ! defined( "{$prefix}_PLUGIN_BASE" ) ) {
+			define( "{$prefix}_PLUGIN_BASE", plugin_basename( $file ) . $dir );
 		}
 
 		// Plugin Folder Path.
-		if ( ! defined( 'SC_PLUGIN_DIR' ) ) {
-			define( 'SC_PLUGIN_DIR', plugin_dir_path( SC_PLUGIN_FILE ) . 'sugar-event-calendar/' );
+		if ( ! defined( "{$prefix}_PLUGIN_DIR" ) ) {
+			define( "{$prefix}_PLUGIN_DIR", trailingslashit( plugin_dir_path( $file ) . $dir ) );
 		}
 
 		// Plugin Folder URL.
-		if ( ! defined( 'SC_PLUGIN_URL' ) ) {
-			define( 'SC_PLUGIN_URL', plugin_dir_url( SC_PLUGIN_FILE )  . 'sugar-event-calendar/' );
+		if ( ! defined( "{$prefix}_PLUGIN_URL" ) ) {
+			define( "{$prefix}_PLUGIN_URL", trailingslashit( plugin_dir_url( $file ) . $dir ) );
 		}
 
 		// Make sure CAL_GREGORIAN is defined.
@@ -371,7 +423,7 @@ final class Plugin {
 
 		// Files & directory
 		$files = array();
-		$dir   = SC_PLUGIN_DIR . 'includes/standard';
+		$dir   = trailingslashit( __DIR__ ) . 'includes/standard';
 
 		// Bail if standard directory does not exist
 		if ( ! is_dir( $dir ) ) {
@@ -388,13 +440,19 @@ final class Plugin {
 
 		// Look for files in the directory
 		while ( ( $plugin = readdir( $dh ) ) !== false ) {
-			if ( substr( $plugin, -4 ) == '.php' ) {
-				$files[] = trailingslashit( $dir ) . $plugin;
+			$ext = substr( $plugin, -4 );
+
+			if ( $ext === '.php' ) {
+				$name = substr( $plugin, 0, strlen( $plugin ) -4 );
+				$files[ $name ] = trailingslashit( $dir ) . $plugin;
 			}
 		}
 
 		// Close the directory
 		closedir( $dh );
+
+		// Skip empty index files
+		unset( $files['index'] );
 
 		// Bail if no files
 		if ( empty( $files ) ) {
@@ -402,28 +460,11 @@ final class Plugin {
 		}
 
 		// Sort files alphabetically
-		sort( $files );
+		ksort( $files );
 
 		// Include each file
 		foreach ( $files as $file ) {
-			include_once $file;
+			require_once $file;
 		}
 	}
-}
-
-/**
- * Returns the plugin instance.
- *
- * The main function responsible for returning the one true plugin instance.
- *
- * Use this function like you would a global variable, except without needing
- * to declare the global.
- *
- * Example: <?php $sc = sugar_calendar(); ?>
- *
- * @since 2.0.0
- * @return object|Plugin
- */
-function sugar_calendar() {
-	return Plugin::instance();
 }

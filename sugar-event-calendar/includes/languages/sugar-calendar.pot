@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.0.20\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2020-09-01 20:41:03+00:00\n"
+"POT-Creation-Date: 2020-09-01 21:16:16+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -44,19 +44,19 @@ msgstr ""
 msgid "Sugar Calendar Requirements"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/assets.php:135
+#: sugar-event-calendar/includes/admin/assets.php:137
 msgid "Verifying"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/assets.php:136
+#: sugar-event-calendar/includes/admin/assets.php:138
 msgid "Verify"
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/assets.php:137
+#: sugar-event-calendar/includes/admin/assets.php:139
 msgid "Verifying..."
 msgstr ""
 
-#: sugar-event-calendar/includes/admin/assets.php:138
+#: sugar-event-calendar/includes/admin/assets.php:140
 msgid "Please enter a valid license key."
 msgstr ""
 
@@ -1722,11 +1722,6 @@ msgstr ""
 
 #: sugar-event-calendar/includes/themes/legacy/widgets.php:453
 msgid "DESC"
-msgstr ""
-
-#: sugar-event-calendar/sugar-calendar.php:86
-#: sugar-event-calendar/sugar-calendar.php:97
-msgid "Cheatin&#8217; huh?"
 msgstr ""
 
 #. Description of the plugin/theme

@@ -9,10 +9,12 @@ namespace Sugar_Calendar\Core\Common\Assets;
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+use Sugar_Calendar\Plugin as Plugin;
+
 /**
  * Whether assets are currently being debugged.
  *
- * @since 1.0.1
+ * @since 2.0.20
  *
  * @return bool
  */
@@ -21,22 +23,39 @@ function doing_debug() {
 }
 
 /**
+ * Get the plugin URL.
+ *
+ * @since 2.0.20
+ *
+ * @return string
+ */
+function get_url() {
+	return constant( strtoupper( Plugin::instance()->prefix ) . '_PLUGIN_URL' );
+}
+
+/**
  * Get the asset version.
  *
- * @since 1.0.1
+ * @since 2.0.20
  *
  * @return string
  */
 function get_version() {
 	return doing_debug()
 		? sugar_calendar_get_request_time()
-		: SC_PLUGIN_VERSION;
+		: constant( strtoupper( Plugin::instance()->prefix ) . '_PLUGIN_VERSION' );
 }
 
 /**
  * Get the CSS path.
  *
- * @since 1.0.1
+ * Use this function in conjunction with Grunt CSS tooling to automate the
+ * generation and enqueueing of minified and right-to-left styling.
+ *
+ * Can be used for Admin or Front-end CSS.
+ *
+ * @since 2.0.20
+ *
  * @return string
  */
 function get_css_path() {

@@ -1,8 +1,10 @@
 === Simple Event Management – Sugar Calendar (Lite) ===
-Author:            Sandhills Development, LLC
 Contributors:      mordauk, johnjamesjacoby
+Author:            Sandhills Development, LLC
 Author URI:        https://sandhillsdev.com
 Plugin URI:        https://sugarcalendar.com
+License URI:       http://www.gnu.org/licenses/gpl-2.0.html
+License:           GNU General Public License v2 or later
 Tags:              simple calendar, event calendar, event management, event list, schedule
 Requires PHP:      5.6.20
 Requires at least: 5.1

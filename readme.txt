@@ -143,7 +143,6 @@ If Sugar Calendar doesn’t quite fit your needs, take a look at some of our oth
 
 - [Easy Digital Downloads](https://easydigitaldownloads.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - Sell digital products with WordPress
 - [AffiliateWP](https://affiliatewp.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - A full-featured affiliate marketing solution
-- [Restrict Content Pro](https://restrictcontentpro.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - A powerful membership plugin for WordPress
 - [WP Simple Pay](https://wpsimplepay.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - A lightweight Stripe payments plugin
 
 == Installation ==

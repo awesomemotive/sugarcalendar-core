@@ -1,10 +1,10 @@
 # Copyright (C) 2020 Sandhills Development, LLC
-# This file is distributed under the same license as the Sugar Calendar (Lite) package.
+# This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.0.20\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2020-09-01 21:16:16+00:00\n"
+"POT-Creation-Date: 2020-09-03 21:24:18+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,23 +24,23 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: sugar-calendar-lite.php:191
+#: sugar-calendar-lite.php:193
 msgid "This plugin is not fully active."
 msgstr ""
 
-#: sugar-calendar-lite.php:201
+#: sugar-calendar-lite.php:203
 msgid "Requires %s (%s), but (%s) is installed."
 msgstr ""
 
-#: sugar-calendar-lite.php:211
+#: sugar-calendar-lite.php:213
 msgid "Requires %s (%s), but it appears to be missing."
 msgstr ""
 
-#: sugar-calendar-lite.php:221
+#: sugar-calendar-lite.php:223
 msgid "Requirements"
 msgstr ""
 
-#: sugar-calendar-lite.php:231
+#: sugar-calendar-lite.php:233
 msgid "Sugar Calendar Requirements"
 msgstr ""
 
@@ -736,7 +736,7 @@ msgid "Location"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2158
-#: sugar-event-calendar/includes/post/types.php:67
+#: sugar-event-calendar/includes/post/types.php:69
 msgid "Search Events"
 msgstr ""
 
@@ -848,7 +848,7 @@ msgid "Previous Year"
 msgstr ""
 
 #: sugar-event-calendar/includes/admin/list-tables/class-wp-list-table-list.php:472
-#: sugar-event-calendar/includes/post/types.php:68
+#: sugar-event-calendar/includes/post/types.php:70
 msgid "No events found."
 msgstr ""
 
@@ -976,7 +976,7 @@ msgstr ""
 
 #: sugar-event-calendar/includes/admin/posts.php:79
 #: sugar-event-calendar/includes/admin/posts.php:80
-#: sugar-event-calendar/includes/post/types.php:87
+#: sugar-event-calendar/includes/post/types.php:89
 msgid "Event updated."
 msgstr ""
 
@@ -1390,95 +1390,95 @@ msgstr ""
 msgid "&larr; Back to Calendars"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:62
+#: sugar-event-calendar/includes/post/types.php:64
 msgid "Add New Event"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:63
+#: sugar-event-calendar/includes/post/types.php:65
 msgid "Edit Event"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:64
+#: sugar-event-calendar/includes/post/types.php:66
 msgid "New Event"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:65
+#: sugar-event-calendar/includes/post/types.php:67
 msgid "View Event"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:66
+#: sugar-event-calendar/includes/post/types.php:68
 msgid "View Events"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:69
+#: sugar-event-calendar/includes/post/types.php:71
 msgid "No events found in trash."
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:70
+#: sugar-event-calendar/includes/post/types.php:72
 msgid "Parent Event:"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:71
+#: sugar-event-calendar/includes/post/types.php:73
 msgid "All Events"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:72
+#: sugar-event-calendar/includes/post/types.php:74
 msgid "Event Archives"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:73
+#: sugar-event-calendar/includes/post/types.php:75
 msgid "Event Attributes"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:74
+#: sugar-event-calendar/includes/post/types.php:76
 msgid "Insert Into Event"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:75
+#: sugar-event-calendar/includes/post/types.php:77
 msgid "Uploaded to this event"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:76
+#: sugar-event-calendar/includes/post/types.php:78
 msgid "Featured Image"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:77
+#: sugar-event-calendar/includes/post/types.php:79
 msgid "Set featured image"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:78
+#: sugar-event-calendar/includes/post/types.php:80
 msgid "Remove featured image"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:79
+#: sugar-event-calendar/includes/post/types.php:81
 msgid "Use as featured image"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:80
+#: sugar-event-calendar/includes/post/types.php:82
 msgid "Filter event list"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:81
+#: sugar-event-calendar/includes/post/types.php:83
 msgid "Events list navigation"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:82
+#: sugar-event-calendar/includes/post/types.php:84
 msgid "Events list"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:83
+#: sugar-event-calendar/includes/post/types.php:85
 msgid "Event created"
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:84
+#: sugar-event-calendar/includes/post/types.php:86
 msgid "Private event created."
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:85
+#: sugar-event-calendar/includes/post/types.php:87
 msgid "Event reverted to draft."
 msgstr ""
 
-#: sugar-event-calendar/includes/post/types.php:86
+#: sugar-event-calendar/includes/post/types.php:88
 msgid "Event scheduled."
 msgstr ""
 
@@ -1817,7 +1817,7 @@ msgstr ""
 
 #: sugar-event-calendar/includes/post/types.php:59
 msgctxt "post type general name"
-msgid "Calendar"
+msgid "Events"
 msgstr ""
 
 #: sugar-event-calendar/includes/post/types.php:60
@@ -1826,6 +1826,16 @@ msgid "Event"
 msgstr ""
 
 #: sugar-event-calendar/includes/post/types.php:61
+msgctxt "post type menu name"
+msgid "Calendar"
+msgstr ""
+
+#: sugar-event-calendar/includes/post/types.php:62
+msgctxt "add new from admin bar"
+msgid "Event"
+msgstr ""
+
+#: sugar-event-calendar/includes/post/types.php:63
 msgctxt "event"
 msgid "Add New"
 msgstr ""

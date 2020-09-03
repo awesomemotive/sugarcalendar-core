@@ -56,8 +56,10 @@ function sugar_calendar_register_post_types() {
 
 	// Labels
 	$labels = apply_filters( 'sc_event_labels', array(
-		'name'                     => esc_html_x( 'Calendar', 'post type general name', 'sugar-calendar' ),
+		'name'                     => esc_html_x( 'Events', 'post type general name', 'sugar-calendar' ),
 		'singular_name'            => esc_html_x( 'Event', 'post type singular name', 'sugar-calendar' ),
+		'menu_name'                => esc_html_x( 'Calendar', 'post type menu name', 'sugar-calendar' ),
+		'name_admin_bar'           => esc_html_x( 'Event', 'add new from admin bar', 'sugar-calendar' ),
 		'add_new'                  => esc_html_x( 'Add New', 'event', 'sugar-calendar' ),
 		'add_new_item'             => esc_html__( 'Add New Event', 'sugar-calendar' ),
 		'edit_item'                => esc_html__( 'Edit Event', 'sugar-calendar' ),

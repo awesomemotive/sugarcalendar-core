@@ -9,6 +9,8 @@ namespace Sugar_Calendar\Admin\Editor\Meta;
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+use Sugar_Calendar\Common\Editor as Editor;
+
 /**
  * Event Types Meta-box
  * Output radio buttons instead of the default WordPress mechanism
@@ -108,7 +110,7 @@ function add() {
 function noop_user_option( $original = array() ) {
 
 	// Bail if using Classic Editor
-	if ( 'classic' === get_option( 'sc_editor_type', 'classic' ) ) {
+	if ( 'classic' === Editor\current() ) {
 		return $original;
 	}
 

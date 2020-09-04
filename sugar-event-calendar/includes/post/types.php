@@ -9,6 +9,8 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+use Sugar_Calendar\Common\Editor as Editor;
+
 /**
  * Return the post type ID for the primary event post-type.
  *
@@ -103,7 +105,7 @@ function sugar_calendar_register_post_types() {
 	);
 
 	// Get the editor type
-	$editor = get_option( 'sc_editor_type', 'classic' );
+	$editor = Editor\current();
 
 	// Maybe supports the editor
 	if ( 'block' === $editor ) {

@@ -9,6 +9,8 @@ namespace Sugar_Calendar\Admin\Settings;
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+use Sugar_Calendar\Common\Editor as Editor;
+
 /**
  * Admin settings for the calendar
  *
@@ -615,11 +617,11 @@ function display_subsection() {
  */
 function editing_subsection() {
 
-	// Get the settings
-	$type = get_option( 'sc_editor_type', 'classic' );
+	// Get the current editor
+	$type = Editor\current();
 
-	// Maybe disable the "Block Editor" option on older WordPress versions
-	$dis  = ! function_exists( 'register_block_type' ); ?>
+	// Get the registered editors
+	$editors = Editor\registered(); ?>
 
 	<table class="form-table">
 		<tbody>
@@ -628,10 +630,20 @@ function editing_subsection() {
 					<label for="sc_editor_type"><?php esc_html_e( 'Editor Type', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
-					<select name="sc_editor_type" id="sc_editor_type" class="sc-select-chosen">
-						<option value="block" <?php selected( $type, 'block' ); ?> <?php disabled( $dis ); ?>><?php esc_html_e( 'Block Editor', 'sugar-calendar' ); ?></option>
-						<option value="classic" <?php selected( $type, 'classic' ); ?>><?php esc_html_e( 'Classic Editor', 'sugar-calendar' ); ?></option>
-					</select>
+					<select name="sc_editor_type" id="sc_editor_type" class="sc-select-chosen"><?php
+
+					// Loop through editors
+					foreach ( $editors as $editor ) :
+
+						?><option value="<?php echo esc_attr( $editor['id'] ); ?>" <?php selected( $type, $editor['id'] ); ?> <?php disabled( $editor['disabled'] ); ?>><?php
+
+							echo esc_html( $editor['label'] );
+
+						?></option><?php
+
+					endforeach;
+
+					?></select>
 					<p class="description">
 						<?php esc_html_e( 'The interface to use when adding or editing Events.', 'sugar-calendar' ); ?>
 					</p>

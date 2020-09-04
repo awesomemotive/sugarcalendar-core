@@ -350,10 +350,11 @@ final class Plugin {
 
 		// Common files
 		require_once SC_PLUGIN_DIR . 'includes/common/assets.php';
-		require_once SC_PLUGIN_DIR . 'includes/common/time.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/color.php';
+		require_once SC_PLUGIN_DIR . 'includes/common/editor.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/general.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/preferences.php';
+		require_once SC_PLUGIN_DIR . 'includes/common/time.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/hooks.php';
 	}
 

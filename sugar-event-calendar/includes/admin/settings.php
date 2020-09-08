@@ -9,6 +9,8 @@ namespace Sugar_Calendar\Admin\Settings;
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+use Sugar_Calendar\Common\Editor as Editor;
+
 /**
  * Admin settings for the calendar
  *
@@ -155,6 +157,12 @@ function get_subsections( $section = '' ) {
 					'name' => esc_html__( 'Display', 'sugar-calendar' ),
 					'url'  => admin_url( 'admin.php?page=sc-settings' ),
 					'func' => 'Sugar_Calendar\\Admin\\Settings\\display_subsection'
+				),
+				'editing' => array(
+					'id'   => 'editing',
+					'name' => esc_html__( 'Editing', 'sugar-calendar' ),
+					'url'  => admin_url( 'admin.php?page=sc-settings' ),
+					'func' => 'Sugar_Calendar\\Admin\\Settings\\editing_subsection'
 				)
 			)
 		);
@@ -406,6 +414,9 @@ function register_settings() {
 	register_setting( 'sc_main_display', 'sc_date_format' );
 	register_setting( 'sc_main_display', 'sc_time_format' );
 
+	// Blocks
+	register_setting( 'sc_main_editing', 'sc_editor_type' );
+
 	do_action( 'sugar_calendar_register_settings' );
 }
 
@@ -591,6 +602,51 @@ function display_subsection() {
 							<span class='spinner'></span>
 						</p>
 					</fieldset>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+<?php
+}
+
+/**
+ * Output the "Editing" subsection.
+ *
+ * @since 2.1.0
+ */
+function editing_subsection() {
+
+	// Get the current editor
+	$type = Editor\current();
+
+	// Get the registered editors
+	$editors = Editor\registered(); ?>
+
+	<table class="form-table">
+		<tbody>
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="sc_editor_type"><?php esc_html_e( 'Editor Type', 'sugar-calendar' ); ?></label>
+				</th>
+				<td>
+					<select name="sc_editor_type" id="sc_editor_type" class="sc-select-chosen"><?php
+
+					// Loop through editors
+					foreach ( $editors as $editor ) :
+
+						?><option value="<?php echo esc_attr( $editor['id'] ); ?>" <?php selected( $type, $editor['id'] ); ?> <?php disabled( $editor['disabled'] ); ?>><?php
+
+							echo esc_html( $editor['label'] );
+
+						?></option><?php
+
+					endforeach;
+
+					?></select>
+					<p class="description">
+						<?php esc_html_e( 'The interface to use when adding or editing Events.', 'sugar-calendar' ); ?>
+					</p>
 				</td>
 			</tr>
 		</tbody>

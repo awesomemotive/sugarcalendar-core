@@ -40,21 +40,16 @@ function sugar_calendar_get_updater() {
  * @return boolean
  */
 function sugar_calendar_doing_script_debug() {
-	return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
+	return Sugar_Calendar\Core\Common\Assets\doing_debug();
 }
 
 /**
  * Return the current asset version.
- *
- * If WordPress SCRIPT_DEBUG is on, this will be set to the current request time
- * which automatically busts caching.
  *
  * @since 2.0.18
  *
  * @return string
  */
 function sugar_calendar_get_assets_version() {
-	return sugar_calendar_doing_script_debug()
-		? sugar_calendar_get_request_time()
-		: SC_PLUGIN_VERSION;
+	return Sugar_Calendar\Core\Common\Assets\get_version();
 }

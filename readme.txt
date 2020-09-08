@@ -1,8 +1,10 @@
 === Simple Event Management – Sugar Calendar (Lite) ===
-Author:            Sandhills Development, LLC
 Contributors:      mordauk, johnjamesjacoby
+Author:            Sandhills Development, LLC
 Author URI:        https://sandhillsdev.com
 Plugin URI:        https://sugarcalendar.com
+License URI:       http://www.gnu.org/licenses/gpl-2.0.html
+License:           GNU General Public License v2 or later
 Tags:              simple calendar, event calendar, event management, event list, schedule
 Requires PHP:      5.6.20
 Requires at least: 5.1
@@ -141,7 +143,6 @@ If Sugar Calendar doesn’t quite fit your needs, take a look at some of our oth
 
 - [Easy Digital Downloads](https://easydigitaldownloads.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - Sell digital products with WordPress
 - [AffiliateWP](https://affiliatewp.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - A full-featured affiliate marketing solution
-- [Restrict Content Pro](https://restrictcontentpro.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - A powerful membership plugin for WordPress
 - [WP Simple Pay](https://wpsimplepay.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - A lightweight Stripe payments plugin
 
 == Installation ==

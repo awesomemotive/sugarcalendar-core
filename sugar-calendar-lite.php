@@ -5,11 +5,13 @@
  * Description:       A calendar with a sweet disposition.
  * Author:            Sandhills Development, LLC
  * Author URI:        https://sandhillsdev.com
+ * License:           GNU General Public License v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       sugar-calendar
  * Domain Path:       /sugar-event-calendar/includes/languages/
  * Requires PHP:      5.6.20
  * Requires at least: 5.1
- * Version:           2.0.19
+ * Version:           2.0.20
  */
 
 // Exit if accessed directly

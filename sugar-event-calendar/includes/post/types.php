@@ -9,6 +9,8 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+use Sugar_Calendar\Common\Editor as Editor;
+
 /**
  * Return the post type ID for the primary event post-type.
  *
@@ -56,8 +58,10 @@ function sugar_calendar_register_post_types() {
 
 	// Labels
 	$labels = apply_filters( 'sc_event_labels', array(
-		'name'                     => esc_html_x( 'Calendar', 'post type general name', 'sugar-calendar' ),
+		'name'                     => esc_html_x( 'Events', 'post type general name', 'sugar-calendar' ),
 		'singular_name'            => esc_html_x( 'Event', 'post type singular name', 'sugar-calendar' ),
+		'menu_name'                => esc_html_x( 'Calendar', 'post type menu name', 'sugar-calendar' ),
+		'name_admin_bar'           => esc_html_x( 'Event', 'add new from admin bar', 'sugar-calendar' ),
 		'add_new'                  => esc_html_x( 'Add New', 'event', 'sugar-calendar' ),
 		'add_new_item'             => esc_html__( 'Add New Event', 'sugar-calendar' ),
 		'edit_item'                => esc_html__( 'Edit Event', 'sugar-calendar' ),
@@ -88,7 +92,7 @@ function sugar_calendar_register_post_types() {
 	) );
 
 	// Supports
-	$supports = apply_filters( 'sc_event_supports', array(
+	$supports = array(
 		'title',
 		'thumbnail',
 		'revisions',
@@ -98,7 +102,18 @@ function sugar_calendar_register_post_types() {
 		'genesis-seo',
 		'genesis-layouts',
 		'genesis-simple-sidebars'
-	) );
+	);
+
+	// Get the editor type
+	$editor = Editor\current();
+
+	// Maybe supports the editor
+	if ( 'block' === $editor ) {
+		array_push( $supports, 'editor' );
+	}
+
+	// Filter supports
+	$supports = apply_filters( 'sc_event_supports', $supports );
 
 	// Capability types
 	$cap_types = apply_filters( 'sc_event_capability_type', array(
@@ -166,6 +181,11 @@ function sugar_calendar_register_post_types() {
 		'delete_with_user'     => false,
 		'source'               => 'sugar-calendar'
 	);
+
+	// Maybe supports the block editor
+	if ( 'block' === $editor ) {
+		$args['show_in_rest'] = true;
+	}
 
 	// Register the event type
 	register_post_type(

@@ -49,9 +49,7 @@
 	height: 34px;
 	width: 34px;
 }
-
-.sc-datepicker .ui-state-hover.ui-datepicker-prev,
-.sc-datepicker .ui-state-hover.ui-datepicker-next {
+.sc-datepicker .ui-state-hover.ui-datepicker-prev, .sc-datepicker .ui-state-hover.ui-datepicker-next {
 	border: none;
 }
 .sc-datepicker .ui-datepicker-prev,
@@ -62,20 +60,19 @@
 .sc-datepicker .ui-datepicker-next-hover {
 	left: 0;
 }
-
-.sc-datepicker .ui-datepicker-next span,
-.sc-datepicker .ui-datepicker-prev span {
-	display: none;
-}
 .sc-datepicker .ui-datepicker-prev {
 	float: right;
 }
 .sc-datepicker .ui-datepicker-next {
 	float: left;
 }
+.sc-datepicker .ui-datepicker-next span,
+.sc-datepicker .ui-datepicker-prev span {
+	display: none;
+}
 .sc-datepicker .ui-datepicker-prev:before,
 .sc-datepicker .ui-datepicker-next:before {
-	font: normal 20px/34px 'dashicons';
+	font: normal 20px/34px "dashicons";
 	padding-right: 7px;
 	color: #fff;
 	speak: none;
@@ -85,18 +82,16 @@
 	height: 34px;
 }
 .sc-datepicker .ui-datepicker-prev:before {
-	content: '\f341';
+	content: "\f341";
 }
 .sc-datepicker .ui-datepicker-next:before {
-	content: '\f345';
+	content: "\f345";
 }
 .sc-datepicker .ui-datepicker-prev-hover:before,
 .sc-datepicker .ui-datepicker-next-hover:before {
 	opacity: 0.7;
 }
-
-.sc-datepicker select.ui-datepicker-month,
-.sc-datepicker select.ui-datepicker-year {
+.sc-datepicker select.ui-datepicker-month, .sc-datepicker select.ui-datepicker-year {
 	width: 33%;
 }
 .sc-datepicker thead {
@@ -227,11 +222,9 @@
 .admin-color-modern .sc-datepicker .ui-datepicker-header {
 	background: #3858e9;
 }
-
 .admin-color-modern .sc-datepicker thead {
 	background: #26292c;
 }
-
 .admin-color-modern .sc-datepicker td .ui-state-hover {
 	background: #3858e9;
 	color: #fff;
@@ -255,7 +248,6 @@
 .admin-color-sunrise .sc-datepicker .ui-datepicker-header {
 	background: #cf4944;
 }
-
 .admin-color-sunrise .sc-datepicker thead {
 	background: #be3631;
 }
@@ -272,13 +264,9 @@
 .admin-color-light .sc-datepicker thead {
 	background: #555;
 }
-
 .admin-color-light .sc-datepicker td .ui-state-hover {
 	background: #888;
 	color: #fff;
-}
-
-.admin-color-light .sc-datepicker td .ui-state-hover {
 	background: #888;
 }
 
@@ -307,4 +295,12 @@
 .admin-color-bbp-mint .sc-datepicker td .ui-state-hover {
 	background: #5fb37c;
 	color: #fff;
+}
+
+/* Parent Input Alignment */
+body.wp-admin:not(.rtl) .sc-datepicker {
+	margin-right: -1px;
+}
+body.wp-admin.rtl .sc-datepicker {
+	margin-left: -1px;
 }

@@ -48,6 +48,14 @@ body.js div.chosen-container {
 	margin-top: 1px;
 }
 
+.chosen-container-single .chosen-search {
+	padding-bottom: 0;
+}
+
+.chosen-container-single.chosen-dropup .chosen-search {
+	margin-top: 3px;
+}
+
 .chosen-container-single .chosen-search input[type=text]:before {
 	display: block;
 	width: 20px;
@@ -61,7 +69,7 @@ body.js div.chosen-container {
 	height: 18px;
 	position: absolute;
 	right: 9px;
-	top: 9px;
+	top: 6px;
 	color: #bbb;
 	font-family: dashicons;
 	font-size: 18px;
@@ -152,7 +160,7 @@ body.js div.chosen-container {
 	position: relative;
 	overflow-x: hidden;
 	overflow-y: auto;
-	margin: 4px !important;
+	margin-left: 4px;
 	padding: 0 !important;
 	max-height: 240px;
 }
@@ -302,67 +310,6 @@ body.js div.chosen-container {
 -------------------------------------------------------------- */
 
 /* Fresh */
-.admin-color-fresh .chosen-container .chosen-results li.highlighted {
-	background-color: #00a0d2;
-}
-
-/* Blue */
-.admin-color-blue .chosen-container .chosen-results li.highlighted {
-	background-color: #096484;
-}
-
-/* Coffee */
-.admin-color-coffee .chosen-container .chosen-results li.highlighted {
-	background-color: #096484;
-}
-
-/* Ectoplasm */
-.admin-color-ectoplasm .chosen-container .chosen-results li.highlighted {
-	background-color: #a3b745;
-}
-
-/* Midnight */
-.admin-color-midnight .chosen-container .chosen-results li.highlighted {
-	background-color: #26292c;
-}
-
-/* Modern */
-.admin-color-modern .chosen-container .chosen-results li.highlighted {
-	background-color: #3858e9;
-}
-
-/* Ocean */
-.admin-color-ocean .chosen-container .chosen-results li.highlighted {
-	background-color: #627c83;
-}
-
-/* Sunrise */
-.admin-color-sunrise .chosen-container .chosen-results li.highlighted {
-	background-color: #be3631;
-}
-
-/* Light */
-.admin-color-light .chosen-container .chosen-results li.highlighted {
-	background-color: #888;
-}
-
-/* bbPress Color Schemes
--------------------------------------------------------------- */
-
-/* Evergreen */
-.admin-color-evergreen .chosen-container .chosen-results li.highlighted {
-	background-color: #36533f;
-}
-
-/* Mint */
-.admin-color-mint .chosen-container .chosen-results li.highlighted {
-	background-color: #4f6d59;
-}
-
-/* WordPress Color Schemes
--------------------------------------------------------------- */
-
-/* Fresh */
 body.admin-color-fresh .chosen-container-active .chosen-single {
 	border-color: #007cba;
 	box-shadow: 0 0 0 1px #007cba;
@@ -376,6 +323,9 @@ body.admin-color-fresh .chosen-container.chosen-dropup .chosen-drop {
 }
 body.admin-color-fresh .chosen-container .chosen-results li.highlighted {
 	background-color: #007cba;
+}
+body.admin-color-fresh .chosen-container:not(.chosen-with-drop) .chosen-single:hover span {
+	color: #007cba;
 }
 
 /* Blue */
@@ -391,7 +341,10 @@ body.admin-color-blue .chosen-container.chosen-dropup .chosen-drop {
 	box-shadow: 0 -1px 0 1px #096484;
 }
 body.admin-color-blue .chosen-container .chosen-results li.highlighted {
-	background-color: #007cba;
+	background-color: #096484;
+}
+body.admin-color-blue .chosen-container:not(.chosen-with-drop) .chosen-single:hover span {
+	color: #096484;
 }
 
 /* Coffee */
@@ -409,6 +362,9 @@ body.admin-color-coffee .chosen-container.chosen-dropup .chosen-drop {
 body.admin-color-coffee .chosen-container .chosen-results li.highlighted {
 	background-color: #c7a589;
 }
+body.admin-color-coffee .chosen-container:not(.chosen-with-drop) .chosen-single:hover span {
+	color: #c7a589;
+}
 
 /* Ectoplasm */
 body.admin-color-ectoplasm .chosen-container-active .chosen-single {
@@ -424,6 +380,9 @@ body.admin-color-ectoplasm .chosen-container.chosen-dropup .chosen-drop {
 }
 body.admin-color-ectoplasm .chosen-container .chosen-results li.highlighted {
 	background-color: #a3b745;
+}
+body.admin-color-ectoplasm .chosen-container:not(.chosen-with-drop) .chosen-single:hover span {
+	color: #a3b745;
 }
 
 /* Midnight */
@@ -441,6 +400,9 @@ body.admin-color-midnight .chosen-container.chosen-dropup .chosen-drop {
 body.admin-color-midnight .chosen-container .chosen-results li.highlighted {
 	background-color: #e14d43;
 }
+body.admin-color-midnight .chosen-container:not(.chosen-with-drop) .chosen-single:hover span {
+	color: #e14d43;
+}
 
 /* Modern */
 body.admin-color-modern .chosen-container-active .chosen-single {
@@ -456,6 +418,9 @@ body.admin-color-modern .chosen-container.chosen-dropup .chosen-drop {
 }
 body.admin-color-modern .chosen-container .chosen-results li.highlighted {
 	background-color: #3858e9;
+}
+body.admin-color-modern .chosen-container:not(.chosen-with-drop) .chosen-single:hover span {
+	color: #3858e9;
 }
 
 /* Ocean */
@@ -473,6 +438,9 @@ body.admin-color-ocean .chosen-container.chosen-dropup .chosen-drop {
 body.admin-color-ocean .chosen-container .chosen-results li.highlighted {
 	background-color: #9ebaa0;
 }
+body.admin-color-ocean .chosen-container:not(.chosen-with-drop) .chosen-single:hover span {
+	color: #9ebaa0;
+}
 
 /* Sunrise */
 body.admin-color-sunrise .chosen-container-active .chosen-single {
@@ -489,6 +457,9 @@ body.admin-color-sunrise .chosen-container.chosen-dropup .chosen-drop {
 body.admin-color-sunrise .chosen-container .chosen-results li.highlighted {
 	background-color: #dd823b;
 }
+body.admin-color-sunrise .chosen-container:not(.chosen-with-drop) .chosen-single:hover span {
+	color: #dd823b;
+}
 
 /* Light */
 body.admin-color-light .chosen-container-active .chosen-single {
@@ -504,6 +475,9 @@ body.admin-color-light .chosen-container.chosen-dropup .chosen-drop {
 }
 body.admin-color-light .chosen-container .chosen-results li.highlighted {
 	background-color: #04a4cc;
+}
+body.admin-color-light .chosen-container:not(.chosen-with-drop) .chosen-single:hover span {
+	color: #04a4cc;
 }
 
 /* bbPress Color Schemes
@@ -523,6 +497,9 @@ body.admin-color-evergreen .chosen-container.chosen-dropup .chosen-drop {
 body.admin-color-evergreen .chosen-container .chosen-results li.highlighted {
 	background-color: #36533f;
 }
+body.admin-color-evergreen .chosen-container:not(.chosen-with-drop) .chosen-single:hover span {
+	color: #36533f;
+}
 
 /* Mint */
 body.admin-color-mint .chosen-container-active .chosen-single {
@@ -538,4 +515,7 @@ body.admin-color-mint .chosen-container.chosen-dropup .chosen-drop {
 }
 body.admin-color-mint .chosen-container .chosen-results li.highlighted {
 	background-color: #4f6d59;
+}
+body.admin-color-mint .chosen-container:not(.chosen-with-drop) .chosen-single:hover span {
+	color: #4f6d59;
 }

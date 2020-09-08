@@ -27,13 +27,13 @@ function register() {
 
 	// Dependencies
 	$deps    = array();
-	$chosen  = array( 'sugar_calendar_admin_chosen' );
+	$chosen  = array( 'sugar_calendar_vendor_chosen' );
 	$general = array( 'sugar_calendar_admin_general' );
 
 	/** Scripts ***************************************************************/
 
 	// Chosen
-	wp_register_script( 'sugar_calendar_admin_chosen',    "{$url}js/chosen.js",      $deps,    $ver, false );
+	wp_register_script( 'sugar_calendar_vendor_chosen',    "{$url}js/chosen.js",      $deps,    $ver, false );
 
 	// Admin
 	wp_register_script( 'sugar_calendar_admin_general',   "{$url}js/sc-admin.js",    $chosen,  $ver, false );
@@ -50,8 +50,8 @@ function register() {
 	/** Styles ****************************************************************/
 
 	// Chosen
-	wp_register_style( 'sugar_calendar_admin_chosen',     "{$url}css/{$path}chosen.css",        $deps,   $ver, 'all' );
-	wp_register_style( 'sugar_calendar_admin_chosen_sc',  "{$url}css/{$path}sc-chosen.css",     $chosen, $ver, 'all' );
+	wp_register_style( 'sugar_calendar_vendor_chosen',    "{$url}css/{$path}chosen.css",        $deps,   $ver, 'all' );
+	wp_register_style( 'sugar_calendar_admin_chosen',     "{$url}css/{$path}sc-chosen.css",     $chosen, $ver, 'all' );
 
 	// Menu
 	wp_register_style( 'sugar_calendar_admin_menu',       "{$url}css/{$path}sc-menu.css",       $deps,   $ver, 'all' );
@@ -92,7 +92,7 @@ function enqueue() {
 
 		// Chosen
 		wp_enqueue_script( 'sugar_calendar_admin_chosen' );
-		wp_enqueue_style( 'sugar_calendar_admin_chosen_sc' );
+		wp_enqueue_style( 'sugar_calendar_admin_chosen' );
 	}
 
 	// Events Pages
@@ -103,7 +103,7 @@ function enqueue() {
 
 		// Chosen
 		wp_enqueue_script( 'sugar_calendar_admin_chosen' );
-		wp_enqueue_style( 'sugar_calendar_admin_chosen_sc' );
+		wp_enqueue_style( 'sugar_calendar_admin_chosen' );
 
 		// Pointer
 		wp_enqueue_script( 'wp-pointer' );

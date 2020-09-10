@@ -27,7 +27,7 @@ __Please Note:__ GitHub is for bug reports and contributions only - if you have 
 ## Code Documentation
 
 * We ensure that every function is documented well and follows the standards set by phpDoc
-* An example function can be found [here](https://github.com/sugarcalendar/lite/blob/master/sugar-event-calendar/includes/events/functions.php#L138)
+* An example function can be found [here](https://github.com/sugarcalendar/core/blob/master/sugar-calendar/includes/events/functions.php#L138)
 * Please make sure that every function is documented so that when we update our API Documentation things don't go awry!
 	* If you're adding/editing a function in a class, make sure to add `@access {private|public|protected}`
 * Finally, please use tabs and not spaces. The tab indent size should be 4 for all languages: PHP, JavaScript, and CSS.

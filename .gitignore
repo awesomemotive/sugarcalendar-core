@@ -3,7 +3,7 @@
 
 # Standard files
 /sugar-calendar.php
-/sugar-event-calendar/includes/standard
+/sugar-calendar/includes/standard
 
 # Files and folders related to build/test tools
 /phpunit.xml

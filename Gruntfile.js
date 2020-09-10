@@ -551,7 +551,7 @@ module.exports = function( grunt ) {
 		grunt.task.run( 'clean:standard_before_clone' );
 
 		// Make /standard directory
-		grunt.file.mkdir( '<%= pkg.name %>/includes/standard' );
+		grunt.file.mkdir( 'sugar-calendar/includes/standard' );
 
 		// Ordered tasks
 		grunt.task.run(

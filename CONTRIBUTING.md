@@ -11,7 +11,7 @@ __Please Note:__ GitHub is for bug reports and contributions only - if you have 
 * __Do not report potential security vulnerabilities here. Email them privately to our security team at [security@sugarcalendar.com](mailto:security@sugarcalendar.com)__
 * Before submitting a ticket, please be sure to replicate the behavior with no other plugins active and on a base theme like Twenty Twenty.
 * Submit a ticket for your issue, assuming one does not already exist.
-	* Raise it on our [Issue Tracker](https://github.com/sugarcalendar/lite/issues)
+	* Raise it on our [Issue Tracker](https://github.com/sugarcalendar/core/issues)
 	* Clearly describe the issue including steps to reproduce the bug.
 	* Make sure you fill in the earliest version that you know has the issue as well as the version of WordPress you're using.
 

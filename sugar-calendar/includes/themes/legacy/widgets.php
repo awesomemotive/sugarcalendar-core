@@ -37,13 +37,13 @@ function sc_register_widgets() {
  *
  * Shows the events calendar.
  *
- * @access      private
- * @since       1.0
- * @return      void
+ * @since 1.0.0
  */
 class sc_events_widget extends WP_Widget {
 
-	/** constructor */
+	/**
+	 * Constructor
+	 */
 	public function __construct() {
 		parent::__construct(
 			'sc_calendar_widget',
@@ -55,12 +55,12 @@ class sc_events_widget extends WP_Widget {
 	}
 
 	/**
+	 * Output the widget
 	 *
-	 * @see WP_Widget::widget
 	 * @param array $args
 	 * @param array $instance
 	 */
-	public function widget( $args, $instance ) {
+	public function widget( $args = array(), $instance = array() ) {
 		$before_widget = ! empty( $args[ 'before_widget' ] )
 			? $args[ 'before_widget' ]
 			: '';
@@ -111,13 +111,14 @@ class sc_events_widget extends WP_Widget {
 	}
 
 	/**
-	 * @see WP_Widget::update
+	 * Update the widget
+	 *
 	 * @param array $new_instance
 	 * @param array $old_instance
 	 *
 	 * @return array
 	 */
-	public function update( $new_instance, $old_instance ) {
+	public function update( $new_instance = array(), $old_instance = array() ) {
 		$instance               = $old_instance;
 		$instance[ 'title' ]    = strip_tags( $new_instance[ 'title' ]    );
 		$instance[ 'size' ]     = strip_tags( $new_instance[ 'size' ]     );
@@ -129,14 +130,12 @@ class sc_events_widget extends WP_Widget {
 	}
 
 	/**
-	 * @see WP_Widget::form
+	 * Output the widget form
 	 *
 	 * @param array $instance
-	 *
-	 * @return string|void
 	 */
-	public function form( $instance ) {
-		$tax   = sugar_calendar_get_calendar_taxonomy_id();
+	public function form( $instance = array() ) {
+
 		$title = ! empty( $instance[ 'title' ] )
 			? $instance[ 'title' ]
 			: '';
@@ -153,6 +152,7 @@ class sc_events_widget extends WP_Widget {
 			? $instance[ 'year' ]
 			: '';
 
+		$tax   = sugar_calendar_get_calendar_taxonomy_id();
 		$terms = get_terms( $tax ); ?>
 
 		<p>
@@ -195,13 +195,13 @@ class sc_events_widget extends WP_Widget {
  *
  * Shows a list of events.
  *
- * @access      private
- * @since       1.0
- * @return      void
+ * @since 1.0.0
  */
 class sc_events_list_widget extends WP_Widget {
 
-	/** constructor */
+	/**
+	 * Constructor
+	 */
 	public function __construct() {
 		parent::__construct(
 			'sc_event_list_widget',
@@ -212,8 +212,13 @@ class sc_events_list_widget extends WP_Widget {
 		);
 	}
 
-	/** @see WP_Widget::widget */
-	public function widget( $args, $instance ) {
+	/**
+	 * Output the widget
+	 *
+	 * @param array $args
+	 * @param array $instance
+	 */
+	public function widget( $args = array(), $instance = array() ) {
 		$before_widget = ! empty( $args[ 'before_widget' ] )
 			? $args[ 'before_widget' ]
 			: '';
@@ -273,7 +278,14 @@ class sc_events_list_widget extends WP_Widget {
 		echo $after_widget;
 	}
 
-	/** @see WP_Widget::update */
+	/**
+	 * Update the widget
+	 *
+	 * @param array $new_instance
+	 * @param array $old_instance
+	 *
+	 * @return array
+	 */
 	public function update( $new_instance = array(), $old_instance = array() ) {
 		$instance               = $old_instance;
 		$instance[ 'title' ]    = strip_tags( $new_instance[ 'title' ] );
@@ -298,14 +310,11 @@ class sc_events_list_widget extends WP_Widget {
 	}
 
 	/**
-	 * @see WP_Widget::form
+	 * Output the widget form
 	 *
 	 * @param array $instance
-	 *
-	 * @return string|void
 	 */
 	public function form( $instance = array() ) {
-		$tax = sugar_calendar_get_calendar_taxonomy_id();
 
 		$title = ! empty( $instance[ 'title' ] )
 			? $instance[ 'title' ]
@@ -338,6 +347,7 @@ class sc_events_list_widget extends WP_Widget {
 			? $instance[ 'show_categories' ]
 			: null;
 
+		$tax   = sugar_calendar_get_calendar_taxonomy_id();
 		$terms = get_terms( $tax ); ?>
 
 		<p>
@@ -399,17 +409,17 @@ class sc_events_list_widget extends WP_Widget {
 }
 
 /**
- * Categories  Widget
+ * Categories Widget
  *
  * Event categories widget class.
  *
- * @access      private
- * @since       1.0
- * @return      void
+ * @since 1.0.0
  */
 class sc_event_categories_widget extends WP_Widget {
 
-	/** constructor */
+	/**
+	 * Constructor
+	 */
 	public function __construct() {
 		parent::__construct(
 			'sc_category_widget',
@@ -421,12 +431,12 @@ class sc_event_categories_widget extends WP_Widget {
 	}
 
 	/**
-	 * @see WP_Widget::widget
+	 * Output the widget
+	 *
 	 * @param array $args
 	 * @param array $instance
 	 */
-	public function widget( $args, $instance ) {
-		$tax = sugar_calendar_get_calendar_taxonomy_id();
+	public function widget( $args = array(), $instance = array() ) {
 
 		$before_widget = ! empty( $args[ 'before_widget' ] )
 			? $args[ 'before_widget' ]
@@ -451,6 +461,7 @@ class sc_event_categories_widget extends WP_Widget {
 			echo $before_title . $title . $after_title;
 		}
 
+		$tax   = sugar_calendar_get_calendar_taxonomy_id();
 		$terms = get_terms( $tax );
 
 		if ( empty( $terms ) || is_wp_error( $terms ) ) {
@@ -470,17 +481,29 @@ class sc_event_categories_widget extends WP_Widget {
 		echo $after_widget;
 	}
 
-	/** @see WP_Widget::update */
-	public function update( $new_instance, $old_instance ) {
+	/**
+	 * Update the widget
+	 *
+	 * @param array $new_instance
+	 * @param array $old_instance
+	 *
+	 * @return array
+	 */
+	public function update( $new_instance = array(), $old_instance = array() ) {
 		$instance = $old_instance;
 		$instance[ 'title' ] = strip_tags( $new_instance[ 'title' ] );
+
 		return $instance;
 	}
 
-	/** @see WP_Widget::form */
-	public function form( $instance ) {
+	/**
+	 * Output the widget form
+	 *
+	 * @param array $instance
+	 */
+	public function form( $instance = array() ) {
 		$title = ! empty( $instance[ 'title' ] )
-			? esc_attr( $instance[ 'title' ] )
+			? $instance[ 'title' ]
 			: '';
 		?>
 
@@ -494,17 +517,17 @@ class sc_event_categories_widget extends WP_Widget {
 }
 
 /**
- * Event Filter  Widget
+ * Event Filter Widget
  *
  * Filter Upcoming / Past Events
  *
- * @access      private
- * @since       1.0
- * @return      void
+ * @since 1.0.0
  */
 class sc_event_filter_widget extends WP_Widget {
 
-	/** constructor */
+	/**
+	 * Constructor
+	 */
 	public function __construct() {
 		parent::__construct(
 			'sc_filter_widget',
@@ -516,11 +539,12 @@ class sc_event_filter_widget extends WP_Widget {
 	}
 
 	/**
-	 * @see WP_Widget::widget
+	 * Output the widget
+	 *
 	 * @param array $args
 	 * @param array $instance
 	 */
-	public function widget( $args, $instance ) {
+	public function widget( $args = array(), $instance = array() ) {
 		$before_widget = ! empty( $args[ 'before_widget' ] )
 			? $args[ 'before_widget' ]
 			: '';
@@ -564,23 +588,26 @@ class sc_event_filter_widget extends WP_Widget {
 	}
 
 	/**
-	 * @see WP_Widget::update
+	 * Update the widget
+	 *
 	 * @param array $new_instance
 	 * @param array $old_instance
 	 *
 	 * @return array
 	 */
-	public function update( $new_instance, $old_instance ) {
+	public function update( $new_instance = array(), $old_instance = array() ) {
 		$instance = $old_instance;
 		$instance[ 'title' ] = strip_tags( $new_instance[ 'title' ] );
+
 		return $instance;
 	}
 
 	/**
-	 * @see WP_Widget::form
+	 * Output the widget form
+	 *
 	 * @param array $instance
 	 */
-	public function form( $instance ) {
+	public function form( $instance = array() ) {
 		$title = ! empty( $instance[ 'title' ] )
 			? $instance[ 'title' ]
 			: '';

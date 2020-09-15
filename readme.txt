@@ -94,7 +94,7 @@ If you purchase an [Ultimate or Professional license](https://sugarcalendar.com/
 - **[Event URLs](https://sugarcalendar.com/downloads/event-urls/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - Add a custom URL to any event created through Sugar Calendar with this add-on. This lets you redirect to events on other web sites and pages or simply open them in a new tab.
 - **[Advanced Recurring](https://sugarcalendar.com/preview-of-the-upcoming-advanced-recurring-add-on/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)**  (coming soon!) - Create events that recur on specific days, every X period, recur X times, etc.
 
-Sugar Calendar is also a Stripe verified partner. The Stripe partner program recognizes applications which meet their strict quality requirements and allows us to provide even better services to our customers.
+Sugar Calendar is a verified member of the [Stripe partner program](https://stripe.com/accept-payments/sugar-calendar). This program recognizes software that meets Stripe's strict quality requirements and provides users of Sugar Calendar and Stripe with the confidence they need to trust us both with their payment integrations.
 
 = Upgrade from Sugar Calendar (Lite) =
 

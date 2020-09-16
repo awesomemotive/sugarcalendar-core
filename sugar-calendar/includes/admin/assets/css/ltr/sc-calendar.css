@@ -297,8 +297,25 @@ table.calendar a.all-day:before {
 	top: 0px;
 }
 
+.wp-pointer-actions .event-delete a {
+	color: #dc3232;
+}
+
+.wp-pointer-actions .event-delete a:hover,
+.wp-pointer-actions .event-delete a:active {
+	color: #a00;
+}
+
 .wp-pointer-actions .event-edit a:before {
 	content: "\f464";
+}
+
+.wp-pointer-actions .event-restore a:before {
+	content: "\f171";
+}
+
+.wp-pointer-actions .event-delete a:before {
+	content: "\f158";
 }
 
 .wp-pointer-actions .event-view a:before {

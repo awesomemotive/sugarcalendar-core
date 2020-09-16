@@ -89,9 +89,12 @@ Extend Sugar Calendar with these free add-ons. We keep the plugin lightweight by
 If you purchase an [Ultimate or Professional license](https://sugarcalendar.com/pricing/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) to Sugar Calendar you get access to all current and future pro add-ons.
 
 - **[Event Tickets](https://sugarcalendar.com/downloads/event-tickets/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on allows you to easily sell tickets to your events, whether they are virtual or in-person events. The plugin includes complete order and ticket management, attendee records, emailed and print versions of tickets, and a direct integration with [Stripe](https://stripe.com/) for payment processing.
+- **[Frontend Event Submissions](https://sugarcalendar.com/downloads/frontend-event-submissions/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on allows you to set up event submission forms that provide a way for your community members to create their own events in your calendars.
 - **[Calendar Feeds](https://sugarcalendar.com/downloads/calendar-feeds/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - Easily subscribe to Events feeds for any of your calendars in Sugar Calendar from Google Calendar, iCal, Gnome Calendar, or just about any other calendar application.
 - **[Event URLs](https://sugarcalendar.com/downloads/event-urls/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - Add a custom URL to any event created through Sugar Calendar with this add-on. This lets you redirect to events on other web sites and pages or simply open them in a new tab.
 - **[Advanced Recurring](https://sugarcalendar.com/preview-of-the-upcoming-advanced-recurring-add-on/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)**  (coming soon!) - Create events that recur on specific days, every X period, recur X times, etc.
+
+Sugar Calendar is a verified member of the [Stripe partner program](https://stripe.com/accept-payments/sugar-calendar). This program recognizes software that meets Stripe's strict quality requirements and provides users of Sugar Calendar and Stripe with the confidence they need to trust us both with their payment integrations.
 
 = Upgrade from Sugar Calendar (Lite) =
 

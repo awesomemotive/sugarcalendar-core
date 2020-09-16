@@ -1132,7 +1132,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return boolean
 	 */
 	protected function skip_item_in_cell( $item = false ) {
-		return false;
+		return empty( $item );
 	}
 
 	/**
@@ -1491,28 +1491,45 @@ class Base_List_Table extends \WP_List_Table {
 			return;
 		}
 
-		// Default links
-		$edit_link = $view_link = '';
-
-		// Rebase the pointer content
+		// Reset all pointer content
 		$pointer_content = array();
 
 		// Pointer content
 		$pointer_content['title'] = '<h3 class="' . $this->get_event_classes( $event ) . '">' . $this->get_pointer_title( $event ) . '</h3>';
 		$pointer_content['text']  = '<p>' . $this->get_pointer_text( $event ) . '</p>';
 
-		// Maybe add edit link
-		if ( $this->current_user_can_edit( $event ) ) {
-			$edit_link = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html__( 'Edit', 'sugar-calendar' ) ) . '</span>';
-		}
+		// Reset links array
+		$links = array();
 
-		// Add view link
-		if ( $this->current_user_can_view( $event ) )  {
-			$view_link = '<span class="action event-view">' . $this->get_event_view_link( $event, esc_html_x( 'View', 'verb', 'sugar-calendar' ) ) . '</span>';
+		// Trashed, so maybe offer to Restore or Delete
+		if ( 'trash' === $event->status ) {
+
+			// Maybe add restore link
+			if ( $this->current_user_can_delete( $event ) ) {
+				$links['restore'] = '<span class="action event-restore">' . $this->get_event_restore_link( $event, esc_html__( 'Restore', 'sugar-calendar' ) ) . '</span>';
+			}
+
+			// Maybe add delete link
+			if ( $this->current_user_can_delete( $event ) ) {
+				$links['delete']  = '<span class="action event-delete">' . $this->get_event_delete_link( $event, esc_html__( 'Delete', 'sugar-calendar' ) ) . '</span>';
+			}
+
+		// Not trashed, so offer to Edit or View
+		} else {
+
+			// Maybe add edit link
+			if ( $this->current_user_can_edit( $event ) ) {
+				$links['edit'] = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html__( 'Edit', 'sugar-calendar' ) ) . '</span>';
+			}
+
+			// Add view link
+			if ( $this->current_user_can_view( $event ) )  {
+				$links['view'] = '<span class="action event-view">' . $this->get_event_view_link( $event, esc_html_x( 'View', 'verb', 'sugar-calendar' ) ) . '</span>';
+			}
 		}
 
 		// Setup actions
-		$pointer_content['links'] = '<div class="wp-pointer-actions">' . $edit_link . $view_link . '</div>';
+		$pointer_content['links'] = '<div class="wp-pointer-actions">' . implode( '', $links ) . '</div>';
 
 		// Filter
 		$pointer_content = (array) apply_filters( 'sugar_calendar_admin_pointer_content', $pointer_content, $event, $cell );
@@ -1572,6 +1589,34 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Get the link used to delete an event.
+	 *
+	 * @since 2.0.21
+	 *
+	 * @param object $event
+	 * @param string $link_text
+	 *
+	 * @return string
+	 */
+	protected function get_event_delete_link( $event = false, $link_text = '' ) {
+		return '<a href="' . esc_url( $this->get_event_delete_url( $event ) ) . '">'  . $link_text . '</a>';
+	}
+
+	/**
+	 * Get the link used to restore an event.
+	 *
+	 * @since 2.0.21
+	 *
+	 * @param object $event
+	 * @param string $link_text
+	 *
+	 * @return string
+	 */
+	protected function get_event_restore_link( $event = false, $link_text = '' ) {
+		return '<a href="' . esc_url( $this->get_event_restore_url( $event ) ) . '">'  . $link_text . '</a>';
+	}
+
+	/**
 	 * Get the link used to view an event.
 	 *
 	 * @since 2.0.0
@@ -1605,6 +1650,76 @@ class Base_List_Table extends \WP_List_Table {
 		switch ( $event->object_type ) {
 			case 'post' :
 				$retval = get_edit_post_link( $event->object_id );
+				break;
+
+			case 'user' :
+				$retval = get_edit_user_link( $event->object_id );
+				break;
+
+			case 'comment' :
+				$retval = get_edit_comment_link( $event->object_id );
+				break;
+		}
+
+		// Return the HTML
+		return $retval;
+	}
+
+	/**
+	 * Get the URL used to restore an event.
+	 *
+	 * @todo Create a relationship registration API
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param object $event
+	 *
+	 * @return string
+	 */
+	protected function get_event_delete_url( $event = false ) {
+
+		// Default return value
+		$retval = '';
+
+		// Type of object
+		switch ( $event->object_type ) {
+			case 'post' :
+				$retval = wp_nonce_url( add_query_arg( array( 'action' => 'delete' ), get_edit_post_link( $event->object_id ) ), 'delete-post_' . $event->object_id );
+				break;
+
+			case 'user' :
+				$retval = get_edit_user_link( $event->object_id );
+				break;
+
+			case 'comment' :
+				$retval = get_edit_comment_link( $event->object_id );
+				break;
+		}
+
+		// Return the HTML
+		return $retval;
+	}
+
+	/**
+	 * Get the URL used to restore an event.
+	 *
+	 * @todo Create a relationship registration API
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param object $event
+	 *
+	 * @return string
+	 */
+	protected function get_event_restore_url( $event = false ) {
+
+		// Default return value
+		$retval = '';
+
+		// Type of object
+		switch ( $event->object_type ) {
+			case 'post' :
+				$retval = wp_nonce_url( add_query_arg( array( 'action' => 'untrash' ), get_edit_post_link( $event->object_id ) ), 'untrash-post_' . $event->object_id );
 				break;
 
 			case 'user' :
@@ -1969,6 +2084,65 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/** Permissions ***********************************************************/
+
+	/**
+	 * Can the current user delete an event?
+	 *
+	 * @since 2.0.21
+	 *
+	 * @param object $event
+	 *
+	 * @return boolean
+	 */
+	protected function current_user_can_delete( $event = false ) {
+		return $this->user_can_delete( get_current_user_id(), $event );
+	}
+	/**
+	 * Can a user ID delete an event?
+	 *
+	 * This method uses the object_type for the event to determine if the user
+	 * can delete the related object_id.
+	 *
+	 * @since 2.0.21
+	 *
+	 * @return boolean Default false. True if user can delete event.
+	 */
+	protected function user_can_delete( $user_id = 0, $event = false ) {
+
+		// Bail if no user was passed
+		if ( empty( $user_id ) ) {
+			return false;
+		}
+
+		// Get the cap, based on the object_type
+		switch ( $event->object_type ) {
+			case 'post' :
+				$type = get_post_type( $event->object_id );
+				$obj  = get_post_type_object( $type );
+
+				// Map to `edit_post` if exists, or `do_not_allow` if not
+				$cap = ! empty( $obj )
+					? $obj->cap->delete_post
+					: 'do_not_allow';
+
+				break;
+
+			case 'user' :
+				$cap  = 'delete_user';
+				break;
+
+			case 'comment' :
+				$cap  = 'delete_comment';
+				break;
+
+			default :
+				$cap = 'delete_event';
+				break;
+		}
+
+		// Cast and return
+		return (bool) user_can( $user_id, $cap, $event->object_id );
+	}
 
 	/**
 	 * Can the current user edit an event?

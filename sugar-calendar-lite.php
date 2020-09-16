@@ -8,10 +8,10 @@
  * License:           GNU General Public License v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       sugar-calendar
- * Domain Path:       /sugar-event-calendar/includes/languages/
+ * Domain Path:       /sugar-calendar/includes/languages/
  * Requires PHP:      5.6.20
  * Requires at least: 5.1
- * Version:           2.0.20
+ * Version:           2.0.21
  */
 
 // Exit if accessed directly
@@ -118,7 +118,7 @@ final class Sugar_Calendar_Requirements_Check {
 
 		// Maybe include the bundled bootstrapper
 		if ( ! class_exists( 'Sugar_Calendar\\Plugin' ) ) {
-			require_once dirname( $this->file ) . '/sugar-event-calendar/sugar-calendar.php';
+			require_once dirname( $this->file ) . '/sugar-calendar/sugar-calendar.php';
 		}
 
 		// Maybe hook-in the bootstrapper

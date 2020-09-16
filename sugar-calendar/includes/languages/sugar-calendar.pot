@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Sugar Calendar (Lite) 2.1.0\n"
+"Project-Id-Version: Sugar Calendar (Lite) 2.0.21\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2020-09-10 18:20:42+00:00\n"
+"POT-Creation-Date: 2020-09-16 16:51:01+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1305,7 +1305,7 @@ msgstr ""
 
 #: sugar-calendar/includes/post/taxonomies.php:42
 #: sugar-calendar/includes/themes/legacy/calendar.php:89
-#: sugar-calendar/includes/themes/legacy/widgets.php:276
+#: sugar-calendar/includes/themes/legacy/widgets.php:377
 msgid "All Calendars"
 msgstr ""
 
@@ -1574,133 +1574,133 @@ msgstr ""
 msgid "Starts %s then every year on the %s of %s"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:48
+#: sugar-calendar/includes/themes/legacy/widgets.php:50
 msgid "(Sugar Calendar) Event Calendar"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:48
+#: sugar-calendar/includes/themes/legacy/widgets.php:52
 msgid "Displays a monthly event calendar widget."
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:122
-#: sugar-calendar/includes/themes/legacy/widgets.php:240
-#: sugar-calendar/includes/themes/legacy/widgets.php:401
-#: sugar-calendar/includes/themes/legacy/widgets.php:482
+#: sugar-calendar/includes/themes/legacy/widgets.php:159
+#: sugar-calendar/includes/themes/legacy/widgets.php:354
+#: sugar-calendar/includes/themes/legacy/widgets.php:511
+#: sugar-calendar/includes/themes/legacy/widgets.php:617
 msgid "Title:"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:126
+#: sugar-calendar/includes/themes/legacy/widgets.php:163
 msgid "Size:"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:128
+#: sugar-calendar/includes/themes/legacy/widgets.php:165
 msgid "Small"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:129
+#: sugar-calendar/includes/themes/legacy/widgets.php:166
 msgid "Large"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:133
-#: sugar-calendar/includes/themes/legacy/widgets.php:274
+#: sugar-calendar/includes/themes/legacy/widgets.php:170
+#: sugar-calendar/includes/themes/legacy/widgets.php:375
 msgid "Calendar:"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:135
-#: sugar-calendar/includes/themes/legacy/widgets.php:253
+#: sugar-calendar/includes/themes/legacy/widgets.php:172
+#: sugar-calendar/includes/themes/legacy/widgets.php:361
 msgid "All"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:145
-msgid "Month & Year:"
+#: sugar-calendar/includes/themes/legacy/widgets.php:183
+msgid "Default Month & Year:"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:148
+#: sugar-calendar/includes/themes/legacy/widgets.php:186
 msgid "Leave empty for current"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:168
+#: sugar-calendar/includes/themes/legacy/widgets.php:208
 msgid "(Sugar Calendar) Event List"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:168
+#: sugar-calendar/includes/themes/legacy/widgets.php:210
 msgid "Displays all/upcoming/past events as a list."
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:248
+#: sugar-calendar/includes/themes/legacy/widgets.php:359
 msgid "Time Period:"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:256
+#: sugar-calendar/includes/themes/legacy/widgets.php:362
 msgid "Upcoming"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:259
+#: sugar-calendar/includes/themes/legacy/widgets.php:363
 msgid "Past"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:263
-#: sugar-calendar/includes/themes/legacy/widgets.php:450
+#: sugar-calendar/includes/themes/legacy/widgets.php:367
+#: sugar-calendar/includes/themes/legacy/widgets.php:578
 msgid "Order:"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:268
+#: sugar-calendar/includes/themes/legacy/widgets.php:369
 msgid "Default for Period"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:269
+#: sugar-calendar/includes/themes/legacy/widgets.php:370
 msgid "Oldest First"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:270
+#: sugar-calendar/includes/themes/legacy/widgets.php:371
 msgid "Newest First"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:294
+#: sugar-calendar/includes/themes/legacy/widgets.php:388
 msgid "Number to show"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:303
+#: sugar-calendar/includes/themes/legacy/widgets.php:392
 msgid "Show widget title"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:330
+#: sugar-calendar/includes/themes/legacy/widgets.php:404
 msgid "Show event categories"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:350
+#: sugar-calendar/includes/themes/legacy/widgets.php:426
 msgid "(Sugar Calendar) Calendar List"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:350
+#: sugar-calendar/includes/themes/legacy/widgets.php:428
 msgid "Display all of the available calendars as a list."
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:422
+#: sugar-calendar/includes/themes/legacy/widgets.php:534
 msgid "(Sugar Calendar) Event Filters"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:422
+#: sugar-calendar/includes/themes/legacy/widgets.php:536
 msgid "Event Archive only. Controls for filtering how to list events."
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:446
+#: sugar-calendar/includes/themes/legacy/widgets.php:574
 msgid "View all events"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:447
+#: sugar-calendar/includes/themes/legacy/widgets.php:575
 msgid "View upcoming events"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:448
+#: sugar-calendar/includes/themes/legacy/widgets.php:576
 msgid "View past events"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:451
+#: sugar-calendar/includes/themes/legacy/widgets.php:579
 msgid "ASC"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:453
+#: sugar-calendar/includes/themes/legacy/widgets.php:581
 msgid "DESC"
 msgstr ""
 
@@ -1850,12 +1850,12 @@ msgctxt "Next month"
 msgid "Next"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:312
+#: sugar-calendar/includes/themes/legacy/widgets.php:396
 msgctxt "Start & end if available"
 msgid "Show event dates"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/widgets.php:321
+#: sugar-calendar/includes/themes/legacy/widgets.php:400
 msgctxt "Start & end if available"
 msgid "Show event times"
 msgstr ""

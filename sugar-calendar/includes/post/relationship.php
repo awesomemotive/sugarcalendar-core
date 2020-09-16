@@ -20,6 +20,11 @@ function sugar_calendar_transition_post_status( $new_status = '', $old_status = 
 	// Get the post type being transitioned
 	$post_type = get_post_type( $post );
 
+	// Bail if no known post type
+	if ( empty( $post_type ) ) {
+		return;
+	}
+
 	// Bail if not supported post type
 	if ( ! in_array( $post_type, sugar_calendar_allowed_post_types(), true ) ) {
 		return;

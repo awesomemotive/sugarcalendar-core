@@ -21,7 +21,7 @@ function sugar_calendar_transition_post_status( $new_status = '', $old_status = 
 	$post_type = get_post_type( $post );
 
 	// Bail if not supported post type
-	if ( in_array( $post_type, sugar_calendar_allowed_post_types(), true ) ) {
+	if ( ! in_array( $post_type, sugar_calendar_allowed_post_types(), true ) ) {
 		return;
 	}
 

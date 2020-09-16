@@ -1,15 +1,15 @@
 {
 	"name": "sugar-calendar",
-	"version": "2.0.20",
+	"version": "2.0.21",
 	"description": "A calendar with a sweet disposition.",
 	"private": true,
 	"license": "GPL-2.0-or-later",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/sugarcalendar/sugar-event-calendar/"
+		"url": "https://github.com/sugarcalendar/core/"
 	},
 	"bugs": {
-		"url": "https://github.com/sugarcalendar/sugar-event-calendar/issues"
+		"url": "https://github.com/sugarcalendar/core/issues"
 	},
 	"homepage": "https://sugarcalendar.com",
 	"engines": {

@@ -52,58 +52,58 @@ module.exports = function( grunt ) {
 				files: [
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'chosen.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-calendar.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-chosen.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-datepicker.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-menu.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-meta-box.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-nav.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-settings.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						ext: '.css',
 					},
 				],
@@ -118,58 +118,58 @@ module.exports = function( grunt ) {
 				files: [
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'chosen.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/ltr',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/ltr',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-calendar.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/ltr',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/ltr',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-chosen.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/ltr',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/ltr',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-datepicker.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/ltr',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/ltr',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-menu.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/ltr',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/ltr',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-meta-box.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/ltr',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/ltr',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-nav.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/ltr',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/ltr',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/ltr',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/ltr',
 						src: [ 'sc-settings.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/ltr',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/ltr',
 						ext: '.css',
 					},
 				],
@@ -178,58 +178,58 @@ module.exports = function( grunt ) {
 				files: [
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						src: [ 'chosen.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						src: [ 'sc-calendar.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						src: [ 'sc-chosen.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						src: [ 'sc-datepicker.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						src: [ 'sc-menu.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						src: [ 'sc-meta-box.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						src: [ 'sc-nav.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/rtl',
 						ext: '.css',
 					},
 					{
 						expand: true,
-						cwd: 'sugar-event-calendar/includes/admin/assets/css/rtl',
+						cwd: '<%= pkg.name %>/includes/admin/assets/css/rtl',
 						src: [ 'sc-settings.css' ],
-						dest: 'sugar-event-calendar/includes/admin/assets/css/min/rtl',
+						dest: '<%= pkg.name %>/includes/admin/assets/css/min/rtl',
 						ext: '.css',
 					},
 				],
@@ -297,16 +297,16 @@ module.exports = function( grunt ) {
 		makepot: {
 			target: {
 				options: {
-					domainPath: '/sugar-event-calendar/includes/languages/', // Where to save the POT file.
+					domainPath: '/<%= pkg.name %>/includes/languages/',
 					exclude: [ 'build/.*' ],
-					mainFile: 'sugar-calendar-lite.php', // Main project file.
-					potFilename: 'sugar-calendar.pot', // Name of the POT file.
+					mainFile: 'sugar-calendar-lite.php',
+					potFilename: 'sugar-calendar.pot',
 					potHeaders: {
-						poedit: true, // Includes common Poedit headers.
-						'x-poedit-keywordslist': true, // Include a list of all possible gettext functions.
+						poedit: true,
+						'x-poedit-keywordslist': true,
 					},
-					type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
-					updateTimestamp: true, // Whether the POT-Creation-Date should be updated without other changes.
+					type: 'wp-plugin',
+					updateTimestamp: false,
 					processPot: function( pot, options ) {
 						pot.headers[ 'report-msgid-bugs-to' ] = 'https://sugarcalendar.com';
 						pot.headers[ 'last-translator' ] = 'WP-Translations (http://wp-translations.org/)';
@@ -342,7 +342,7 @@ module.exports = function( grunt ) {
 				options: {
 					repository: 'git@github.com:sugarcalendar/standard.git',
 					branch: 'main',
-					directory: 'sugar-event-calendar/includes/standard',
+					directory: '<%= pkg.name %>/includes/standard',
 					depth: 1
 				},
 			},
@@ -361,7 +361,7 @@ module.exports = function( grunt ) {
 			// All temporary directories
 			main: [
 				'build/',
-				'sugar-event-calendar/includes/standard/',
+				'<%= pkg.name %>/includes/standard/',
 			],
 
 			// Build
@@ -371,14 +371,14 @@ module.exports = function( grunt ) {
 
 			// For Standard
 			standard_before_clone: [
-				'sugar-event-calendar/includes/standard/',
+				'<%= pkg.name %>/includes/standard/',
 			],
 			standard_after_clone: [
-				'sugar-event-calendar/includes/standard/.git',
-				'sugar-event-calendar/includes/standard/README.md',
+				'<%= pkg.name %>/includes/standard/.git',
+				'<%= pkg.name %>/includes/standard/README.md',
 			],
 			standard_after_build: [
-				'sugar-event-calendar/includes/standard/',
+				'<%= pkg.name %>/includes/standard/',
 			]
 		},
 
@@ -403,7 +403,7 @@ module.exports = function( grunt ) {
 			// Copy the plugin contents
 			contents: {
 				src: [
-					'sugar-event-calendar/**',
+					'<%= pkg.name %>/**',
 				],
 				dest: 'build/' + type + '/',
 			},
@@ -441,9 +441,9 @@ module.exports = function( grunt ) {
 				}],
 			},
 
-			// sugar-event-calendar/sugar-calendar.php
+			// sugar-calendar.php
 			loader_php: {
-				src: [ 'sugar-event-calendar/sugar-calendar.php' ],
+				src: [ '<%= pkg.name %>/sugar-calendar.php' ],
 				overwrite: true,
 				replacements: [{
 					from: /private\s*\$version\s*=\s*'(.*)'/,
@@ -463,7 +463,7 @@ module.exports = function( grunt ) {
 
 			// POT Main file
 			build_pot_bootstrap: {
-				src: [ 'build/' + type + '/sugar-event-calendar/includes/languages/sugar-calendar.pot' ],
+				src: [ 'build/' + type + '/<%= pkg.name %>/includes/languages/sugar-calendar.pot' ],
 				overwrite: true,
 				replacements: [{
 					from: 'sugar-calendar-lite.php',
@@ -473,13 +473,21 @@ module.exports = function( grunt ) {
 
 			// POT Name
 			build_pot_name: {
-				src: [ 'build/' + type + '/sugar-event-calendar/includes/languages/sugar-calendar.pot' ],
+				src: [ 'build/' + type + '/<%= pkg.name %>/includes/languages/sugar-calendar.pot' ],
 				overwrite: true,
 				replacements: [{
 					from: 'Sugar Calendar (Lite)',
 					to: name,
 				}],
 			},
+
+			// For Standard
+			standard: {
+				src: [
+					'sugar-calendar-lite.php',
+				],
+				dest: 'sugar-calendar.php',
+			}
 		},
 
 		// Compress build directory into <name>.zip and <name>-<version>.zip
@@ -543,7 +551,7 @@ module.exports = function( grunt ) {
 		grunt.task.run( 'clean:standard_before_clone' );
 
 		// Make /standard directory
-		grunt.file.mkdir( 'sugar-event-calendar/includes/standard' );
+		grunt.file.mkdir( 'sugar-calendar/includes/standard' );
 
 		// Ordered tasks
 		grunt.task.run(

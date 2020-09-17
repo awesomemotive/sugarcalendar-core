@@ -414,8 +414,9 @@ function register_settings() {
 	register_setting( 'sc_main_display', 'sc_date_format' );
 	register_setting( 'sc_main_display', 'sc_time_format' );
 
-	// Blocks
+	// Editor
 	register_setting( 'sc_main_editing', 'sc_editor_type' );
+	register_setting( 'sc_main_editing', 'sc_custom_fields' );
 
 	do_action( 'sugar_calendar_register_settings' );
 }
@@ -617,8 +618,9 @@ function display_subsection() {
  */
 function editing_subsection() {
 
-	// Get the current editor
-	$type = Editor\current();
+	// Get the current editor settings
+	$type   = Editor\current();
+	$fields = Editor\custom_fields();
 
 	// Get the registered editors
 	$editors = Editor\registered(); ?>
@@ -646,6 +648,21 @@ function editing_subsection() {
 					?></select>
 					<p class="description">
 						<?php esc_html_e( 'The interface to use when adding or editing Events.', 'sugar-calendar' ); ?>
+					</p>
+				</td>
+			</tr>
+
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="sc_custom_fields"><?php esc_html_e( 'Custom Fields', 'sugar-calendar' ); ?></label>
+				</th>
+				<td>
+					<label>
+						<input type="checkbox" name="sc_custom_fields" id="sc_custom_fields" value="1" <?php checked( $fields ); ?> />
+						<?php esc_html_e( 'Enable Custom Fields', 'sugar-calendar' ); ?>
+					</label>
+					<p class="description">
+						<?php _e( 'Allow developers to extend post types that support <code>events</code>.', 'sugar-calendar' ); ?>
 					</p>
 				</td>
 			</tr>

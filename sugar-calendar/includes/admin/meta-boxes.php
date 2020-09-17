@@ -12,6 +12,29 @@ defined( 'ABSPATH' ) || exit;
 use Sugar_Calendar\Common\Editor as Editor;
 
 /**
+ * Maybe add custom fields support to supported post types.
+ *
+ * @since 2.1.0
+ *
+ * @param array $supports
+ *
+ * @return array
+ */
+function custom_fields( $supports = array() ) {
+
+	// Get the custom fields setting
+	$supported = Editor\custom_fields();
+
+	// Add custom fields support
+	if ( ! empty( $supported ) ) {
+		array_push( $supports, 'custom-fields' );
+	}
+
+	// Return supported
+	return $supports;
+}
+
+/**
  * Event Types Meta-box
  * Output radio buttons instead of the default WordPress mechanism
  *

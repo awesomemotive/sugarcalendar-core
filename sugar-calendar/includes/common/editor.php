@@ -69,3 +69,17 @@ function registered() {
 		),
 	) );
 }
+
+/**
+ * Get the currently selected Editor custom fields setting.
+ *
+ * @since 2.1.0
+ *
+ * @return bool
+ */
+function custom_fields() {
+	$retval = get_option( 'sc_custom_fields', false );
+
+	// Filter & return
+	return apply_filters( 'sugar_calendar_get_custom_fields', $retval, false );
+}

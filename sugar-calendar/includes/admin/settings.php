@@ -662,7 +662,7 @@ function editing_subsection() {
 						<?php esc_html_e( 'Enable Custom Fields', 'sugar-calendar' ); ?>
 					</label>
 					<p class="description">
-						<?php esc_html_e( 'Allow developers to extend Events, using the standard interface.', 'sugar-calendar' ); ?>
+						<?php _e( 'Allow developers to extend post types that support <code>events</code>.', 'sugar-calendar' ); ?>
 					</p>
 				</td>
 			</tr>

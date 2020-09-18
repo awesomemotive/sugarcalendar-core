@@ -251,10 +251,11 @@ function maybe_empty_trash() {
 
 	// Get trashed events
 	$trashed = sugar_calendar_get_events( array(
-		'status'        => 'trash',
-		'number'        => false,
-		'update_cache'  => false,
-		'no_found_rows' => true
+		'status'            => 'trash',
+		'number'            => false,
+		'update_item_cache' => false,
+		'update_meta_cache' => false,
+		'no_found_rows'     => true
 	) );
 
 	// Bail if nothing in trash

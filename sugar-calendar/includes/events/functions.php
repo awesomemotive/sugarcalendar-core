@@ -63,7 +63,7 @@ function sugar_calendar_delete_events( $args = array() ) {
 	$r = wp_parse_args( $args, array(
 		'object_id'     => 0,
 		'object_type'   => 'post',
-		'number'        => -1,
+		'number'        => false,
 		'update_cache'  => false,
 		'no_found_rows' => true
 	) );

@@ -114,10 +114,13 @@ function sugar_calendar_update_event( $event_id = 0, $data = array() ) {
  * @since 2.0
  *
  * @param int $event_id event ID.
- * @return Sugar_Calendar\events\event
+ * @return Sugar_Calendar\Event
  */
 function sugar_calendar_get_event( $event_id = 0 ) {
-	return sugar_calendar_get_event_by( 'id', $event_id );
+	$events = new \Sugar_Calendar\Event_Query();
+
+	// Return event
+	return $events->get_item( $event_id );
 }
 
 /**
@@ -127,7 +130,7 @@ function sugar_calendar_get_event( $event_id = 0 ) {
  *
  * @param string $field Database table field.
  * @param string $value Value of the row.
- * @return Sugar_Calendar\events\event
+ * @return Sugar_Calendar\Event
  */
 function sugar_calendar_get_event_by( $field = '', $value = '' ) {
 	$events = new \Sugar_Calendar\Event_Query();
@@ -143,7 +146,7 @@ function sugar_calendar_get_event_by( $field = '', $value = '' ) {
  *
  * @param int    $object_id   Object ID
  * @param string $object_type Object type
- * @return Sugar_Calendar\events\event
+ * @return Sugar_Calendar\Event
  */
 function sugar_calendar_get_event_by_object( $object_id = 0, $object_type = 'post' ) {
 

@@ -89,8 +89,13 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 		$args[ $tax ] = $category;
 	}
 
+	// Do not query for all found rows
+	$r = array_merge( $args, array(
+		'no_found_rows' => true
+	) );
+
 	// Query for events
-	$events = sugar_calendar_get_events( $args );
+	$events = sugar_calendar_get_events( $r );
 
 	// Bail if no events
 	if ( empty( $events ) ) {

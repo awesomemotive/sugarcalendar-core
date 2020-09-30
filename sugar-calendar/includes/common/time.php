@@ -309,6 +309,7 @@ function sugar_calendar_get_hours() {
 	// 24 hour clock
 	} else {
 		$retval = array(
+			'00',
 			'01',
 			'02',
 			'03',

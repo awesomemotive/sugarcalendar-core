@@ -41,12 +41,13 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 
 	// Default arguments
 	$args = array(
-		'number'      => $number,
-		'object_type' => 'post',
-		'status'      => 'publish',
-		'orderby'     => 'start',
-		'order'       => 'ASC',
-		'date_query'  => sugar_calendar_get_date_query_args( 'month', $view_start, $view_end )
+		'no_found_rows' => true,
+		'number'        => $number,
+		'object_type'   => 'post',
+		'status'        => 'publish',
+		'orderby'       => 'start',
+		'order'         => 'ASC',
+		'date_query'    => sugar_calendar_get_date_query_args( 'month', $view_start, $view_end )
 	);
 
 	// Maybe add category if non-empty

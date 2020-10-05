@@ -40,7 +40,7 @@ function sugar_calendar_get_updater() {
  * @return boolean
  */
 function sugar_calendar_doing_script_debug() {
-	return Sugar_Calendar\Core\Common\Assets\doing_debug();
+	return Sugar_Calendar\Common\Assets\doing_debug();
 }
 
 /**
@@ -51,5 +51,5 @@ function sugar_calendar_doing_script_debug() {
  * @return string
  */
 function sugar_calendar_get_assets_version() {
-	return Sugar_Calendar\Core\Common\Assets\get_version();
+	return Sugar_Calendar\Common\Assets\get_version();
 }

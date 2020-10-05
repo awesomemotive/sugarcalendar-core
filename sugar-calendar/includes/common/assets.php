@@ -4,7 +4,7 @@
  *
  * @package Plugins/Site/Events/Common/Assets
  */
-namespace Sugar_Calendar\Core\Common\Assets;
+namespace Sugar_Calendar\Common\Assets;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;

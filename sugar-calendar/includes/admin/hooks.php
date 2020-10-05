@@ -22,8 +22,7 @@ add_action( 'admin_init', __NAMESPACE__ . '\\Screen\\Options\\save' );
 add_action( 'admin_notices', __NAMESPACE__ . '\\Upgrades\\notices' );
 
 // Admin Settings
-add_action( 'admin_menu', __NAMESPACE__ . '\\Settings\\menu'               );
-add_action( 'admin_init', __NAMESPACE__ . '\\Settings\\register_settings'  );
+add_action( 'admin_menu', __NAMESPACE__ . '\\Settings\\menu' );
 
 // Admin meta box
 add_action( 'add_meta_boxes',          __NAMESPACE__ . '\\Editor\\Meta\\add'          );

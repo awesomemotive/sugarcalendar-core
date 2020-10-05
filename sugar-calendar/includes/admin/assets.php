@@ -9,7 +9,7 @@ namespace Sugar_Calendar\Admin\Assets;
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
-use Sugar_Calendar\Core\Common\Assets as Assets;
+use Sugar_Calendar\Common\Assets as Assets;
 
 /**
  * Register assets.

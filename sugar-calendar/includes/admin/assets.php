@@ -44,8 +44,11 @@ function register() {
 	// Calendar
 	wp_register_script( 'sugar_calendar_admin_calendar',  "{$url}js/sc-calendar.js", $general, $ver, false );
 
-	// Calendar
+	// Settings
 	wp_register_script( 'sugar_calendar_admin_settings',  "{$url}js/sc-settings.js", $general, $ver, false );
+
+	// Taxonomy
+	wp_register_script( 'sugar_calendar_admin_taxonomy',  "{$url}js/sc-taxonomy.js", $general, $ver, false );
 
 	/** Styles ****************************************************************/
 
@@ -68,6 +71,9 @@ function register() {
 
 	// Settings
 	wp_register_style( 'sugar_calendar_admin_settings',   "{$url}css/{$path}sc-settings.css",   $deps,   $ver, 'all' );
+
+	// Taxonomy
+	wp_register_style( 'sugar_calendar_admin_taxonomy',   "{$url}css/{$path}sc-taxonomy.css",   $deps,   $ver, 'all' );
 }
 
 /**
@@ -120,6 +126,14 @@ function enqueue() {
 		// Meta-box
 		wp_enqueue_script( 'sugar_calendar_admin_meta_box' );
 		wp_enqueue_style( 'sugar_calendar_admin_meta_box' );
+	}
+
+	// Taxonomy Pages
+	if ( sugar_calendar_admin_is_taxonomy_page() ) {
+
+		// Taxonomy
+		wp_enqueue_script( 'sugar_calendar_admin_taxonomy' );
+		wp_enqueue_style( 'sugar_calendar_admin_taxonomy' );
 	}
 }
 

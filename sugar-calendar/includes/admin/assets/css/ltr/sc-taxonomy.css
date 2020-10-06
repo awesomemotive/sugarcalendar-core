@@ -1,0 +1,77 @@
+body.js.sugar-calendar.edit-tags-php #wpbody {
+	position: inherit;
+}
+
+body.js.sugar-calendar.edit-tags-php #col-left {
+	float: none;
+	position: absolute;
+	left: 0;
+	top: -32px;
+	height: calc( 100% + 32px );
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	background: rgba(0,0,0,0.6);
+	z-index: 99999;
+	display: none;
+}
+
+body.js.sugar-calendar.edit-tags-php #col-left .col-wrap {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	height: 75vh;
+	width: 55vw;
+	margin: 0;
+	transform: translate(-50%, -50%);
+	background-color: #f1f1f1;
+	padding: 10px 20px 0;
+	border: 1px solid #fff;
+	border-radius: 5px;
+	overflow-y: auto;
+}
+
+body.js.sugar-calendar.edit-tags-php #col-right {
+	float: none;
+	width: auto;
+}
+
+body.js.sugar-calendar.edit-tags-php #col-right .col-wrap {
+	padding: 0;
+}
+
+body.js.sugar-calendar.edit-tags-php .search-form {
+	display: inline-block;
+	position: relative;
+	box-sizing: border-box;
+	margin: 3px 0 25px;
+	padding: 11px;
+	width: 100%;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	border: 1px solid #ccd0d4;
+	background: #fff;
+	color: #555;
+	font-size: 13px;
+}
+
+@media screen and (max-width: 782px) {
+	body.js.sugar-calendar.edit-tags-php.auto-fold #wpcontent {
+		position: inherit;
+		margin-left: 0;
+		padding-left: 0;
+	}
+
+	body.js.sugar-calendar.edit-tags-php.auto-fold #wpbody {
+		padding-left: 10px;
+	}
+
+	body.js.sugar-calendar.edit-tags-php.auto-fold #col-left {
+		top: -45px;
+		height: calc( 100% + 45px );
+	}
+
+	body.js.sugar-calendar.edit-tags-php.auto-fold #col-left .col-wrap {
+		height: 90vh;
+		width: 90vw;
+	}
+}

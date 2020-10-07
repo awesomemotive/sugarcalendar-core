@@ -255,6 +255,9 @@ function taxonomy_tabs() {
 
 	// Output the tabs
 	?><div class="wrap sc-tab-wrap"><?php
-		display();
-	?></div><?php
+
+		display();?>
+
+		<hr class="wp-header-end">
+	</div><?php
 }

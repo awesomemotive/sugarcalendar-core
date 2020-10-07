@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.1.0\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2020-10-06 21:45:56+00:00\n"
+"POT-Creation-Date: 2020-10-07 18:47:15+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,20 +24,20 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: sugar-calendar/includes/admin/assets.php:151
+#: sugar-calendar/includes/admin/assets.php:153
 msgid "Verifying"
 msgstr ""
 
-#: sugar-calendar/includes/admin/assets.php:152
+#: sugar-calendar/includes/admin/assets.php:154
 #: sugar-calendar/includes/standard/license.php:742
 msgid "Verify"
 msgstr ""
 
-#: sugar-calendar/includes/admin/assets.php:153
+#: sugar-calendar/includes/admin/assets.php:155
 msgid "Verifying..."
 msgstr ""
 
-#: sugar-calendar/includes/admin/assets.php:154
+#: sugar-calendar/includes/admin/assets.php:156
 #: sugar-calendar/includes/standard/license.php:571
 msgid "Please enter a valid license key."
 msgstr ""

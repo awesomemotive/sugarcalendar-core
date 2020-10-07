@@ -29,6 +29,8 @@ function register() {
 	$deps    = array();
 	$chosen  = array( 'sugar_calendar_vendor_chosen' );
 	$general = array( 'sugar_calendar_admin_general' );
+	$dialog  = array_push( $general, 'jquery-ui-dialog' );
+	$wpui    = array( 'wp-jquery-ui-dialog' );
 
 	/** Scripts ***************************************************************/
 
@@ -48,7 +50,7 @@ function register() {
 	wp_register_script( 'sugar_calendar_admin_settings',  "{$url}js/sc-settings.js", $general, $ver, false );
 
 	// Taxonomy
-	wp_register_script( 'sugar_calendar_admin_taxonomy',  "{$url}js/sc-taxonomy.js", $general, $ver, false );
+	wp_register_script( 'sugar_calendar_admin_taxonomy',  "{$url}js/sc-taxonomy.js", $dialog,  $ver, false );
 
 	/** Styles ****************************************************************/
 
@@ -73,7 +75,7 @@ function register() {
 	wp_register_style( 'sugar_calendar_admin_settings',   "{$url}css/{$path}sc-settings.css",   $deps,   $ver, 'all' );
 
 	// Taxonomy
-	wp_register_style( 'sugar_calendar_admin_taxonomy',   "{$url}css/{$path}sc-taxonomy.css",   $deps,   $ver, 'all' );
+	wp_register_style( 'sugar_calendar_admin_taxonomy',   "{$url}css/{$path}sc-taxonomy.css",   $wpui,   $ver, 'all' );
 }
 
 /**

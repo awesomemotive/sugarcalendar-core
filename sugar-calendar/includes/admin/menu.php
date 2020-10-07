@@ -217,7 +217,7 @@ function body_class( $class = '' ) {
 
 	// Add class if in an admin page
 	if ( sugar_calendar_admin_is_events_page() ) {
-		$class .= 'sugar-calendar';
+		$class .= ' sugar-calendar';
 	}
 
 	// Return class string

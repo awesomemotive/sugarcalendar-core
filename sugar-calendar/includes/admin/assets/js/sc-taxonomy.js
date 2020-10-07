@@ -12,6 +12,9 @@ jQuery( document ).ready( function( $ ) {
 		sinput   = $( '#tag-search-input' ),
 		ssubmit  = $( '#search-submit' ),
 
+		// URL
+		hash     = window.location.hash,
+
 		// Dialog
 		vwidth   = $( window ).width(),
 		vheight  = $( window ).height(),
@@ -30,6 +33,17 @@ jQuery( document ).ready( function( $ ) {
 	sinput.attr( 'placeholder', ssubmit.attr( 'value' ) );
 
 	/**
+	 * Maybe open the dialog
+	 *
+	 * Done here, like this, to avoid rendering issues with autoOpen in Safari.
+	 */
+	if ( '#tag-name' === hash ) {
+		setTimeout( function() {
+			dialog.dialog( 'open' );
+		}, 100 );
+	}
+
+	/**
 	 * Show on "Add New" click
 	 *
 	 * @since 2.1.0
@@ -38,7 +52,7 @@ jQuery( document ).ready( function( $ ) {
 	add_new.on( 'click', function( e ) {
 		e.preventDefault();
 
-		// Oper the dialog
+		// Open the dialog
 		dialog.dialog( 'open' );
 
 		// Set focus on the first input

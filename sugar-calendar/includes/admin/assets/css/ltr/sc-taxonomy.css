@@ -1,3 +1,4 @@
+/* WordPress Overrides */
 body.js.sugar-calendar.edit-tags-php #wpbody {
 	position: inherit;
 }
@@ -21,6 +22,7 @@ body.js.sugar-calendar.edit-tags-php #col-right .col-wrap {
 	padding: 0;
 }
 
+/* Search Form */
 body.js.sugar-calendar.edit-tags-php .search-form {
 	display: inline-block;
 	position: relative;
@@ -39,6 +41,21 @@ body.js.sugar-calendar.edit-tags-php .search-form #search-submit {
 	display: none;
 }
 
+/* List Table Columns */
+
+body.js.sugar-calendar.edit-tags-php .column-color {
+	width: 74px;
+}
+
+body.js.sugar-calendar.edit-tags-php .column-slug {
+	width: 10%;
+}
+
+body.js.sugar-calendar.edit-tags-php .column-description {
+	width: 20%;
+}
+
+/* Small Screens */
 @media screen and (max-width: 782px) {
 	body.js.sugar-calendar.edit-tags-php.auto-fold #wpcontent {
 		position: inherit;

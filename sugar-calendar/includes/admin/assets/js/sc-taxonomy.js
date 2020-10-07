@@ -22,11 +22,19 @@ jQuery( document ).ready( function( $ ) {
 		dheight  = ( vwidth <= 782 ) ? vheight - 40 : 500,
 		title    = wrapper.find( 'h2' ).text(),
 		dialog   = wrapper.dialog( {
-			modal    : true,
-			autoOpen : false,
-			title    : title,
-			width    : dwidth,
-			height   : dheight
+			modal     : true,
+			autoOpen  : false,
+			resizable : false,
+			draggable : false,
+			title     : title,
+			width     : dwidth,
+			height    : dheight,
+			create: function() {
+				$( this )
+					.parent()
+						.css( 'maxWidth',  '90vw' )
+						.css( 'maxHeight', '70vh' );
+			},
 		} );
 
 	// Set search placeholder text, since the button is now hidden

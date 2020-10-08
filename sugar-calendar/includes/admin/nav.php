@@ -210,8 +210,20 @@ function add_new() {
 		return;
 	}
 
-	?><a href="<?php echo esc_url( add_query_arg( array( 'post_type' => $post_type ), admin_url( 'post-new.php' ) ) ); ?>" class="page-title-action">
-		<?php esc_html_e( 'Add New', 'sugar-calendar' ); ?>
+	// Singular name for Post type or Taxonomy
+	if ( sugar_calendar_admin_is_taxonomy_page() ) {
+		$name = get_taxonomy( get_current_screen()->taxonomy )->labels->singular_name;
+		$url  = '#tag-name';
+	} else {
+		$name = $post_type_object->labels->singular_name;
+		$url  = $url  = add_query_arg( array( 'post_type' => $post_type ), admin_url( 'post-new.php' ) );
+	}
+
+	// Default "Add New" text
+	$text = sprintf( esc_html__( 'Add %s', 'sugar-calendar' ), $name );
+
+	?><a href="<?php echo esc_url( $url ); ?>" class="page-title-action">
+		<?php echo esc_html( $text ); ?>
 	</a><?php
 }
 
@@ -243,6 +255,9 @@ function taxonomy_tabs() {
 
 	// Output the tabs
 	?><div class="wrap sc-tab-wrap"><?php
-		display();
-	?></div><?php
+
+		display();?>
+
+		<hr class="wp-header-end">
+	</div><?php
 }

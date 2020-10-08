@@ -46,17 +46,16 @@ function sugar_calendar_admin_get_primary_page() {
  * @return boolean
  */
 function sugar_calendar_is_admin() {
-	$screen = get_current_screen();
 
 	if (
 
-		// Add if the event post type
-		post_type_supports( $screen->post_type, 'events' )
+		// Is Events Page
+		sugar_calendar_admin_is_events_page()
 
 		||
 
-		// Or if Events pages
-		sugar_calendar_get_admin_page_id() === $screen->id
+		// Is Taxonomy Page
+		sugar_calendar_admin_is_taxonomy_page()
 
 		||
 
@@ -88,6 +87,37 @@ function sugar_calendar_admin_is_events_page() {
 
 		// Or if Events pages
 		sugar_calendar_get_admin_page_id() === $screen->id
+	) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Is this an admin area page used for displaying or interacting with Events?
+ *
+ * @since 2.1.0
+ *
+ * @return boolean
+ */
+function sugar_calendar_admin_is_taxonomy_page() {
+	$screen = get_current_screen();
+
+	if (
+
+		// Add if the event post type
+		post_type_supports( $screen->post_type, 'events' )
+
+		&&
+
+		// And Taxonomy page
+		! empty( $screen->taxonomy )
+
+		&&
+
+		// And is supported Taxonomy
+		in_array( $screen->taxonomy, sugar_calendar_get_object_taxonomies(), true )
 	) {
 		return true;
 	}

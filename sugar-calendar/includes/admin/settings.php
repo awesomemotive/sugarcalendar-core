@@ -163,6 +163,12 @@ function get_subsections( $section = '' ) {
 					'name' => esc_html__( 'Editing', 'sugar-calendar' ),
 					'url'  => admin_url( 'admin.php?page=sc-settings' ),
 					'func' => 'Sugar_Calendar\\Admin\\Settings\\editing_subsection'
+				),
+				'timezones' => array(
+					'id'   => 'timezones',
+					'name' => esc_html__( 'Timezones', 'sugar-calendar' ),
+					'url'  => admin_url( 'admin.php?page=sc-settings' ),
+					'func' => 'Sugar_Calendar\\Admin\\Settings\\timezone_subsection'
 				)
 			)
 		);
@@ -643,6 +649,50 @@ function editing_subsection() {
 					</label>
 					<p class="description">
 						<?php _e( 'Allow developers to extend post types that support <code>events</code>.', 'sugar-calendar' ); ?>
+					</p>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+<?php
+}
+
+/**
+ * Output the "Timezone" subsection.
+ *
+ * @since 2.1.0
+ */
+function timezone_subsection() {
+
+	// Get the current editor settings
+	$tzview = get_option( 'sc_timezone_view' ); ?>
+
+	<table class="form-table">
+		<tbody>
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="sc_timezone_view"><?php esc_html_e( 'Timezones', 'sugar-calendar' ); ?></label>
+				</th>
+				<td>
+					<label>
+						<input type="checkbox" name="sc_timezone_view" id="sc_timezone_view" value="1" <?php checked( $tzview ); ?> />
+						<?php esc_html_e( 'Enable Timezone Support', 'sugar-calendar' ); ?>
+					</label>
+					<p class="description">
+						<?php _e( 'Allow developers to extend post types that support <code>events</code>.', 'sugar-calendar' ); ?>
+					</p>
+				</td>
+			</tr>
+
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="sc_editor_type"><?php esc_html_e( 'Editor Type', 'sugar-calendar' ); ?></label>
+				</th>
+				<td>
+					<?php sugar_calendar_timezone_dropdown(); ?>
+					<p class="description">
+						<?php esc_html_e( 'The interface to use when adding or editing Events.', 'sugar-calendar' ); ?>
 					</p>
 				</td>
 			</tr>

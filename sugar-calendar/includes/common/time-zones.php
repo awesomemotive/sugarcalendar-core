@@ -92,25 +92,47 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 		'<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" class="' . implode( ' ', $classes ) . '" placeholder="' . esc_attr( $placeholder ) . '">'
 	);
 
-	$continents = array( 'Africa', 'America', 'Antarctica', 'Arctic', 'Asia', 'Atlantic', 'Australia', 'Europe', 'Indian', 'Pacific' );
+	// Allowed continents (why not just disallow instead?)
+	$continents = array(
+		'Africa',
+		'America',
+		'Antarctica',
+		'Arctic',
+		'Asia',
+		'Atlantic',
+		'Australia',
+		'Europe',
+		'Indian',
+		'Pacific'
+	);
+
+	$zones = array();
 
 	// Load translations for continents and cities.
-	if ( ! $mo_loaded || $locale !== $locale_loaded ) {
-		$locale_loaded = $locale ? $locale : get_locale();
+	if ( empty( $mo_loaded ) || ( $locale !== $locale_loaded ) ) {
+		$locale_loaded = ! empty( $locale )
+			? $locale
+			: get_locale();
 		$mofile        = WP_LANG_DIR . '/continents-cities-' . $locale_loaded . '.mo';
 		unload_textdomain( 'continents-cities' );
 		load_textdomain( 'continents-cities', $mofile );
 		$mo_loaded = true;
 	}
 
-	$zonen = array();
-	foreach ( timezone_identifiers_list() as $zone ) {
+	// Get identifiers
+	$identifiers = timezone_identifiers_list();
+
+	// Loop through all identifiers
+	foreach ( $identifiers as $zone ) {
 		$zone = explode( '/', $zone );
+
+		// Skip unknown continents (UTC specifically is done later)
 		if ( ! in_array( $zone[0], $continents, true ) ) {
 			continue;
 		}
 
-		// This determines what gets set and translated - we don't translate Etc/* strings here, they are done later.
+		// This determines what gets set and translated - we don't translate
+		// Etc/* strings here, they are done later.
 		$exists    = array(
 			0 => ( isset( $zone[0] ) && $zone[0] ),
 			1 => ( isset( $zone[1] ) && $zone[1] ),
@@ -121,7 +143,7 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 		$exists[5] = ( $exists[2] && $exists[3] );
 
 		// phpcs:disable WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText
-		$zonen[] = array(
+		$zones[] = array(
 			'continent'   => ( $exists[0] ? $zone[0] : '' ),
 			'city'        => ( $exists[1] ? $zone[1] : '' ),
 			'subcity'     => ( $exists[2] ? $zone[2] : '' ),
@@ -131,24 +153,32 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 		);
 		// phpcs:enable
 	}
-	usort( $zonen, '_wp_timezone_choice_usort_callback' );
 
+	// Sort these zones
+	usort( $zones, '_wp_timezone_choice_usort_callback' );
+
+	// Support empty/floating time zone
 	if ( ! empty( $r['allow_empty'] ) ) {
-		$structure[] = '<option selected="selected" value="">' . esc_html( $none_text ) . '</option>';
+		$structure[] = '<optgroup label="' . esc_attr__( 'Default', 'sugar-calendar' ) . '">';
+		$structure[] = '<option ' . selected( $selected_zone, false, false ) . ' value="">' . esc_html( $none_text ) . '</option>';
+		$structure[] = '</optgroup>';
 	}
 
-	foreach ( $zonen as $key => $zone ) {
+	// Loop through zones
+	foreach ( $zones as $key => $zone ) {
+
 		// Build value in an array to join later.
 		$value = array( $zone['continent'] );
 
+		// It's at the continent level (generally won't happen).
 		if ( empty( $zone['city'] ) ) {
-			// It's at the continent level (generally won't happen).
 			$display = $zone['t_continent'];
+
+		// It's inside a continent group.
 		} else {
-			// It's inside a continent group.
 
 			// Continent optgroup.
-			if ( ! isset( $zonen[ $key - 1 ] ) || $zonen[ $key - 1 ]['continent'] !== $zone['continent'] ) {
+			if ( ! isset( $zones[ $key - 1 ] ) || $zones[ $key - 1 ]['continent'] !== $zone['continent'] ) {
 				$label       = $zone['t_continent'];
 				$structure[] = '<optgroup label="' . esc_attr( $label ) . '">';
 			}
@@ -157,34 +187,27 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 			$value[] = $zone['city'];
 
 			$display = $zone['t_city'];
+
+			// Add the subcity to the value.
 			if ( ! empty( $zone['subcity'] ) ) {
-				// Add the subcity to the value.
 				$value[]  = $zone['subcity'];
 				$display .= ' - ' . $zone['t_subcity'];
 			}
 		}
 
 		// Build the value.
-		$value    = join( '/', $value );
-		$selected = '';
-		if ( $value === $selected_zone ) {
-			$selected = 'selected="selected" ';
-		}
-		$structure[] = '<option ' . $selected . 'value="' . esc_attr( $value ) . '">' . esc_html( $display ) . '</option>';
+		$value       = join( '/', $value );
+		$structure[] = '<option ' . selected( $value, $selected_zone, false ) . 'value="' . esc_attr( $value ) . '">' . esc_html( $display ) . '</option>';
 
 		// Close continent optgroup.
-		if ( ! empty( $zone['city'] ) && ( ! isset( $zonen[ $key + 1 ] ) || ( isset( $zonen[ $key + 1 ] ) && $zonen[ $key + 1 ]['continent'] !== $zone['continent'] ) ) ) {
+		if ( ! empty( $zone['city'] ) && ( ! isset( $zones[ $key + 1 ] ) || ( isset( $zones[ $key + 1 ] ) && $zones[ $key + 1 ]['continent'] !== $zone['continent'] ) ) ) {
 			$structure[] = '</optgroup>';
 		}
 	}
 
 	// Do UTC.
 	$structure[] = '<optgroup label="' . esc_attr__( 'UTC' ) . '">';
-	$selected    = '';
-	if ( 'UTC' === $selected_zone ) {
-		$selected = 'selected="selected" ';
-	}
-	$structure[] = '<option ' . $selected . 'value="' . esc_attr( 'UTC' ) . '">' . __( 'UTC' ) . '</option>';
+	$structure[] = '<option ' . selected( 'UTC', $selected_zone, false ) . 'value="' . esc_attr( 'UTC' ) . '">' . __( 'UTC' ) . '</option>';
 	$structure[] = '</optgroup>';
 
 	// Do manual UTC offsets.
@@ -257,11 +280,7 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 		$offset_name  = str_replace( array( '.25', '.5', '.75' ), array( ':15', ':30', ':45' ), $offset_name );
 		$offset_name  = 'UTC' . $offset_name;
 		$offset_value = 'UTC' . $offset_value;
-		$selected     = '';
-		if ( $offset_value === $selected_zone ) {
-			$selected = 'selected="selected" ';
-		}
-		$structure[] = '<option ' . $selected . 'value="' . esc_attr( $offset_value ) . '">' . esc_html( $offset_name ) . '</option>';
+		$structure[]  = '<option ' . selected( $offset_value, $selected_zone, false ) . 'value="' . esc_attr( $offset_value ) . '">' . esc_html( $offset_name ) . '</option>';
 
 	}
 	$structure[] = '</optgroup>';

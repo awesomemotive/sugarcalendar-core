@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @param string   $type Type of time to retrieve. Accepts 'mysql', 'timestamp', or PHP date
  *                       format string (e.g. 'Y-m-d').
- * @param int|bool $gmt  Optional. Whether to use GMT timezone. Default false.
+ * @param int|bool $gmt  Optional. Whether to use GMT time zone. Default false.
  *
  * @return int|string Integer if $type is 'timestamp', string otherwise.
  */
@@ -257,7 +257,7 @@ function sugar_calendar_get_recurrence_types() {
  * Get the clock type, based on the user's preference and the site setting.
  *
  * Future versions of this may be able to guess a better default based on the
- * timezone or locale.
+ * time zone or locale.
  *
  * @since 2.0.19
  *

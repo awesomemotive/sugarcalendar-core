@@ -429,7 +429,7 @@ function add_settings_tabs() {
 
 	<?php
 
-	// Timezone table
+	// Time zone table
 	$timezone_table = ob_get_clean();
 
 	// Full table
@@ -533,10 +533,10 @@ function add_settings_tabs() {
 		'content'	=> $time_table
 	) );
 
-	// Timezone
+	// Time zone
 	get_current_screen()->add_help_tab( array(
-		'id'		=> 'timezone-format',
-		'title'		=> __( '&mdash; Timezone', 'sugar-calendar' ),
+		'id'		=> 'time-zone-format',
+		'title'		=> __( '&mdash; Time zone', 'sugar-calendar' ),
 		'content'	=> $timezone_table
 	) );
 

@@ -355,8 +355,8 @@ final class Plugin {
 		require_once SC_PLUGIN_DIR . 'includes/common/general.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/preferences.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/settings.php';
+		require_once SC_PLUGIN_DIR . 'includes/common/time-zones.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/time.php';
-		require_once SC_PLUGIN_DIR . 'includes/common/timezones.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/hooks.php';
 	}
 

@@ -929,7 +929,7 @@ function section_duration( $event = null ) {
 	}
 
 	// Time zone
-	if ( ! empty( $timezones ) && empty( $event->end_tz ) ) {
+	if ( ! empty( $timezones ) && empty( $event->end_tz ) && empty( $event->start ) ) {
 		$event->end_tz = $timezone;
 	}
 
@@ -976,7 +976,7 @@ function section_duration( $event = null ) {
 	}
 
 	// Time zone
-	if ( ! empty( $timezones ) && empty( $event->start_tz ) ) {
+	if ( ! empty( $timezones ) && empty( $event->start_tz ) && empty( $event->start ) ) {
 		$event->start_tz = $timezone;
 	}
 

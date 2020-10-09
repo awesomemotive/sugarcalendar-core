@@ -89,7 +89,7 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 
 	// Start the HTML structure
 	$structure = array(
-		'<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" class="' . implode( ' ', $classes ) . '" placeholder="' . esc_attr( $placeholder ) . '">'
+		'<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" class="' . implode( ' ', $classes ) . '" data-placeholder="' . esc_attr( $placeholder ) . '">'
 	);
 
 	// Allowed continents (why not just disallow instead?)

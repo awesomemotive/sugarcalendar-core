@@ -57,12 +57,12 @@ function sc_modify_events_archive( $query = false ) {
 		// Order argument
 		$order_arg = ! empty( $_GET[ 'event-order' ] )
 			? strtoupper( sanitize_key( urldecode( $_GET[ 'event-order' ] ) ) )
-			: 'DESC';
+			: '';
 
 		// Default order, based on display arg
-		$default_order = ( 'past' === $display_arg )
-			? 'DESC'
-			: 'ASC';
+		$default_order = ( 'upcoming' === $display_arg )
+			? 'ASC'
+			: 'DESC';
 
 		// Maybe force a default
 		if ( ! in_array( $order_arg, array( 'ASC', 'DESC' ), true ) ) {

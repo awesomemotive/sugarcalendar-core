@@ -1,6 +1,6 @@
 <?php
 /**
- * Timezone Functions
+ * Time Zone Functions
  *
  * @package Plugins/Site/Events/Functions
  */
@@ -56,7 +56,7 @@ function sugar_calendar_get_timezone( $timezone = '' ) {
 }
 
 /**
- * Output a <select> HTML element of Timezones
+ * Output a <select> HTML element of Time Zones
  *
  * @since 2.1.0
  * @param array $args

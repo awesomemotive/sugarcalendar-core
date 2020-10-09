@@ -273,17 +273,18 @@ function save( $object_id = 0, $object = null ) {
 	}
 
 	// Prepare event parameters
-	$all_day = prepare_all_day();
-	$start   = prepare_start();
-	$end     = prepare_end();
+	$all_day  = prepare_all_day();
+	$start    = prepare_start();
+	$end      = prepare_end();
+	$start_tz = prepare_timezone( 'start' );
+	$end_tz   = prepare_timezone( 'end' );
 
-	// Sanitize start & end to prevent data entry errors
-	$start   = sanitize_start( $start, $end, $all_day );
-	$end     = sanitize_end( $end, $start, $all_day );
-	$all_day = sanitize_all_day( $all_day, $start, $end );
-
-	// Time zones (empty for UTC by default)
-	$start_tz = $end_tz = '';
+	// Sanitize to prevent data entry errors
+	$start    = sanitize_start( $start, $end, $all_day );
+	$end      = sanitize_end( $end, $start, $all_day );
+	$all_day  = sanitize_all_day( $all_day, $start, $end );
+	$start_tz = sanitize_timezone( $start_tz );
+	$end_tz   = sanitize_timezone( $end_tz );
 
 	// Shim these for now (need to make functions for them)
 	$title   = $object->post_title;
@@ -472,6 +473,33 @@ function prepare_date_time( $prefix = 'start' ) {
 }
 
 /**
+ * Prepare a time zone value to be saved to the database.
+ *
+ * @since 2.1.0
+ *
+ * @return string The PHP/Olson time zone to save
+ */
+function prepare_timezone( $prefix = 'start' ) {
+
+	// Sanity check the prefix
+	if ( empty( $prefix ) || ! is_string( $prefix ) ) {
+		$prefix = 'start';
+	}
+
+	// Sanitize the prefix, and append an underscore
+	$prefix = sanitize_key( $prefix ) . '_';
+	$field  = "{$prefix}tz";
+
+	// Sanitize time zone
+	$zone = ! empty( $_POST[ $field ] )
+		? sanitize_text_field( $_POST[ $field ] )
+		: '';
+
+	// Return the prepared time zone
+	return $zone;
+}
+
+/**
  * Sanitizes the start MySQL datetime, so that:
  *
  * - If all-day, time is set to midnight
@@ -629,6 +657,39 @@ function sanitize_end( $end = '', $start = '', $all_day = false ) {
 
 	// Return the new end
 	return $retval;
+}
+
+/**
+ * Sanitize a timezone value, so that:
+ *
+ * - it can be empty                     (Floating)
+ * - it can be valid PHP/Olson time zone (America/Chicago)
+ * - it can be UTC offset                (UTC-13)
+ *
+ * @since 2.1.0
+ *
+ * @param string $timezone
+ */
+function sanitize_timezone( $timezone = '' ) {
+
+	// Bail if empty (floating)
+	if ( empty( $timezone ) || ! is_string( $timezone ) ) {
+		return '';
+	}
+
+	// Get valid zones
+	$zones = timezone_identifiers_list();
+
+	// Make sure timezone is valid
+	$retval = in_array( $timezone, $zones, true );
+
+	// Bail if valid
+	if ( ! empty( $retval ) ) {
+		return $timezone;
+	}
+
+	// Return empty (floating) if invalid
+	return '';
 }
 
 /**
@@ -933,7 +994,10 @@ function section_duration( $event = null ) {
 				</th>
 
 				<td>
-					<input type="text" class="sugar_calendar_datepicker" name="start_date" id="start_date" value="<?php echo esc_attr( $date ); ?>" placeholder="yyyy-mm-dd" />
+					<div class="event-date">
+						<input type="text" class="sugar_calendar_datepicker" name="start_date" id="start_date" value="<?php echo esc_attr( $date ); ?>" placeholder="yyyy-mm-dd" />
+					</div>
+
 					<div class="event-time" <?php echo $hidden; ?>>
 						<span class="sc-time-separator"><?php esc_html_e( ' at ', 'sugar-calendar' ); ?></span>
 						<?php sugar_calendar_time_dropdown( array(
@@ -960,6 +1024,18 @@ function section_duration( $event = null ) {
 							</select>
 						<?php endif; ?>
 					</div>
+
+					<?php if ( get_option( 'sc_enable_timezones' ) ) : ?>
+
+						<div class="event-time-zone"><?php
+							sugar_calendar_timezone_dropdown( array(
+								'id'      => 'start_tz',
+								'name'    => 'start_tz',
+								'current' => $event->start_tz
+							) );
+						?></div>
+
+					<?php endif; ?>
 				</td>
 
 			</tr>
@@ -970,7 +1046,10 @@ function section_duration( $event = null ) {
 				</th>
 
 				<td>
-					<input type="text" class="sugar_calendar_datepicker" name="end_date" id="end_date" value="<?php echo esc_attr( $end_date ); ?>" placeholder="yyyy-mm-dd" />
+					<div class="event-date">
+						<input type="text" class="sugar_calendar_datepicker" name="end_date" id="end_date" value="<?php echo esc_attr( $end_date ); ?>" placeholder="yyyy-mm-dd" />
+					</div>
+
 					<div class="event-time" <?php echo $hidden; ?>>
 						<span class="sc-time-separator"><?php esc_html_e( ' at ', 'sugar-calendar' ); ?></span>
 						<?php sugar_calendar_time_dropdown( array(
@@ -997,6 +1076,19 @@ function section_duration( $event = null ) {
 							</select>
 						<?php endif; ?>
 					</div>
+
+					<?php if ( get_option( 'sc_enable_timezones' ) ) : ?>
+
+						<div class="event-time-zone"><?php
+							sugar_calendar_timezone_dropdown( array(
+								'id'      => 'end_tz',
+								'name'    => 'end_tz',
+								'current' => $event->end_tz
+							) );
+						?></div>
+
+					<?php endif; ?>
+
 				</td>
 			</tr>
 		</tbody>

@@ -13,8 +13,11 @@ body.sugar-calendar #post-body-content {
 	margin-top: 20px;
 }
 
-.event-time {
+.event-date,
+.event-time,
+.event-time-zone {
 	display: inline-block;
+	padding: 2.5px 0;
 }
 .sugar_calendar_datepicker {
 	max-width: 105px;

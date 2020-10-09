@@ -17,7 +17,7 @@ body.sugar-calendar #post-body-content {
 .event-time,
 .event-time-zone {
 	display: inline-block;
-	padding: 2.5px 0;
+	padding: 4px 0;
 }
 .sugar_calendar_datepicker {
 	max-width: 105px;

@@ -671,25 +671,7 @@ function sanitize_end( $end = '', $start = '', $all_day = false ) {
  * @param string $timezone
  */
 function sanitize_timezone( $timezone = '' ) {
-
-	// Bail if empty (floating)
-	if ( empty( $timezone ) || ! is_string( $timezone ) ) {
-		return '';
-	}
-
-	// Get valid zones
-	$zones = timezone_identifiers_list();
-
-	// Make sure timezone is valid
-	$retval = in_array( $timezone, $zones, true );
-
-	// Bail if valid
-	if ( ! empty( $retval ) ) {
-		return $timezone;
-	}
-
-	// Return empty (floating) if invalid
-	return '';
+	return sugar_calendar_validate_timezone( $timezone );
 }
 
 /**

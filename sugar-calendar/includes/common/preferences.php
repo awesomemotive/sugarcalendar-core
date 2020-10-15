@@ -41,7 +41,7 @@ function sugar_calendar_get_user_preference( $key = '', $default = '', $user_id 
 		: get_user_meta( $user_id, $keys['user'], true ); //get_user_setting( $keys['user'], $default );
 
 	// Nothing, so check site option
-	if ( false === $retval ) {
+	if ( '' === $retval ) {
 		$retval = get_option( $keys['site'] );
 
 		// Nothing, so check network option if multisite

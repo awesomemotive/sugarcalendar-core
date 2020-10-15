@@ -700,7 +700,9 @@ function time_zone_subsection() {
 					<label for="sc_timezone"><?php esc_html_e( 'Default Time Zone', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
-					<?php sugar_calendar_timezone_dropdown(); ?>
+					<?php sugar_calendar_timezone_dropdown( array(
+						'current' => get_option( 'sc_timezone' )
+					) ); ?>
 					<p class="description">
 						<?php esc_html_e( 'The default time zone that Events should use.', 'sugar-calendar' ); ?>
 					</p>

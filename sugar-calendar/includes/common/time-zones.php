@@ -354,7 +354,7 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 		'name'         => 'sc_timezone',
 		'class'        => 'sc-select-chosen',
 		'locale'       => '',
-		'current'      => get_option( 'sc_timezone' ),
+		'current'      => '',
 
 		// What time zones to allow
 		'allow_empty'  => true,

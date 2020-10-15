@@ -276,8 +276,22 @@ function save( $object_id = 0, $object = null ) {
 	$all_day  = prepare_all_day();
 	$start    = prepare_start();
 	$end      = prepare_end();
-	$start_tz = prepare_timezone( 'start' );
-	$end_tz   = prepare_timezone( 'end' );
+
+	// Not all-day, so check time zones
+	if ( empty( $all_day ) ) {
+
+		// All time zone types save start
+		$start_tz = prepare_timezone( 'start' );
+
+		// Multi time zone uses its own end
+		$end_tz   = ( 'multi' === sugar_calendar_get_timezone_type() )
+			? prepare_timezone( 'end' )
+			: $start_tz;
+
+	// All-day events have no time zones
+	} else {
+		$start_tz = $end_tz = '';
+	}
 
 	// Sanitize to prevent data entry errors
 	$start    = sanitize_start( $start, $end, $all_day );
@@ -842,8 +856,8 @@ function calendars( $post, $box ) {
 function section_duration( $event = null ) {
 
 	// Get clock type, hours, and minutes
-	$timezones = get_option( 'sc_enable_timezones' );
-	$timezone  = get_option( 'sc_timezone' );
+	$tztype    = sugar_calendar_get_timezone_type();
+	$timezone  = sugar_calendar_get_timezone();
 	$clock     = sugar_calendar_get_clock_type();
 	$hours     = sugar_calendar_get_hours();
 	$minutes   = sugar_calendar_get_minutes();
@@ -864,7 +878,7 @@ function section_duration( $event = null ) {
 	// Default AM/PM
 	$am_pm = $end_am_pm = '';
 
-	/** All Day ***********************************************************/
+	/** All Day ***************************************************************/
 
 	$all_day = ! empty( $event->all_day )
 		? (bool) $event->all_day
@@ -874,7 +888,7 @@ function section_duration( $event = null ) {
 		? ' style="display: none;"'
 		: '';
 
-	/** Ends **************************************************************/
+	/** Ends ******************************************************************/
 
 	// Get date_time
 	$end_date_time = ! $event->is_empty_date( $event->end ) && ( $event->start !== $event->end )
@@ -911,11 +925,11 @@ function section_duration( $event = null ) {
 	}
 
 	// Time zone
-	if ( ! empty( $timezones ) && empty( $event->end_tz ) && empty( $event->start ) ) {
+	if ( ! empty( $tztype ) && empty( $event->end_tz ) && ! $event->exists() ) {
 		$event->end_tz = $timezone;
 	}
 
-	/** Starts ************************************************************/
+	/** Starts ****************************************************************/
 
 	// Get date_time
 	if ( ! empty( $_GET['start_day'] ) ) {
@@ -958,11 +972,19 @@ function section_duration( $event = null ) {
 	}
 
 	// Time zone
-	if ( ! empty( $timezones ) && empty( $event->start_tz ) && empty( $event->start ) ) {
+	if ( ! empty( $tztype ) && empty( $event->start_tz ) && ! $event->exists() ) {
 		$event->start_tz = $timezone;
 	}
 
-	/** Let's Go! *********************************************************/
+	/** Time Zones ************************************************************/
+
+	// All day Events have no time zone data
+	if ( ! empty( $all_day ) ) {
+		$event->start_tz = '';
+		$event->end_tz   = '';
+	}
+
+	/** Let's Go! *************************************************************/
 
 	// Start an output buffer
 	ob_start(); ?>
@@ -1028,7 +1050,7 @@ function section_duration( $event = null ) {
 					?></div><?php
 
 					// Start Time Zone
-					if ( ! empty( $timezones ) ) :
+					if ( 'multi' === $tztype ) :
 
 						?><div class="event-time-zone"><?php
 
@@ -1090,7 +1112,7 @@ function section_duration( $event = null ) {
 					?></div><?php
 
 					// End Time Zone
-					if ( ! empty( $timezones ) ) :
+					if ( 'multi' === $tztype ) :
 
 						?><div class="event-time-zone"><?php
 
@@ -1106,6 +1128,29 @@ function section_duration( $event = null ) {
 
 				?></td>
 			</tr>
+
+			<?php if ( 'single' === $tztype ) : ?>
+
+				<tr class="time-zone-row" <?php echo $hidden; ?>>
+					<th>
+						<label for="start_tz"><?php esc_html_e( 'Time Zone', 'sugar-calendar'); ?></label>
+					</th>
+
+					<td>
+						<div class="event-time-zone"><?php
+
+							sugar_calendar_timezone_dropdown( array(
+								'id'      => 'start_tz',
+								'name'    => 'start_tz',
+								'current' => $event->start_tz
+							) );
+
+						?></div>
+					</td>
+				</tr>
+
+			<?php endif; ?>
+
 		</tbody>
 	</table>
 

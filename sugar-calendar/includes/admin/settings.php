@@ -666,33 +666,43 @@ function editing_subsection() {
 function time_zone_subsection() {
 
 	// Get the current setting
-	$tzview = get_option( 'sc_enable_timezones' ); ?>
+	$tztype = get_option( 'sc_timezone_type' );
+
+	// Types
+	$types = array(
+		'off'    => esc_html__( 'Off',    'sugar-calendar' ),
+		'single' => esc_html__( 'Single', 'sugar-calendar' ),
+		'multi'  => esc_html__( 'Multi',  'sugar-calendar' )
+	); ?>
 
 	<table class="form-table">
 		<tbody>
 			<tr valign="top">
 				<th scope="row" valign="top">
-					<label for="sc_enable_timezones"><?php esc_html_e( 'Time Zones', 'sugar-calendar' ); ?></label>
+					<label for="sc_timezone_type"><?php esc_html_e( 'Time Zones', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
-					<label>
-						<input type="checkbox" name="sc_enable_timezones" id="sc_enable_timezones" value="1" <?php checked( $tzview ); ?> />
-						<?php esc_html_e( 'Enable Time Zone Support', 'sugar-calendar' ); ?>
-					</label>
+					<select name="sc_timezone_type" id="sc_timezone_type" class="sc-select-chosen">
+						<?php foreach ( $types as $type => $label ) : ?>
+
+							<option value="<?php echo esc_attr( $type ); ?>" <?php selected( $tztype,  $type ); ?>><?php echo esc_html( $label ); ?></option>
+
+						<?php endforeach; ?>
+					</select>
 					<p class="description">
-						<?php esc_html_e( 'View Events from any time zone. Set time zones per Event.', 'sugar-calendar' ); ?>
+						<?php _e( '"Off" by default.<br>"Single" allows Events to have one time zone.<br>"Multi" allows Events to have different start & end time zones.', 'sugar-calendar' ); ?>
 					</p>
 				</td>
 			</tr>
 
 			<tr valign="top">
 				<th scope="row" valign="top">
-					<label for="sc_editor_type"><?php esc_html_e( 'Default Time Zone', 'sugar-calendar' ); ?></label>
+					<label for="sc_timezone"><?php esc_html_e( 'Default Time Zone', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
 					<?php sugar_calendar_timezone_dropdown(); ?>
 					<p class="description">
-						<?php esc_html_e( 'The default time zone that events should use.', 'sugar-calendar' ); ?>
+						<?php esc_html_e( 'The default time zone that Events should use.', 'sugar-calendar' ); ?>
 					</p>
 				</td>
 			</tr>

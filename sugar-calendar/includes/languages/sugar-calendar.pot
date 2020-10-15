@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.1.0\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2020-10-09 22:42:13+00:00\n"
+"POT-Creation-Date: 2020-10-15 18:25:26+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -230,7 +230,7 @@ msgstr ""
 #: sugar-calendar/includes/admin/help.php:554
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1883
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-list.php:372
-#: sugar-calendar/includes/admin/meta-boxes.php:992
+#: sugar-calendar/includes/admin/meta-boxes.php:996
 #: sugar-calendar/includes/post/functions.php:159
 msgid "All Day"
 msgstr ""
@@ -501,6 +501,7 @@ msgid "Milliseconds"
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:387
+#: sugar-calendar/includes/admin/meta-boxes.php:1136
 msgid "Time Zone"
 msgstr ""
 
@@ -703,7 +704,7 @@ msgstr ""
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1902
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1909
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1920
-#: sugar-calendar/includes/admin/meta-boxes.php:1005
+#: sugar-calendar/includes/admin/meta-boxes.php:1009
 msgid "Start"
 msgstr ""
 
@@ -714,13 +715,13 @@ msgstr ""
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1904
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1911
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1926
-#: sugar-calendar/includes/admin/meta-boxes.php:1068
+#: sugar-calendar/includes/admin/meta-boxes.php:1072
 msgid "End"
 msgstr ""
 
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1995
 #: sugar-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:86
-#: sugar-calendar/includes/admin/meta-boxes.php:1162
+#: sugar-calendar/includes/admin/meta-boxes.php:1189
 msgid "Location"
 msgstr ""
 
@@ -803,7 +804,7 @@ msgstr ""
 
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-day.php:184
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-week.php:210
-#: sugar-calendar/includes/admin/meta-boxes.php:998
+#: sugar-calendar/includes/admin/meta-boxes.php:1002
 #: sugar-calendar/includes/themes/legacy/event-display.php:148
 #: sugar-calendar/includes/themes/legacy/events-list.php:135
 msgid "All-day"
@@ -921,22 +922,22 @@ msgstr ""
 msgid "Event Options"
 msgstr ""
 
-#: sugar-calendar/includes/admin/meta-boxes.php:1014
-#: sugar-calendar/includes/admin/meta-boxes.php:1077
+#: sugar-calendar/includes/admin/meta-boxes.php:1018
+#: sugar-calendar/includes/admin/meta-boxes.php:1081
 msgid "at"
 msgstr ""
 
-#: sugar-calendar/includes/admin/meta-boxes.php:1041
-#: sugar-calendar/includes/admin/meta-boxes.php:1104
+#: sugar-calendar/includes/admin/meta-boxes.php:1045
+#: sugar-calendar/includes/admin/meta-boxes.php:1108
 msgid "AM"
 msgstr ""
 
-#: sugar-calendar/includes/admin/meta-boxes.php:1042
-#: sugar-calendar/includes/admin/meta-boxes.php:1105
+#: sugar-calendar/includes/admin/meta-boxes.php:1046
+#: sugar-calendar/includes/admin/meta-boxes.php:1109
 msgid "PM"
 msgstr ""
 
-#: sugar-calendar/includes/admin/meta-boxes.php:1167
+#: sugar-calendar/includes/admin/meta-boxes.php:1194
 msgid "(Optional)"
 msgstr ""
 
@@ -1109,7 +1110,7 @@ msgid "Editing"
 msgstr ""
 
 #: sugar-calendar/includes/admin/settings.php:169
-#: sugar-calendar/includes/admin/settings.php:675
+#: sugar-calendar/includes/admin/settings.php:682
 msgid "Time Zones"
 msgstr ""
 
@@ -1177,40 +1178,50 @@ msgstr ""
 msgid "Allow developers to extend post types that support <code>events</code>."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:680
-msgid "Enable Time Zone Support"
+#: sugar-calendar/includes/admin/settings.php:673
+msgid "Off"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:683
-msgid "View Events from any time zone. Set time zones per Event."
+#: sugar-calendar/includes/admin/settings.php:674
+msgid "Single"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:690
+#: sugar-calendar/includes/admin/settings.php:675
+msgid "Multi"
+msgstr ""
+
+#: sugar-calendar/includes/admin/settings.php:693
+msgid ""
+"\"Off\" by default.<br>\"Single\" allows Events to have one time "
+"zone.<br>\"Multi\" allows Events to have different start & end time zones."
+msgstr ""
+
+#: sugar-calendar/includes/admin/settings.php:700
 msgid "Default Time Zone"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:695
-msgid "The default time zone that events should use."
+#: sugar-calendar/includes/admin/settings.php:705
+msgid "The default time zone that Events should use."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:783
+#: sugar-calendar/includes/admin/settings.php:793
 msgid ""
 "Save 25% on all Sugar Calendar purchases <strong>this week</strong>, "
 "including renewals and upgrades!"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:787
+#: sugar-calendar/includes/admin/settings.php:797
 msgid "Use code at checkout:"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:789
+#: sugar-calendar/includes/admin/settings.php:799
 msgid ""
 "Sale ends 23:59 PM December 6th CST. Save 25% on <a "
 "href=\"https://sandhillsdev.com/projects/\" target=\"_blank\">our other "
 "plugins</a>."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:793
+#: sugar-calendar/includes/admin/settings.php:803
 msgid "Upgrade Now!"
 msgstr ""
 
@@ -1268,24 +1279,20 @@ msgstr ""
 msgid "Classic Editor"
 msgstr ""
 
-#: sugar-calendar/includes/common/time-zones.php:75
-msgid "Select a time zone"
-msgstr ""
-
-#: sugar-calendar/includes/common/time-zones.php:76
+#: sugar-calendar/includes/common/time-zones.php:365
 msgid "Floating"
 msgstr ""
 
-#: sugar-calendar/includes/common/time-zones.php:162
+#: sugar-calendar/includes/common/time-zones.php:441
 msgid "Default"
 msgstr ""
 
-#: sugar-calendar/includes/common/time-zones.php:209
-#: sugar-calendar/includes/common/time-zones.php:210
+#: sugar-calendar/includes/common/time-zones.php:448
+#: sugar-calendar/includes/common/time-zones.php:449
 msgid "UTC"
 msgstr ""
 
-#: sugar-calendar/includes/common/time-zones.php:214
+#: sugar-calendar/includes/common/time-zones.php:498
 msgid "Manual Offsets"
 msgstr ""
 

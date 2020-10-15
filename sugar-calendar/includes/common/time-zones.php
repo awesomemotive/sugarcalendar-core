@@ -9,6 +9,36 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Get the time zone.
+ *
+ * @since 2.1.0
+ * @return string
+ */
+function sugar_calendar_get_timezone() {
+
+	// Get user time zone preference - default "Floating"
+	$retval = sugar_calendar_get_user_preference( 'sc_timezone', '' );
+
+	// Filter & return
+	return apply_filters( 'sugar_calendar_get_timezone', $retval );
+}
+
+/**
+ * Get the time zone type.
+ *
+ * @since 2.1.0
+ * @return string
+ */
+function sugar_calendar_get_timezone_type() {
+
+	// Get user time zone preference - default "off"
+	$retval = sugar_calendar_get_user_preference( 'sc_timezone_type', 'off' );
+
+	// Filter & return
+	return apply_filters( 'sugar_calendar_get_timezone_type', $retval );
+}
+
+/**
  * Get a time zone object.
  *
  * @since 2.1.0
@@ -332,8 +362,8 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 		'allow_manual' => false,
 
 		// Labels
-		'placeholder'  => esc_html__( 'Select a time zone', 'sugar-calendar' ),
-		'none'         => esc_html__( 'Floating',           'sugar-calendar' )
+		'placeholder'  => esc_html__( 'Floating', 'sugar-calendar' ),
+		'none'         => ''
 	) );
 
 	// Sanitize ID & Name
@@ -349,7 +379,7 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 
 	// Start the HTML structure
 	$structure = array(
-		'<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" class="' . implode( ' ', $classes ) . '" data-placeholder="' . esc_attr( $placeholder ) . '">'
+		'<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" class="' . implode( ' ', $classes ) . '" data-placeholder="' . esc_attr( $placeholder ) . '" data-single-deselect="true">'
 	);
 
 	// Allowed continents (why not just disallow instead?)

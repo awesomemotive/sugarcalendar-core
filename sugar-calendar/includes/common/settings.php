@@ -22,7 +22,7 @@ function sugar_calendar_register_settings() {
 	register_setting( 'sc_main_display', 'sc_time_format' );
 
 	// Time Zones
-	register_setting( 'sc_main_timezones', 'sc_enable_timezones' );
+	register_setting( 'sc_main_timezones', 'sc_timezone_type' );
 	register_setting( 'sc_main_timezones', 'sc_timezone' );
 
 	// Editor

@@ -41,6 +41,11 @@ body.sugar-calendar #post-body-content {
 	max-width: 50px;
 }
 
+body.sugar-calendar.js div.sugar-calendar-wrap div.event-time-zone select:not(.sc-select-chosen),
+body.sugar-calendar.js div.sugar-calendar-wrap div.event-time-zone div.sc-select-chosen {
+	min-width: 222px;
+}
+
 @media only screen and ( max-width: 782px ) {
 
 	.event-time input,

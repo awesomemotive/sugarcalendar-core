@@ -140,8 +140,13 @@ function sc_add_date_time_details( $post_id = 0 ) {
 	// Start & end TIMES
 	if ( ! empty( $start_time ) ) :
 
+		// Default format
+		$format = 'Y-m-d\TH:i:s';
+
+		// @todo start time zone
+
 		// Get start datetime
-		$dt = $event->format_date( 'Y-m-d\TH:i:s\Z', $event->start );
+		$dt = $event->format_date( $format, $event->start );
 
 		// Set to all-day and noop the end time
 		if ( ! empty( $all_day ) ) :
@@ -162,8 +167,13 @@ function sc_add_date_time_details( $post_id = 0 ) {
 			// Maybe output a separator and the end time
 			if ( ! empty( $end_time ) && ( $end_time !== $start_time ) ) :
 
+				// Format
+				$format = 'Y-m-d\TH:i:s';
+
+				// @todo end time zone
+
 				// Get end datetime
-				$dt = $event->format_date( 'Y-m-d\TH:i:s\Z', $event->end ); ?>
+				$dt = $event->format_date( 'Y-m-d\TH:i:s', $event->end ); ?>
 
 				<span class="sc_event_time_sep">
 					<?php esc_html_e( 'to', 'sugar-calendar' ); ?>

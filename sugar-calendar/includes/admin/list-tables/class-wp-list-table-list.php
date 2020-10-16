@@ -311,7 +311,9 @@ class Basic extends Base_List_Table {
 
 		// Start
 		if ( ! $item->is_empty_date( $item->start ) ) {
-			$dt     = $item->format_date( 'Y-m-d\TH:i:s\Z', $item->start );
+			$format = 'Y-m-d\TH:i:s';
+			// @todo time zone
+			$dt     = $item->format_date( $format, $item->start );
 			$retval = '<time datetime="' . esc_attr( $dt ) . '">' . $this->get_event_date( $item->start );
 
 			// Maybe add time if not all-day
@@ -338,7 +340,9 @@ class Basic extends Base_List_Table {
 
 		// End
 		if ( ! $item->is_empty_date( $item->end ) && ! ( $item->format_date( 'Y-m-d', $item->start ) === $item->format_date( 'Y-m-d', $item->end ) ) ) {
-			$dt              = $item->format_date( 'Y-m-d\TH:i:s\Z', $item->end );
+			$format = 'Y-m-d\TH:i:s';
+			// @todo time zone
+			$dt              = $item->format_date( $format, $item->end );
 			$retval          = '<time datetime="' . esc_attr( $dt ) . '">' . $this->get_event_date( $item->end );
 			$this->item_ends = true;
 

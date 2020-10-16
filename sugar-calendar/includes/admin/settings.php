@@ -665,8 +665,10 @@ function editing_subsection() {
  */
 function time_zone_subsection() {
 
-	// Get the current setting
-	$tztype = get_option( 'sc_timezone_type' );
+	// Get the current settings
+	$timezone  = get_option( 'sc_timezone' );
+	$tztype    = get_option( 'sc_timezone_type' );
+	$tzconvert = get_option( 'sc_timezone_convert' );
 
 	// Types
 	$types = array(
@@ -701,10 +703,25 @@ function time_zone_subsection() {
 				</th>
 				<td>
 					<?php sugar_calendar_timezone_dropdown( array(
-						'current' => get_option( 'sc_timezone' )
+						'current' => $timezone
 					) ); ?>
 					<p class="description">
 						<?php esc_html_e( 'The default time zone that Events should use.', 'sugar-calendar' ); ?>
+					</p>
+				</td>
+			</tr>
+
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="sc_timezone_convert"><?php esc_html_e( 'Visitor Conversion', 'sugar-calendar' ); ?></label>
+				</th>
+				<td>
+					<label>
+						<input type="checkbox" name="sc_timezone_convert" id="sc_timezone_convert" value="1" <?php checked( $tzconvert ); ?> />
+						<?php esc_html_e( 'Enable Conversion', 'sugar-calendar' ); ?>
+					</label>
+					<p class="description">
+						<?php esc_html_e( 'Attempts to update theme-side times according to visitor web browser location.', 'sugar-calendar' ); ?>
 					</p>
 				</td>
 			</tr>

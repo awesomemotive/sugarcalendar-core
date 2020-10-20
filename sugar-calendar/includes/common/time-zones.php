@@ -108,11 +108,11 @@ function sugar_calendar_format_timezone( $timezone = '' ) {
 	if ( empty( $timezone ) ) {
 		$retval = esc_html__( 'Floating', 'sugar-calendar' );
 
-	// Get the manual offset
+	// Manual offset looks like "Etc/GMT-5"
 	} elseif ( sugar_calendar_is_manual_timezone_offset( $timezone ) ) {
 		$retval = sugar_calendar_format_manual_timezone_offset( $timezone );
 
-	// Replace underscores with spaces
+	// Olson IDs should not break because of spaces
 	} else {
 		$retval = str_replace( '_', '&nbsp;', $timezone );
 	}

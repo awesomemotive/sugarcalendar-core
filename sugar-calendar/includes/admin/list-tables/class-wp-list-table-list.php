@@ -309,19 +309,53 @@ class Basic extends Base_List_Table {
 		// Default return value
 		$retval = '&mdash;';
 
-		// Start
-		if ( ! $item->is_empty_date( $item->start ) ) {
-			$format = 'Y-m-d\TH:i:s';
-			// @todo time zone
-			$dt     = $item->format_date( $format, $item->start );
-			$retval = '<time datetime="' . esc_attr( $dt ) . '">' . $this->get_event_date( $item->start );
+		// Bail if empty date
+		if ( $item->is_empty_date( $item->start ) ) {
+			return $retval;
+		}
 
-			// Maybe add time if not all-day
-			if ( ! $item->is_all_day() ) {
-				 $retval .= '<br><span>' . $this->get_event_time( $item->start ) . '</span>';
+		// Floating
+		$format = 'Y-m-d\TH:i:s';
+		$tz     = 'floating';
+
+		// Non-floating
+		if ( ! empty( $item->start_tz ) ) {
+
+			// Get the offset
+			$offset = sugar_calendar_get_timezone_offset( array(
+				'datetime' => $item->start,
+				'timezone' => $item->start_tz
+			) );
+
+			// Add timezone to format
+			$format = "Y-m-d\TH:i:s{$offset}";
+		}
+
+		// Format the date/time
+		$dt = $item->format_date( $format, $item->start );
+
+		// All-day Events have floating time zones
+		if ( ! empty( $item->start_tz ) && ! $item->is_all_day() ) {
+			$tz = $item->start_tz;
+		}
+
+		// Start the <time> tag, with timezone data
+		$retval = '<time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '"><span class="sc-date">' . $this->get_event_date( $item->start ) . '</span>';
+
+		// Maybe add time if not all-day
+		if ( ! $item->is_all_day() ) {
+			$retval .= '<br><span class="sc-time">' . $this->get_event_time( $item->start ) . '</span>';
+
+			// Maybe add timezone
+			if ( ! empty( $item->start_tz ) ) {
+				$retval .= '<br><span class="sc-timezone">' . sugar_calendar_format_timezone( $tz ) . '</span>';
 			}
 		}
 
+		// Close the <time> tag
+		$retval .= '</time>';
+
+		// Return the <time> tag
 		return $retval;
 	}
 
@@ -338,23 +372,67 @@ class Basic extends Base_List_Table {
 		// Default return value
 		$retval = '&mdash;';
 
-		// End
-		if ( ! $item->is_empty_date( $item->end ) && ! ( $item->format_date( 'Y-m-d', $item->start ) === $item->format_date( 'Y-m-d', $item->end ) ) ) {
-			$format = 'Y-m-d\TH:i:s';
-			// @todo time zone
-			$dt              = $item->format_date( $format, $item->end );
-			$retval          = '<time datetime="' . esc_attr( $dt ) . '">' . $this->get_event_date( $item->end );
-			$this->item_ends = true;
-
-			// Maybe add time if not all-day
-			if ( ! $item->is_all_day() ) {
-				 $retval .= '<br><span>' . $this->get_event_time( $item->end ) . '</span>';
-			}
-
-			$retval .= '</time>';
+		// Bail if empty date
+		if ( $item->is_empty_date( $item->end ) ) {
+			return $retval;
 		}
 
-		// Return the end date & time
+		// Bail if start & end are exactly the same
+		if ( $item->start === $item->end ) {
+			return $retval;
+		}
+
+		// Bail if all-day and only 1 day
+		if ( $item->is_all_day() && ( $item->format_date( 'Y-m-d', $item->start ) === $item->format_date( 'Y-m-d', $item->end ) ) ) {
+			return $retval;
+		}
+
+		// Floating
+		$format = 'Y-m-d\TH:i:s';
+		$tz     = 'floating';
+
+		// Non-floating
+		if ( ! empty( $item->end_tz ) ) {
+
+			// Get the offset
+			$offset = sugar_calendar_get_timezone_offset( array(
+				'datetime' => $item->end,
+				'timezone' => $item->end_tz
+			) );
+
+			// Add timezone to format
+			$format = "Y-m-d\TH:i:s{$offset}";
+		}
+
+		// Format the date/time
+		$dt = $item->format_date( $format, $item->end );
+
+		// All-day Events have floating time zones
+		if ( ! empty( $item->end_tz ) && ! $item->is_all_day() ) {
+			$tz = $item->end_tz;
+
+		// Maybe fallback to the start time zone
+		} elseif ( ! empty( $item->start_tz ) ) {
+			$tz = $item->start_tz;
+		}
+
+		// Start the <time> tag, with timezone data
+		$retval = '<time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '"><span class="sc-date">' . $this->get_event_date( $item->end ) . '</span>';
+
+		// Maybe add time if not all-day
+		if ( ! $item->is_all_day() ) {
+			$retval .= '<br><span class="sc-time">' . $this->get_event_time( $item->end ) . '</span>';
+
+			// Maybe add timezone
+			if ( ! empty( $item->end_tz ) ) {
+				$retval .= '<br><span class="sc-timezone">' . sugar_calendar_format_timezone( $tz ) . '</span>';
+			}
+		}
+
+		// Close the <time> tag
+		$retval .= '</time>';
+
+		// Return the <time> tag
 		return $retval;
 	}
 
@@ -373,16 +451,16 @@ class Basic extends Base_List_Table {
 
 		// Duration
 		if ( $item->is_all_day() ) {
-			$duration = esc_html__( 'All Day', 'sugar-calendar' );
+			$retval = esc_html__( 'All Day', 'sugar-calendar' );
 
 			// Maybe add duration if mulitple all-day days
 			if ( $item->is_multi() ) {
-				$duration .= '<br>' . $this->get_human_diff_time( $item->start, $item->end );
+				$retval .= '<br>' . $this->get_human_diff_time( $item->start, $item->end );
 			}
 
 		// Get diff only if end exists
-		} elseif ( true === $this->item_ends ) {
-			$duration = $this->get_human_diff_time( $item->start, $item->end );
+		} elseif ( ( $item->start !== $item->end ) && ! $item->is_empty_date( $item->end ) ) {
+			$retval = $this->get_human_diff_time( $item->start, $item->end );
 		}
 
 		// Return the duration

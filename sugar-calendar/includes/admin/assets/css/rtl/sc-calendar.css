@@ -625,6 +625,11 @@ table.day th.column-sunday {
 	}
 }
 
+table.list span.sc-timezone {
+	font-size: 11px;
+	color: rgba(0, 0, 0, 0.4);
+}
+
 /** Screen Options ************************************************************/
 
 body.sugar-calendar form#adv-settings .metabox-prefs label {

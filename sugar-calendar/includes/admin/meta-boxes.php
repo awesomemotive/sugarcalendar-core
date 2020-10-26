@@ -685,7 +685,7 @@ function sanitize_end( $end = '', $start = '', $all_day = false ) {
  * @param string $timezone
  */
 function sanitize_timezone( $timezone = '' ) {
-	return sugar_calendar_validate_timezone( $timezone );
+	return sugar_calendar_sanitize_timezone( $timezone );
 }
 
 /**

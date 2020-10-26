@@ -84,6 +84,7 @@ function sugar_calendar_register_calendar_taxonomy() {
 		'public'                => true,
 		'show_ui'               => true,
 		'colors'                => true,
+		'timezones'             => true,
 		'source'                => 'sugar-calendar',
 		'meta_box_cb'           => 'Sugar_Calendar\\Admin\\Editor\\Meta\\calendars'
 	);

@@ -666,9 +666,9 @@ function editing_subsection() {
 function time_zone_subsection() {
 
 	// Get the current settings
-	$timezone  = get_option( 'sc_timezone' );
-	$tztype    = get_option( 'sc_timezone_type' );
-	$tzconvert = get_option( 'sc_timezone_convert' );
+	$timezone  = get_option( 'sc_timezone',         ''    );
+	$tztype    = get_option( 'sc_timezone_type',    'off' );
+	$tzconvert = get_option( 'sc_timezone_convert', false );
 
 	// Types
 	$types = array(

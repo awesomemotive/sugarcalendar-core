@@ -169,11 +169,16 @@ function sugar_calendar_format_timezone_offset( $args = array() ) {
 	) );
 
 	// Return value formatting
-	switch ( $r['format'] ) {
+	switch ( strtoupper( $r['format'] ) ) {
 
 		// +/-0000
+		case 'RFC822' :
+		case 'RFC850' :
+		case 'RFC1036' :
+		case 'RFC1123' :
 		case 'RFC2822' :
-		case 'rfc' :
+		case 'RFC3339' :
+		case 'RSS' :
 
 			// Math
 			$hours    = absint( floor( $r['offset'] / HOUR_IN_SECONDS ) );
@@ -192,8 +197,10 @@ function sugar_calendar_format_timezone_offset( $args = array() ) {
 			break;
 
 		// +/-00:00
+		case 'ATOM' :
+		case 'COOKIE' :
 		case 'ISO8601' :
-		case 'iso' :
+		case 'W3C' :
 
 			// Math
 			$hours    = absint( floor( $r['offset'] / HOUR_IN_SECONDS ) );

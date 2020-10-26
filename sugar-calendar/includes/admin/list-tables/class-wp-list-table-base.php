@@ -464,6 +464,21 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Return a human-readable time difference as a string.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param string $timezone1 First Olson time zone ID.
+	 * @param string $timezone2 Optional. Default: 'UTC' Second Olson time zone ID.
+	 * @param mixed  $datetime  Optional. Default: 'now' Time to use for diff
+	 *
+	 * @return string String representing the time difference - "2.5 hours"
+	 */
+	protected function get_human_diff_timezone( $timezone1 = '', $timezone2 = 'UTC', $datetime = 'now' ) {
+		return sugar_calendar_human_diff_timezone( $timezone1, $timezone2, $datetime );
+	}
+
+	/**
 	 * Return the color of an event.
 	 *
 	 * @since 2.0.0

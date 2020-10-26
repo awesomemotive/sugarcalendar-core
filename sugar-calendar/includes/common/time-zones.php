@@ -24,13 +24,15 @@ function sugar_calendar_get_timezone() {
 }
 
 /**
- * Get the difference between two timezones, at a specific time.
+ * Get the difference between two time zones, at a specific time.
  *
  * @since 2.1.0
- * @param string $timezone1
- * @param string $timezone2
- * @param string $datetime
- * @return int
+ *
+ * @param string $timezone1 First Olson time zone ID.
+ * @param string $timezone2 Optional. Default: 'UTC'. Second Olson time zone ID.
+ * @param mixed  $datetime  Optional. Default: 'now'. Time to use for diff.
+ *
+ * @return int Number of seconds between two time zones at that time.
  */
 function sugar_calendar_get_timezone_diff( $timezone1 = '', $timezone2 = 'UTC', $datetime = 'now' ) {
 
@@ -39,11 +41,11 @@ function sugar_calendar_get_timezone_diff( $timezone1 = '', $timezone2 = 'UTC', 
 		$datetime = 'now';
 	}
 
-	// Get the timezones
+	// Get the time zones
 	$tz1 = sugar_calendar_get_timezone_object( $timezone1 );
 	$tz2 = sugar_calendar_get_timezone_object( $timezone2 );
 
-	// Get the datetimes, using the timezones
+	// Get the datetimes, using the time zones
 	$dt1 = new \DateTime( $datetime, $tz1 );
 	$dt2 = new \DateTime( $datetime, $tz2 );
 
@@ -59,7 +61,61 @@ function sugar_calendar_get_timezone_diff( $timezone1 = '', $timezone2 = 'UTC', 
 }
 
 /**
- * Get the offset of a specific timezone.
+ * Get a human readable representation of the time between two time zones at a
+ * given date and time.
+ *
+ * This function will return a human-readable representation using hours:
+ * - 2 hours
+ * - 4.25 hours
+ * - -13.5 hours
+ *
+ * @param string $timezone1 First Olson time zone ID
+ * @param string $timezone2 Optional. Default: 'UTC'. Second Olson time zone ID
+ * @param mixed  $datetime  Optional. Default: 'now'. Time to use for diff
+ *
+ * @return string String representing the time difference - "2.5 hours"
+ */
+function sugar_calendar_human_diff_timezone( $timezone1, $timezone2 = 'UTC', $datetime = 'now' ) {
+
+	// Default return value
+	$retval = '';
+
+	// Get the difference
+	$difference = sugar_calendar_get_timezone_diff( $timezone1, $timezone2, $datetime );
+
+	// Time change text
+	if ( ! empty( $difference ) ) {
+
+		// Calculate the change
+		$change = abs( $difference / HOUR_IN_SECONDS );
+
+		// Positive or negative
+		$posneg = ( $difference > 0 )
+			? esc_html_x( '+', 'Plus',  'sugar-calendar' )
+			: esc_html_x( '-', 'Minus', 'sugar-calendar' );
+
+		// Format the text
+		$number = number_format_i18n( $change );
+		$string = _n( '%s hour', '%s hours', $change, 'sugar-calendar' );
+		$retval = sprintf( $string, $posneg . $number );
+	}
+
+	/**
+	 * Filters the human readable representation of the time elapsed since a
+	 * given date.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $retval    Final return value
+	 * @param string $timezone1 First Olson time zone ID.
+	 * @param string $timezone2 Optional. Default: 'UTC'. Second Olson time zone ID.
+	 * @param string $datetime  Optional. Default: 'now'. (current time).
+	 */
+	return apply_filters( 'sugar_calendar_human_diff_timezone', $retval, $timezone1, $timezone2, $datetime );
+}
+
+/**
+ * Get the offset of a specific time zone.
  *
  * Defaults to UTC offset, returned in "-0500" format.
  *
@@ -96,7 +152,7 @@ function sugar_calendar_get_timezone_offset( $args = array() ) {
  *
  * @since 2.1.0
  *
- * @param string $timezone
+ * @param string $timezone Default ''. Olson time zone ID.
  * @return string
  */
 function sugar_calendar_format_timezone( $timezone = '' ) {
@@ -104,7 +160,7 @@ function sugar_calendar_format_timezone( $timezone = '' ) {
 	// Default return value
 	$retval = $timezone;
 
-	// Empty timezone is floating
+	// Empty time zone is floating
 	if ( empty( $timezone ) ) {
 		$retval = esc_html__( 'Floating', 'sugar-calendar' );
 
@@ -132,7 +188,7 @@ function sugar_calendar_format_timezone( $timezone = '' ) {
  * @see https://bugs.php.net/bug.php?id=45528
  *
  * @since 2.1.0
- * @param string $timezone
+ * @param string $timezone Default ''. Olson time zone ID.
  * @return string
  */
 function sugar_calendar_format_manual_timezone_offset( $timezone = '' ) {
@@ -263,7 +319,7 @@ function sugar_calendar_get_timezone_type() {
  *
  * @since 2.1.0
  *
- * @param string $timezone The time zone to use
+ * @param string $timezone Default ''. Olson time zone ID.
  * @return object
  */
 function sugar_calendar_get_timezone_object( $timezone = '' ) {
@@ -296,7 +352,7 @@ function sugar_calendar_get_timezone_object( $timezone = '' ) {
  * Is a time zone a manual offset?
  *
  * @since 2.1.0
- * @param string $timezone
+ * @param string $timezone Default ''. Olson time zone ID.
  * @return boolean
  */
 function sugar_calendar_is_manual_timezone_offset( $timezone = '' ) {
@@ -331,8 +387,8 @@ function sugar_calendar_is_manual_timezone_offset( $timezone = '' ) {
  * Get the numeric offset from a manual offset.
  *
  * @since 2.1.0
- * @param mixed  $datetime
- * @param string $timezone
+ * @param mixed  $datetime Default: 'now'. Time to use for diff.
+ * @param string $timezone Default: 'UTC'. Olson time zone ID.
  * @return float
  */
 function sugar_calendar_get_manual_timezone_offset( $datetime = 'now', $timezone = 'UTC' ) {
@@ -340,10 +396,8 @@ function sugar_calendar_get_manual_timezone_offset( $datetime = 'now', $timezone
 	// Default return value
 	$retval = 0;
 
-	// Bail if not a manual offset
+	// Maybe get a manual offset
 	if ( sugar_calendar_is_manual_timezone_offset( $timezone ) ) {
-
-		// Get the offset
 		$retval = substr( $timezone, 3 );
 
 	// Not a manual offset
@@ -523,8 +577,8 @@ function sugar_calendar_get_valid_timezones( $args = array() ) {
  * Validate a time zone.
  *
  * @since 2.1.0
- * @param string $timezone
- * @param array  $args
+ * @param string $timezone Default ''. Olson time zone ID.
+ * @param array  $args     Default array().
  * @return string
  */
 function sugar_calendar_validate_timezone( $timezone = '', $args = array() ) {

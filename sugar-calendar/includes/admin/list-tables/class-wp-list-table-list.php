@@ -478,24 +478,14 @@ class Basic extends Base_List_Table {
 			}
 
 			// Get human readible date time difference
-			$retval = $this->get_human_diff_time( $start, $end );
+			$retval     = $this->get_human_diff_time( $start, $end );
 
 			// Look for a time zone difference
-			$difference = sugar_calendar_get_timezone_diff( $item->start_tz, $item->end_tz );
+			$difference = $this->get_human_diff_timezone( $item->start_tz, $item->end_tz );
 
-			// Time change text
+			// Wrap difference in a decorative span
 			if ( ! empty( $difference ) ) {
-
-				// Calculate the change
-				$change = ( $difference / HOUR_IN_SECONDS );
-
-				// Format the text
-				$number = number_format_i18n( $change );
-				$string = _n( '%s hour time change', '%s hour time change', abs( $change ), 'sugar-calendar' );
-				$text   = sprintf( $string, $number );
-
-				// Add to return value
-				$retval .= '<br><span class="sc-timechange">' . esc_html( $text ) . '</span>';
+				$retval .= '<br><span class="sc-timechange">' . esc_html( $difference ) . '</span>';
 			}
 		}
 

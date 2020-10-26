@@ -219,19 +219,19 @@ function sugar_calendar_format_timezone_offset( $args = array() ) {
 			break;
 
 		// -18000
-		case 'seconds' :
+		case 'SECONDS' :
 			$retval = $r['offset'];
 			break;
 
 		// -300
-		case 'minutes' :
+		case 'MINUTES' :
 			$retval = ! empty( $r['offset'] )
 				? ( $r['offset'] / MINUTE_IN_SECONDS )
 				: 0;
 			break;
 
 		// 4.5
-		case 'hours' :
+		case 'HOURS' :
 		default :
 			$retval = ! empty( $r['offset'] )
 				? ( $r['offset'] / HOUR_IN_SECONDS )

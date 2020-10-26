@@ -460,7 +460,43 @@ class Basic extends Base_List_Table {
 
 		// Get diff only if end exists
 		} elseif ( ( $item->start !== $item->end ) && ! $item->is_empty_date( $item->end ) ) {
-			$retval = $this->get_human_diff_time( $item->start, $item->end );
+
+			// Default date times
+			$start  = strtotime( $item->start );
+			$end    = strtotime( $item->end   );
+
+			// Adjust start by time zone
+			if ( ! empty( $item->start_tz ) ) {
+				$str   = sprintf( '%s %s', $item->start, $item->start_tz );
+				$start = strtotime( $str );
+			}
+
+			// Adjust end by time zone
+			if ( ! empty( $item->end_tz ) ) {
+				$str   = sprintf( '%s %s', $item->end, $item->end_tz );
+				$end   = strtotime( $str );
+			}
+
+			// Get human readible date time difference
+			$retval = $this->get_human_diff_time( $start, $end );
+
+			// Look for a time zone difference
+			$difference = sugar_calendar_get_timezone_diff( $item->start_tz, $item->end_tz );
+
+			// Time change text
+			if ( ! empty( $difference ) ) {
+
+				// Calculate the change
+				$change = ( $difference / HOUR_IN_SECONDS );
+
+				// Format the text
+				$number = number_format_i18n( $change );
+				$string = _n( '%s hour time change', '%s hour time change', abs( $change ), 'sugar-calendar' );
+				$text   = sprintf( $string, $number );
+
+				// Add to return value
+				$retval .= '<br><span class="sc-timechange">' . esc_html( $text ) . '</span>';
+			}
 		}
 
 		// Return the duration

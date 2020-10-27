@@ -1050,7 +1050,7 @@ function section_duration( $event = null ) {
 					?></div><?php
 
 					// Start Time Zone
-					if ( 'multi' === $tztype ) :
+					if ( ( 'multi' === $tztype ) || ( ( 'off' === $tztype ) && ( $event->start_tz !== $event->end_tz ) ) ) :
 
 						?><div class="event-time-zone"><?php
 
@@ -1112,7 +1112,7 @@ function section_duration( $event = null ) {
 					?></div><?php
 
 					// End Time Zone
-					if ( 'multi' === $tztype ) :
+					if ( ( 'multi' === $tztype ) || ( ( 'off' === $tztype ) && ( $event->start_tz !== $event->end_tz ) ) ) :
 
 						?><div class="event-time-zone"><?php
 
@@ -1129,7 +1129,7 @@ function section_duration( $event = null ) {
 				?></td>
 			</tr>
 
-			<?php if ( 'single' === $tztype ) : ?>
+			<?php if ( ( 'single' === $tztype ) || ( ( 'off' === $tztype ) && ( $event->start_tz === $event->end_tz ) ) ) : ?>
 
 				<tr class="time-zone-row" <?php echo $hidden; ?>>
 					<th>

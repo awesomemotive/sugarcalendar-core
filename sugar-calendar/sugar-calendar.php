@@ -321,13 +321,11 @@ final class Plugin {
 
 		// Utilities
 		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/class-term-meta-ui.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/ical-to-array.php';
 
 		// Terms
 		require_once SC_PLUGIN_DIR . 'includes/classes/terms/class-term-colors.php';
 		require_once SC_PLUGIN_DIR . 'includes/classes/terms/class-term-timezones.php';
-
-		// Utilities
-		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/ical-to-array.php';
 
 		// Event files
 		require_once SC_PLUGIN_DIR . 'includes/events/capabilities.php';

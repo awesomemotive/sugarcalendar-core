@@ -237,11 +237,10 @@ final class Term_Timezones extends UI {
 	 */
 	protected function format_output( $meta = '' ) {
 
-		// Output
-		$tz = ! empty( $meta )
-			? str_replace( '_', '&nbsp;', $meta )
-			: '&mdash;';
+		// Replace underscores with spaces
+		$tz = str_replace( '_', '&nbsp;', $meta );
 
+		// Escape & return
 		return '<span class="term-timezone" data-timezone="' . esc_attr( $meta ) . '">' . esc_html( $tz ) . '</span>';
 	}
 }

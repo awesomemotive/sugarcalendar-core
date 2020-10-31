@@ -240,7 +240,10 @@ final class Term_Timezones extends UI {
 		// Replace underscores with spaces
 		$tz = str_replace( '_', '&nbsp;', $meta );
 
+		// Get offset
+		$offset = sugar_calendar_human_diff_timezone( $meta );
+
 		// Escape & return
-		return '<span class="term-timezone" data-timezone="' . esc_attr( $meta ) . '">' . esc_html( $tz ) . '</span>';
+		return '<span class="term-timezone" data-timezone="' . esc_attr( $meta ) . '" title="' . esc_attr( $offset ) . '">' . esc_html( $tz ) . '</span>';
 	}
 }

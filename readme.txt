@@ -80,9 +80,10 @@ If you purchase a premium license to Sugar Calendar you have access to:
 
 Extend Sugar Calendar with these free add-ons. We keep the plugin lightweight by letting you add what you need only if you need it!
 
-- **[Google Maps](https://sugarcalendar.com/downloads/google-maps/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This is an add-on plugin for Sugar Calendar that lets you easily display a Google Map of the event location on the event details page.
+- **[Google Maps](https://sugarcalendar.com/downloads/google-maps/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on to Sugar Calendar allows you to display a Google Map of the event location on the event details page.
 - **[Ninja Forms Form Embed](https://sugarcalendar.com/downloads/ninja-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on to Sugar Calendar allows you to add a Ninja Forms form to your event pages, so that you can easily add registration forms. If you have one of [Ninja Forms](https://ninjaforms.com/)’ payment gateway add-ons installed ([Stripe](http://ninjaforms.com/downloads/stripe/) or [Paypal Express](http://ninjaforms.com/downloads/paypal-express/)), you can even take payment for event registrations.
 - **[Gravity Forms Form Embed](https://sugarcalendar.com/downloads/gravity-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on to Sugar Calendar allows you to add a [Gravity Forms](https://gravityforms.com/) form to your event pages, so that you can easily add registration forms. If you have one of [Gravity Forms’ payment gateway add-ons](https://www.gravityforms.com/add-ons/) installed , you can even take payment for event registrations.
+- **[WP All Import](https://sugarcalendar.com/downloads/wp-all-import/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on to Sugar Calendar allows you to bulk import events into Sugar Calendar using [WP All Import](https://wordpress.org/plugins/wp-all-import/).
 
 = Pro add-ons =
 

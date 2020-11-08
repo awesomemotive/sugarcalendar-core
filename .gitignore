@@ -42,6 +42,7 @@ tests/clover.xml
 
 # Node
 node_modules
+pnpm-lock.yaml
 
 # Vendor
 /vendor

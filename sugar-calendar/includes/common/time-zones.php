@@ -647,7 +647,7 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 	if ( empty( $mo_loaded ) || ( $locale !== $locale_loaded ) ) {
 		$locale_loaded = ! empty( $locale )
 			? $locale
-			: get_locale();
+			: get_user_locale( get_current_user_id() );
 		$mofile        = WP_LANG_DIR . '/continents-cities-' . $locale_loaded . '.mo';
 		unload_textdomain( 'continents-cities' );
 		load_textdomain( 'continents-cities', $mofile );

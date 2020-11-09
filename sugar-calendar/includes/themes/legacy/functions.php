@@ -163,7 +163,7 @@ function sc_filter_events_for_day( $events = array(), $day = '01', $month = '01'
 function sc_get_event_class( $object_id = false ) {
 
 	// This function only accepts a post ID
-	if ( empty( $object_id ) || ! is_int( $object_id ) ) {
+	if ( empty( $object_id ) || ! is_numeric( $object_id ) ) {
 		return '';
 	}
 

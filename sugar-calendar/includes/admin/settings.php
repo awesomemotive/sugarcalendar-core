@@ -706,7 +706,7 @@ function time_zone_subsection() {
 						'current' => $timezone
 					) ); ?>
 					<p class="description">
-						<?php esc_html_e( 'The default time zone that Events should use.', 'sugar-calendar' ); ?>
+						<?php _e( 'When time zones are enabled, new Events will default to this.<br>If you are unsure, leave empty or pick the time zone you are in.', 'sugar-calendar' ); ?>
 					</p>
 				</td>
 			</tr>
@@ -721,7 +721,7 @@ function time_zone_subsection() {
 						<?php esc_html_e( 'Enable Conversion', 'sugar-calendar' ); ?>
 					</label>
 					<p class="description">
-						<?php esc_html_e( 'Attempts to update theme-side times according to visitor web browser location.', 'sugar-calendar' ); ?>
+						<?php _e( 'Attempts to update theme-side Event times according to visitor web browser location.<br>Depends on client-side browser support. May not work for all visitors.', 'sugar-calendar' ); ?>
 					</p>
 				</td>
 			</tr>

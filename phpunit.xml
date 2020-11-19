@@ -8,7 +8,7 @@
 	convertWarningsToExceptions="true"
 	>
 	<testsuites>
-		<testsuite>
+		<testsuite name="Sugar Calendar Unit Tests">
 			<directory prefix="tests-" suffix=".php">./tests/phpunit/</directory>
 		</testsuite>
 	</testsuites>

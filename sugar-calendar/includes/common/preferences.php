@@ -13,14 +13,16 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 2.0.0
  *
- * @param  string  $key
- * @param  mixed   $default
- * @param  int     $user_id
- * @param  boolean $persistent
+ * @param string $key
+ * @param mixed  $default
+ * @param int    $user_id
  *
  * @return mixed
  */
-function sugar_calendar_get_user_preference( $key = '', $default = '', $user_id = 0, $persistent = false ) {
+function sugar_calendar_get_user_preference( $key = '', $default = '', $user_id = 0 ) {
+
+	// Default empty values
+	$empties = array( '', false );
 
 	// Get user/site/network preference map
 	$keys = sugar_calendar_map_user_preference_key( $key );
@@ -30,33 +32,30 @@ function sugar_calendar_get_user_preference( $key = '', $default = '', $user_id 
 		? get_current_user_id()
 		: absint( $user_id );
 
-	// Force to non-persistent if no user
-	if ( empty( $user_id ) ) {
-		$persistent = false;
-	}
-
 	// Check usermeta first
-	$retval = ( true === $persistent )
-		? get_user_meta( $user_id, $keys['user'], true )
-		: get_user_meta( $user_id, $keys['user'], true ); //get_user_setting( $keys['user'], $default );
+	$retval = get_user_meta( $user_id, $keys['user'], true );
 
-	// Nothing, so check site option
-	if ( '' === $retval ) {
+	// Meta may return false or an empty string if empty, but 0 or '0' are allowed
+	if ( in_array( $retval, $empties, true ) ) {
+
+		// Check the site option
 		$retval = get_option( $keys['site'] );
 
-		// Nothing, so check network option if multisite
-		if ( false === $retval && is_multisite() ) {
+		// No site option and multisite
+		if ( ( false === $retval ) && is_multisite() ) {
+
+			// So check network option
 			$retval = get_site_option( $keys['network'] );
 		}
 	}
 
 	// Fallback to default if empty
-	if ( ( '' === $retval ) && ! empty( $default ) ) {
+	if ( in_array( $retval, $empties, true ) && ! empty( $default ) ) {
 		$retval = $default;
 	}
 
 	// Filter & return
-	return apply_filters( 'sugar_calendar_get_user_preference', $retval, $key, $default, $user_id, $persistent );
+	return apply_filters( 'sugar_calendar_get_user_preference', $retval, $key, $default, $user_id );
 }
 
 /**
@@ -64,14 +63,13 @@ function sugar_calendar_get_user_preference( $key = '', $default = '', $user_id 
  *
  * @since 2.0.0
  *
- * @param  string  $key
- * @param  mixed   $value
- * @param  int     $user_id
- * @param  boolean $persistent
+ * @param string $key
+ * @param mixed  $value
+ * @param int    $user_id
  *
  * @return mixed
  */
-function sugar_calendar_set_user_preference( $key = '', $value = '', $user_id = 0, $persistent = false ) {
+function sugar_calendar_set_user_preference( $key = '', $value = '', $user_id = 0 ) {
 
 	// Get user/site/network preference map
 	$keys = sugar_calendar_map_user_preference_key( $key );
@@ -81,18 +79,11 @@ function sugar_calendar_set_user_preference( $key = '', $value = '', $user_id = 
 		? get_current_user_id()
 		: absint( $user_id );
 
-	// Force to non-persistent if no user
-	if ( empty( $user_id ) ) {
-		$persistent = false;
-	}
-
 	// Check usermeta first
-	$retval = ( true === $persistent )
-		? update_user_meta( $user_id, $keys['user'], $value )
-		: update_user_meta( $user_id, $keys['user'], $value ); //set_user_setting( $keys['user'], $value );
+	$retval = update_user_meta( $user_id, $keys['user'], $value );
 
 	// Filter & return
-	return apply_filters( 'sugar_calendar_set_user_preference', $retval, $key, $value, $user_id, $persistent );
+	return apply_filters( 'sugar_calendar_set_user_preference', $retval, $key, $value, $user_id );
 }
 
 /**
@@ -100,13 +91,12 @@ function sugar_calendar_set_user_preference( $key = '', $value = '', $user_id = 
  *
  * @since 2.0.0
  *
- * @param  string  $key
- * @param  int     $user_id
- * @param  boolean $persistent
+ * @param string $key
+ * @param int    $user_id
  *
  * @return mixed
  */
-function sugar_calendar_delete_user_preference( $key = '', $user_id = 0, $persistent = false ) {
+function sugar_calendar_delete_user_preference( $key = '', $user_id = 0 ) {
 
 	// Get user/site/network preference map
 	$keys = sugar_calendar_map_user_preference_key( $key );
@@ -116,18 +106,11 @@ function sugar_calendar_delete_user_preference( $key = '', $user_id = 0, $persis
 		? get_current_user_id()
 		: absint( $user_id );
 
-	// Force to non-persistent if no user
-	if ( empty( $user_id ) ) {
-		$persistent = false;
-	}
-
 	// Check usermeta first
-	$retval = ( true === $persistent )
-		? delete_user_meta( $user_id, $keys['user'] )
-		: delete_user_meta( $user_id, $keys['user'] ); //delete_user_setting( $keys['user'] );
+	$retval = delete_user_meta( $user_id, $keys['user'] );
 
 	// Filter & return
-	return apply_filters( 'sugar_calendar_set_user_preference', $retval, $key, $user_id, $persistent );
+	return apply_filters( 'sugar_calendar_set_user_preference', $retval, $key, $user_id );
 }
 
 /**

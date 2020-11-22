@@ -382,6 +382,6 @@ final class Event extends Row {
 			: (int) $datetime;
 
 		// Return date part
-		return date_i18n( $format, $date );
+		return gmdate( $format, $date );
 	}
 }

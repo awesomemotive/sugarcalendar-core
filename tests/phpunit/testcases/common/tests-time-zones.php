@@ -12,7 +12,7 @@ class TimeZones extends \WP_UnitTestCase {
 	 * Set up
 	 */
 	public function setUp() {
-		require_once SC_PLUGIN_DIR . 'includes/common/time-zones.php';
+
 	}
 
 	/**

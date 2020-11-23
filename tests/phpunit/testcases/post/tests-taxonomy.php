@@ -2,9 +2,9 @@
 namespace Sugar_Calendar\Tests\Post;
 
 /**
- * Tests for the admin tools functions.
+ * Tests for the post taxonomy functions.
  *
- * @group tools
+ * @group taxonomy
  */
 class Taxonomy extends \WP_UnitTestCase {
 

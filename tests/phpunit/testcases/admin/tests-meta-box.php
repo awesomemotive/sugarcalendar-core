@@ -4,7 +4,7 @@ namespace Sugar_Calendar\Tests\Admin;
 /**
  * Tests for the admin tools functions.
  *
- * @group tools
+ * @group meta-box
  */
 class MetaBox extends \WP_UnitTestCase {
 
@@ -149,7 +149,7 @@ class MetaBox extends \WP_UnitTestCase {
 		$_POST['start_time_am_pm']  = 'pm';
 
 		$retval = \Sugar_Calendar\Admin\Editor\Meta\prepare_start();
-		$compare = date( 'Y-m-d 12:00:00', current_time( 'timestamp' ) );
+		$compare = gmdate( 'Y-m-d 12:00:00', current_time( 'timestamp' ) );
 
 		$this->assertSame( $compare, $retval );
 	}

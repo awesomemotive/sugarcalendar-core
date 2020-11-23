@@ -157,4 +157,78 @@ class Settings extends \WP_UnitTestCase {
 
 		$this->assertSame( count( $events ), $this->max );
 	}
+
+	/**
+	 * Start of week
+	 *
+	 * @group settings
+	 * @group start-of-week
+	 */
+	public function test_start_of_week() {
+
+		// Set start-of-week to Wednesday
+		update_option( 'sc_start_of_week', 4 );
+
+		// Get the number
+		$start = sc_get_week_start_day();
+
+		// Get all events before today by the term
+		$events = sugar_calendar_get_events( array(
+			'no_found_rows'  => true,
+			'object_type'    => 'post',
+			'object_subtype' => sugar_calendar_get_event_post_type_id(),
+			'status'         => 'publish',
+			'orderby'        => 'start',
+			'order'          => 'ASC',
+			'start_query'    => array(
+				'dayofweek'  => $start
+			)
+		) );
+
+		// Make sure all Events take place on Wednesday
+		foreach ( $events as $event ) {
+			$day = gmdate( 'D', strtotime( $event->start ) );
+			$this->assertSame( 'Wed', $day );
+		}
+	}
+
+	/**
+	 * Date format
+	 *
+	 * @group settings
+	 * @group date-format
+	 */
+	public function test_date_format() {
+
+		// Set start-of-week to Wednesday
+		update_option( 'sc_date_format', 'jS F, Y' );
+
+		// Get the date format
+		$format = sc_get_date_format();
+
+		$date  = '1979-06-17 03:33:00';
+		$retval = gmdate( $format, strtotime( $date ) );
+
+		$this->assertSame( '17th June, 1979', $retval );
+	}
+
+	/**
+	 * Time format
+	 *
+	 * @group settings
+	 * @group time-format
+	 */
+	public function test_time_format() {
+
+		// Set start-of-week to Wednesday
+		update_option( 'sc_time_format', 'H:i' );
+
+		// Get the date format
+		$format = sc_get_time_format();
+
+		$date  = '1979-06-17 03:33:00';
+		$retval = gmdate( $format, strtotime( $date ) );
+
+		$this->assertSame( '03:33', $retval );
+	}
 }

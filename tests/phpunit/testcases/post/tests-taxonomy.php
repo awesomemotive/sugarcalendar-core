@@ -66,7 +66,7 @@ class Taxonomy extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group taxonomy
+	 * @group get-events
 	 */
 	public function test_get_past_events_in_calendar() {
 

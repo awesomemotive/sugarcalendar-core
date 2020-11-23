@@ -69,6 +69,7 @@ class Settings extends \WP_UnitTestCase {
 	 * Five events
 	 *
 	 * @group settings
+	 * @group get-events
 	 */
 	public function test_number_of_events_5() {
 
@@ -100,6 +101,7 @@ class Settings extends \WP_UnitTestCase {
 	 * Ten events
 	 *
 	 * @group settings
+	 * @group get-events
 	 */
 	public function test_number_of_events_10() {
 
@@ -131,6 +133,7 @@ class Settings extends \WP_UnitTestCase {
 	 * All events
 	 *
 	 * @group settings
+	 * @group get-events
 	 */
 	public function test_number_of_events_0() {
 
@@ -163,6 +166,7 @@ class Settings extends \WP_UnitTestCase {
 	 *
 	 * @group settings
 	 * @group start-of-week
+	 * @group get-events
 	 */
 	public function test_start_of_week() {
 

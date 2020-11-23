@@ -737,7 +737,20 @@ function time_zone_subsection() {
  * @since 2.0.14
  */
 function ajax_date_format() {
-	wp_die( date_i18n( sanitize_option( 'date_format', wp_unslash( $_POST['sc_date'] ) ) ) );
+
+	// Sanitize
+	$date = ! empty( $_POST['sc_date'] )
+		? wp_unslash( $_POST['sc_date'] )
+		: '';
+
+	// Format
+	$format = sanitize_option( 'date_format', $date );
+
+	// Uses WordPress locale
+	$retval = date_i18n( $format );
+
+	// Output
+	wp_die( $retval );
 }
 
 /**
@@ -746,7 +759,20 @@ function ajax_date_format() {
  * @since 2.0.14
  */
 function ajax_time_format() {
-	wp_die( date_i18n( sanitize_option( 'time_format', wp_unslash( $_POST['sc_date'] ) ) ) );
+
+	// Sanitize
+	$time = ! empty( $_POST['sc_date'] )
+		? wp_unslash( $_POST['sc_date'] )
+		: '';
+
+	// Format
+	$format = sanitize_option( 'time_format', $time );
+
+	// Uses WordPress locale
+	$retval = date_i18n( $format );
+
+	// Output
+	wp_die( $retval );
 }
 
 /**

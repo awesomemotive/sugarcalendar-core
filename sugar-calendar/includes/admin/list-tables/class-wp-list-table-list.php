@@ -75,7 +75,7 @@ class Basic extends Base_List_Table {
 		$this->list_end   = strtotime( $boundary, $this->list_start );
 
 		// View end
-		$view_end = date_i18n( 'Y-m-d H:i:s', $this->list_end );
+		$view_end = gmdate( 'Y-m-d H:i:s', $this->list_end );
 
 		// Set the view
 		$this->set_view( $view_start, $view_end );

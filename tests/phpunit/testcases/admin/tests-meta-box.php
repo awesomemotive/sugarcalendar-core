@@ -37,7 +37,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group has_end
 	 */
 	public function test_has_end_ok() {
@@ -51,7 +50,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group has_end
 	 */
 	public function test_has_no_end_default() {
@@ -61,7 +59,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group has_end
 	 */
 	public function test_has_no_end_empty() {
@@ -75,7 +72,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group prepare_all_day
 	 */
 	public function test_prepare_all_day_ok() {
@@ -87,7 +83,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group prepare_all_day
 	 */
 	public function test_prepare_all_day_default() {
@@ -109,7 +104,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group prepare_start
 	 */
 	public function test_prepare_start_noon() {
@@ -124,7 +118,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group prepare_start
 	 */
 	public function test_prepare_start_midnight() {
@@ -139,7 +132,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group prepare_start
 	 */
 	public function test_prepare_start_empty_date() {
@@ -155,7 +147,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group prepare_start
 	 */
 	public function test_prepare_start_empty_time() {
@@ -170,7 +161,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group sanitize_end
 	 */
 	public function test_sanitize_end_ok() {
@@ -185,7 +175,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group sanitize_end
 	 */
 	public function test_sanitize_end_start_time_after_end_time() {
@@ -200,7 +189,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group sanitize_end
 	 */
 	public function test_sanitize_end_start_date_before_end_date() {
@@ -215,7 +203,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group sanitize_end
 	 */
 	public function test_sanitize_end_empty_end_date_time() {
@@ -230,7 +217,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group sanitize_end
 	 */
 	public function test_sanitize_end_empty_end_date() {
@@ -245,7 +231,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group sanitize_end
 	 */
 	public function test_sanitize_end_empty_end_time() {
@@ -260,7 +245,6 @@ class MetaBox extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * @group meta-box
 	 * @group sanitize_end
 	 */
 	public function test_sanitize_end_all_day() {

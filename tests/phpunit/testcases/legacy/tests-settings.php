@@ -134,7 +134,7 @@ class Settings extends \WP_UnitTestCase {
 	 */
 	public function test_number_of_events_0() {
 
-		// Set number to 5
+		// Set number to 0
 		update_option( 'sc_number_of_events', 0 );
 
 		// Get the number

@@ -52,26 +52,28 @@ function updated_messages( $messages = array() ) {
 	// Preview URL
 	$preview_url = get_preview_post_link( $post );
 
-	// Preview post link.
+	// Preview post link
 	$preview_post_link_html = sprintf( ' <a target="_blank" href="%1$s">%2$s</a>',
 		esc_url( $preview_url ),
 		esc_html__( 'Preview event', 'sugar-calendar' )
 	);
 
-	// Scheduled post preview link.
+	// Scheduled post preview link
 	$scheduled_post_link_html = sprintf( ' <a target="_blank" href="%1$s">%2$s</a>',
 		esc_url( $permalink ),
 		esc_html__( 'Preview event', 'sugar-calendar' )
 	);
 
-	// View post link.
+	// View post link
 	$view_post_link_html = sprintf( ' <a href="%1$s">%2$s</a>',
 		esc_url( $permalink ),
 		esc_html__( 'View event', 'sugar-calendar' )
 	);
 
-	// Scheduled
-	$scheduled_date = date_i18n( esc_html_x( 'M j, Y @ H:i', 'Date formatting', 'sugar-calendar' ), strtotime( $post->post_date ) );
+	// Scheduled (uses WordPress site locale & timezone)
+	$format         = esc_html_x( 'M j, Y @ H:i', 'Date formatting', 'sugar-calendar' );
+	$timestamp      = strtotime( $post->post_date );
+	$scheduled_date = date_i18n( $format, $timestamp );
 
 	// Add post type to messages array
 	$messages[ sugar_calendar_get_event_post_type_id() ] = array(

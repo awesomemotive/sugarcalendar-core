@@ -502,11 +502,14 @@ function display_subsection() {
 								: '';
 
 							// Checked?
-							$checked = checked( $format, $sc_date_format, false ); ?>
+							$checked = checked( $format, $sc_date_format, false );
+
+							// Uses WordPress locale & time zone
+							$date = date_i18n( $format ); ?>
 
 							<label>
 								<input type="radio" <?php echo $id; ?> name="sc_date_format" value="<?php echo esc_attr( $format ); ?>"<?php echo $checked; ?> />
-								<span class="date-time-text format-i18n"><?php echo date_i18n( $format );?></span>
+								<span class="date-time-text format-i18n"><?php echo esc_html( $date ); ?></span>
 								<code><?php echo esc_html( $format ); ?></code>
 							</label>
 							<br />
@@ -556,11 +559,14 @@ function display_subsection() {
 								: '';
 
 							// Checked?
-							$checked = checked( $format, $sc_time_format, false ); ?>
+							$checked = checked( $format, $sc_time_format, false );
+
+							// Uses WordPress locale & time zone
+							$time = date_i18n( $format ); ?>
 
 							<label>
 								<input type="radio" <?php echo $id; ?> name="sc_time_format" value="<?php echo esc_attr( $format ); ?>"<?php echo $checked; ?> />
-								<span class="date-time-text format-i18n"><?php echo date_i18n( $format );?></span>
+								<span class="date-time-text format-i18n"><?php echo esc_html( $time );?></span>
 								<code><?php echo esc_html( $format ); ?></code>
 							</label>
 							<br />
@@ -746,7 +752,7 @@ function ajax_date_format() {
 	// Format
 	$format = sanitize_option( 'date_format', $date );
 
-	// Uses WordPress locale
+	// Uses WordPress locale & time zone
 	$retval = date_i18n( $format );
 
 	// Output
@@ -768,7 +774,7 @@ function ajax_time_format() {
 	// Format
 	$format = sanitize_option( 'time_format', $time );
 
-	// Uses WordPress locale
+	// Uses WordPress locale & time zone
 	$retval = date_i18n( $format );
 
 	// Output

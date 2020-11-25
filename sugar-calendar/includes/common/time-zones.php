@@ -31,33 +31,99 @@ function sugar_calendar_get_timezone() {
  * @param string $timezone1 First Olson time zone ID.
  * @param string $timezone2 Optional. Default: 'UTC'. Second Olson time zone ID.
  * @param mixed  $datetime  Optional. Default: 'now'. Time to use for diff.
+ * @param string $format    Optional. Default: 'seconds'. Format to return.
  *
- * @return int Number of seconds between two time zones at that time.
+ * @return mixed Difference between 2 time zones.
  */
-function sugar_calendar_get_timezone_diff( $timezone1 = '', $timezone2 = 'UTC', $datetime = 'now' ) {
+function sugar_calendar_get_timezone_diff( $timezone1 = '', $timezone2 = 'UTC', $datetime = 'now', $format = 'seconds' ) {
 
-	// Use now if empty
-	if ( empty( $datetime ) ) {
-		$datetime = 'now';
-	}
-
-	// Get the time zones
-	$tz1 = sugar_calendar_get_timezone_object( $timezone1 );
-	$tz2 = sugar_calendar_get_timezone_object( $timezone2 );
-
-	// Get the datetimes, using the time zones
-	$dt1 = new \DateTime( $datetime, $tz1 );
-	$dt2 = new \DateTime( $datetime, $tz2 );
-
-	// Get the two offsets
-	$off1 = $tz1->getOffset( $dt1 );
-	$off2 = $tz2->getOffset( $dt2 );
-
-	// Get the difference
-	$retval = $off1 - $off2;
+	// Pass both timezones into the array
+	$retval = sugar_calendar_get_timezone_diff_multi( array(
+		'datetime'  => $datetime,
+		'direction' => 'left',
+		'format'    => $format,
+		'timezones' => array( $timezone1, $timezone2 )
+	) );
 
 	// Filter & return
 	return apply_filters( 'sugar_calendar_get_timezone_diff', $retval, $datetime, $timezone1, $timezone2 );
+}
+
+/**
+ * Get the difference of an array of Olson time zone IDs.
+ *
+ * @since 2.1.0
+ *
+ * @param array $args
+ *
+ * @return int
+ */
+function sugar_calendar_get_timezone_diff_multi( $args = array() ) {
+
+	// Parse arguments
+	$r = wp_parse_args( $args, array(
+		'datetime'  => 'now',
+		'direction' => 'left',
+		'format'    => '',
+		'timezones' => array()
+	) );
+
+	// Default return value
+	$retval = 0;
+
+	// Remove empties and duplicates
+	$timezones = ! empty( $r['timezones'] ) && is_array( $r['timezones'] )
+		? array_filter( $r['timezones'] )
+		: array();
+
+	// Get the timezone count
+	$count = count( $timezones );
+
+	// Only if there is more than 1 time zone to iterate through
+	if ( 2 <= $count ) {
+
+		// Default
+		$off2 = $retval;
+
+		// Invert the direction
+		if ( 'left' === $r['direction'] ) {
+			$timezones = array_reverse( $timezones );
+		}
+
+		// Loop through timezones
+		foreach ( $timezones as $key => $timezone ) {
+
+			// Get the offset
+			$offset = sugar_calendar_get_timezone_offset( array(
+				'datetime' => $r['datetime'],
+				'timezone' => $timezone,
+				'format'   => 'seconds'
+			) );
+
+			// Skip the first item
+			if ( 0 !== $key ) {
+
+				// Set return value to the difference
+				$retval = ( 'left' === $r['direction'] )
+					? $retval - ( $off2 - $offset )
+					: $retval + ( $off2 + $offset );
+			}
+
+			// Set the difference offset
+			$off2 = $offset;
+		}
+	}
+
+	// Maybe format
+	if ( ! empty( $r['format'] ) ) {
+		$retval = sugar_calendar_format_timezone_offset( array(
+			'offset' => $retval,
+			'format' => $r['format']
+		) );
+	}
+
+	// Filter & return
+	return apply_filters( 'sugar_calendar_get_timezone_diff_multi', $retval, $r, $args );
 }
 
 /**
@@ -134,13 +200,13 @@ function sugar_calendar_get_timezone_offset( $args = array() ) {
 
 	// Get objects
 	$tzo = sugar_calendar_get_timezone_object( $r['timezone'] );
-	$dt  = new \DateTime( $r['datetime'] );
+	$dt  = new \DateTime( $r['datetime'], $tzo );
+	$off = $dt->getOffset();
 
 	// Format the return value
 	$retval = sugar_calendar_format_timezone_offset( array(
-		'offset'   => timezone_offset_get( $tzo, $dt ),
-		'timezone' => $r['timezone'],
-		'format'   => $r['format']
+		'offset' => $off,
+		'format' => $r['format']
 	) );
 
 	// Filter & return
@@ -220,7 +286,6 @@ function sugar_calendar_format_timezone_offset( $args = array() ) {
 	// Parse arguments
 	$r = wp_parse_args( $args, array(
 		'offset'   => 0,
-		'timezone' => 'UTC',
 		'format'   => 'RFC2822'
 	) );
 
@@ -274,9 +339,12 @@ function sugar_calendar_format_timezone_offset( $args = array() ) {
 			$retval = "{$mod}{$hours}:{$minutes}";
 			break;
 
-		// -18000
-		case 'SECONDS' :
-			$retval = $r['offset'];
+		// 4.5
+		case 'HOURS' :
+			$retval = ! empty( $r['offset'] )
+				? ( $r['offset'] / HOUR_IN_SECONDS )
+				: 0;
+
 			break;
 
 		// -300
@@ -286,12 +354,10 @@ function sugar_calendar_format_timezone_offset( $args = array() ) {
 				: 0;
 			break;
 
-		// 4.5
-		case 'HOURS' :
+		// -18000
+		case 'SECONDS' :
 		default :
-			$retval = ! empty( $r['offset'] )
-				? ( $r['offset'] / HOUR_IN_SECONDS )
-				: 0;
+			$retval = $r['offset'];
 			break;
 	}
 

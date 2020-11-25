@@ -71,7 +71,7 @@ function sugar_calendar_get_timezone_diff_multi( $args = array() ) {
 	// Default return value
 	$retval = 0;
 
-	// Remove empties and duplicates
+	// Remove empties
 	$timezones = ! empty( $r['timezones'] ) && is_array( $r['timezones'] )
 		? array_filter( $r['timezones'] )
 		: array();

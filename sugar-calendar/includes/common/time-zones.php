@@ -198,10 +198,17 @@ function sugar_calendar_get_timezone_offset( $args = array() ) {
 		'format'   => 'RFC2822'
 	) );
 
-	// Get objects
+	// Default offset (UTC)
+	$off = 0;
+
+	// Get timezone object
 	$tzo = sugar_calendar_get_timezone_object( $r['timezone'] );
-	$dt  = new \DateTime( $r['datetime'], $tzo );
-	$off = $dt->getOffset();
+
+	// Timezone is valid, so get the offset from it
+	if ( ! empty( $tzo ) ) {
+		$dt  = new \DateTime( $r['datetime'], $tzo );
+		$off = $dt->getOffset();
+	}
 
 	// Format the return value
 	$retval = sugar_calendar_format_timezone_offset( array(
@@ -232,7 +239,7 @@ function sugar_calendar_format_timezone( $timezone = '' ) {
 
 	// Manual offset looks like "Etc/GMT-5"
 	} elseif ( sugar_calendar_is_manual_timezone_offset( $timezone ) ) {
-		$retval = sugar_calendar_format_manual_timezone_offset( $timezone );
+		$retval = sugar_calendar_get_manual_timezone_offset_id( $timezone );
 
 	// Olson IDs should not break because of spaces
 	} else {
@@ -246,6 +253,9 @@ function sugar_calendar_format_timezone( $timezone = '' ) {
 /**
  * Format a manual time zone offset.
  *
+ * Must be a manual time zone. Passing in an Olson ID will yield unintended
+ * results.
+ *
  * IANA time zone database that provides PHP's time zone support uses
  * (i.e. reversed) POSIX style signs
  *
@@ -254,13 +264,14 @@ function sugar_calendar_format_timezone( $timezone = '' ) {
  * @see https://bugs.php.net/bug.php?id=45528
  *
  * @since 2.1.0
- * @param string $timezone Default ''. Olson time zone ID.
+ * @param string $timezone Default: 'UTC'. Olson time zone ID.
+ * @param mixed  $datetime Default: 'now'. Time to use for diff.
  * @return string
  */
-function sugar_calendar_format_manual_timezone_offset( $timezone = '' ) {
+function sugar_calendar_get_manual_timezone_offset_id( $timezone = '', $datetime = 'now' ) {
 
 	// Get the manual offset
-	$offset = sugar_calendar_get_manual_timezone_offset( 'now', $timezone );
+	$offset = sugar_calendar_get_manual_timezone_offset( $datetime, $timezone );
 
 	// Make the offset string
 	$offset_st = ( $offset > 0 )
@@ -399,7 +410,7 @@ function sugar_calendar_get_timezone_object( $timezone = '' ) {
 
 	// Format the time zone
 	$timezone = sugar_calendar_is_manual_timezone_offset( $timezone )
-		? sugar_calendar_format_manual_timezone_offset( $timezone )
+		? sugar_calendar_get_manual_timezone_offset_id( $timezone )
 		: $timezone;
 
 	// "Floating" is not valid, so set to "UTC" to avoid DateTimeZone erroring
@@ -452,6 +463,9 @@ function sugar_calendar_is_manual_timezone_offset( $timezone = '' ) {
 /**
  * Get the numeric offset from a manual offset.
  *
+ * Will fallback to an offset from an Olson ID if the timezone passed is not a
+ * manual one.
+ *
  * @since 2.1.0
  * @param mixed  $datetime Default: 'now'. Time to use for diff.
  * @param string $timezone Default: 'UTC'. Olson time zone ID.
@@ -468,19 +482,11 @@ function sugar_calendar_get_manual_timezone_offset( $datetime = 'now', $timezone
 
 	// Not a manual offset
 	} else {
-
-		// Get the time zone object
-		$tz = sugar_calendar_get_timezone_object( $timezone );
-
-		// Bail if time zone is invalid
-		if ( ! empty( $tz ) ) {
-
-			// Get a date time object, based on this time zone
-			$dt = new \DateTime( $datetime, $tz );
-
-			// Calculate the offset
-			$retval = $dt->getOffset() / HOUR_IN_SECONDS;
-		}
+		$retval = sugar_calendar_get_timezone_offset( array(
+			'datetime' => $datetime,
+			'timezone' => $timezone,
+			'format'   => 'hours'
+		) );
 	}
 
 	// Return the offset

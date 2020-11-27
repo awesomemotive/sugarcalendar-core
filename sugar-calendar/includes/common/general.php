@@ -68,23 +68,23 @@ function sugar_calendar_get_assets_version() {
  *
  * @return string
  */
-function sugar_calendar_date( $format = 'Y-m-d H:i:s', $timestamp = null, $timezone = null ) {
+function sugar_calendar_format_date( $format = 'Y-m-d H:i:s', $timestamp = null, $timezone = null ) {
 
 	// Fallback to "now"
 	if ( null === $timestamp ) {
-		$timestamp = sugar_calendar_get_request_time();
+		$timestamp = (int) sugar_calendar_get_request_time();
 
 	// Fallback to whatever strtotime() guesses at
 	} elseif ( ! is_numeric( $timestamp ) ) {
 		$timestamp = strtotime( $timestamp );
 	}
 
-	// Fallback to the user preference
-	if ( null === $timezone ) {
+	// Maybe use the default
+	if ( false === $timezone ) {
 		$timezone = sugar_calendar_get_timezone();
 	}
 
-	// Maybe try to get the timezone object
+	// Maybe get the DateTimeZone object
 	if ( is_string( $timezone ) ) {
 		$timezone = sugar_calendar_get_timezone_object( $timezone );
 	}
@@ -100,6 +100,8 @@ function sugar_calendar_date( $format = 'Y-m-d H:i:s', $timestamp = null, $timez
 /**
  * Translate a timestamp into a specific format, possibly by time zone.
  *
+ * Loosely based on wp_date() but without the site-specific time zone fallback.
+ *
  * @since 2.1.0
  *
  * @param string $format    Defaults to MySQL datetime format.
@@ -109,7 +111,8 @@ function sugar_calendar_date( $format = 'Y-m-d H:i:s', $timestamp = null, $timez
  *
  * @return string
  */
-function sugar_calendar_date_i18n( $format = 'Y-m-d H:i:s', $timestamp = null, $timezone = null, $locale = null ) {
+function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $timestamp = null, $timezone = null, $locale = null ) {
+	global $wp_locale;
 
 	// Switch!
 	if ( ! empty( $locale ) ) {
@@ -118,25 +121,93 @@ function sugar_calendar_date_i18n( $format = 'Y-m-d H:i:s', $timestamp = null, $
 
 	// Fallback to "now"
 	if ( null === $timestamp ) {
-		$timestamp = sugar_calendar_get_request_time();
+		$timestamp = (int) sugar_calendar_get_request_time();
 
 	// Fallback to whatever strtotime() guesses at
 	} elseif ( ! is_numeric( $timestamp ) ) {
 		$timestamp = strtotime( $timestamp );
 	}
 
-	// Fallback to the user preference
-	if ( null === $timezone ) {
+	// Maybe use the default
+	if ( false === $timezone ) {
 		$timezone = sugar_calendar_get_timezone();
 	}
 
-	// Maybe try to get the timezone object
+	// Maybe get the DateTimeZone object
 	if ( is_string( $timezone ) ) {
 		$timezone = sugar_calendar_get_timezone_object( $timezone );
 	}
 
-	// Format the date using the WordPress locale
-	$retval = wp_date( $format, $timestamp, $timezone );
+	// Get DateTime object (with time zone) and use it to format
+	$dto = date_create( '@' . $timestamp, $timezone );
+
+	// No locale available, so fallback to regular date formatting
+	if ( empty( $wp_locale->month ) || empty( $wp_locale->weekday ) ) {
+		$retval = $dto->format( $format );
+
+	// Can localize, so try...
+	} else {
+
+		// We need to unpack shorthand `r` format because it has parts that might be localized.
+		$format = preg_replace( '/(?<!\\\\)r/', DATE_RFC2822, $format );
+
+		$new_format    = '';
+		$slashes       = '\\A..Za..z';
+		$format_length = strlen( $format );
+		$month         = $wp_locale->get_month( $dto->format( 'm' ) );
+		$weekday       = $wp_locale->get_weekday( $dto->format( 'w' ) );
+
+		for ( $i = 0; $i < $format_length; $i ++ ) {
+			switch ( $format[ $i ] ) {
+				case 'D' :
+					$str         = $wp_locale->get_weekday_abbrev( $weekday );
+					$new_format .= addcslashes( $str, $slashes );
+					break;
+
+				case 'F' :
+					$new_format .= addcslashes( $month, $slashes );
+					break;
+
+				case 'l' :
+					$new_format .= addcslashes( $weekday, $slashes );
+					break;
+
+				case 'M' :
+					$str         = $wp_locale->get_month_abbrev( $month );
+					$new_format .= addcslashes( $str, $slashes );
+					break;
+
+				case 'a' :
+					$str         = $wp_locale->get_meridiem( $dto->format( 'a' ) );
+					$new_format .= addcslashes( $str, $slashes );
+					break;
+
+				case 'A' :
+					$str         = $wp_locale->get_meridiem( $dto->format( 'A' ) );
+					$new_format .= addcslashes( $str, $slashes );
+					break;
+
+				case '\\' :
+					$new_format .= $format[ $i ];
+
+					// If character follows a slash, we add it without translating.
+					if ( $i < $format_length ) {
+						$new_format .= $format[ ++$i ];
+					}
+					break;
+
+				default :
+					$new_format .= $format[ $i ];
+					break;
+			}
+		}
+
+		// Use the new format
+		$date   = $dto->format( $new_format );
+
+		// Prevent impossible dates
+		$retval = wp_maybe_decline_date( $date, $format );
+	}
 
 	// Unswitch!
 	if ( ! empty( $locale ) ) {

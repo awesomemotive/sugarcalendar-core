@@ -146,7 +146,7 @@ function sc_add_date_time_details( $post_id = 0 ) {
 		// @todo start time zone
 
 		// Get start datetime
-		$dt = $event->format_date( $format, $event->start );
+		$dt = $event->start_date( $format );
 
 		// Set to all-day and noop the end time
 		if ( ! empty( $all_day ) ) :
@@ -173,7 +173,7 @@ function sc_add_date_time_details( $post_id = 0 ) {
 				// @todo end time zone
 
 				// Get end datetime
-				$dt = $event->format_date( 'Y-m-d\TH:i:s', $event->end ); ?>
+				$dt = $event->end_date( 'Y-m-d\TH:i:s' ); ?>
 
 				<span class="sc_event_time_sep">
 					<?php esc_html_e( 'to', 'sugar-calendar' ); ?>

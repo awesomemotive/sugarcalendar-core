@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
 function sugar_calendar_get_timezone() {
 
 	// Get user time zone preference - default "Floating"
-	$retval = sugar_calendar_get_user_preference( 'sc_timezone', '' );
+	$retval = sugar_calendar_get_user_preference( 'sc_timezone', null );
 
 	// Filter & return
 	return apply_filters( 'sugar_calendar_get_timezone', $retval );

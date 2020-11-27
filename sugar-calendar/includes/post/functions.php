@@ -34,11 +34,11 @@ function sugar_calendar_get_event_start_date_time( $post = false ) {
 		$df   = get_option( 'date_format' );
 		$tf   = get_option( 'time_format' );
 
-		echo date_i18n( $df, $date );
+		echo sugar_calendar_format_date_i18n( $df, $date );
 
 		// Time
 		if ( empty( $all_day ) ) {
-			echo '<br>' . date_i18n( $tf, $date );
+			echo '<br>' . sugar_calendar_format_date_i18n( $tf, $date );
 		}
 
 	// No start date
@@ -78,11 +78,11 @@ function sugar_calendar_get_event_end_date_time( $post = false ) {
 		$df   = get_option( 'date_format' );
 		$tf   = get_option( 'time_format' );
 
-		echo date_i18n( $df, $date );
+		echo sugar_calendar_format_date_i18n( $df, $date );
 
 		// Time
 		if ( empty( $all_day ) ) {
-			echo '<br>' . date_i18n( $tf, $date );
+			echo '<br>' . sugar_calendar_format_date_i18n( $tf, $date );
 		}
 
 	} else {
@@ -155,7 +155,7 @@ function sugar_calendar_get_event_duration( $post = false ) {
 	if ( true === $all_day ) {
 
 		// 1 day
-		if ( $event->format_date( 'd', $start_date ) === $event->format_date( 'd', $end_date ) ) {
+		if ( $event->start_date( 'd' ) === $event->end_date( 'd' ) ) {
 			esc_html_e( 'All Day', 'sugar-calendar' );
 
 		// More than 1 day

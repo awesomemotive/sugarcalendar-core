@@ -453,9 +453,9 @@ function display_subsection() {
 	// Is custom time checked?
 	$custom_time_checked = ! in_array( $sc_time_format, $time_formats, true );
 
-	// Uses WordPress locale & time zone
-	$looks_like_date = date_i18n( $sc_date_format );
-	$looks_like_time = date_i18n( $sc_time_format ); ?>
+	// Format and translate
+	$looks_like_date = sugar_calendar_format_date_i18n( $sc_date_format );
+	$looks_like_time = sugar_calendar_format_date_i18n( $sc_time_format ); ?>
 
 	<table class="form-table">
 		<tbody>
@@ -511,8 +511,8 @@ function display_subsection() {
 							// Checked?
 							$checked = checked( $format, $sc_date_format, false );
 
-							// Uses WordPress locale & time zone
-							$date = date_i18n( $format ); ?>
+							// Format and translate
+							$date = sugar_calendar_format_date_i18n( $format ); ?>
 
 							<label>
 								<input type="radio" <?php echo $id; ?> name="sc_date_format" value="<?php echo esc_attr( $format ); ?>"<?php echo $checked; ?> />
@@ -568,8 +568,8 @@ function display_subsection() {
 							// Checked?
 							$checked = checked( $format, $sc_time_format, false );
 
-							// Uses WordPress locale & time zone
-							$time = date_i18n( $format ); ?>
+							// Format and translate
+							$time = sugar_calendar_format_date_i18n( $format ); ?>
 
 							<label>
 								<input type="radio" <?php echo $id; ?> name="sc_time_format" value="<?php echo esc_attr( $format ); ?>"<?php echo $checked; ?> />
@@ -756,11 +756,11 @@ function ajax_date_format() {
 		? wp_unslash( $_POST['sc_date'] )
 		: '';
 
-	// Format
+	// Get format
 	$format = sanitize_option( 'date_format', $date );
 
-	// Uses WordPress locale & time zone
-	$retval = date_i18n( $format );
+	// Format and translate
+	$retval = sugar_calendar_format_date_i18n( $format );
 
 	// Output
 	wp_die( $retval );
@@ -778,11 +778,11 @@ function ajax_time_format() {
 		? wp_unslash( $_POST['sc_date'] )
 		: '';
 
-	// Format
+	// Get format
 	$format = sanitize_option( 'time_format', $time );
 
-	// Uses WordPress locale & time zone
-	$retval = date_i18n( $format );
+	// Format and translate
+	$retval = sugar_calendar_format_date_i18n( $format );
 
 	// Output
 	wp_die( $retval );

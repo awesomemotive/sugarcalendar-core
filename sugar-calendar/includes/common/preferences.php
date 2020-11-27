@@ -50,7 +50,7 @@ function sugar_calendar_get_user_preference( $key = '', $default = '', $user_id 
 	}
 
 	// Fallback to default if empty
-	if ( in_array( $retval, $empties, true ) && ! empty( $default ) ) {
+	if ( in_array( $retval, $empties, true ) ) {
 		$retval = $default;
 	}
 

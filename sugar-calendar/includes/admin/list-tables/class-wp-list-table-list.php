@@ -332,7 +332,7 @@ class Basic extends Base_List_Table {
 		}
 
 		// Format the date/time
-		$dt = $item->format_date( $format, $item->start );
+		$dt = $item->start_date( $format );
 
 		// All-day Events have floating time zones
 		if ( ! empty( $item->start_tz ) && ! $item->is_all_day() ) {
@@ -348,7 +348,7 @@ class Basic extends Base_List_Table {
 
 			// Maybe add timezone
 			if ( ! empty( $item->start_tz ) ) {
-				$retval .= '<br><span class="sc-timezone">' . sugar_calendar_format_timezone( $tz ) . '</span>';
+				$retval .= '<br><span class="sc-timezone">' . $this->get_time_zone( $tz ) . '</span>';
 			}
 		}
 
@@ -383,7 +383,7 @@ class Basic extends Base_List_Table {
 		}
 
 		// Bail if all-day and only 1 day
-		if ( $item->is_all_day() && ( $item->format_date( 'Y-m-d', $item->start ) === $item->format_date( 'Y-m-d', $item->end ) ) ) {
+		if ( $item->is_all_day() && ( $item->start_date( 'Y-m-d' ) === $item->end_date( 'Y-m-d' ) ) ) {
 			return $retval;
 		}
 
@@ -405,7 +405,7 @@ class Basic extends Base_List_Table {
 		}
 
 		// Format the date/time
-		$dt = $item->format_date( $format, $item->end );
+		$dt = $item->end_date( $format );
 
 		// All-day Events have floating time zones
 		if ( ! empty( $item->end_tz ) && ! $item->is_all_day() ) {
@@ -425,7 +425,7 @@ class Basic extends Base_List_Table {
 
 			// Maybe add timezone
 			if ( ! empty( $item->end_tz ) ) {
-				$retval .= '<br><span class="sc-timezone">' . sugar_calendar_format_timezone( $tz ) . '</span>';
+				$retval .= '<br><span class="sc-timezone">' . $this->get_time_zone( $tz ) . '</span>';
 			}
 		}
 

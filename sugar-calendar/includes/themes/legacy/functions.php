@@ -764,8 +764,8 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 function sc_month_num_to_name( $n ) {
 	$timestamp = mktime( 0, 0, 0, $n, 1, 2005 );
 
-	// Uses WordPress locale & time zone
-	return date_i18n( 'F', $timestamp );
+	// Uses WordPress locale
+	return sugar_calendar_format_date_i18n( 'F', $timestamp );
 }
 
 /**
@@ -870,10 +870,10 @@ function sc_get_event_date( $event_id = 0, $formatted = true ) {
 
 	// Get the date format, and format start
 	$format     = sc_get_date_format();
-	$dt         = $event->format_date( 'Y-m-d', $event->start );
+	$dt         = $event->start_date( 'Y-m-d' );
 
 	// @todo needs time zone support
-	$start_date = date_i18n( $format, $retval );
+	$start_date = sugar_calendar_format_date_i18n( $format, $retval );
 	$start_html = '<span class="sc-date-start"><time datetime="' . esc_attr( $dt ) . '">' . esc_html( $start_date ) . '</time></span>';
 
 	// Get the end date
@@ -885,11 +885,11 @@ function sc_get_event_date( $event_id = 0, $formatted = true ) {
 	}
 
 	// @todo needs time zone support
-	$end_date = date_i18n( $format, $end );
+	$end_date = sugar_calendar_format_date_i18n( $format, $end );
 
 	// Add end to start, with separator
 	if ( $end_date !== $start_date ) {
-		$dt       = $event->format_date( 'Y-m-d', $event->end );
+		$dt       = $event->end_date( 'Y-m-d' );
 		$end_html = '<span class="sc-date-start-end-sep"> - </span><span class="sc-date-end"><time datetime="' . esc_attr( $dt ) . '">' . esc_html( $end_date ) . '</time></span>';
 		$retval   = $start_html . $end_html;
 
@@ -931,9 +931,7 @@ function sc_get_formatted_date( $event_id = 0, $timestamp = null ) {
 	// Maybe format a timestamp if one was found
 	if ( ! empty( $timestamp ) ) {
 		$format = sc_get_date_format();
-
-		// Uses WordPress locale & time zone
-		$retval = date_i18n( $format, $timestamp );
+		$retval = sugar_calendar_format_date_i18n( $format, $timestamp );
 	}
 
 	// Return a possibly formatted start date & time
@@ -1003,7 +1001,7 @@ function sc_get_event_start_time( $event_id = 0 ) {
 		$mktime = mktime( $hour, $minute, 0, $month, $day, $year );
 
 		// @todo needs time zone support
-		$time   = date_i18n( $format, $mktime );
+		$time   = sugar_calendar_format_date_i18n( $format, $mktime );
 	}
 
 	return apply_filters( 'sc_event_start_time', $time, $hour, $minute, $am_pm );
@@ -1051,7 +1049,7 @@ function sc_get_event_end_time( $event_id = 0 ) {
 		$mktime = mktime( $hour, $minute, 0, $month, $day, $year );
 
 		// @todo needs time zone support
-		$time   = date_i18n( $format, $mktime );
+		$time   = sugar_calendar_format_date_i18n( $format, $mktime );
 	}
 
 	return apply_filters( 'sc_event_end_time', $time, $hour, $minute );

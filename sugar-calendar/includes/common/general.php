@@ -89,11 +89,12 @@ function sugar_calendar_date( $format = 'Y-m-d H:i:s', $timestamp = null, $timez
 		$timezone = sugar_calendar_get_timezone_object( $timezone );
 	}
 
-	//
+	// Get DateTime object (with time zone) and use it to format
 	$dto    = date_create( '@' . $timestamp, $timezone );
 	$retval = $dto->format( $format );
 
-	return $retval;
+	// Filter & return
+	return apply_filters( 'sugar_calendar_date', $retval, $format, $timestamp, $timezone );
 }
 
 /**

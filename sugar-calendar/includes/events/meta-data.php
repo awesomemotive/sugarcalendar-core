@@ -225,3 +225,14 @@ function sugar_calendar_sanitize_location( $value = '' ) {
 function sugar_calendar_sanitize_color( $value = '' ) {
 	return sugar_calendar_sanitize_hex_color( trim( strip_tags( $value ) ) );
 }
+
+/**
+ * Sanitize time zone for saving
+ *
+ * @since 2.1.0
+ *
+ * @param string $value
+ */
+function sugar_calendar_sanitize_timezone( $value = '' ) {
+	return sugar_calendar_validate_timezone( trim( strip_tags( $value ) ) );
+}

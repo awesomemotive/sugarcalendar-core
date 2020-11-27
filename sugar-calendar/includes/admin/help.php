@@ -378,20 +378,20 @@ function add_settings_tabs() {
 	// Time table
 	$time_table = ob_get_clean();
 
-	// Timezone table
+	// Time zone table
 	ob_start(); ?>
 
 	<table class="sc-date-time-format-table sc-custom-time-table">
 		<thead>
 			<tr>
-				<th colspan="3"><?php esc_html_e( 'Timezone', 'sugar-calendar' ); ?></th>
+				<th colspan="3"><?php esc_html_e( 'Time Zone', 'sugar-calendar' ); ?></th>
 			</tr>
 		</thead>
 
 		<tbody class="tbody">
 			<tr>
 				<th><code class="code">e</code></th>
-				<td><?php esc_html_e( 'Timezone identifier', 'sugar-calendar' ); ?></td>
+				<td><?php esc_html_e( 'Time zone identifier', 'sugar-calendar' ); ?></td>
 				<td><code>UTC</code>, <code>GMT</code>, <code>Atlantic/Azores</code></td>
 			</tr>
 
@@ -415,13 +415,13 @@ function add_settings_tabs() {
 
 			<tr>
 				<th><code class="code">T</code></th>
-				<td><?php esc_html_e( 'Timezone abbreviation', 'sugar-calendar' ); ?></td>
+				<td><?php esc_html_e( 'Time zone abbreviation', 'sugar-calendar' ); ?></td>
 				<td><code>EST</code>, <code>MDT</code> ...</td>
 			</tr>
 
 			<tr>
 				<th><code class="code">Z</code></th>
-				<td><?php echo __( 'Timezone offset in seconds.<br>West of UTC is negative.<br>East of UTC is positive.', 'sugar-calendar' ); ?></td>
+				<td><?php echo __( 'Time zone offset in seconds.<br>West of UTC is negative.<br>East of UTC is positive.', 'sugar-calendar' ); ?></td>
 				<td><?php echo __( '<code>-43200</code> through <code>50400</code>', 'sugar-calendar' ); ?></td>
 			</tr>
 		</tbody>
@@ -429,7 +429,7 @@ function add_settings_tabs() {
 
 	<?php
 
-	// Timezone table
+	// Time zone table
 	$timezone_table = ob_get_clean();
 
 	// Full table
@@ -533,10 +533,10 @@ function add_settings_tabs() {
 		'content'	=> $time_table
 	) );
 
-	// Timezone
+	// Time zone
 	get_current_screen()->add_help_tab( array(
-		'id'		=> 'timezone-format',
-		'title'		=> __( '&mdash; Timezone', 'sugar-calendar' ),
+		'id'		=> 'time-zone-format',
+		'title'		=> __( '&mdash; Time zone', 'sugar-calendar' ),
 		'content'	=> $timezone_table
 	) );
 

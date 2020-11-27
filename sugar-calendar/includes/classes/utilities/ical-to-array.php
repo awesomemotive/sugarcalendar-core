@@ -1305,7 +1305,7 @@ class ToArray {
 		// Maybe strip the "T" for time
 		$ical_date = str_replace( 'T', '', $ical_date );
 
-		// Maybe strip the "Z" for timezone
+		// Maybe strip the "Z" for time zone
 		$ical_date = str_replace( 'Z', '', $ical_date );
 
 		// Maybe strip out empty spaces, because some services seem to use them?

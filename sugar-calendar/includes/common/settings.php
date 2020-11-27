@@ -21,6 +21,11 @@ function sugar_calendar_register_settings() {
 	register_setting( 'sc_main_display', 'sc_date_format' );
 	register_setting( 'sc_main_display', 'sc_time_format' );
 
+	// Time Zones
+	register_setting( 'sc_main_timezones', 'sc_timezone_convert' );
+	register_setting( 'sc_main_timezones', 'sc_timezone_type' );
+	register_setting( 'sc_main_timezones', 'sc_timezone' );
+
 	// Editor
 	register_setting( 'sc_main_editing', 'sc_editor_type' );
 	register_setting( 'sc_main_editing', 'sc_custom_fields' );

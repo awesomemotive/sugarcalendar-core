@@ -48,8 +48,8 @@ class Day extends Base_List_Table {
 		$this->grid_end   = strtotime( 'tomorrow  -1 second', $this->grid_start );
 
 		// Setup the day ranges
-		$view_start = date_i18n( 'Y-m-d H:i:s', $this->grid_start );
-		$view_end   = date_i18n( 'Y-m-d H:i:s', $this->grid_end   );
+		$view_start = gmdate( 'Y-m-d H:i:s', $this->grid_start );
+		$view_end   = gmdate( 'Y-m-d H:i:s', $this->grid_end   );
 
 		// Setup views
 		$this->set_view( $view_start, $view_end );
@@ -67,12 +67,12 @@ class Day extends Base_List_Table {
 	public function get_columns() {
 
 		// Lowercase day, for column key
-		$day = strtolower( date_i18n( 'l', $this->grid_start ) );
+		$day = strtolower( gmdate( 'l', $this->grid_start ) );
 
 		// Return Week & Day
 		return array(
-			'hour' => sprintf( esc_html_x( 'Wk. %s', 'Week number', 'sugar-calendar' ), date_i18n( 'W', $this->today ) ),
-			$day   => date_i18n( 'l, F j, Y', $this->grid_start ),
+			'hour' => sprintf( esc_html_x( 'Wk. %s', 'Week number', 'sugar-calendar' ), gmdate( 'W', $this->today ) ),
+			$day   => gmdate( 'l, F j, Y', $this->grid_start ),
 		);
 	}
 
@@ -174,7 +174,7 @@ class Day extends Base_List_Table {
 	protected function get_all_day_row() {
 
 		// Set the day
-		$day = date_i18n( 'd', $this->grid_start );
+		$day = gmdate( 'd', $this->grid_start );
 
 		// Start an output buffer
 		ob_start(); ?>
@@ -209,7 +209,7 @@ class Day extends Base_List_Table {
 	protected function get_multi_day_row() {
 
 		// Set the day
-		$day = date_i18n( 'd', $this->grid_start );
+		$day = gmdate( 'd', $this->grid_start );
 
 		// Start an output buffer
 		ob_start(); ?>
@@ -267,7 +267,7 @@ class Day extends Base_List_Table {
 		$start = $this->get_current_cell( 'start' );
 
 		// Hour for row
-		$hour = date_i18n( 'H', $start );
+		$hour = gmdate( 'H', $start );
 
 		// No row classes
 		$classes = array(
@@ -276,7 +276,7 @@ class Day extends Base_List_Table {
 		);
 
 		// Is this the current hour?
-		if ( date_i18n( 'H', $this->now ) === $hour ) {
+		if ( gmdate( 'H', $this->now ) === $hour ) {
 			$classes[] = 'this-hour';
 		}
 
@@ -285,7 +285,7 @@ class Day extends Base_List_Table {
 
 		<tr class="<?php echo implode( ' ', $classes ); ?>">
 			<th class="column-hour<?php echo $this->get_hour_class(); ?>">
-				<?php echo date_i18n( 'g:i a', $start ); ?>
+				<?php echo gmdate( 'g:i a', $start ); ?>
 			</th>
 
 		<?php

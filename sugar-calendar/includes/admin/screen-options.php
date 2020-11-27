@@ -56,6 +56,7 @@ function display( $settings = '', $screen = false ) {
  * @since 2.0.0
  */
 function preferences() {
+	global $wp_locale;
 
 	// Get the preferences
 	$preferences = array(
@@ -87,13 +88,13 @@ function preferences() {
 				</th>
 				<td>
 					<select id="start_of_week" name="start_of_week">
-						<option value="0" <?php selected( $start_of_week, 0); ?>><?php esc_html_e( 'Sunday', 'sugar-calendar' ); ?></option>
-						<option value="1" <?php selected( $start_of_week, 1); ?>><?php esc_html_e( 'Monday', 'sugar-calendar' ); ?></option>
-						<option value="2" <?php selected( $start_of_week, 2); ?>><?php esc_html_e( 'Tuesday', 'sugar-calendar' ); ?></option>
-						<option value="3" <?php selected( $start_of_week, 3); ?>><?php esc_html_e( 'Wednesday', 'sugar-calendar' ); ?></option>
-						<option value="4" <?php selected( $start_of_week, 4); ?>><?php esc_html_e( 'Thursday', 'sugar-calendar' ); ?></option>
-						<option value="5" <?php selected( $start_of_week, 5); ?>><?php esc_html_e( 'Friday', 'sugar-calendar' ); ?></option>
-						<option value="6" <?php selected( $start_of_week, 6); ?>><?php esc_html_e( 'Saturday', 'sugar-calendar' ); ?></option>
+						<option value="0" <?php selected( $start_of_week, 0 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 0 ) ); ?></option>
+						<option value="1" <?php selected( $start_of_week, 1 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 1 ) ); ?></option>
+						<option value="2" <?php selected( $start_of_week, 2 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 2 ) ); ?></option>
+						<option value="3" <?php selected( $start_of_week, 3 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 3 ) ); ?></option>
+						<option value="4" <?php selected( $start_of_week, 4 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 4 ) ); ?></option>
+						<option value="5" <?php selected( $start_of_week, 5 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 5 ) ); ?></option>
+						<option value="6" <?php selected( $start_of_week, 6 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 6 ) ); ?></option>
 					</select>
 					<p class="description">
 						<?php esc_html_e( 'Select the first day of the week', 'sugar-calendar' ); ?>

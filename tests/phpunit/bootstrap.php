@@ -17,7 +17,7 @@ if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 
 // If that's not right, we are out of ideas
 if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
-	echo "Could not find {$_tests_dir}/includes/functions.php, have you run bin/install-wp-tests.sh ?" . PHP_EOL; // WPCS: XSS ok.
+	echo "Could not find {$_tests_dir}/includes/functions.php. Have you run `bash bin/install-wp-tests.sh` ?" . PHP_EOL; // WPCS: XSS ok.
 	exit( 1 );
 }
 

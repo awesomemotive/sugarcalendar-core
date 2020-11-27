@@ -75,7 +75,7 @@ class Basic extends Base_List_Table {
 		$this->list_end   = strtotime( $boundary, $this->list_start );
 
 		// View end
-		$view_end = date_i18n( 'Y-m-d H:i:s', $this->list_end );
+		$view_end = gmdate( 'Y-m-d H:i:s', $this->list_end );
 
 		// Set the view
 		$this->set_view( $view_start, $view_end );
@@ -309,17 +309,53 @@ class Basic extends Base_List_Table {
 		// Default return value
 		$retval = '&mdash;';
 
-		// Start
-		if ( ! $item->is_empty_date( $item->start ) ) {
-			$dt     = $item->format_date( 'Y-m-d\TH:i:s\Z', $item->start );
-			$retval = '<time datetime="' . esc_attr( $dt ) . '">' . $this->get_event_date( $item->start );
+		// Bail if empty date
+		if ( $item->is_empty_date( $item->start ) ) {
+			return $retval;
+		}
 
-			// Maybe add time if not all-day
-			if ( ! $item->is_all_day() ) {
-				 $retval .= '<br><span>' . $this->get_event_time( $item->start ) . '</span>';
+		// Floating
+		$format = 'Y-m-d\TH:i:s';
+		$tz     = 'floating';
+
+		// Non-floating
+		if ( ! empty( $item->start_tz ) ) {
+
+			// Get the offset
+			$offset = sugar_calendar_get_timezone_offset( array(
+				'datetime' => $item->start,
+				'timezone' => $item->start_tz
+			) );
+
+			// Add timezone to format
+			$format = "Y-m-d\TH:i:s{$offset}";
+		}
+
+		// Format the date/time
+		$dt = $item->start_date( $format );
+
+		// All-day Events have floating time zones
+		if ( ! empty( $item->start_tz ) && ! $item->is_all_day() ) {
+			$tz = $item->start_tz;
+		}
+
+		// Start the <time> tag, with timezone data
+		$retval = '<time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '"><span class="sc-date">' . $this->get_event_date( $item->start ) . '</span>';
+
+		// Maybe add time if not all-day
+		if ( ! $item->is_all_day() ) {
+			$retval .= '<br><span class="sc-time">' . $this->get_event_time( $item->start ) . '</span>';
+
+			// Maybe add timezone
+			if ( ! empty( $item->start_tz ) ) {
+				$retval .= '<br><span class="sc-timezone">' . $this->get_time_zone( $tz ) . '</span>';
 			}
 		}
 
+		// Close the <time> tag
+		$retval .= '</time>';
+
+		// Return the <time> tag
 		return $retval;
 	}
 
@@ -336,21 +372,67 @@ class Basic extends Base_List_Table {
 		// Default return value
 		$retval = '&mdash;';
 
-		// End
-		if ( ! $item->is_empty_date( $item->end ) && ! ( $item->format_date( 'Y-m-d', $item->start ) === $item->format_date( 'Y-m-d', $item->end ) ) ) {
-			$dt              = $item->format_date( 'Y-m-d\TH:i:s\Z', $item->end );
-			$retval          = '<time datetime="' . esc_attr( $dt ) . '">' . $this->get_event_date( $item->end );
-			$this->item_ends = true;
-
-			// Maybe add time if not all-day
-			if ( ! $item->is_all_day() ) {
-				 $retval .= '<br><span>' . $this->get_event_time( $item->end ) . '</span>';
-			}
-
-			$retval .= '</time>';
+		// Bail if empty date
+		if ( $item->is_empty_date( $item->end ) ) {
+			return $retval;
 		}
 
-		// Return the end date & time
+		// Bail if start & end are exactly the same
+		if ( $item->start === $item->end ) {
+			return $retval;
+		}
+
+		// Bail if all-day and only 1 day
+		if ( $item->is_all_day() && ( $item->start_date( 'Y-m-d' ) === $item->end_date( 'Y-m-d' ) ) ) {
+			return $retval;
+		}
+
+		// Floating
+		$format = 'Y-m-d\TH:i:s';
+		$tz     = 'floating';
+
+		// Non-floating
+		if ( ! empty( $item->end_tz ) ) {
+
+			// Get the offset
+			$offset = sugar_calendar_get_timezone_offset( array(
+				'datetime' => $item->end,
+				'timezone' => $item->end_tz
+			) );
+
+			// Add timezone to format
+			$format = "Y-m-d\TH:i:s{$offset}";
+		}
+
+		// Format the date/time
+		$dt = $item->end_date( $format );
+
+		// All-day Events have floating time zones
+		if ( ! empty( $item->end_tz ) && ! $item->is_all_day() ) {
+			$tz = $item->end_tz;
+
+		// Maybe fallback to the start time zone
+		} elseif ( ! empty( $item->start_tz ) ) {
+			$tz = $item->start_tz;
+		}
+
+		// Start the <time> tag, with timezone data
+		$retval = '<time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '"><span class="sc-date">' . $this->get_event_date( $item->end ) . '</span>';
+
+		// Maybe add time if not all-day
+		if ( ! $item->is_all_day() ) {
+			$retval .= '<br><span class="sc-time">' . $this->get_event_time( $item->end ) . '</span>';
+
+			// Maybe add timezone
+			if ( ! empty( $item->end_tz ) ) {
+				$retval .= '<br><span class="sc-timezone">' . $this->get_time_zone( $tz ) . '</span>';
+			}
+		}
+
+		// Close the <time> tag
+		$retval .= '</time>';
+
+		// Return the <time> tag
 		return $retval;
 	}
 
@@ -369,16 +451,42 @@ class Basic extends Base_List_Table {
 
 		// Duration
 		if ( $item->is_all_day() ) {
-			$duration = esc_html__( 'All Day', 'sugar-calendar' );
+			$retval = esc_html__( 'All Day', 'sugar-calendar' );
 
 			// Maybe add duration if mulitple all-day days
 			if ( $item->is_multi() ) {
-				$duration .= '<br>' . $this->get_human_diff_time( $item->start, $item->end );
+				$retval .= '<br>' . $this->get_human_diff_time( $item->start, $item->end );
 			}
 
 		// Get diff only if end exists
-		} elseif ( true === $this->item_ends ) {
-			$duration = $this->get_human_diff_time( $item->start, $item->end );
+		} elseif ( ( $item->start !== $item->end ) && ! $item->is_empty_date( $item->end ) ) {
+
+			// Default date times
+			$start  = strtotime( $item->start );
+			$end    = strtotime( $item->end   );
+
+			// Adjust start by time zone
+			if ( ! empty( $item->start_tz ) ) {
+				$str   = sprintf( '%s %s', $item->start, $item->start_tz );
+				$start = strtotime( $str );
+			}
+
+			// Adjust end by time zone
+			if ( ! empty( $item->end_tz ) ) {
+				$str   = sprintf( '%s %s', $item->end, $item->end_tz );
+				$end   = strtotime( $str );
+			}
+
+			// Get human readible date time difference
+			$retval     = $this->get_human_diff_time( $start, $end );
+
+			// Look for a time zone difference
+			$difference = $this->get_human_diff_timezone( $item->start_tz, $item->end_tz );
+
+			// Wrap difference in a decorative span
+			if ( ! empty( $difference ) ) {
+				$retval .= '<br><span class="sc-timechange">' . esc_html( $difference ) . '</span>';
+			}
 		}
 
 		// Return the duration

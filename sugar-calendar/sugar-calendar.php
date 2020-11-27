@@ -282,6 +282,7 @@ final class Plugin {
 		new Posts\Meta\Back_Compat();
 
 		// Taxonomy Features
+		new Term_Timezones( $this->file );
 		new Term_Colors( $this->file );
 	}
 
@@ -318,12 +319,13 @@ final class Plugin {
 		// Events Helpers
 		require_once SC_PLUGIN_DIR . 'includes/classes/objects/class-wp-event-schema.php';
 
-		// Term Colors
-		require_once SC_PLUGIN_DIR . 'includes/classes/term-colors/class-term-meta-ui.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/term-colors/class-term-colors.php';
-
 		// Utilities
+		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/class-term-meta-ui.php';
 		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/ical-to-array.php';
+
+		// Terms
+		require_once SC_PLUGIN_DIR . 'includes/classes/terms/class-term-colors.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/terms/class-term-timezones.php';
 
 		// Event files
 		require_once SC_PLUGIN_DIR . 'includes/events/capabilities.php';
@@ -355,6 +357,7 @@ final class Plugin {
 		require_once SC_PLUGIN_DIR . 'includes/common/general.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/preferences.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/settings.php';
+		require_once SC_PLUGIN_DIR . 'includes/common/time-zones.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/time.php';
 		require_once SC_PLUGIN_DIR . 'includes/common/hooks.php';
 	}

@@ -369,19 +369,14 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $format
-	 * @param string $datetime
+	 * @param string $format    Defaults to MySQL datetime format.
+	 * @param mixed  $timestamp Defaults to "now".
+	 * @param string $timezone  Defaults to time zone preference.
+	 * @param string $locale    Defaults to user/site preference.
 	 *
 	 * @return string
 	 */
-	public static function format_date( $format = 'Y-m-d H:i:s', $datetime = '' ) {
-
-		// Maybe format
-		$date = is_string( $datetime )
-			? strtotime( $datetime )
-			: (int) $datetime;
-
-		// Return date part
-		return date_i18n( $format, $date );
+	public static function format_date( $format = 'Y-m-d H:i:s', $timestamp = null, $timezone = null, $locale = null ) {
+		return sugar_calendar_format_date_i18n( $format, $timestamp, $timezone, $locale );
 	}
 }

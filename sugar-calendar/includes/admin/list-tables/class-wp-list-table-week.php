@@ -44,7 +44,7 @@ class Week extends Base_List_Table {
 		$days       = array_values( $this->get_week_days() );
 		$first_day  = $days[ 0 ];
 		$last_day   = $days[ count( $days ) - 1 ];
-		$week_start = ( $this->start_of_week == date_i18n( 'w', $this->today ) );
+		$week_start = ( $this->start_of_week == gmdate( 'w', $this->today ) );
 
 		// Reset the week
 		$where_is_thumbkin = ( true === $week_start )
@@ -61,8 +61,8 @@ class Week extends Base_List_Table {
 		$this->grid_end   = strtotime( $here_i_am,         $this->today );
 
 		// Setup the week ranges
-		$view_start = date_i18n( 'Y-m-d H:i:s', $this->grid_start );
-		$view_end   = date_i18n( 'Y-m-d H:i:s', $this->grid_end   );
+		$view_start = gmdate( 'Y-m-d H:i:s', $this->grid_start );
+		$view_end   = gmdate( 'Y-m-d H:i:s', $this->grid_end   );
 
 		// Setup views
 		$this->set_view( $view_start, $view_end );
@@ -85,7 +85,7 @@ class Week extends Base_List_Table {
 
 			// Setup return value
 			$retval = array(
-				'hour' => sprintf( esc_html_x( 'Wk. %s', 'Week number', 'sugar-calendar' ), date_i18n( 'W', $this->today ) )
+				'hour' => sprintf( esc_html_x( 'Wk. %s', 'Week number', 'sugar-calendar' ), gmdate( 'W', $this->today ) )
 			);
 
 			// PHP day => day ID
@@ -96,7 +96,7 @@ class Week extends Base_List_Table {
 
 			// Loop through days and add them to the return value
 			foreach ( $days as $day ) {
-				$retval[ $day ] = date_i18n( 'D, M. j', $time );
+				$retval[ $day ] = gmdate( 'D, M. j', $time );
 				$time           = $time + ( DAY_IN_SECONDS * 1 );
 			}
 		}
@@ -217,9 +217,9 @@ class Week extends Base_List_Table {
 				$offset = ceil( DAY_IN_SECONDS * $i );
 
 				// Calc the day/month/year
-				$day    = date_i18n( 'd', $this->grid_start + $offset );
-				$month  = date_i18n( 'm', $this->grid_start + $offset );
-				$year   = date_i18n( 'Y', $this->grid_start + $offset );
+				$day    = gmdate( 'd', $this->grid_start + $offset );
+				$month  = gmdate( 'm', $this->grid_start + $offset );
+				$year   = gmdate( 'Y', $this->grid_start + $offset );
 
 				// Set the current cell
 				$this->set_current_cell( array(
@@ -265,9 +265,9 @@ class Week extends Base_List_Table {
 				$offset = ceil( DAY_IN_SECONDS * $i );
 
 				// Calc the day/month/year
-				$day    = date_i18n( 'd', $this->grid_start + $offset );
-				$month  = date_i18n( 'm', $this->grid_start + $offset );
-				$year   = date_i18n( 'Y', $this->grid_start + $offset );
+				$day    = gmdate( 'd', $this->grid_start + $offset );
+				$month  = gmdate( 'm', $this->grid_start + $offset );
+				$year   = gmdate( 'Y', $this->grid_start + $offset );
 
 				// Set the current cell
 				$this->set_current_cell( array(
@@ -322,7 +322,7 @@ class Week extends Base_List_Table {
 		$start = $this->get_current_cell( 'start' );
 
 		// Hour for row
-		$hour = date_i18n( 'H', $start );
+		$hour = gmdate( 'H', $start );
 
 		// No row classes
 		$classes = array(
@@ -331,7 +331,7 @@ class Week extends Base_List_Table {
 		);
 
 		// Is this the current hour?
-		if ( date_i18n( 'H', $this->now ) === $hour ) {
+		if ( gmdate( 'H', $this->now ) === $hour ) {
 			$classes[] = 'this-hour';
 		}
 
@@ -340,7 +340,7 @@ class Week extends Base_List_Table {
 
 		<tr class="<?php echo implode( ' ', $classes ); ?>">
 			<th class="column-hour<?php echo $this->get_hour_class(); ?>">
-				<?php echo date_i18n( 'g:i a', $start ); ?>
+				<?php echo gmdate( 'g:i a', $start ); ?>
 			</th>
 
 		<?php
@@ -413,9 +413,9 @@ class Week extends Base_List_Table {
 			$offset = ceil( DAY_IN_SECONDS * $column );
 
 			// Calc the day/month/year
-			$day    = date_i18n( 'd', $this->grid_start + $offset );
-			$month  = date_i18n( 'm', $this->grid_start + $offset );
-			$year   = date_i18n( 'Y', $this->grid_start + $offset );
+			$day    = gmdate( 'd', $this->grid_start + $offset );
+			$month  = gmdate( 'm', $this->grid_start + $offset );
+			$year   = gmdate( 'Y', $this->grid_start + $offset );
 
 			// Setup cell boundaries
 			$this->set_current_cell( array(

@@ -21,36 +21,25 @@ defined( 'ABSPATH' ) || exit;
 function sugar_calendar_get_event_start_date_time( $post = false ) {
 
 	// Get the post object & start date
-	$post    = get_post( $post );
-	$event   = sugar_calendar_get_event_by_object( $post->ID, 'post' );
-	$date    = $event->start;
-	$all_day = $event->all_day;
+	$post  = get_post( $post );
+	$event = sugar_calendar_get_event_by_object( $post->ID, 'post' );
 
-	// Start an output buffer
-	ob_start();
+	// Default return value
+	$retval = '&mdash;';
 
-	if ( ! empty( $date ) ) {
-		$date = strtotime( $date );
-		$df   = get_option( 'date_format' );
-		$tf   = get_option( 'time_format' );
+	if ( ! empty( $event->start ) ) {
 
-		echo date_i18n( $df, $date );
+		// Date
+		$retval = $event->start_date( get_option( 'date_format' ) );
 
 		// Time
-		if ( empty( $all_day ) ) {
-			echo '<br>' . date_i18n( $tf, $date );
+		if ( empty( $event->all_day ) ) {
+			$retval .= '<br>' . $event->start_date( get_option( 'time_format' ) );
 		}
-
-	// No start date
-	} else {
-		echo '&mdash;';
 	}
 
-	// Get the output buffer
-	$retval = ob_get_clean();
-
 	// Filter & return
-	return apply_filters( 'sugar_calendar_get_event_start_date_time', $retval, $post, $date );
+	return apply_filters( 'sugar_calendar_get_event_start_date_time', $retval, $post, $event->start );
 }
 
 /**
@@ -65,35 +54,25 @@ function sugar_calendar_get_event_start_date_time( $post = false ) {
 function sugar_calendar_get_event_end_date_time( $post = false ) {
 
 	// Get the post object & start date
-	$post    = get_post( $post );
-	$event   = sugar_calendar_get_event_by_object( $post->ID );
-	$date    = $event->end;
-	$all_day = $event->all_day;
+	$post  = get_post( $post );
+	$event = sugar_calendar_get_event_by_object( $post->ID );
 
-	// Start an output buffer
-	ob_start();
+	// Default return value
+	$retval = '&mdash;';
 
-	if ( ! empty( $date ) ) {
-		$date = strtotime( $date );
-		$df   = get_option( 'date_format' );
-		$tf   = get_option( 'time_format' );
+	if ( ! empty( $event->end ) ) {
 
-		echo date_i18n( $df, $date );
+		// Date
+		$retval = $event->end_date( get_option( 'date_format' ) );
 
 		// Time
-		if ( empty( $all_day ) ) {
-			echo '<br>' . date_i18n( $tf, $date );
+		if ( empty( $event->all_day ) ) {
+			$retval .= '<br>' . $event->end_date( get_option( 'time_format' ) );
 		}
-
-	} else {
-		echo '&mdash;';
 	}
 
-	// Get the output buffer
-	$retval = ob_get_clean();
-
 	// Filter & return
-	return apply_filters( 'sugar_calendar_get_event_end_date_time', $retval, $post, $date );
+	return apply_filters( 'sugar_calendar_get_event_end_date_time', $retval, $post, $event->end );
 }
 
 /**
@@ -113,18 +92,12 @@ function sugar_calendar_get_event_recurrence( $post = false ) {
 	$recurrence = $event->recurrence;
 	$intervals  = sugar_calendar_get_recurrence_types();
 
-	// Start an output buffer
-	ob_start();
+	// Default return value
+	$retval = '&mdash;';
 
 	if ( ! empty( $recurrence ) && isset( $intervals[ $recurrence ] ) ) {
-		echo $intervals[ $recurrence ];
-
-	} else {
-		echo '&mdash;';
+		$retval = $intervals[ $recurrence ];
 	}
-
-	// Get the output buffer
-	$retval = ob_get_clean();
 
 	// Filter & return
 	return apply_filters( 'sugar_calendar_get_event_recurrence', $retval, $post, $recurrence );
@@ -148,19 +121,19 @@ function sugar_calendar_get_event_duration( $post = false ) {
 	$start_date = $event->start;
 	$end_date   = $event->end;
 
-	// Start an output buffer
-	ob_start();
+	// Default return value
+	$retval = '';
 
 	// All day event
 	if ( true === $all_day ) {
 
 		// 1 day
-		if ( $event->format_date( 'd', $start_date ) === $event->format_date( 'd', $end_date ) ) {
-			esc_html_e( 'All Day', 'sugar-calendar' );
+		if ( $event->start_date( 'd' ) === $event->end_date( 'd' ) ) {
+			$retval .= esc_html__( 'All Day', 'sugar-calendar' );
 
 		// More than 1 day
 		} else {
-			echo sugar_calendar_human_diff_time(
+			$retval .= sugar_calendar_human_diff_time(
 				strtotime( 'midnight', $start_date ),
 				strtotime( 'midnight', $end_date   )
 			);
@@ -168,12 +141,9 @@ function sugar_calendar_get_event_duration( $post = false ) {
 
 	// Specific times
 	} else {
-		echo sugar_calendar_human_diff_time( $start_date, $end_date );
+		$retval .= sugar_calendar_human_diff_time( $start_date, $end_date );
 	}
 
-	// Get the output buffer
-	$retval = ob_get_clean();
-
 	// Filter & return
-	return apply_filters( 'sugar_calendar_get_event_end_date_time', $retval, $post, $all_day, $start_date, $end_date );
+	return apply_filters( 'sugar_calendar_get_event_duration', $retval, $post, $all_day, $start_date, $end_date );
 }

@@ -206,8 +206,8 @@ function sugar_calendar_get_timezone_offset( $args = array() ) {
 
 	// Timezone is valid, so get the offset from it
 	if ( ! empty( $tzo ) ) {
-		$dt  = new \DateTime( $r['datetime'], $tzo );
-		$off = $dt->getOffset();
+		$dto = date_create( $r['datetime'], $tzo );
+		$off = $dto->getOffset();
 	}
 
 	// Format the return value

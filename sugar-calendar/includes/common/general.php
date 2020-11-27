@@ -90,8 +90,8 @@ function sugar_calendar_date( $format = 'Y-m-d H:i:s', $timestamp = null, $timez
 	}
 
 	//
-	$datetime = new \DateTime( '@' . $timestamp, $timezone );
-	$retval   = $datetime->format( $format );
+	$dto    = date_create( '@' . $timestamp, $timezone );
+	$retval = $dto->format( $format );
 
 	return $retval;
 }

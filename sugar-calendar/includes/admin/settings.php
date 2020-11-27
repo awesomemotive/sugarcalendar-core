@@ -426,7 +426,7 @@ function display_subsection() {
 	 * @param string[] $default_date_formats Array of default date formats.
 	 */
 	$date_formats = array_unique( apply_filters( 'date_formats', array(
-		__( 'F j, Y', 'sugar-calendar' ),
+		esc_html__( 'F j, Y', 'sugar-calendar' ),
 		'Y-m-d',
 		'm/d/Y',
 		'd/m/Y',
@@ -442,13 +442,17 @@ function display_subsection() {
 	 * @param string[] $default_time_formats Array of default time formats.
 	 */
 	$time_formats = array_unique( apply_filters( 'time_formats', array(
-		__( 'g:i a', 'sugar-calendar' ),
+		esc_html__( 'g:i a', 'sugar-calendar' ),
 		'g:i A',
 		'H:i'
 	) ) );
 
 	// Is custom time checked?
-	$custom_time_checked = ! in_array( $sc_time_format, $time_formats, true ); ?>
+	$custom_time_checked = ! in_array( $sc_time_format, $time_formats, true );
+
+	// Uses WordPress locale & time zone
+	$looks_like_date = date_i18n( $sc_date_format );
+	$looks_like_time = date_i18n( $sc_time_format ); ?>
 
 	<table class="form-table">
 		<tbody>
@@ -470,13 +474,13 @@ function display_subsection() {
 				</th>
 				<td>
 					<select name="sc_start_of_week" id="sc_start_of_week" class="sc-select-chosen">
-						<option value="0" <?php selected( $start_of_week, 0); ?>><?php esc_html_e( 'Sunday', 'sugar-calendar' ); ?></option>
-						<option value="1" <?php selected( $start_of_week, 1); ?>><?php esc_html_e( 'Monday', 'sugar-calendar' ); ?></option>
-						<option value="2" <?php selected( $start_of_week, 2); ?>><?php esc_html_e( 'Tuesday', 'sugar-calendar' ); ?></option>
-						<option value="3" <?php selected( $start_of_week, 3); ?>><?php esc_html_e( 'Wednesday', 'sugar-calendar' ); ?></option>
-						<option value="4" <?php selected( $start_of_week, 4); ?>><?php esc_html_e( 'Thursday', 'sugar-calendar' ); ?></option>
-						<option value="5" <?php selected( $start_of_week, 5); ?>><?php esc_html_e( 'Friday', 'sugar-calendar' ); ?></option>
-						<option value="6" <?php selected( $start_of_week, 6); ?>><?php esc_html_e( 'Saturday', 'sugar-calendar' ); ?></option>
+						<option value="0" <?php selected( $start_of_week, 0 ); ?>><?php esc_html_e( 'Sunday',    'sugar-calendar' ); ?></option>
+						<option value="1" <?php selected( $start_of_week, 1 ); ?>><?php esc_html_e( 'Monday',    'sugar-calendar' ); ?></option>
+						<option value="2" <?php selected( $start_of_week, 2 ); ?>><?php esc_html_e( 'Tuesday',   'sugar-calendar' ); ?></option>
+						<option value="3" <?php selected( $start_of_week, 3 ); ?>><?php esc_html_e( 'Wednesday', 'sugar-calendar' ); ?></option>
+						<option value="4" <?php selected( $start_of_week, 4 ); ?>><?php esc_html_e( 'Thursday',  'sugar-calendar' ); ?></option>
+						<option value="5" <?php selected( $start_of_week, 5 ); ?>><?php esc_html_e( 'Friday',    'sugar-calendar' ); ?></option>
+						<option value="6" <?php selected( $start_of_week, 6 ); ?>><?php esc_html_e( 'Saturday',  'sugar-calendar' ); ?></option>
 					</select>
 					<p class="description">
 						<?php esc_html_e( 'Select the first day of the week', 'sugar-calendar' ); ?>
@@ -534,7 +538,7 @@ function display_subsection() {
 
 						<p class="description">
 							<strong><?php esc_html_e( 'Looks Like:', 'sugar-calendar' ); ?></strong>
-							<span class="example"><?php echo date_i18n( $sc_date_format ); ?></span>
+							<span class="example"><?php echo esc_html( $looks_like_date ); ?></span>
 							<span class='spinner'></span>
 						</p>
 					</fieldset>
@@ -591,7 +595,7 @@ function display_subsection() {
 
 						<p class="description">
 							<strong><?php esc_html_e( 'Looks Like:', 'sugar-calendar' ); ?></strong>
-							<span class="example"><?php echo date_i18n( $sc_time_format ); ?></span>
+							<span class="example"><?php echo esc_html( $looks_like_time ); ?></span>
 							<span class='spinner'></span>
 						</p>
 					</fieldset>

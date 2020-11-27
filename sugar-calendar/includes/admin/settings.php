@@ -705,7 +705,7 @@ function time_zone_subsection() {
 						<?php endforeach; ?>
 					</select>
 					<p class="description">
-						<?php _e( '"Off" by default.<br>"Single" allows Events to have one time zone.<br>"Multi" allows Events to have different start & end time zones.<br>"Single" and "Multi" will enable time zones for Calendars.', 'sugar-calendar' ); ?>
+						<?php _e( '"Off" by default (Existing time zone data still appears).<br>"Single" allows Events to have one time zone.<br>"Multi" allows Events to have different start & end time zones.<br>"Single" and "Multi" will enable time zones for Calendars.', 'sugar-calendar' ); ?>
 					</p>
 				</td>
 			</tr>

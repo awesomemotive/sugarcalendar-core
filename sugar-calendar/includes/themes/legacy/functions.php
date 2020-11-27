@@ -207,29 +207,10 @@ function sc_get_event_class( $object_id = false ) {
  * @return string
  */
 function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
+	global $wp_locale;
 
-	//start draw table
-	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
-
-	$day_names_large = array(
-		0 => __( 'Sunday',    'sugar-calendar' ),
-		1 => __( 'Monday',    'sugar-calendar' ),
-		2 => __( 'Tuesday',   'sugar-calendar' ),
-		3 => __( 'Wednesday', 'sugar-calendar' ),
-		4 => __( 'Thursday',  'sugar-calendar' ),
-		5 => __( 'Friday',    'sugar-calendar' ),
-		6 => __( 'Saturday',  'sugar-calendar' )
-	);
-
-	$day_names_small = array(
-		0 => __( 'Sun', 'sugar-calendar' ),
-		1 => __( 'Mon', 'sugar-calendar' ),
-		2 => __( 'Tue', 'sugar-calendar' ),
-		3 => __( 'Wed', 'sugar-calendar' ),
-		4 => __( 'Thr', 'sugar-calendar' ),
-		5 => __( 'Fri', 'sugar-calendar' ),
-		6 => __( 'Sat', 'sugar-calendar' )
-	);
+	$day_names_large = $wp_locale->weekday;
+	$day_names_small = array_values( $wp_locale->weekday_initial );
 
 	$week_start_day = sc_get_week_start_day();
 
@@ -242,15 +223,12 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
 		$day_names[] = $end_day;
 	}
 
-	if ( $size == 'small' ) {
-		foreach ( $day_names as $key => $day ) {
-			$day_names[ $key ] = substr( $day, 0, 1 );
-		}
-	}
-
+	//start draw table
+	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
+
 	for ( $i = 0; $i <= 6; $i++ ) {
-		$calendar .= '<th class="calendar-day-head">' . $day_names[ $i ] . '</th>';
+		$calendar .= '<th class="calendar-day-head">' . esc_html( $day_names[ $i ] ) . '</th>';
 	}
 	$calendar .= '</tr>';
 
@@ -377,29 +355,10 @@ function sc_draw_calendar_month( $display_time, $size = 'large', $category = nul
  * @return string
  */
 function sc_draw_calendar_week( $display_time, $size = 'large', $category = null ) {
+	global $wp_locale;
 
-	//start draw table
-	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
-
-	$day_names_large = array(
-		0 => __( 'Sunday',    'sugar-calendar' ),
-		1 => __( 'Monday',    'sugar-calendar' ),
-		2 => __( 'Tuesday',   'sugar-calendar' ),
-		3 => __( 'Wednesday', 'sugar-calendar' ),
-		4 => __( 'Thursday',  'sugar-calendar' ),
-		5 => __( 'Friday',    'sugar-calendar' ),
-		6 => __( 'Saturday',  'sugar-calendar' )
-	);
-
-	$day_names_small = array(
-		0 => __( 'Sun', 'sugar-calendar' ),
-		1 => __( 'Mon', 'sugar-calendar' ),
-		2 => __( 'Tue', 'sugar-calendar' ),
-		3 => __( 'Wed', 'sugar-calendar' ),
-		4 => __( 'Thr', 'sugar-calendar' ),
-		5 => __( 'Fri', 'sugar-calendar' ),
-		6 => __( 'Sat', 'sugar-calendar' )
-	);
+	$day_names_large = $wp_locale->weekday;
+	$day_names_small = array_values( $wp_locale->weekday_initial );
 
 	$week_start_day = sc_get_week_start_day();
 
@@ -412,15 +371,12 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 		$day_names[] = $end_day;
 	}
 
-	if ( $size == 'small' ) {
-		foreach ( $day_names as $key => $day ) {
-			$day_names[ $key ] = substr( $day, 0, 1 );
-		}
-	}
-
+	//start draw table
+	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
+
 	for ( $i = 0; $i <= 6; $i++ ) {
-		$calendar .= '<th class="calendar-day-head">' . $day_names[ $i ] . '</th>';
+		$calendar .= '<th class="calendar-day-head">' . esc_html( $day_names[ $i ] ) . '</th>';
 	}
 	$calendar .= '</tr>';
 
@@ -506,29 +462,10 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
  * @return string
  */
 function sc_draw_calendar_2week( $display_time, $size = 'large', $category = null ) {
+	global $wp_locale;
 
-	//start draw table
-	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
-
-	$day_names_large = array(
-		0 => __( 'Sunday',    'sugar-calendar' ),
-		1 => __( 'Monday',    'sugar-calendar' ),
-		2 => __( 'Tuesday',   'sugar-calendar' ),
-		3 => __( 'Wednesday', 'sugar-calendar' ),
-		4 => __( 'Thursday',  'sugar-calendar' ),
-		5 => __( 'Friday',    'sugar-calendar' ),
-		6 => __( 'Saturday',  'sugar-calendar' )
-	);
-
-	$day_names_small = array(
-		0 => __( 'Sun', 'sugar-calendar' ),
-		1 => __( 'Mon', 'sugar-calendar' ),
-		2 => __( 'Tue', 'sugar-calendar' ),
-		3 => __( 'Wed', 'sugar-calendar' ),
-		4 => __( 'Thr', 'sugar-calendar' ),
-		5 => __( 'Fri', 'sugar-calendar' ),
-		6 => __( 'Sat', 'sugar-calendar' )
-	);
+	$day_names_large = $wp_locale->weekday;
+	$day_names_small = array_values( $wp_locale->weekday_initial );
 
 	$week_start_day = sc_get_week_start_day();
 
@@ -541,15 +478,12 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 		$day_names[] = $end_day;
 	}
 
-	if ( $size == 'small' ) {
-		foreach ( $day_names as $key => $day ) {
-			$day_names[ $key ] = substr( $day, 0, 1 );
-		}
-	}
-
+	//start draw table
+	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
+
 	for ( $i = 0; $i <= 6; $i++ ) {
-		$calendar .= '<th class="calendar-day-head">' . $day_names[ $i ] . '</th>';
+		$calendar .= '<th class="calendar-day-head">' . esc_html( $day_names[ $i ] ) . '</th>';
 	}
 	$calendar .= '</tr>';
 
@@ -640,42 +574,19 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
  * @return string
  */
 function sc_draw_calendar_day( $display_time, $size = 'large', $category = null ) {
+	global $wp_locale;
 
-	//start draw table
-	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar">';
-
-	$day_names_large = array(
-		0 => __( 'Sunday',    'sugar-calendar' ),
-		1 => __( 'Monday',    'sugar-calendar' ),
-		2 => __( 'Tuesday',   'sugar-calendar' ),
-		3 => __( 'Wednesday', 'sugar-calendar' ),
-		4 => __( 'Thursday',  'sugar-calendar' ),
-		5 => __( 'Friday',    'sugar-calendar' ),
-		6 => __( 'Saturday',  'sugar-calendar' )
-	);
-
-	$day_names_small = array(
-		0 => __( 'Sun', 'sugar-calendar' ),
-		1 => __( 'Mon', 'sugar-calendar' ),
-		2 => __( 'Tue', 'sugar-calendar' ),
-		3 => __( 'Wed', 'sugar-calendar' ),
-		4 => __( 'Thr', 'sugar-calendar' ),
-		5 => __( 'Fri', 'sugar-calendar' ),
-		6 => __( 'Sat', 'sugar-calendar' )
-	);
+	$day_names_large = $wp_locale->weekday;
+	$day_names_small = array_values( $wp_locale->weekday_initial );
 
 	$day_of_week = date( 'w', $display_time );
 
 	$day_names = $size == 'small' ? $day_names_small : $day_names_large;
 
-	if ( $size == 'small' ) {
-		foreach ( $day_names as $key => $day ) {
-			$day_names[ $key ] = substr( $day, 0, 1 );
-		}
-	}
-
+	//start draw table
+	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar">';
 	$calendar .= '<tr class="calendar-row">';
-	$calendar .= '<th class="calendar-day-head">' . $day_names[ $day_of_week ] . '</th>';
+	$calendar .= '<th class="calendar-day-head">' . esc_html( $day_names[ $day_of_week ] ) . '</th>';
 	$calendar .= '</tr>';
 
 	$display_day   = date( 'j', $display_time );
@@ -750,43 +661,21 @@ function sc_draw_calendar_day( $display_time, $size = 'large', $category = null 
  * @return string
  */
 function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null ) {
+	global $wp_locale;
 
-	//start draw table
-	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
-
-	$day_names_large = array(
-		0 => __( 'Sunday',   'sugar-calendar' ),
-		1 => __( 'Monday',   'sugar-calendar' ),
-		2 => __( 'Tuesday',   'sugar-calendar' ),
-		3 => __( 'Wednesday', 'sugar-calendar' ),
-		4 => __( 'Thursday',  'sugar-calendar' ),
-		5 => __( 'Friday',    'sugar-calendar' ),
-		6 => __( 'Saturday',  'sugar-calendar' )
-	);
-
-	$day_names_small = array(
-		0 => __( 'Sun', 'sugar-calendar' ),
-		1 => __( 'Mon', 'sugar-calendar' ),
-		2 => __( 'Tue', 'sugar-calendar' ),
-		3 => __( 'Wed', 'sugar-calendar' ),
-		4 => __( 'Thr', 'sugar-calendar' ),
-		5 => __( 'Fri', 'sugar-calendar' ),
-		6 => __( 'Sat', 'sugar-calendar' )
-	);
+	$day_names_large = $wp_locale->weekday;
+	$day_names_small = array_values( $wp_locale->weekday_initial );
 
 	$day_of_week = date( 'w', $display_time );
 
 	$day_names = $size == 'small' ? $day_names_small : $day_names_large;
 
-	if ( $size == 'small' ) {
-		foreach ( $day_names as $key => $day ) {
-			$day_names[ $key ] = substr( $day, 0, 1 );
-		}
-	}
-
+	//start draw table
+	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
+
 	for ( $i = 0; $i <= 3; $i++ ) {
-		$calendar .= '<th class="calendar-day-head">' . $day_names[ $day_of_week ] . '</th>';
+		$calendar .= '<th class="calendar-day-head">' . esc_html( $day_names[ $day_of_week ] ) . '</th>';
 		if ( $day_of_week == 6 ) {
 			$day_of_week = 0;
 		} else {

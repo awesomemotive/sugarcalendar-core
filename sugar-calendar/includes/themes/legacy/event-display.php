@@ -142,11 +142,28 @@ function sc_add_date_time_details( $post_id = 0 ) {
 
 		// Default format
 		$format = 'Y-m-d\TH:i:s';
+		$tz     = 'floating';
 
-		// @todo start time zone
+		// Non-floating
+		if ( ! empty( $event->start_tz ) ) {
 
-		// Get start datetime
+			// Get the offset
+			$offset = sugar_calendar_get_timezone_offset( array(
+				'datetime' => $event->start,
+				'timezone' => $event->start_tz
+			) );
+
+			// Add timezone to format
+			$format = "Y-m-d\TH:i:s{$offset}";
+		}
+
+		// Format the date/time
 		$dt = $event->start_date( $format );
+
+		// All-day Events have floating time zones
+		if ( ! empty( $event->start_tz ) && ! $event->is_all_day() ) {
+			$tz = $event->start_tz;
+		}
 
 		// Set to all-day and noop the end time
 		if ( ! empty( $all_day ) ) :
@@ -159,7 +176,7 @@ function sc_add_date_time_details( $post_id = 0 ) {
 			<span class="sc_event_start_time">
 				<?php esc_html_e( 'Time:', 'sugar-calendar' ); ?>
 
-				<time datetime="<?php echo esc_attr( $dt ); ?>">
+				<time datetime="<?php echo esc_attr( $dt ); ?>" data-timezone="<?php echo esc_attr( $tz ); ?>">
 					<?php echo esc_html( $start_time ); ?>
 				</time>
 			</span><?php
@@ -169,18 +186,39 @@ function sc_add_date_time_details( $post_id = 0 ) {
 
 				// Format
 				$format = 'Y-m-d\TH:i:s';
+				$tz     = 'floating';
 
-				// @todo end time zone
+				// Non-floating
+				if ( ! empty( $event->end_tz ) ) {
 
-				// Get end datetime
-				$dt = $event->end_date( 'Y-m-d\TH:i:s' ); ?>
+					// Get the offset
+					$offset = sugar_calendar_get_timezone_offset( array(
+						'datetime' => $event->end,
+						'timezone' => $event->end_tz
+					) );
+
+					// Add timezone to format
+					$format = "Y-m-d\TH:i:s{$offset}";
+				}
+
+				// Format the date/time
+				$dt = $event->end_date( $format );
+
+				// All-day Events have floating time zones
+				if ( ! empty( $event->end_tz ) && ! $event->is_all_day() ) {
+					$tz = $event->end_tz;
+
+				// Maybe fallback to the start time zone
+				} elseif ( empty( $event->end_tz ) && ! empty( $event->start_tz ) ) {
+					$tz = $event->start_tz;
+				} ?>
 
 				<span class="sc_event_time_sep">
 					<?php esc_html_e( 'to', 'sugar-calendar' ); ?>
 				</span>
 
 				<span class="sc_event_end_time">
-					<time datetime="<?php echo esc_attr( $dt ); ?>">
+					<time datetime="<?php echo esc_attr( $dt ); ?>" data-timezone="<?php echo esc_attr( $tz ); ?>">
 						<?php echo esc_html( $end_time ); ?>
 					</time>
 				</span>

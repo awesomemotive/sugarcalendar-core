@@ -866,15 +866,22 @@ function sc_get_event_date( $event_id = 0, $formatted = true ) {
 	}
 
 	// Get the event
-	$event      = sugar_calendar_get_event_by_object( $event_id );
+	$event  = sugar_calendar_get_event_by_object( $event_id );
 
 	// Get the date format, and format start
-	$format     = sc_get_date_format();
-	$dt         = $event->start_date( 'Y-m-d' );
+	$format = sc_get_date_format();
+	$dt     = $event->start_date( 'Y-m-d' );
 
-	// @todo needs time zone support
+	// Default time zone
+	$tz     = 'floating';
+
+	// Maybe use the start time zone
+	if ( ! empty( $event->start_tz ) ) {
+		$tz = $event->start_tz;
+	}
+
 	$start_date = sugar_calendar_format_date_i18n( $format, $retval );
-	$start_html = '<span class="sc-date-start"><time datetime="' . esc_attr( $dt ) . '">' . esc_html( $start_date ) . '</time></span>';
+	$start_html = '<span class="sc-date-start"><time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '">' . esc_html( $start_date ) . '</time></span>';
 
 	// Get the end date
 	$end = get_post_meta( $event_id, 'sc_event_end_date_time', true );
@@ -884,13 +891,29 @@ function sc_get_event_date( $event_id = 0, $formatted = true ) {
 		return $start_html;
 	}
 
-	// @todo needs time zone support
+	// End date
 	$end_date = sugar_calendar_format_date_i18n( $format, $end );
 
 	// Add end to start, with separator
 	if ( $end_date !== $start_date ) {
+
+		// Default time zone
+		$tz = 'floating';
+
+		// All-day Events have floating time zones
+		if ( ! empty( $event->end_tz ) && ! $event->is_all_day() ) {
+			$tz = $event->end_tz;
+
+		// Maybe fallback to the start time zone
+		} elseif ( empty( $event->end_tz ) && ! empty( $event->start_tz ) ) {
+			$tz = $event->start_tz;
+		}
+
+		// End date
 		$dt       = $event->end_date( 'Y-m-d' );
-		$end_html = '<span class="sc-date-start-end-sep"> - </span><span class="sc-date-end"><time datetime="' . esc_attr( $dt ) . '">' . esc_html( $end_date ) . '</time></span>';
+
+		// Output
+		$end_html = '<span class="sc-date-start-end-sep"> - </span><span class="sc-date-end"><time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '">' . esc_html( $end_date ) . '</time></span>';
 		$retval   = $start_html . $end_html;
 
 	// Just the start

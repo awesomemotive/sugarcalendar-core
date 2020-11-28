@@ -90,7 +90,14 @@ function sugar_calendar_format_date( $format = 'Y-m-d H:i:s', $timestamp = null,
 	}
 
 	// Get DateTime object (with time zone) and use it to format
-	$dto    = date_create( '@' . $timestamp, $timezone );
+	$dto = date_create( '@' . $timestamp );
+
+	// Maybe set the time zone
+	if ( is_object( $timezone ) ) {
+		$dto->setTimezone( $timezone );
+	}
+
+	// Format
 	$retval = $dto->format( $format );
 
 	// Filter & return
@@ -140,6 +147,11 @@ function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $timestamp = 
 
 	// Get DateTime object (with time zone) and use it to format
 	$dto = date_create( '@' . $timestamp, $timezone );
+
+	// Maybe set the time zone
+	if ( is_object( $timezone ) ) {
+		$dto->setTimezone( $timezone );
+	}
 
 	// No locale available, so fallback to regular date formatting
 	if ( empty( $wp_locale->month ) || empty( $wp_locale->weekday ) ) {

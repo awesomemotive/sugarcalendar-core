@@ -372,8 +372,8 @@ function do_20_migration() {
 			$all_day = false;
 
 			// Format the start & end
-			$start = date( 'Y-m-d H:i:s', $start );
-			$end   = date( 'Y-m-d H:i:s', $end   );
+			$start = gmdate( 'Y-m-d H:i:s', $start );
+			$end   = gmdate( 'Y-m-d H:i:s', $end   );
 
 			// Sanitize start & end to prevent data entry errors
 			$start_date_time = \Sugar_Calendar\Admin\Editor\Meta\sanitize_start( $start, $end, $all_day );
@@ -391,7 +391,7 @@ function do_20_migration() {
 			// Format recurrence end
 			$recur_end = (int) get_post_meta( $post->ID, 'sc_recur_until', true );
 			$recur_end = ! empty( $recur_end )
-				? date( 'Y-m-d H:i:s', $recur_end )
+				? gmdate( 'Y-m-d H:i:s', $recur_end )
 				: '';
 
 			// Add the event

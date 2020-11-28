@@ -273,8 +273,8 @@ class Month extends Base_List_Table {
 
 			// Setup cell boundaries
 			$this->set_current_cell( array(
-				'start'  => mktime( 0,  0,  0,  $this->month, $day, $this->year ),
-				'end'    => mktime( 23, 59, 59, $this->month, $day, $this->year ),
+				'start'  => gmmktime( 0,  0,  0,  $this->month, $day, $this->year ),
+				'end'    => gmmktime( 23, 59, 59, $this->month, $day, $this->year ),
 				'row'    => $row,
 				'index'  => $i,
 				'offset' => $offset

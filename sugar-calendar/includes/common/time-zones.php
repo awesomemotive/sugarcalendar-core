@@ -39,7 +39,7 @@ function sugar_calendar_get_timezone_diff( $timezone1 = '', $timezone2 = 'UTC', 
 
 	// Pass both timezones into the array
 	$retval = sugar_calendar_get_timezone_diff_multi( array(
-		'datetime'  => $datetime,
+		'time'      => $datetime,
 		'direction' => 'left',
 		'format'    => $format,
 		'timezones' => array( $timezone1, $timezone2 )
@@ -62,7 +62,7 @@ function sugar_calendar_get_timezone_diff_multi( $args = array() ) {
 
 	// Parse arguments
 	$r = wp_parse_args( $args, array(
-		'datetime'  => 'now',
+		'time'      => 'now',
 		'direction' => 'left',
 		'format'    => '',
 		'timezones' => array()
@@ -95,7 +95,7 @@ function sugar_calendar_get_timezone_diff_multi( $args = array() ) {
 
 			// Get the offset
 			$offset = sugar_calendar_get_timezone_offset( array(
-				'datetime' => $r['datetime'],
+				'time'     => $r['time'],
 				'timezone' => $timezone,
 				'format'   => 'seconds'
 			) );
@@ -193,7 +193,7 @@ function sugar_calendar_get_timezone_offset( $args = array() ) {
 
 	// Parse arguments
 	$r = wp_parse_args( $args, array(
-		'datetime' => 'now',
+		'time'     => 'now',
 		'timezone' => 'UTC',
 		'format'   => 'RFC2822'
 	) );
@@ -206,12 +206,9 @@ function sugar_calendar_get_timezone_offset( $args = array() ) {
 
 	// Timezone is valid, so get the offset from it
 	if ( ! empty( $tzo ) ) {
-		$dto = date_create( $r['datetime'] );
 
-		// Maybe set the time zone
-		if ( is_object( $tzo ) ) {
-			$dto->setTimezone( $tzo );
-		}
+		// Get DateTime object (with time zone) and use it to format
+		$dto = sugar_calendar_get_datetime_object( $r['time'], $tzo );
 
 		// Get the offset
 		$off = $dto->getOffset();
@@ -399,6 +396,47 @@ function sugar_calendar_get_timezone_type() {
 }
 
 /**
+ * Get a date time object.
+ *
+ * @since 2.1.0
+ * @param string $time
+ * @param string $timezone
+ * @return object
+ */
+function sugar_calendar_get_datetime_object( $time = null, $timezone = null ) {
+
+	// Fallback to "now"
+	if ( null === $time ) {
+		$time = (int) sugar_calendar_get_request_time();
+
+	// Fallback to whatever strtotime() guesses at
+	} elseif ( ! is_numeric( $time ) ) {
+		$time = strtotime( $time );
+	}
+
+	// Maybe use the default
+	if ( false === $timezone ) {
+		$timezone = sugar_calendar_get_timezone();
+	}
+
+	// Maybe get the DateTimeZone object
+	if ( is_string( $timezone ) ) {
+		$timezone = sugar_calendar_get_timezone_object( $timezone );
+	}
+
+	// Get DateTime object (with time zone) and use it to format
+	$retval = date_create( '@' . $time, $timezone );
+
+	// Maybe set the time zone
+	if ( is_object( $timezone ) ) {
+		$retval->setTimezone( $timezone );
+	}
+
+	// Filter & return
+	return apply_filters( 'sugar_calendar_get_datetime_object', $retval, $time, $timezone );
+}
+
+/**
  * Get a time zone object.
  *
  * @since 2.1.0
@@ -490,7 +528,7 @@ function sugar_calendar_get_manual_timezone_offset( $datetime = 'now', $timezone
 	// Not a manual offset
 	} else {
 		$retval = sugar_calendar_get_timezone_offset( array(
-			'datetime' => $datetime,
+			'time'     => $datetime,
 			'timezone' => $timezone,
 			'format'   => 'hours'
 		) );

@@ -1339,7 +1339,7 @@ class ToArray {
 		$date = array_map( array( $this, 'sanitize_absint' ), $date );
 
 		// Convert date array to a Unix time
-		$time = mktime(
+		$time = gmmktime(
 			$date[ 4 ],
 			$date[ 5 ],
 			$date[ 6 ],

@@ -186,8 +186,8 @@ class Day extends Base_List_Table {
 
 			// Set the current cell
 			$this->set_current_cell( array(
-				'start' => mktime( 0,  0,  0, $this->month, $day, $this->year ),
-				'end'   => mktime( 23, 59, 0, $this->month, $day, $this->year ),
+				'start' => gmmktime( 0,  0,  0, $this->month, $day, $this->year ),
+				'end'   => gmmktime( 23, 59, 0, $this->month, $day, $this->year ),
 				'type'  => 'all_day',
 				'index' => 0
 			) );
@@ -221,8 +221,8 @@ class Day extends Base_List_Table {
 
 			// Set the current cell
 			$this->set_current_cell( array(
-				'start' => mktime( 0,  0,  0, $this->month, $day, $this->year ),
-				'end'   => mktime( 23, 59, 0, $this->month, $day, $this->year ),
+				'start' => gmmktime( 0,  0,  0, $this->month, $day, $this->year ),
+				'end'   => gmmktime( 23, 59, 0, $this->month, $day, $this->year ),
 				'type'  => 'multi_day',
 				'index' => 0
 			) );
@@ -355,8 +355,8 @@ class Day extends Base_List_Table {
 
 			// Setup cell boundaries
 			$this->set_current_cell( array(
-				'start'  => mktime( $row, 0,  0, $this->month, $this->day, $this->year ),
-				'end'    => mktime( $row, 59, 0, $this->month, $this->day, $this->year ),
+				'start'  => gmmktime( $row, 0,  0, $this->month, $this->day, $this->year ),
+				'end'    => gmmktime( $row, 59, 0, $this->month, $this->day, $this->year ),
 				'row'    => $row,
 				'index'  => $i,
 				'offset' => 0

@@ -107,10 +107,10 @@ function preferences() {
 					<label for="date_format"><?php esc_html_e( 'Date Format', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
-					<label title="F j, Y"><input type="radio" name="date_format" value="F j, Y" <?php checked( 'F j, Y', $date_format ); ?>> <span><?php echo date( 'F j, Y' ); ?></span></label><br/>
-					<label title="d/m/Y"><input type="radio" name="date_format" value="d/m/Y" <?php checked( 'd/m/Y', $date_format ); ?>> <span><?php echo date( 'd/m/Y' ); ?></span></label><br/>
-					<label title="m/d/Y"><input type="radio" name="date_format" value="m/d/Y" <?php checked( 'm/d/Y', $date_format ); ?>> <span><?php echo date( 'm/d/Y' ); ?></span></label><br/>
-					<label title="Y-m-d"><input type="radio" name="date_format" value="Y-m-d" <?php checked( 'Y-m-d', $date_format ); ?>> <span><?php echo date( 'Y-m-d' ); ?></span></label><br/>
+					<label title="F j, Y"><input type="radio" name="date_format" value="F j, Y" <?php checked( 'F j, Y', $date_format ); ?>> <span><?php echo gmdate( 'F j, Y' ); ?></span></label><br/>
+					<label title="d/m/Y"><input type="radio" name="date_format" value="d/m/Y" <?php checked( 'd/m/Y', $date_format ); ?>> <span><?php echo gmdate( 'd/m/Y' ); ?></span></label><br/>
+					<label title="m/d/Y"><input type="radio" name="date_format" value="m/d/Y" <?php checked( 'm/d/Y', $date_format ); ?>> <span><?php echo gmdate( 'm/d/Y' ); ?></span></label><br/>
+					<label title="Y-m-d"><input type="radio" name="date_format" value="Y-m-d" <?php checked( 'Y-m-d', $date_format ); ?>> <span><?php echo gmdate( 'Y-m-d' ); ?></span></label><br/>
 				</td>
 			</tr>
 
@@ -119,9 +119,9 @@ function preferences() {
 					<label for="time_format"><?php esc_html_e( 'Time Format', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
-					<label title="g:i a"><input type="radio" name="time_format" value="g:i a" <?php checked( 'g:i a', $time_format ); ?>> <span><?php echo date( 'g:i a' ); ?></span></label><br/>
-					<label title="g:i A"><input type="radio" name="time_format" value="g:i A" <?php checked( 'g:i A', $time_format ); ?>> <span><?php echo date( 'g:i A' ); ?></span></label><br/>
-					<label title="H:i"><input type="radio" name="time_format" value="H:i" <?php checked( 'H:i', $time_format ); ?>> <span><?php echo date( 'H:i' ); ?></span></label><br/>
+					<label title="g:i a"><input type="radio" name="time_format" value="g:i a" <?php checked( 'g:i a', $time_format ); ?>> <span><?php echo gmdate( 'g:i a' ); ?></span></label><br/>
+					<label title="g:i A"><input type="radio" name="time_format" value="g:i A" <?php checked( 'g:i A', $time_format ); ?>> <span><?php echo gmdate( 'g:i A' ); ?></span></label><br/>
+					<label title="H:i"><input type="radio" name="time_format" value="H:i" <?php checked( 'H:i', $time_format ); ?>> <span><?php echo gmdate( 'H:i' ); ?></span></label><br/>
 				</td>
 			</tr>
 		</tbody>

@@ -323,7 +323,7 @@ class Basic extends Base_List_Table {
 
 			// Get the offset
 			$offset = sugar_calendar_get_timezone_offset( array(
-				'datetime' => $item->start,
+				'time'     => $item->start,
 				'timezone' => $item->start_tz
 			) );
 
@@ -396,7 +396,7 @@ class Basic extends Base_List_Table {
 
 			// Get the offset
 			$offset = sugar_calendar_get_timezone_offset( array(
-				'datetime' => $item->end,
+				'time'     => $item->end,
 				'timezone' => $item->end_tz
 			) );
 

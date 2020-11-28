@@ -1128,7 +1128,7 @@ class Base_List_Table extends \WP_List_Table {
 		) );
 
 		// Return merged
-		return gmdate( 'Y-m-d H:i:s', mktime(
+		return gmdate( 'Y-m-d H:i:s', gmmktime(
 			$r['H'],
 			$r['i'],
 			$r['s'],

@@ -22,13 +22,13 @@ function sc_add_fields_to_rss() {
 		$event_month = get_post_meta( $post_id, 'sc_event_month', true );
 		$event_year  = get_post_meta( $post_id, 'sc_event_year', true );
 		$timestamp   = get_post_meta( $post_id, 'sc_event_date_time', true );
-		$event_time  = date( 'Y-m-d', $timestamp );
+		$event_time  = gmdate( 'Y-m-d', $timestamp );
 
 		$event_end_day   = get_post_meta( $post_id, 'sc_event_end_day_of_month', true );
 		$event_end_month = get_post_meta( $post_id, 'sc_event_end_month', true );
 		$event_end_year  = get_post_meta( $post_id, 'sc_event_end_year', true );
 		$timestamp       = get_post_meta( $post_id, 'sc_event_end_date_time', true );
-		$event_end_time  = date( 'Y-m-d', $timestamp );
+		$event_end_time  = gmdate( 'Y-m-d', $timestamp );
 
 ?><event_day><?php echo $event_day ?></event_day>
 <event_month><?php echo $event_month ?></event_month>

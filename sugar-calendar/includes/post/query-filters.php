@@ -47,7 +47,7 @@ function sc_modify_events_archive( $query = false ) {
 		$alias = 'sce';
 
 		// Get today, to query before/after
-		$today = date( 'Y-m-d 00:00:00' );
+		$today = gmdate( 'Y-m-d 00:00:00' );
 
 		// Display argument
 		$display_arg = ! empty( $_GET[ 'event-display' ] )

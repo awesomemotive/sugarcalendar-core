@@ -149,7 +149,7 @@ function sc_add_date_time_details( $post_id = 0 ) {
 
 			// Get the offset
 			$offset = sugar_calendar_get_timezone_offset( array(
-				'datetime' => $event->start,
+				'time'     => $event->start,
 				'timezone' => $event->start_tz
 			) );
 
@@ -193,7 +193,7 @@ function sc_add_date_time_details( $post_id = 0 ) {
 
 					// Get the offset
 					$offset = sugar_calendar_get_timezone_offset( array(
-						'datetime' => $event->end,
+						'time'     => $event->end,
 						'timezone' => $event->end_tz
 					) );
 

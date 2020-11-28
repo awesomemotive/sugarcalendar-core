@@ -62,46 +62,22 @@ function sugar_calendar_get_assets_version() {
  *
  * @since 2.1.0
  *
- * @param string $format    Defaults to MySQL datetime format.
- * @param mixed  $timestamp Defaults to "now".
- * @param string $timezone  Defaults to time zone preference.
+ * @param string $format   Defaults to MySQL datetime format.
+ * @param mixed  $time     Defaults to "now".
+ * @param string $timezone Defaults to time zone preference.
  *
  * @return string
  */
-function sugar_calendar_format_date( $format = 'Y-m-d H:i:s', $timestamp = null, $timezone = null ) {
-
-	// Fallback to "now"
-	if ( null === $timestamp ) {
-		$timestamp = (int) sugar_calendar_get_request_time();
-
-	// Fallback to whatever strtotime() guesses at
-	} elseif ( ! is_numeric( $timestamp ) ) {
-		$timestamp = strtotime( $timestamp );
-	}
-
-	// Maybe use the default
-	if ( false === $timezone ) {
-		$timezone = sugar_calendar_get_timezone();
-	}
-
-	// Maybe get the DateTimeZone object
-	if ( is_string( $timezone ) ) {
-		$timezone = sugar_calendar_get_timezone_object( $timezone );
-	}
+function sugar_calendar_format_date( $format = 'Y-m-d H:i:s', $time = null, $timezone = null ) {
 
 	// Get DateTime object (with time zone) and use it to format
-	$dto = date_create( '@' . $timestamp );
-
-	// Maybe set the time zone
-	if ( is_object( $timezone ) ) {
-		$dto->setTimezone( $timezone );
-	}
+	$dto = sugar_calendar_get_datetime_object( $time, $timezone );
 
 	// Format
 	$retval = $dto->format( $format );
 
 	// Filter & return
-	return apply_filters( 'sugar_calendar_date', $retval, $format, $timestamp, $timezone );
+	return apply_filters( 'sugar_calendar_date', $retval, $format, $time, $timezone );
 }
 
 /**
@@ -111,14 +87,14 @@ function sugar_calendar_format_date( $format = 'Y-m-d H:i:s', $timestamp = null,
  *
  * @since 2.1.0
  *
- * @param string $format    Defaults to MySQL datetime format.
- * @param mixed  $timestamp Defaults to "now".
- * @param string $timezone  Defaults to time zone preference.
- * @param string $locale    Defaults to user/site preference.
+ * @param string $format   Defaults to MySQL datetime format.
+ * @param mixed  $time     Defaults to "now".
+ * @param string $timezone Defaults to time zone preference.
+ * @param string $locale   Defaults to user/site preference.
  *
  * @return string
  */
-function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $timestamp = null, $timezone = null, $locale = null ) {
+function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $time = null, $timezone = null, $locale = null ) {
 	global $wp_locale;
 
 	// Switch!
@@ -126,32 +102,8 @@ function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $timestamp = 
 		switch_to_locale( $locale );
 	}
 
-	// Fallback to "now"
-	if ( null === $timestamp ) {
-		$timestamp = (int) sugar_calendar_get_request_time();
-
-	// Fallback to whatever strtotime() guesses at
-	} elseif ( ! is_numeric( $timestamp ) ) {
-		$timestamp = strtotime( $timestamp );
-	}
-
-	// Maybe use the default
-	if ( false === $timezone ) {
-		$timezone = sugar_calendar_get_timezone();
-	}
-
-	// Maybe get the DateTimeZone object
-	if ( is_string( $timezone ) ) {
-		$timezone = sugar_calendar_get_timezone_object( $timezone );
-	}
-
 	// Get DateTime object (with time zone) and use it to format
-	$dto = date_create( '@' . $timestamp, $timezone );
-
-	// Maybe set the time zone
-	if ( is_object( $timezone ) ) {
-		$dto->setTimezone( $timezone );
-	}
+	$dto = sugar_calendar_get_datetime_object( $time, $timezone );
 
 	// No locale available, so fallback to regular date formatting
 	if ( empty( $wp_locale->month ) || empty( $wp_locale->weekday ) ) {
@@ -227,5 +179,5 @@ function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $timestamp = 
 	}
 
 	// Filter & return
-	return apply_filters( 'sugar_calendar_date_i18n', $retval, $format, $timestamp, $timezone, $locale );
+	return apply_filters( 'sugar_calendar_date_i18n', $retval, $format, $time, $timezone, $locale );
 }

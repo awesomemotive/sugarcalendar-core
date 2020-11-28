@@ -428,13 +428,13 @@ function prepare_date_time( $prefix = 'start' ) {
 	$now = sugar_calendar_get_request_time();
 
 	// Get the current Year, Month, and Day, without any time
-	$nt  = date( 'Y-m-d H:i:s', mktime(
+	$nt  = gmdate( 'Y-m-d H:i:s', gmmktime(
 		0,
 		0,
 		0,
-		date( 'n', $now ),
-		date( 'j', $now ),
-		date( 'Y', $now )
+		gmdate( 'n', $now ),
+		gmdate( 'j', $now ),
+		gmdate( 'Y', $now )
 	) );
 
 	// Calendar date is set
@@ -470,17 +470,17 @@ function prepare_date_time( $prefix = 'start' ) {
 	}
 
 	// Make timestamp from pieces
-	$timestamp = mktime(
+	$timestamp = gmmktime(
 		intval( $hour ),
 		intval( $minutes ),
 		intval( $seconds ),
-		date( 'n', $date ),
-		date( 'j', $date ),
-		date( 'Y', $date )
+		gmdate( 'n', $date ),
+		gmdate( 'j', $date ),
+		gmdate( 'Y', $date )
 	);
 
 	// Format for MySQL
-	$retval = date( 'Y-m-d H:i:s', $timestamp );
+	$retval = gmdate( 'Y-m-d H:i:s', $timestamp );
 
 	// Return
 	return $retval;
@@ -538,18 +538,18 @@ function sanitize_start( $start = '', $end = '', $all_day = false ) {
 
 	// All day events end at the final second
 	if ( true === $all_day ) {
-		$start_int = mktime(
+		$start_int = gmmktime(
 			0,
 			0,
 			0,
-			date( 'n', $start_int ),
-			date( 'j', $start_int ),
-			date( 'Y', $start_int )
+			gmdate( 'n', $start_int ),
+			gmdate( 'j', $start_int ),
+			gmdate( 'Y', $start_int )
 		);
 	}
 
 	// Format
-	$retval = date( 'Y-m-d H:i:s', $start_int );
+	$retval = gmdate( 'Y-m-d H:i:s', $start_int );
 
 	// Return the new start
 	return $retval;
@@ -581,9 +581,9 @@ function sanitize_all_day( $all_day = false, $start = '', $end = '' ) {
 
 	// Starts at midnight and ends 1 second before
 	if (
-		( '00:00:00' === date( 'H:i:s', $start_int ) )
+		( '00:00:00' === gmdate( 'H:i:s', $start_int ) )
 		&&
-		( '23:59:59' === date( 'H:i:s', $end_int ) )
+		( '23:59:59' === gmdate( 'H:i:s', $end_int ) )
 	) {
 		$all_day = true;
 	}
@@ -656,18 +656,18 @@ function sanitize_end( $end = '', $start = '', $all_day = false ) {
 
 	// All day events end at the final second
 	if ( true === $all_day ) {
-		$end_int = mktime(
+		$end_int = gmmktime(
 			23,
 			59,
 			59,
-			date( 'n', $end_int ),
-			date( 'j', $end_int ),
-			date( 'Y', $end_int )
+			gmdate( 'n', $end_int ),
+			gmdate( 'j', $end_int ),
+			gmdate( 'Y', $end_int )
 		);
 	}
 
 	// Format
-	$retval = date( 'Y-m-d H:i:s', $end_int );
+	$retval = gmdate( 'Y-m-d H:i:s', $end_int );
 
 	// Return the new end
 	return $retval;
@@ -899,25 +899,25 @@ function section_duration( $event = null ) {
 	if ( ! empty( $end_date_time ) ) {
 
 		// Date
-		$end_date = date( 'Y-m-d', $end_date_time );
+		$end_date = gmdate( 'Y-m-d', $end_date_time );
 
 		// Only if not all-day
 		if ( empty( $all_day ) ) {
 
 			// Hour
-			$end_hour = date( $hour_format, $end_date_time );
+			$end_hour = gmdate( $hour_format, $end_date_time );
 			if ( empty( $end_hour ) ) {
 				$end_hour = '';
 			}
 
 			// Minute
-			$end_minute = date( 'i', $end_date_time );
+			$end_minute = gmdate( 'i', $end_date_time );
 			if ( empty( $end_hour ) || empty( $end_minute )) {
 				$end_minute = '';
 			}
 
 			// Day/night
-			$end_am_pm = date( 'a', $end_date_time );
+			$end_am_pm = gmdate( 'a', $end_date_time );
 			if ( empty( $end_hour ) && empty( $end_minute ) ) {
 				$end_am_pm = '';
 			}
@@ -942,25 +942,25 @@ function section_duration( $event = null ) {
 
 	// Date
 	if ( ! empty( $date_time ) ) {
-		$date = date( 'Y-m-d', $date_time );
+		$date = gmdate( 'Y-m-d', $date_time );
 
 		// Only if not all-day
 		if ( empty( $all_day ) ) {
 
 			// Hour
-			$hour = date( $hour_format, $date_time );
+			$hour = gmdate( $hour_format, $date_time );
 			if ( empty( $hour ) ) {
 				$hour = '';
 			}
 
 			// Minute
-			$minute = date( 'i', $date_time );
+			$minute = gmdate( 'i', $date_time );
 			if ( empty( $hour ) || empty( $minute ) ) {
 				$minute = '';
 			}
 
 			// Day/night
-			$am_pm = date( 'a', $date_time );
+			$am_pm = gmdate( 'a', $date_time );
 			if ( empty( $hour ) && empty( $minute ) ) {
 				$am_pm = '';
 			}

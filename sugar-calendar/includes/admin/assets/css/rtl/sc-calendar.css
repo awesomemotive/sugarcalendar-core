@@ -626,7 +626,8 @@ table.day th.column-sunday {
 }
 
 table.list span.sc-timechange,
-table.list span.sc-timezone {
+table.list span.sc-timezone,
+.wp-pointer-content span.sc-timezone {
 	font-size: 11px;
 	color: rgba(0, 0, 0, 0.4);
 }

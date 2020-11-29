@@ -1502,6 +1502,19 @@ class Base_List_Table extends \WP_List_Table {
 		return sugar_calendar_format_timezone( $timezone );
 	}
 
+	/**
+	 * Get the time zone offset
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	protected function get_time_zone_offset( $args = array() ) {
+		return sugar_calendar_get_timezone_offset( $args );
+	}
+
 	/** Pointers **************************************************************/
 
 	/**
@@ -1889,6 +1902,22 @@ class Base_List_Table extends \WP_List_Table {
 	protected function get_pointer_dates( $event = false ) {
 		$pointer_dates = array();
 
+		// Default time zone offset strings
+		$stz = '';
+		$etz = '';
+
+		// Start time zone
+		if ( ! empty( $event->start_tz ) ) {
+			$stz = '<span class="sc-timezone">' . esc_html( $this->get_time_zone( $event->start_tz ) ) . '</span>';
+		}
+
+		// End time zone
+		if ( ! empty( $event->end_tz ) ) {
+			$etz = '<span class="sc-timezone">' . esc_html( $this->get_time_zone( $event->end_tz ) ) . '</span>';
+		} elseif ( ! empty( $stz ) ) {
+			$etz = $stz;
+		}
+
 		// All day, single-day event
 		if ( $event->is_all_day() ) {
 
@@ -1956,26 +1985,36 @@ class Base_List_Table extends \WP_List_Table {
 
 				// Date & Time
 				if ( ! $event->is_empty_date( $event->start ) ) {
-					$start = sprintf(
+					$start = esc_html( sprintf(
 						esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ),
 						$this->get_event_time( $event->start ),
 						$GLOBALS['wp_locale']->get_weekday( $event->start_date( 'w' ) )
-					);
+					) );
+
+					// Maybe append time zone
+					if ( ! empty( $stz ) ) {
+						$start .= '<br>' . $stz;
+					}
 
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = '<span>'   . esc_html( $start )  . '</span>';
+					$pointer_dates['start']       = '<span>'   . $start  . '</span>'; // Unescaped
 				}
 
 				// Date & Time
 				if ( ! $event->is_empty_date( $event->end ) && ( $event->start !== $event->end ) ) {
-					$end = sprintf(
+					$end = esc_html( sprintf(
 						esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ),
 						$this->get_event_time( $event->end ),
 						$GLOBALS['wp_locale']->get_weekday( $event->end_date( 'w' ) )
-					);
+					) );
+
+					// Maybe append time zone
+					if ( ! empty( $etz ) ) {
+						$end .= '<br>' . $etz;
+					}
 
 					$pointer_dates['end_title'] = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']       = '<span>'   . esc_html( $end ) . '</span>';
+					$pointer_dates['end']       = '<span>'   . $end . '</span>'; // Unescaped
 				}
 			}
 		}
@@ -1990,16 +2029,18 @@ class Base_List_Table extends \WP_List_Table {
 
 				// No end
 				if ( empty( $event->recurrence_end ) ) {
-					$pointer_dates['interval'] = $intervals[ $event->recurrence ];
+					$pointer_dates['interval'] = esc_html( $intervals[ $event->recurrence ] );
 
 				// Recurrence ends
 				} elseif ( ! $event->is_empty_date( $event->recurrence_end ) ) {
-					$pointer_dates['recurrence_end'] = '<span>' . sprintf(
+					$recurring = sprintf(
 						esc_html_x( '%s from %s until %s', 'Weekly from December 1, 2030 until December 31, 2030', 'sugar-calendar' ),
 						$intervals[ $event->recurrence ],
 						$this->get_event_date( $event->start ),
 						$this->get_event_date( $event->recurrence_end )
-					) . '</span>';
+					);
+
+					$pointer_dates['recurrence_end'] = '<span>' . esc_html( $recurring ) . '</span>';
 
 				// Recurrence goes forever
 				} elseif ( ! $event->is_empty_date( $event->end ) && ( $event->start === $event->end ) ) {
@@ -2072,7 +2113,7 @@ class Base_List_Table extends \WP_List_Table {
 		return array(
 			'a'      => array(),
 			'strong' => array(),
-			'span'   => array(),
+			'span'   => array( 'class' => 1 ),
 			'em'     => array(),
 			'img'    => array(),
 			'br'     => array()

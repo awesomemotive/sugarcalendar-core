@@ -25,10 +25,10 @@ class TimeZones extends \WP_UnitTestCase {
 	/**
 	 * @group settings
 	 */
-	public function test_default_is_false() {
+	public function test_default_is_null() {
 		$tz = sugar_calendar_get_timezone();
 
-		$this->assertSame( false, $tz );
+		$this->assertSame( null, $tz );
 	}
 
 	/**

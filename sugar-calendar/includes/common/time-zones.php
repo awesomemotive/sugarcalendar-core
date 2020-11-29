@@ -405,11 +405,11 @@ function sugar_calendar_get_timezone_type() {
  */
 function sugar_calendar_get_datetime_object( $time = null, $timezone = null ) {
 
-	// Fallback to "now"
+	// Fallback to "now" timestamp
 	if ( null === $time ) {
 		$time = (int) sugar_calendar_get_request_time();
 
-	// Fallback to whatever strtotime() guesses at
+	// Fallback to timestamp that strtotime() guesses
 	} elseif ( ! is_numeric( $time ) ) {
 		$time = strtotime( $time );
 	}
@@ -424,8 +424,8 @@ function sugar_calendar_get_datetime_object( $time = null, $timezone = null ) {
 		$timezone = sugar_calendar_get_timezone_object( $timezone );
 	}
 
-	// Get DateTime object (with time zone) and use it to format
-	$retval = date_create( '@' . $time, $timezone );
+	// Get DateTime object and use it to format
+	$retval = date_create( '@' . $time );
 
 	// Maybe set the time zone
 	if ( is_object( $timezone ) ) {

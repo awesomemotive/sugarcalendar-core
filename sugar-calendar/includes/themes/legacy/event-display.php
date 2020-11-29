@@ -176,7 +176,7 @@ function sc_add_date_time_details( $post_id = 0 ) {
 			<span class="sc_event_start_time">
 				<?php esc_html_e( 'Time:', 'sugar-calendar' ); ?>
 
-				<time datetime="<?php echo esc_attr( $dt ); ?>" data-timezone="<?php echo esc_attr( $tz ); ?>">
+				<time datetime="<?php echo esc_attr( $dt ); ?>" title="<?php echo esc_attr( $dt ); ?>" data-timezone="<?php echo esc_attr( $tz ); ?>">
 					<?php echo esc_html( $start_time ); ?>
 				</time>
 			</span><?php
@@ -218,7 +218,7 @@ function sc_add_date_time_details( $post_id = 0 ) {
 				</span>
 
 				<span class="sc_event_end_time">
-					<time datetime="<?php echo esc_attr( $dt ); ?>" data-timezone="<?php echo esc_attr( $tz ); ?>">
+					<time datetime="<?php echo esc_attr( $dt ); ?>" title="<?php echo esc_attr( $dt ); ?>" data-timezone="<?php echo esc_attr( $tz ); ?>">
 						<?php echo esc_html( $end_time ); ?>
 					</time>
 				</span>

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.1.0\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2020-11-29 21:18:22+00:00\n"
+"POT-Creation-Date: 2020-11-29 22:52:13+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,6 +29,7 @@ msgid "Verifying"
 msgstr ""
 
 #: sugar-calendar/includes/admin/assets.php:154
+#: sugar-calendar/includes/standard/license.php:742
 msgid "Verify"
 msgstr ""
 
@@ -37,6 +38,7 @@ msgid "Verifying..."
 msgstr ""
 
 #: sugar-calendar/includes/admin/assets.php:156
+#: sugar-calendar/includes/standard/license.php:571
 msgid "Please enter a valid license key."
 msgstr ""
 
@@ -217,17 +219,17 @@ msgid "Switch views using the filter-bar icons."
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:110
-#: sugar-calendar/includes/admin/help.php:552
+#: sugar-calendar/includes/admin/help.php:572
 msgid "Regular Event"
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:111
-#: sugar-calendar/includes/admin/help.php:553
+#: sugar-calendar/includes/admin/help.php:573
 msgid "Has Location"
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:112
-#: sugar-calendar/includes/admin/help.php:554
+#: sugar-calendar/includes/admin/help.php:574
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1951
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-list.php:456
 #: sugar-calendar/includes/admin/meta-boxes.php:996
@@ -236,22 +238,22 @@ msgid "All Day"
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:113
-#: sugar-calendar/includes/admin/help.php:555
+#: sugar-calendar/includes/admin/help.php:575
 msgid "Recurring"
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:114
-#: sugar-calendar/includes/admin/help.php:556
+#: sugar-calendar/includes/admin/help.php:576
 msgid "Trashed"
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:115
-#: sugar-calendar/includes/admin/help.php:557
+#: sugar-calendar/includes/admin/help.php:577
 msgid "Private"
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:116
-#: sugar-calendar/includes/admin/help.php:558
+#: sugar-calendar/includes/admin/help.php:578
 msgid "Protected"
 msgstr ""
 
@@ -598,6 +600,7 @@ msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:482
 #: sugar-calendar/includes/admin/help.php:521
+#: sugar-calendar/includes/admin/help.php:555
 msgid "Ranges"
 msgstr ""
 
@@ -659,6 +662,63 @@ msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:546
 msgid "&mdash; Full"
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:553
+#: sugar-calendar/includes/admin/settings.php:169
+#: sugar-calendar/includes/admin/settings.php:697
+#: sugar-calendar/includes/classes/terms/class-term-timezones.php:80
+msgid "Time Zones"
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:556
+msgid "Adds time zone support to Events and Calendars."
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:557
+msgid "\"Off\" is the default value. Leave off if you are unsure."
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:558
+msgid "\"Single\" means Event Start & End are the same."
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:559
+msgid "\"Multi\" means Event Start & End can be different."
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:560
+#: sugar-calendar/includes/admin/settings.php:715
+msgid "Default Time Zone"
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:561
+msgid "What to use when nothing else is specified."
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:562
+msgid "Categorized by region. Ordered alphabetically"
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:563
+msgid "\"UTC\" should only be used if location is not available."
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:564
+msgid "\"Floating\" means \"no time zone\" or relative to the user."
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:565
+#: sugar-calendar/includes/admin/settings.php:729
+msgid "Visitor Conversion"
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:566
+msgid "Enable this to make times relative to the site visitor."
+msgstr ""
+
+#: sugar-calendar/includes/admin/help.php:567
+msgid "Relies on browser support. May not always be accurate."
 msgstr ""
 
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:255
@@ -1041,12 +1101,6 @@ msgstr ""
 msgid "Editing"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:169
-#: sugar-calendar/includes/admin/settings.php:697
-#: sugar-calendar/includes/classes/terms/class-term-timezones.php:80
-msgid "Time Zones"
-msgstr ""
-
 #: sugar-calendar/includes/admin/settings.php:366
 msgid "Settings updated."
 msgstr ""
@@ -1131,18 +1185,10 @@ msgid ""
 "time zones for Calendars."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:715
-msgid "Default Time Zone"
-msgstr ""
-
 #: sugar-calendar/includes/admin/settings.php:722
 msgid ""
 "When time zones are enabled, new Events will default to this.<br>If you are "
 "unsure, leave empty or pick the time zone you are in."
-msgstr ""
-
-#: sugar-calendar/includes/admin/settings.php:729
-msgid "Visitor Conversion"
 msgstr ""
 
 #: sugar-calendar/includes/admin/settings.php:734
@@ -1488,6 +1534,172 @@ msgstr ""
 
 #: sugar-calendar/includes/post/types.php:90
 msgid "Event scheduled."
+msgstr ""
+
+#: sugar-calendar/includes/standard/beta-updates.php:40
+msgid "Updates"
+msgstr ""
+
+#: sugar-calendar/includes/standard/beta-updates.php:74
+msgid "Software Updates"
+msgstr ""
+
+#: sugar-calendar/includes/standard/beta-updates.php:79
+msgid "Get Beta Versions"
+msgstr ""
+
+#: sugar-calendar/includes/standard/beta-updates.php:82
+msgid "Receive update notifications about beta versions instead."
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:262
+msgid "License"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:537
+msgid "This is a lifetime license. That is amazing!"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:543
+msgid " until: <time datetime=\"%s\">%s (at %s)</time>"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:572
+msgid "Empty"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:579
+msgid "This license key is valid%s."
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:580
+msgid "Valid"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:587
+msgid "This license key is expired"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:588
+msgid "Expired"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:595
+#: sugar-calendar/includes/standard/license.php:603
+msgid "This license key is disabled."
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:596
+msgid "Disabled"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:604
+msgid "Revoked"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:611
+msgid "This license key is not valid."
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:612
+#: sugar-calendar/includes/standard/license.php:660
+msgid "Invalid"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:619
+#: sugar-calendar/includes/standard/license.php:627
+#: sugar-calendar/includes/standard/license.php:643
+msgid "This license key is saved but has not been verified."
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:620
+#: sugar-calendar/includes/standard/license.php:628
+#: sugar-calendar/includes/standard/license.php:644
+msgid "Site Inactive"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:635
+msgid "This license key could not be deactivated."
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:636
+msgid "Failed"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:651
+#: sugar-calendar/includes/standard/license.php:659
+msgid "This license key appears to be for another product."
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:652
+msgid "Mismatch"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:667
+msgid "This license key has reached its activation limit."
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:668
+msgid "Out of Activations"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:728
+msgid "License Key"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:729
+msgid "Enter a valid license key to enable automatic updates"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:732
+msgid ""
+"Look for your license key in your <a "
+"href=\"https://sugarcalendar.com/account/\">SugarCalendar.com account</a>. "
+"Don't have one? <a href=\"https://sugarcalendar.com/pricing/\">Purchase one "
+"today!</a>"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:743
+msgid "Deactivate"
+msgstr ""
+
+#: sugar-calendar/includes/standard/license.php:748
+msgid "Refresh Status"
+msgstr ""
+
+#: sugar-calendar/includes/standard/recurring.php:654
+msgid "Recurrence"
+msgstr ""
+
+#: sugar-calendar/includes/standard/recurring.php:690
+msgid "Repeat"
+msgstr ""
+
+#: sugar-calendar/includes/standard/recurring.php:695
+#: sugar-calendar/includes/standard/recurring.php:717
+msgid "Never"
+msgstr ""
+
+#: sugar-calendar/includes/standard/recurring.php:713
+msgid "End Repeat"
+msgstr ""
+
+#: sugar-calendar/includes/standard/updater.php:238
+msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
+msgstr ""
+
+#: sugar-calendar/includes/standard/updater.php:246
+msgid ""
+"There is a new version of %1$s available. %2$sView version %3$s details%4$s "
+"or %5$supdate now%6$s."
+msgstr ""
+
+#: sugar-calendar/includes/standard/updater.php:489
+msgid "You do not have permission to install plugin updates"
+msgstr ""
+
+#: sugar-calendar/includes/standard/updater.php:489
+msgid "Error"
 msgstr ""
 
 #: sugar-calendar/includes/themes/legacy/calendar.php:154

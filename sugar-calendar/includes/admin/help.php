@@ -547,6 +547,26 @@ function add_settings_tabs() {
 		'content'	=> $full_table
 	) );
 
+	// Time Zones
+	get_current_screen()->add_help_tab( array(
+		'id'		=> 'time-zones',
+		'title'		=> esc_html__( 'Time Zones', 'sugar-calendar' ),
+		'content'	=>
+			'<p><strong>'  . esc_html__( 'Ranges', 'sugar-calendar' ) . '</strong></p>' .
+			'<p>'  . esc_html__( 'Adds time zone support to Events and Calendars.',          'sugar-calendar' ) . '</p><ul>' .
+			'<li>' . esc_html__( '"Off" is the default value. Leave off if you are unsure.', 'sugar-calendar' ) . '</li>' .
+			'<li>' . esc_html__( '"Single" means Event Start & End are the same.',           'sugar-calendar' ) . '</li>' .
+			'<li>' . esc_html__( '"Multi" means Event Start & End can be different.',        'sugar-calendar' ) . '</li></ul>' .
+			'<p><strong>'  . esc_html__( 'Default Time Zone', 'sugar-calendar' ) . '</strong></p>' .
+			'<p>'  . esc_html__( 'What to use when nothing else is specified.',              'sugar-calendar' ) . '</p><ul>' .
+			'<li>' . esc_html__( 'Categorized by region. Ordered alphabetically',            'sugar-calendar' ) . '</li>' .
+			'<li>' . esc_html__( '"UTC" should only be used if location is not available.',  'sugar-calendar' ) . '</li>' .
+			'<li>' . esc_html__( '"Floating" means "no time zone" or relative to the user.', 'sugar-calendar' ) . '</li></ul>' .
+			'<p><strong>'  . esc_html__( 'Visitor Conversion', 'sugar-calendar' ) . '</strong></p>' .
+			'<p>'  . esc_html__( 'Enable this to make times relative to the site visitor.',  'sugar-calendar' ) . '</p><ul>' .
+			'<li>' . esc_html__( 'Relies on browser support. May not always be accurate.',   'sugar-calendar' ) . '</li></ul>'
+	) );
+
 	// Help Sidebar
 	get_current_screen()->set_help_sidebar(
 		'<p><i class="dashicons dashicons-calendar-alt"></i> ' . esc_html__( 'Regular Event', 'sugar-calendar' ) . '</p>' .

@@ -1519,45 +1519,12 @@ class Base_List_Table extends \WP_List_Table {
 			return;
 		}
 
-		// Reset all pointer content
-		$pointer_content = array();
-
-		// Pointer content
-		$pointer_content['title'] = '<h3 class="' . $this->get_event_classes( $event ) . '">' . $this->get_pointer_title( $event ) . '</h3>';
-		$pointer_content['text']  = '<p>' . $this->get_pointer_text( $event ) . '</p>';
-
-		// Reset links array
-		$links = array();
-
-		// Trashed, so maybe offer to Restore or Delete
-		if ( 'trash' === $event->status ) {
-
-			// Maybe add restore link
-			if ( $this->current_user_can_delete( $event ) ) {
-				$links['restore'] = '<span class="action event-restore">' . $this->get_event_restore_link( $event, esc_html__( 'Restore', 'sugar-calendar' ) ) . '</span>';
-			}
-
-			// Maybe add delete link
-			if ( $this->current_user_can_delete( $event ) ) {
-				$links['delete']  = '<span class="action event-delete">' . $this->get_event_delete_link( $event, esc_html__( 'Delete', 'sugar-calendar' ) ) . '</span>';
-			}
-
-		// Not trashed, so offer to Edit or View
-		} else {
-
-			// Maybe add edit link
-			if ( $this->current_user_can_edit( $event ) ) {
-				$links['edit'] = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html__( 'Edit', 'sugar-calendar' ) ) . '</span>';
-			}
-
-			// Add view link
-			if ( $this->current_user_can_view( $event ) )  {
-				$links['view'] = '<span class="action event-view">' . $this->get_event_view_link( $event, esc_html_x( 'View', 'verb', 'sugar-calendar' ) ) . '</span>';
-			}
-		}
-
-		// Setup actions
-		$pointer_content['links'] = '<div class="wp-pointer-actions">' . implode( '', $links ) . '</div>';
+		// Get all pointer contents
+		$pointer_content = array(
+			'title' => '<h3 class="' . $this->get_event_classes( $event ) . '">' . $this->get_pointer_title( $event ) . '</h3>',
+			'text'  => '<p>' . $this->get_pointer_text( $event ) . '</p>',
+			'links' => '<div class="wp-pointer-actions">' . $this->get_pointer_links( $event ) . '</div>'
+		);
 
 		// Filter
 		$pointer_content = (array) apply_filters( 'sugar_calendar_admin_pointer_content', $pointer_content, $event, $cell );
@@ -1598,8 +1565,52 @@ class Base_List_Table extends \WP_List_Table {
 			$retval = $this->get_event_view_link( $event, $retval );
 		}
 
-		// Filter & return the pointer title
+		// Return
 		return $retval;
+	}
+
+	/**
+	 * Return the pointer links HTML
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param  object $event
+	 * @return string
+	 */
+	protected function get_pointer_links( $event = false ) {
+
+		// Default no links
+		$links = array();
+
+		// Trashed, so maybe offer to Restore or Delete
+		if ( 'trash' === $event->status ) {
+
+			// Maybe add restore link
+			if ( $this->current_user_can_delete( $event ) ) {
+				$links['restore'] = '<span class="action event-restore">' . $this->get_event_restore_link( $event, esc_html__( 'Restore', 'sugar-calendar' ) ) . '</span>';
+			}
+
+			// Maybe add delete link
+			if ( $this->current_user_can_delete( $event ) ) {
+				$links['delete']  = '<span class="action event-delete">' . $this->get_event_delete_link( $event, esc_html__( 'Delete', 'sugar-calendar' ) ) . '</span>';
+			}
+
+		// Not trashed, so offer to Edit or View
+		} else {
+
+			// Maybe add edit link
+			if ( $this->current_user_can_edit( $event ) ) {
+				$links['edit'] = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html__( 'Edit', 'sugar-calendar' ) ) . '</span>';
+			}
+
+			// Add view link
+			if ( $this->current_user_can_view( $event ) )  {
+				$links['view'] = '<span class="action event-view">' . $this->get_event_view_link( $event, esc_html_x( 'View', 'verb', 'sugar-calendar' ) ) . '</span>';
+			}
+		}
+
+		// Return
+		return implode( '', $links );
 	}
 
 	/**
@@ -2877,7 +2888,7 @@ class Base_List_Table extends \WP_List_Table {
 		// After action
 		do_action( "sugar_calendar_admin_after_extra_tablenav_{$which}", $this );
 
-		// Filter & return
+		// Return
 		return ob_get_clean();
 	}
 
@@ -2977,7 +2988,7 @@ class Base_List_Table extends \WP_List_Table {
 
 		<?php
 
-		// Filter & return
+		// Return
 		return ob_get_clean();
 	}
 

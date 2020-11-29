@@ -181,3 +181,86 @@ function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $time = null,
 	// Filter & return
 	return apply_filters( 'sugar_calendar_date_i18n', $retval, $format, $time, $timezone, $locale );
 }
+
+/**
+ * Generate the HTML for a <time> tag.
+ *
+ * @since 2.1.0
+ * @param array $args
+ * @return string HTML for a <time> tag
+ */
+function sugar_calendar_get_time_tag( $args = array() ) {
+
+	// Default arrays
+	$ddata = array( 'timezone' => '' );
+	$dattr = array( 'datetime' => '', 'title' => '' );
+
+	// Parse arguments
+	$r = wp_parse_args( $args, array(
+		'time'     => null,
+		'timezone' => null,
+		'format'   => 'Y-m-d H:i:s',
+		'dtformat' => 'Y-m-d\TH:i:s',
+		'data'     => $ddata,
+		'attr'     => $dattr
+	) );
+
+	// Make sure data is array
+	if ( ! is_array( $r['data'] ) ) {
+		$r['data'] = $ddata;
+	}
+
+	// Make sure attr is array
+	if ( ! is_array( $r['attr'] ) ) {
+		$r['attr'] = $dattr;
+	}
+
+	// Set timezone in data
+	$r['data']['timezone'] = ! empty( $r['timezone'] )
+		? $r['timezone']
+		: 'floating';
+
+	// Non-floating
+	if ( ! empty( $r['timezone'] ) && ( 'floating' !== $r['timezone'] ) ) {
+
+		// Add the offset
+		$r['data']['offset'] = sugar_calendar_get_timezone_offset( array(
+			'time'     => $r['time'],
+			'timezone' => $r['timezone']
+		) );
+	}
+
+	// Format the time
+	$dt  = sugar_calendar_format_date( $r['format'],   $r['time'], $r['timezone'] );
+	$dtf = sugar_calendar_format_date( $r['dtformat'], $r['time'], $r['timezone'] );
+
+	// Default attribute string
+	$r['attr']['datetime'] = esc_attr( $dtf );
+
+	// Default array
+	$arr = $r['attr'];
+
+	// Add data attributes
+	if ( ! empty( $r['data'] ) ) {
+		foreach ( $r['data'] as $key => $value ) {
+			$arr[ 'data-' . $key ] = esc_attr( $value );
+		}
+	}
+
+	// Concatenate HTML tag attributes
+	if ( ! empty( $arr ) ) {
+
+		// Remove empties and duplicates
+		$arr = array_unique( array_filter( $arr ) );
+
+		// Build
+		foreach ( $arr as $key => $value ) {
+			$attr .= ' ' . sanitize_key( $key ) . '="' . esc_attr( $value ) . '"';
+		}
+	}
+
+	// Setup return value
+	$retval = '<time' . $attr . '>' . esc_html( $dt ) . '</time>';
+
+	return $retval;
+}

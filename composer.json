@@ -1,0 +1,20 @@
+{
+    "name": "sugarcalendar/core",
+    "description": "Sugar Calendar Plugin for WordPress",
+    "keywords": ["wordpress", "sugarcalendar"],
+    "homepage": "https://sugarcalendar.com",
+    "authors": [
+        {
+            "name": "Pippin Williamson",
+            "homepage": "https://pippinsplugins.com"
+        },
+        {
+            "name": "John James Jacoby",
+            "homepage": "https://jjj.blog"
+        }
+    ],
+    "type": "wordpress-plugin",
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}

@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <phpunit
 	bootstrap="tests/phpunit/bootstrap.php"
 	backupGlobals="false"
@@ -7,16 +8,16 @@
 	convertWarningsToExceptions="true"
 	>
 	<testsuites>
-		<testsuite>
+		<testsuite name="Sugar Calendar Unit Tests">
 			<directory prefix="tests-" suffix=".php">./tests/phpunit/</directory>
 		</testsuite>
 	</testsuites>
 	<listeners>
-		<listener class="SpeedTrapListener" file="tests/phpunit/speed-trap-listener.php">
+		<listener class="SpeedTrapListener" file="tests/phpunit/listener-loader.php">
 			<arguments>
 				<array>
 					<element key="slowThreshold">
-						<integer>150</integer>
+						<integer>250</integer>
 					</element>
 				</array>
 			</arguments>

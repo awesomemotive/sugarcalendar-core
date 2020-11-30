@@ -63,7 +63,7 @@ jQuery( document ).ready( function ( $ ) {
 	// Toggle time field visibility if all-day
 	$( '#all_day' ).on( 'click', function() {
 		var checked = $( this ).prop( 'checked' ),
-			times   = $( '.event-time' );
+			times   = $( '.time-zone-row, .event-time-zone, .event-time' );
 
 		// Toggle
 		( true === checked )

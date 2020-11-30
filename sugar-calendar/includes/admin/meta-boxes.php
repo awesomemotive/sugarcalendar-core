@@ -12,6 +12,29 @@ defined( 'ABSPATH' ) || exit;
 use Sugar_Calendar\Common\Editor as Editor;
 
 /**
+ * Maybe add custom fields support to supported post types.
+ *
+ * @since 2.1.0
+ *
+ * @param array $supports
+ *
+ * @return array
+ */
+function custom_fields( $supports = array() ) {
+
+	// Get the custom fields setting
+	$supported = Editor\custom_fields();
+
+	// Add custom fields support
+	if ( ! empty( $supported ) ) {
+		array_push( $supports, 'custom-fields' );
+	}
+
+	// Return supported
+	return $supports;
+}
+
+/**
  * Event Types Meta-box
  * Output radio buttons instead of the default WordPress mechanism
  *
@@ -250,17 +273,32 @@ function save( $object_id = 0, $object = null ) {
 	}
 
 	// Prepare event parameters
-	$all_day = prepare_all_day();
-	$start   = prepare_start();
-	$end     = prepare_end();
+	$all_day  = prepare_all_day();
+	$start    = prepare_start();
+	$end      = prepare_end();
 
-	// Sanitize start & end to prevent data entry errors
-	$start   = sanitize_start( $start, $end, $all_day );
-	$end     = sanitize_end( $end, $start, $all_day );
-	$all_day = sanitize_all_day( $all_day, $start, $end );
+	// Not all-day, so check time zones
+	if ( empty( $all_day ) ) {
 
-	// Time zones (empty for UTC by default)
-	$start_tz = $end_tz = '';
+		// All time zone types save start
+		$start_tz = prepare_timezone( 'start' );
+
+		// Multi time zone uses its own end
+		$end_tz   = ( 'multi' === sugar_calendar_get_timezone_type() )
+			? prepare_timezone( 'end' )
+			: $start_tz;
+
+	// All-day events have no time zones
+	} else {
+		$start_tz = $end_tz = '';
+	}
+
+	// Sanitize to prevent data entry errors
+	$start    = sanitize_start( $start, $end, $all_day );
+	$end      = sanitize_end( $end, $start, $all_day );
+	$all_day  = sanitize_all_day( $all_day, $start, $end );
+	$start_tz = sanitize_timezone( $start_tz );
+	$end_tz   = sanitize_timezone( $end_tz );
 
 	// Shim these for now (need to make functions for them)
 	$title   = $object->post_title;
@@ -390,13 +428,13 @@ function prepare_date_time( $prefix = 'start' ) {
 	$now = sugar_calendar_get_request_time();
 
 	// Get the current Year, Month, and Day, without any time
-	$nt  = date( 'Y-m-d H:i:s', mktime(
+	$nt  = gmdate( 'Y-m-d H:i:s', gmmktime(
 		0,
 		0,
 		0,
-		date( 'n', $now ),
-		date( 'j', $now ),
-		date( 'Y', $now )
+		gmdate( 'n', $now ),
+		gmdate( 'j', $now ),
+		gmdate( 'Y', $now )
 	) );
 
 	// Calendar date is set
@@ -432,20 +470,47 @@ function prepare_date_time( $prefix = 'start' ) {
 	}
 
 	// Make timestamp from pieces
-	$timestamp = mktime(
+	$timestamp = gmmktime(
 		intval( $hour ),
 		intval( $minutes ),
 		intval( $seconds ),
-		date( 'n', $date ),
-		date( 'j', $date ),
-		date( 'Y', $date )
+		gmdate( 'n', $date ),
+		gmdate( 'j', $date ),
+		gmdate( 'Y', $date )
 	);
 
 	// Format for MySQL
-	$retval = date( 'Y-m-d H:i:s', $timestamp );
+	$retval = gmdate( 'Y-m-d H:i:s', $timestamp );
 
 	// Return
 	return $retval;
+}
+
+/**
+ * Prepare a time zone value to be saved to the database.
+ *
+ * @since 2.1.0
+ *
+ * @return string The PHP/Olson time zone to save
+ */
+function prepare_timezone( $prefix = 'start' ) {
+
+	// Sanity check the prefix
+	if ( empty( $prefix ) || ! is_string( $prefix ) ) {
+		$prefix = 'start';
+	}
+
+	// Sanitize the prefix, and append an underscore
+	$prefix = sanitize_key( $prefix ) . '_';
+	$field  = "{$prefix}tz";
+
+	// Sanitize time zone
+	$zone = ! empty( $_POST[ $field ] )
+		? sanitize_text_field( $_POST[ $field ] )
+		: '';
+
+	// Return the prepared time zone
+	return $zone;
 }
 
 /**
@@ -473,18 +538,18 @@ function sanitize_start( $start = '', $end = '', $all_day = false ) {
 
 	// All day events end at the final second
 	if ( true === $all_day ) {
-		$start_int = mktime(
+		$start_int = gmmktime(
 			0,
 			0,
 			0,
-			date( 'n', $start_int ),
-			date( 'j', $start_int ),
-			date( 'Y', $start_int )
+			gmdate( 'n', $start_int ),
+			gmdate( 'j', $start_int ),
+			gmdate( 'Y', $start_int )
 		);
 	}
 
 	// Format
-	$retval = date( 'Y-m-d H:i:s', $start_int );
+	$retval = gmdate( 'Y-m-d H:i:s', $start_int );
 
 	// Return the new start
 	return $retval;
@@ -516,9 +581,9 @@ function sanitize_all_day( $all_day = false, $start = '', $end = '' ) {
 
 	// Starts at midnight and ends 1 second before
 	if (
-		( '00:00:00' === date( 'H:i:s', $start_int ) )
+		( '00:00:00' === gmdate( 'H:i:s', $start_int ) )
 		&&
-		( '23:59:59' === date( 'H:i:s', $end_int ) )
+		( '23:59:59' === gmdate( 'H:i:s', $end_int ) )
 	) {
 		$all_day = true;
 	}
@@ -591,21 +656,36 @@ function sanitize_end( $end = '', $start = '', $all_day = false ) {
 
 	// All day events end at the final second
 	if ( true === $all_day ) {
-		$end_int = mktime(
+		$end_int = gmmktime(
 			23,
 			59,
 			59,
-			date( 'n', $end_int ),
-			date( 'j', $end_int ),
-			date( 'Y', $end_int )
+			gmdate( 'n', $end_int ),
+			gmdate( 'j', $end_int ),
+			gmdate( 'Y', $end_int )
 		);
 	}
 
 	// Format
-	$retval = date( 'Y-m-d H:i:s', $end_int );
+	$retval = gmdate( 'Y-m-d H:i:s', $end_int );
 
 	// Return the new end
 	return $retval;
+}
+
+/**
+ * Sanitize a timezone value, so that:
+ *
+ * - it can be empty                     (Floating)
+ * - it can be valid PHP/Olson time zone (America/Chicago)
+ * - it can be UTC offset                (UTC-13)
+ *
+ * @since 2.1.0
+ *
+ * @param string $timezone
+ */
+function sanitize_timezone( $timezone = '' ) {
+	return sugar_calendar_sanitize_timezone( $timezone );
 }
 
 /**
@@ -776,9 +856,11 @@ function calendars( $post, $box ) {
 function section_duration( $event = null ) {
 
 	// Get clock type, hours, and minutes
-	$clock   = sugar_calendar_get_clock_type();
-	$hours   = sugar_calendar_get_hours();
-	$minutes = sugar_calendar_get_minutes();
+	$tztype    = sugar_calendar_get_timezone_type();
+	$timezone  = sugar_calendar_get_timezone();
+	$clock     = sugar_calendar_get_clock_type();
+	$hours     = sugar_calendar_get_hours();
+	$minutes   = sugar_calendar_get_minutes();
 
 	// Get the hour format based on the clock type
 	$hour_format = ( '12' === $clock )
@@ -796,7 +878,7 @@ function section_duration( $event = null ) {
 	// Default AM/PM
 	$am_pm = $end_am_pm = '';
 
-	/** All Day ***********************************************************/
+	/** All Day ***************************************************************/
 
 	$all_day = ! empty( $event->all_day )
 		? (bool) $event->all_day
@@ -806,7 +888,7 @@ function section_duration( $event = null ) {
 		? ' style="display: none;"'
 		: '';
 
-	/** Ends **************************************************************/
+	/** Ends ******************************************************************/
 
 	// Get date_time
 	$end_date_time = ! $event->is_empty_date( $event->end ) && ( $event->start !== $event->end )
@@ -817,32 +899,37 @@ function section_duration( $event = null ) {
 	if ( ! empty( $end_date_time ) ) {
 
 		// Date
-		$end_date = date( 'Y-m-d', $end_date_time );
+		$end_date = gmdate( 'Y-m-d', $end_date_time );
 
 		// Only if not all-day
 		if ( empty( $all_day ) ) {
 
 			// Hour
-			$end_hour = date( $hour_format, $end_date_time );
+			$end_hour = gmdate( $hour_format, $end_date_time );
 			if ( empty( $end_hour ) ) {
 				$end_hour = '';
 			}
 
 			// Minute
-			$end_minute = date( 'i', $end_date_time );
+			$end_minute = gmdate( 'i', $end_date_time );
 			if ( empty( $end_hour ) || empty( $end_minute )) {
 				$end_minute = '';
 			}
 
 			// Day/night
-			$end_am_pm = date( 'a', $end_date_time );
+			$end_am_pm = gmdate( 'a', $end_date_time );
 			if ( empty( $end_hour ) && empty( $end_minute ) ) {
 				$end_am_pm = '';
 			}
 		}
 	}
 
-	/** Starts ************************************************************/
+	// Time zone
+	if ( ! empty( $tztype ) && empty( $event->end_tz ) && ! $event->exists() ) {
+		$event->end_tz = $timezone;
+	}
+
+	/** Starts ****************************************************************/
 
 	// Get date_time
 	if ( ! empty( $_GET['start_day'] ) ) {
@@ -855,25 +942,25 @@ function section_duration( $event = null ) {
 
 	// Date
 	if ( ! empty( $date_time ) ) {
-		$date = date( 'Y-m-d', $date_time );
+		$date = gmdate( 'Y-m-d', $date_time );
 
 		// Only if not all-day
 		if ( empty( $all_day ) ) {
 
 			// Hour
-			$hour = date( $hour_format, $date_time );
+			$hour = gmdate( $hour_format, $date_time );
 			if ( empty( $hour ) ) {
 				$hour = '';
 			}
 
 			// Minute
-			$minute = date( 'i', $date_time );
+			$minute = gmdate( 'i', $date_time );
 			if ( empty( $hour ) || empty( $minute ) ) {
 				$minute = '';
 			}
 
 			// Day/night
-			$am_pm = date( 'a', $date_time );
+			$am_pm = gmdate( 'a', $date_time );
 			if ( empty( $hour ) && empty( $minute ) ) {
 				$am_pm = '';
 			}
@@ -884,7 +971,20 @@ function section_duration( $event = null ) {
 		}
 	}
 
-	/** Let's Go! *********************************************************/
+	// Time zone
+	if ( ! empty( $tztype ) && empty( $event->start_tz ) && ! $event->exists() ) {
+		$event->start_tz = $timezone;
+	}
+
+	/** Time Zones ************************************************************/
+
+	// All day Events have no time zone data
+	if ( ! empty( $all_day ) ) {
+		$event->start_tz = '';
+		$event->end_tz   = '';
+	}
+
+	/** Let's Go! *************************************************************/
 
 	// Start an output buffer
 	ob_start(); ?>
@@ -910,18 +1010,27 @@ function section_duration( $event = null ) {
 				</th>
 
 				<td>
-					<input type="text" class="sugar_calendar_datepicker" name="start_date" id="start_date" value="<?php echo esc_attr( $date ); ?>" placeholder="yyyy-mm-dd" />
+					<div class="event-date">
+						<input type="text" class="sugar_calendar_datepicker" name="start_date" id="start_date" value="<?php echo esc_attr( $date ); ?>" placeholder="yyyy-mm-dd" />
+					</div>
+
 					<div class="event-time" <?php echo $hidden; ?>>
-						<span class="sc-time-separator"><?php esc_html_e( ' at ', 'sugar-calendar' ); ?></span>
-						<?php sugar_calendar_time_dropdown( array(
+						<span class="sc-time-separator"><?php esc_html_e( 'at', 'sugar-calendar' ); ?></span>
+						<?php
+
+						// Start Hour
+						sugar_calendar_time_dropdown( array(
 							'first'    => '&nbsp;',
 							'id'       => 'start_time_hour',
 							'name'     => 'start_time_hour',
 							'items'    => $hours,
 							'selected' => $hour
-						) ); ?>
-						<span class="sc-time-separator">:</span>
-						<?php sugar_calendar_time_dropdown( array(
+						) );
+
+						?><span class="sc-time-separator"> : </span><?php
+
+						// Start Minute
+						sugar_calendar_time_dropdown( array(
 							'first'    => '&nbsp;',
 							'id'       => 'start_time_minute',
 							'name'     => 'start_time_minute',
@@ -929,15 +1038,32 @@ function section_duration( $event = null ) {
 							'selected' => $minute
 						) );
 
-						if ( '12' === $clock ) : ?>
-							<select id="start_time_am_pm" name="start_time_am_pm" class="sc-select-chosen sc-time">
+						// Start AM/PM
+						if ( '12' === $clock ) :
+							?><select id="start_time_am_pm" name="start_time_am_pm" class="sc-select-chosen sc-time">
 								<option value="">&nbsp;</option>
 								<option value="am" <?php selected( $am_pm, 'am' ); ?>><?php esc_html_e( 'AM', 'sugar-calendar' ); ?></option>
 								<option value="pm" <?php selected( $am_pm, 'pm' ); ?>><?php esc_html_e( 'PM', 'sugar-calendar' ); ?></option>
-							</select>
-						<?php endif; ?>
-					</div>
-				</td>
+							</select><?php
+						endif;
+
+					?></div><?php
+
+					// Start Time Zone
+					if ( ( 'multi' === $tztype ) || ( ( 'off' === $tztype ) && ( $event->start_tz !== $event->end_tz ) ) ) :
+
+						?><div class="event-time-zone"><?php
+
+							sugar_calendar_timezone_dropdown( array(
+								'id'      => 'start_tz',
+								'name'    => 'start_tz',
+								'current' => $event->start_tz
+							) );
+
+						?></div><?php
+
+					endif;
+				?></td>
 
 			</tr>
 
@@ -947,18 +1073,27 @@ function section_duration( $event = null ) {
 				</th>
 
 				<td>
-					<input type="text" class="sugar_calendar_datepicker" name="end_date" id="end_date" value="<?php echo esc_attr( $end_date ); ?>" placeholder="yyyy-mm-dd" />
+					<div class="event-date">
+						<input type="text" class="sugar_calendar_datepicker" name="end_date" id="end_date" value="<?php echo esc_attr( $end_date ); ?>" placeholder="yyyy-mm-dd" />
+					</div>
+
 					<div class="event-time" <?php echo $hidden; ?>>
-						<span class="sc-time-separator"><?php esc_html_e( ' at ', 'sugar-calendar' ); ?></span>
-						<?php sugar_calendar_time_dropdown( array(
+						<span class="sc-time-separator"><?php esc_html_e( 'at', 'sugar-calendar' ); ?></span>
+						<?php
+
+						// End Hour
+						sugar_calendar_time_dropdown( array(
 							'first'    => '&nbsp;',
 							'id'       => 'end_time_hour',
 							'name'     => 'end_time_hour',
 							'items'    => $hours,
 							'selected' => $end_hour
-						) ); ?>
-						<span class="sc-time-separator">:</span>
-						<?php sugar_calendar_time_dropdown( array(
+						) );
+
+						?><span class="sc-time-separator"> : </span><?php
+
+						// End Minute
+						sugar_calendar_time_dropdown( array(
 							'first'    => '&nbsp;',
 							'id'       => 'end_time_minute',
 							'name'     => 'end_time_minute',
@@ -966,16 +1101,56 @@ function section_duration( $event = null ) {
 							'selected' => $end_minute
 						) );
 
-						if ( '12' === $clock ) : ?>
-							<select id="end_time_am_pm" name="end_time_am_pm" class="sc-select-chosen sc-time">
+						// End AM/PM
+						if ( '12' === $clock ) :
+							?><select id="end_time_am_pm" name="end_time_am_pm" class="sc-select-chosen sc-time">
 								<option value="">&nbsp;</option>
 								<option value="am" <?php selected( $end_am_pm, 'am' ); ?>><?php esc_html_e( 'AM', 'sugar-calendar' ); ?></option>
 								<option value="pm" <?php selected( $end_am_pm, 'pm' ); ?>><?php esc_html_e( 'PM', 'sugar-calendar' ); ?></option>
-							</select>
-						<?php endif; ?>
-					</div>
-				</td>
+							</select><?php
+						endif;
+					?></div><?php
+
+					// End Time Zone
+					if ( ( 'multi' === $tztype ) || ( ( 'off' === $tztype ) && ( $event->start_tz !== $event->end_tz ) ) ) :
+
+						?><div class="event-time-zone"><?php
+
+							sugar_calendar_timezone_dropdown( array(
+								'id'      => 'end_tz',
+								'name'    => 'end_tz',
+								'current' => $event->end_tz
+							) );
+
+						?></div><?php
+
+					endif;
+
+				?></td>
 			</tr>
+
+			<?php if ( ( 'single' === $tztype ) || ( ( 'off' === $tztype ) && ( $event->start_tz === $event->end_tz ) ) ) : ?>
+
+				<tr class="time-zone-row" <?php echo $hidden; ?>>
+					<th>
+						<label for="start_tz"><?php esc_html_e( 'Time Zone', 'sugar-calendar'); ?></label>
+					</th>
+
+					<td>
+						<div class="event-time-zone"><?php
+
+							sugar_calendar_timezone_dropdown( array(
+								'id'      => 'start_tz',
+								'name'    => 'start_tz',
+								'current' => $event->start_tz
+							) );
+
+						?></div>
+					</td>
+				</tr>
+
+			<?php endif; ?>
+
 		</tbody>
 	</table>
 

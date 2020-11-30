@@ -1305,7 +1305,7 @@ class ToArray {
 		// Maybe strip the "T" for time
 		$ical_date = str_replace( 'T', '', $ical_date );
 
-		// Maybe strip the "Z" for timezone
+		// Maybe strip the "Z" for time zone
 		$ical_date = str_replace( 'Z', '', $ical_date );
 
 		// Maybe strip out empty spaces, because some services seem to use them?
@@ -1339,7 +1339,7 @@ class ToArray {
 		$date = array_map( array( $this, 'sanitize_absint' ), $date );
 
 		// Convert date array to a Unix time
-		$time = mktime(
+		$time = gmmktime(
 			$date[ 4 ],
 			$date[ 5 ],
 			$date[ 6 ],

@@ -22,14 +22,14 @@ add_action( 'admin_init', __NAMESPACE__ . '\\Screen\\Options\\save' );
 add_action( 'admin_notices', __NAMESPACE__ . '\\Upgrades\\notices' );
 
 // Admin Settings
-add_action( 'admin_menu', __NAMESPACE__ . '\\Settings\\menu'               );
-add_action( 'admin_init', __NAMESPACE__ . '\\Settings\\register_settings'  );
+add_action( 'admin_menu', __NAMESPACE__ . '\\Settings\\menu' );
 
 // Admin meta box
 add_action( 'add_meta_boxes',          __NAMESPACE__ . '\\Editor\\Meta\\add'          );
 add_action( 'save_post',               __NAMESPACE__ . '\\Editor\\Meta\\save',  10, 2 );
 add_filter( 'register_taxonomy_args',  __NAMESPACE__ . '\\Editor\\Meta\\taxonomy_args',  10, 2 );
 add_filter( 'wp_terms_checklist_args', __NAMESPACE__ . '\\Editor\\Meta\\checklist_args', 10, 1 );
+add_filter( 'sc_event_supports',       __NAMESPACE__ . '\\Editor\\Meta\\custom_fields' );
 
 // Admin meta box Save
 add_filter( 'sugar_calendar_event_to_save', __NAMESPACE__ . '\\Editor\\Meta\\add_location_to_save' );

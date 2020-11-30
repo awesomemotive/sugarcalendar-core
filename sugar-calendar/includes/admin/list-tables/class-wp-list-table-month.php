@@ -46,7 +46,7 @@ class Month extends Base_List_Table {
 		$this->grid_end   = strtotime( '+1 month -1 second', $this->grid_start );
 
 		// View end
-		$view_end = date_i18n( 'Y-m-d H:i:s', $this->grid_end );
+		$view_end = gmdate( 'Y-m-d H:i:s', $this->grid_end );
 
 		// Set the view
 		$this->set_view( $view_start, $view_end );
@@ -127,7 +127,7 @@ class Month extends Base_List_Table {
 		$day   = $this->get_current_cell( 'start_day' );
 
 		// Week for row
-		$week = date_i18n( 'W', $start );
+		$week = gmdate( 'W', $start );
 
 		// Calculate link to week view
 		$link_to_day  = add_query_arg( array(
@@ -144,7 +144,7 @@ class Month extends Base_List_Table {
 		);
 
 		// Is this the current week?
-		if ( date_i18n( 'W', $this->now ) === $week ) {
+		if ( gmdate( 'W', $this->now ) === $week ) {
 			$classes[] = 'this-week';
 		}
 
@@ -273,8 +273,8 @@ class Month extends Base_List_Table {
 
 			// Setup cell boundaries
 			$this->set_current_cell( array(
-				'start'  => mktime( 0,  0,  0,  $this->month, $day, $this->year ),
-				'end'    => mktime( 23, 59, 59, $this->month, $day, $this->year ),
+				'start'  => gmmktime( 0,  0,  0,  $this->month, $day, $this->year ),
+				'end'    => gmmktime( 23, 59, 59, $this->month, $day, $this->year ),
 				'row'    => $row,
 				'index'  => $i,
 				'offset' => $offset

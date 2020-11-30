@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @param string   $type Type of time to retrieve. Accepts 'mysql', 'timestamp', or PHP date
  *                       format string (e.g. 'Y-m-d').
- * @param int|bool $gmt  Optional. Whether to use GMT timezone. Default false.
+ * @param int|bool $gmt  Optional. Whether to use GMT time zone. Default false.
  *
  * @return int|string Integer if $type is 'timestamp', string otherwise.
  */
@@ -65,11 +65,11 @@ function sugar_calendar_get_request_time( $type = 'timestamp', $gmt = 0 ) {
  *
  * Based on function created by Dunstan Orchard - http://1976design.com
  *
- * This function will return a read representation of the time elapsed
+ * This function will return a human-readable representation of the time elapsed
  * since a given date.
- * eg: 2 hours and 50 minutes
- * eg: 4 days
- * eg: 4 weeks and 6 days
+ * - 2 hours and 50 minutes
+ * - 4 days
+ * - 4 weeks and 6 days
  *
  * Note that fractions of minutes are not represented in the return string. So
  * an interval of 3 minutes will be represented by "3 minutes", as will an
@@ -81,7 +81,7 @@ function sugar_calendar_get_request_time( $type = 'timestamp', $gmt = 0 ) {
  * @param int|bool   $newer_date Optional. Unix timestamp of date to compare older
  *                               date to. Default: false (current time).
  *
- * @return string String representing the time since the older date, eg
+ * @return string String representing the time since the older date - 
  *         "2 hours and 50 minutes".
  */
 function sugar_calendar_human_diff_time( $older_date, $newer_date = false ) {
@@ -257,7 +257,7 @@ function sugar_calendar_get_recurrence_types() {
  * Get the clock type, based on the user's preference and the site setting.
  *
  * Future versions of this may be able to guess a better default based on the
- * timezone or locale.
+ * time zone or locale.
  *
  * @since 2.0.19
  *
@@ -309,6 +309,7 @@ function sugar_calendar_get_hours() {
 	// 24 hour clock
 	} else {
 		$retval = array(
+			'00',
 			'01',
 			'02',
 			'03',

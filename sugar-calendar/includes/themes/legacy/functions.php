@@ -36,17 +36,18 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 	$view_start  = "{$year}-{$month}-01 00:00:00";
 	$month_start = mysql2date( 'U', $view_start );
 	$month_end   = strtotime( '+1 month -1 second', $month_start );
-	$view_end    = date_i18n( 'Y-m-d H:i:s', $month_end );
+	$view_end    = gmdate( 'Y-m-d H:i:s', $month_end );
 	$number      = sc_get_number_of_events();
 
 	// Default arguments
 	$args = array(
-		'number'      => $number,
-		'object_type' => 'post',
-		'status'      => 'publish',
-		'orderby'     => 'start',
-		'order'       => 'ASC',
-		'date_query'  => sugar_calendar_get_date_query_args( 'month', $view_start, $view_end )
+		'no_found_rows' => true,
+		'number'        => $number,
+		'object_type'   => 'post',
+		'status'        => 'publish',
+		'orderby'       => 'start',
+		'order'         => 'ASC',
+		'date_query'    => sugar_calendar_get_date_query_args( 'month', $view_start, $view_end )
 	);
 
 	// Maybe add category if non-empty
@@ -77,8 +78,8 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 function sc_is_event_for_day( $event, $day = '01', $month = '01', $year = '1970' ) {
 
 	// Make start & end
-	$start = strtotime( date( 'Y-m-d H:i:s', mktime( '00', '00', '00', $month, $day, $year ) ) );
-	$end   = strtotime( date( 'Y-m-d H:i:s', mktime( '23', '59', '59', $month, $day, $year ) ) );
+	$start = gmmktime( '00', '00', '00', $month, $day, $year );
+	$end   = gmmktime( '23', '59', '59', $month, $day, $year );
 
 	// Return
 	return $event->overlaps( $start, $end );
@@ -162,7 +163,7 @@ function sc_filter_events_for_day( $events = array(), $day = '01', $month = '01'
 function sc_get_event_class( $object_id = false ) {
 
 	// This function only accepts a post ID
-	if ( empty( $object_id ) || ! is_int( $object_id ) ) {
+	if ( empty( $object_id ) || ! is_numeric( $object_id ) ) {
 		return '';
 	}
 
@@ -206,29 +207,10 @@ function sc_get_event_class( $object_id = false ) {
  * @return string
  */
 function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
+	global $wp_locale;
 
-	//start draw table
-	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
-
-	$day_names_large = array(
-		0 => __( 'Sunday',    'sugar-calendar' ),
-		1 => __( 'Monday',    'sugar-calendar' ),
-		2 => __( 'Tuesday',   'sugar-calendar' ),
-		3 => __( 'Wednesday', 'sugar-calendar' ),
-		4 => __( 'Thursday',  'sugar-calendar' ),
-		5 => __( 'Friday',    'sugar-calendar' ),
-		6 => __( 'Saturday',  'sugar-calendar' )
-	);
-
-	$day_names_small = array(
-		0 => __( 'Sun', 'sugar-calendar' ),
-		1 => __( 'Mon', 'sugar-calendar' ),
-		2 => __( 'Tue', 'sugar-calendar' ),
-		3 => __( 'Wed', 'sugar-calendar' ),
-		4 => __( 'Thr', 'sugar-calendar' ),
-		5 => __( 'Fri', 'sugar-calendar' ),
-		6 => __( 'Sat', 'sugar-calendar' )
-	);
+	$day_names_large = $wp_locale->weekday;
+	$day_names_small = array_values( $wp_locale->weekday_initial );
 
 	$week_start_day = sc_get_week_start_day();
 
@@ -241,32 +223,29 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
 		$day_names[] = $end_day;
 	}
 
-	if ( $size == 'small' ) {
-		foreach ( $day_names as $key => $day ) {
-			$day_names[ $key ] = substr( $day, 0, 1 );
-		}
-	}
-
+	//start draw table
+	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
+
 	for ( $i = 0; $i <= 6; $i++ ) {
-		$calendar .= '<th class="calendar-day-head">' . $day_names[ $i ] . '</th>';
+		$calendar .= '<th class="calendar-day-head">' . esc_html( $day_names[ $i ] ) . '</th>';
 	}
 	$calendar .= '</tr>';
 
 	//days and weeks vars now
-	$running_day = date( 'w', mktime( 0, 0, 0, $month, 1, $year ) );
+	$running_day = gmdate( 'w', gmmktime( 0, 0, 0, $month, 1, $year ) );
 	if ( $week_start_day == 1 ) {
 		$running_day = ( $running_day > 0 ) ? $running_day - 1 : 6;
 	}
-	$days_in_month = date( 't', mktime( 0, 0, 0, $month, 1, $year ) );
+	$days_in_month = gmdate( 't', gmmktime( 0, 0, 0, $month, 1, $year ) );
 	$days_in_this_week = 1;
 	$day_counter = 0;
 
 	//get today's date
-	$time        = sugar_calendar_get_request_time();
-	$today_day   = date( 'j', $time );
-	$today_month = date( 'm', $time );
-	$today_year  = date( 'Y', $time );
+	$time        = (int) sugar_calendar_get_request_time();
+	$today_day   = gmdate( 'j', $time );
+	$today_month = gmdate( 'm', $time );
+	$today_year  = gmdate( 'Y', $time );
 
 	// Get the events
 	$all_events = sc_get_events_for_calendar( '01', $month, $year, $category );
@@ -358,8 +337,8 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
  * @return string
  */
 function sc_draw_calendar_month( $display_time, $size = 'large', $category = null ) {
-	$month = date( 'n', $display_time );
-	$year  = date( 'Y', $display_time );
+	$month = gmdate( 'n', $display_time );
+	$year  = gmdate( 'Y', $display_time );
 
 	return sc_draw_calendar( $month, $year, $size, $category );
 }
@@ -376,29 +355,10 @@ function sc_draw_calendar_month( $display_time, $size = 'large', $category = nul
  * @return string
  */
 function sc_draw_calendar_week( $display_time, $size = 'large', $category = null ) {
+	global $wp_locale;
 
-	//start draw table
-	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
-
-	$day_names_large = array(
-		0 => __( 'Sunday',    'sugar-calendar' ),
-		1 => __( 'Monday',    'sugar-calendar' ),
-		2 => __( 'Tuesday',   'sugar-calendar' ),
-		3 => __( 'Wednesday', 'sugar-calendar' ),
-		4 => __( 'Thursday',  'sugar-calendar' ),
-		5 => __( 'Friday',    'sugar-calendar' ),
-		6 => __( 'Saturday',  'sugar-calendar' )
-	);
-
-	$day_names_small = array(
-		0 => __( 'Sun', 'sugar-calendar' ),
-		1 => __( 'Mon', 'sugar-calendar' ),
-		2 => __( 'Tue', 'sugar-calendar' ),
-		3 => __( 'Wed', 'sugar-calendar' ),
-		4 => __( 'Thr', 'sugar-calendar' ),
-		5 => __( 'Fri', 'sugar-calendar' ),
-		6 => __( 'Sat', 'sugar-calendar' )
-	);
+	$day_names_large = $wp_locale->weekday;
+	$day_names_small = array_values( $wp_locale->weekday_initial );
 
 	$week_start_day = sc_get_week_start_day();
 
@@ -411,30 +371,27 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 		$day_names[] = $end_day;
 	}
 
-	if ( $size == 'small' ) {
-		foreach ( $day_names as $key => $day ) {
-			$day_names[ $key ] = substr( $day, 0, 1 );
-		}
-	}
-
+	//start draw table
+	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
+
 	for ( $i = 0; $i <= 6; $i++ ) {
-		$calendar .= '<th class="calendar-day-head">' . $day_names[ $i ] . '</th>';
+		$calendar .= '<th class="calendar-day-head">' . esc_html( $day_names[ $i ] ) . '</th>';
 	}
 	$calendar .= '</tr>';
 
 	// get the values for the first day of week where $display_time occurs
-	$day_of_week   = date( 'w', $display_time );
+	$day_of_week   = gmdate( 'w', $display_time );
 	$display_time  = strtotime( '-' . $day_of_week . ' days', $display_time );
-	$display_day   = date( 'j', $display_time );
-	$display_month = date( 'n', $display_time );
-	$display_year  = date( 'Y', $display_time );
+	$display_day   = gmdate( 'j', $display_time );
+	$display_month = gmdate( 'n', $display_time );
+	$display_year  = gmdate( 'Y', $display_time );
 
 	//get today's date
-	$time        = sugar_calendar_get_request_time();
-	$today_day   = date( 'j', $time );
-	$today_month = date( 'm', $time );
-	$today_year  = date( 'Y', $time );
+	$time        = (int) sugar_calendar_get_request_time();
+	$today_day   = gmdate( 'j', $time );
+	$today_month = gmdate( 'm', $time );
+	$today_year  = gmdate( 'Y', $time );
 
 	// start row
 	$calendar .= '<tr class="calendar-row">';
@@ -475,9 +432,9 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 		$calendar .= '</div></td>';
 
 		$display_time  = strtotime( '+1 day', $display_time );
-		$display_day   = date( 'j', $display_time );
-		$display_month = date( 'n', $display_time );
-		$display_year  = date( 'Y', $display_time );
+		$display_day   = gmdate( 'j', $display_time );
+		$display_month = gmdate( 'n', $display_time );
+		$display_year  = gmdate( 'Y', $display_time );
 	}
 
 	// finish row
@@ -505,29 +462,10 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
  * @return string
  */
 function sc_draw_calendar_2week( $display_time, $size = 'large', $category = null ) {
+	global $wp_locale;
 
-	//start draw table
-	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
-
-	$day_names_large = array(
-		0 => __( 'Sunday',    'sugar-calendar' ),
-		1 => __( 'Monday',    'sugar-calendar' ),
-		2 => __( 'Tuesday',   'sugar-calendar' ),
-		3 => __( 'Wednesday', 'sugar-calendar' ),
-		4 => __( 'Thursday',  'sugar-calendar' ),
-		5 => __( 'Friday',    'sugar-calendar' ),
-		6 => __( 'Saturday',  'sugar-calendar' )
-	);
-
-	$day_names_small = array(
-		0 => __( 'Sun', 'sugar-calendar' ),
-		1 => __( 'Mon', 'sugar-calendar' ),
-		2 => __( 'Tue', 'sugar-calendar' ),
-		3 => __( 'Wed', 'sugar-calendar' ),
-		4 => __( 'Thr', 'sugar-calendar' ),
-		5 => __( 'Fri', 'sugar-calendar' ),
-		6 => __( 'Sat', 'sugar-calendar' )
-	);
+	$day_names_large = $wp_locale->weekday;
+	$day_names_small = array_values( $wp_locale->weekday_initial );
 
 	$week_start_day = sc_get_week_start_day();
 
@@ -540,30 +478,27 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 		$day_names[] = $end_day;
 	}
 
-	if ( $size == 'small' ) {
-		foreach ( $day_names as $key => $day ) {
-			$day_names[ $key ] = substr( $day, 0, 1 );
-		}
-	}
-
+	//start draw table
+	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
+
 	for ( $i = 0; $i <= 6; $i++ ) {
-		$calendar .= '<th class="calendar-day-head">' . $day_names[ $i ] . '</th>';
+		$calendar .= '<th class="calendar-day-head">' . esc_html( $day_names[ $i ] ) . '</th>';
 	}
 	$calendar .= '</tr>';
 
 	// get the values for the first day of week where $display_time occurs
-	$day_of_week   = date( 'w', $display_time );
+	$day_of_week   = gmdate( 'w', $display_time );
 	$display_time  = strtotime( '-' . $day_of_week . ' days', $display_time );
-	$display_day   = date( 'j', $display_time );
-	$display_month = date( 'n', $display_time );
-	$display_year  = date( 'Y', $display_time );
+	$display_day   = gmdate( 'j', $display_time );
+	$display_month = gmdate( 'n', $display_time );
+	$display_year  = gmdate( 'Y', $display_time );
 
 	//get today's date
-	$time        = sugar_calendar_get_request_time();
-	$today_day   = date( 'j', $time );
-	$today_month = date( 'm', $time );
-	$today_year  = date( 'Y', $time );
+	$time        = (int) sugar_calendar_get_request_time();
+	$today_day   = gmdate( 'j', $time );
+	$today_month = gmdate( 'm', $time );
+	$today_year  = gmdate( 'Y', $time );
 
 	// start row
 	$calendar .= '<tr class="calendar-row">';
@@ -609,9 +544,9 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 		}
 
 		$display_time  = strtotime( '+1 day', $display_time );
-		$display_day   = date( 'j', $display_time );
-		$display_month = date( 'n', $display_time );
-		$display_year  = date( 'Y', $display_time );
+		$display_day   = gmdate( 'j', $display_time );
+		$display_month = gmdate( 'n', $display_time );
+		$display_year  = gmdate( 'Y', $display_time );
 	}
 
 	// finish row
@@ -639,53 +574,30 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
  * @return string
  */
 function sc_draw_calendar_day( $display_time, $size = 'large', $category = null ) {
+	global $wp_locale;
 
-	//start draw table
-	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar">';
+	$day_names_large = $wp_locale->weekday;
+	$day_names_small = array_values( $wp_locale->weekday_initial );
 
-	$day_names_large = array(
-		0 => __( 'Sunday',    'sugar-calendar' ),
-		1 => __( 'Monday',    'sugar-calendar' ),
-		2 => __( 'Tuesday',   'sugar-calendar' ),
-		3 => __( 'Wednesday', 'sugar-calendar' ),
-		4 => __( 'Thursday',  'sugar-calendar' ),
-		5 => __( 'Friday',    'sugar-calendar' ),
-		6 => __( 'Saturday',  'sugar-calendar' )
-	);
-
-	$day_names_small = array(
-		0 => __( 'Sun', 'sugar-calendar' ),
-		1 => __( 'Mon', 'sugar-calendar' ),
-		2 => __( 'Tue', 'sugar-calendar' ),
-		3 => __( 'Wed', 'sugar-calendar' ),
-		4 => __( 'Thr', 'sugar-calendar' ),
-		5 => __( 'Fri', 'sugar-calendar' ),
-		6 => __( 'Sat', 'sugar-calendar' )
-	);
-
-	$day_of_week = date( 'w', $display_time );
+	$day_of_week = gmdate( 'w', $display_time );
 
 	$day_names = $size == 'small' ? $day_names_small : $day_names_large;
 
-	if ( $size == 'small' ) {
-		foreach ( $day_names as $key => $day ) {
-			$day_names[ $key ] = substr( $day, 0, 1 );
-		}
-	}
-
+	//start draw table
+	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar">';
 	$calendar .= '<tr class="calendar-row">';
-	$calendar .= '<th class="calendar-day-head">' . $day_names[ $day_of_week ] . '</th>';
+	$calendar .= '<th class="calendar-day-head">' . esc_html( $day_names[ $day_of_week ] ) . '</th>';
 	$calendar .= '</tr>';
 
-	$display_day   = date( 'j', $display_time );
-	$display_month = date( 'n', $display_time );
-	$display_year  = date( 'Y', $display_time );
+	$display_day   = gmdate( 'j', $display_time );
+	$display_month = gmdate( 'n', $display_time );
+	$display_year  = gmdate( 'Y', $display_time );
 
 	//get today's date
-	$time        = sugar_calendar_get_request_time();
-	$today_day   = date( 'j', $time );
-	$today_month = date( 'm', $time );
-	$today_year  = date( 'Y', $time );
+	$time        = (int) sugar_calendar_get_request_time();
+	$today_day   = gmdate( 'j', $time );
+	$today_month = gmdate( 'm', $time );
+	$today_year  = gmdate( 'Y', $time );
 
 	// start row
 	$calendar .= '<tr class="calendar-row">';
@@ -749,43 +661,21 @@ function sc_draw_calendar_day( $display_time, $size = 'large', $category = null 
  * @return string
  */
 function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null ) {
+	global $wp_locale;
 
-	//start draw table
-	$calendar = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
+	$day_names_large = $wp_locale->weekday;
+	$day_names_small = array_values( $wp_locale->weekday_initial );
 
-	$day_names_large = array(
-		0 => __( 'Sunday',   'sugar-calendar' ),
-		1 => __( 'Monday',   'sugar-calendar' ),
-		2 => __( 'Tuesday',   'sugar-calendar' ),
-		3 => __( 'Wednesday', 'sugar-calendar' ),
-		4 => __( 'Thursday',  'sugar-calendar' ),
-		5 => __( 'Friday',    'sugar-calendar' ),
-		6 => __( 'Saturday',  'sugar-calendar' )
-	);
-
-	$day_names_small = array(
-		0 => __( 'Sun', 'sugar-calendar' ),
-		1 => __( 'Mon', 'sugar-calendar' ),
-		2 => __( 'Tue', 'sugar-calendar' ),
-		3 => __( 'Wed', 'sugar-calendar' ),
-		4 => __( 'Thr', 'sugar-calendar' ),
-		5 => __( 'Fri', 'sugar-calendar' ),
-		6 => __( 'Sat', 'sugar-calendar' )
-	);
-
-	$day_of_week = date( 'w', $display_time );
+	$day_of_week = gmdate( 'w', $display_time );
 
 	$day_names = $size == 'small' ? $day_names_small : $day_names_large;
 
-	if ( $size == 'small' ) {
-		foreach ( $day_names as $key => $day ) {
-			$day_names[ $key ] = substr( $day, 0, 1 );
-		}
-	}
-
+	//start draw table
+	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
+
 	for ( $i = 0; $i <= 3; $i++ ) {
-		$calendar .= '<th class="calendar-day-head">' . $day_names[ $day_of_week ] . '</th>';
+		$calendar .= '<th class="calendar-day-head">' . esc_html( $day_names[ $day_of_week ] ) . '</th>';
 		if ( $day_of_week == 6 ) {
 			$day_of_week = 0;
 		} else {
@@ -794,15 +684,15 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 	}
 	$calendar .= '</tr>';
 
-	$display_day   = date( 'j', $display_time );
-	$display_month = date( 'n', $display_time );
-	$display_year  = date( 'Y', $display_time );
+	$display_day   = gmdate( 'j', $display_time );
+	$display_month = gmdate( 'n', $display_time );
+	$display_year  = gmdate( 'Y', $display_time );
 
 	//get today's date
-	$time        = sugar_calendar_get_request_time();
-	$today_day   = date( 'j', $time );
-	$today_month = date( 'm', $time );
-	$today_year  = date( 'Y', $time );
+	$time        = (int) sugar_calendar_get_request_time();
+	$today_day   = gmdate( 'j', $time );
+	$today_month = gmdate( 'm', $time );
+	$today_year  = gmdate( 'Y', $time );
 
 	// start row
 	$calendar .= '<tr class="calendar-row">';
@@ -843,9 +733,9 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 		$calendar .= '</div></td>';
 
 		$display_time  = strtotime( '+1 day', $display_time );
-		$display_day   = date( 'j', $display_time );
-		$display_month = date( 'n', $display_time );
-		$display_year  = date( 'Y', $display_time );
+		$display_day   = gmdate( 'j', $display_time );
+		$display_month = gmdate( 'n', $display_time );
+		$display_year  = gmdate( 'Y', $display_time );
 	}
 
 	// finish row
@@ -872,8 +762,10 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
  * @return      string
  */
 function sc_month_num_to_name( $n ) {
-	$timestamp = mktime( 0, 0, 0, $n, 1, 2005 );
-	return date_i18n( 'F', $timestamp );
+	$timestamp = gmmktime( 0, 0, 0, $n, 1, 2005 );
+
+	// Uses WordPress locale
+	return sugar_calendar_format_date_i18n( 'F', $timestamp );
 }
 
 /**
@@ -974,13 +866,22 @@ function sc_get_event_date( $event_id = 0, $formatted = true ) {
 	}
 
 	// Get the event
-	$event      = sugar_calendar_get_event_by_object( $event_id );
+	$event  = sugar_calendar_get_event_by_object( $event_id );
 
 	// Get the date format, and format start
-	$format     = sc_get_date_format();
-	$dt         = $event->format_date( 'Y-m-d', $event->start );
-	$start_date = date_i18n( $format, $retval );
-	$start_html = '<span class="sc-date-start"><time datetime="' . esc_attr( $dt ) . '">' . esc_html( $start_date ) . '</time></span>';
+	$format = sc_get_date_format();
+	$dt     = $event->start_date( 'Y-m-d' );
+
+	// Default time zone
+	$tz     = 'floating';
+
+	// Maybe use the start time zone
+	if ( ! empty( $event->start_tz ) ) {
+		$tz = $event->start_tz;
+	}
+
+	$start_date = sugar_calendar_format_date_i18n( $format, $retval );
+	$start_html = '<span class="sc-date-start"><time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '">' . esc_html( $start_date ) . '</time></span>';
 
 	// Get the end date
 	$end = get_post_meta( $event_id, 'sc_event_end_date_time', true );
@@ -990,13 +891,29 @@ function sc_get_event_date( $event_id = 0, $formatted = true ) {
 		return $start_html;
 	}
 
-	// Format the end
-	$end_date = date_i18n( $format, $end );
+	// End date
+	$end_date = sugar_calendar_format_date_i18n( $format, $end );
 
 	// Add end to start, with separator
 	if ( $end_date !== $start_date ) {
-		$dt       = $event->format_date( 'Y-m-d', $event->end );
-		$end_html = '<span class="sc-date-start-end-sep"> - </span><span class="sc-date-end"><time datetime="' . esc_attr( $dt ) . '">' . esc_html( $end_date ) . '</time></span>';
+
+		// Default time zone
+		$tz = 'floating';
+
+		// All-day Events have floating time zones
+		if ( ! empty( $event->end_tz ) && ! $event->is_all_day() ) {
+			$tz = $event->end_tz;
+
+		// Maybe fallback to the start time zone
+		} elseif ( empty( $event->end_tz ) && ! empty( $event->start_tz ) ) {
+			$tz = $event->start_tz;
+		}
+
+		// End date
+		$dt       = $event->end_date( 'Y-m-d' );
+
+		// Output
+		$end_html = '<span class="sc-date-start-end-sep"> - </span><span class="sc-date-end"><time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '">' . esc_html( $end_date ) . '</time></span>';
 		$retval   = $start_html . $end_html;
 
 	// Just the start
@@ -1004,7 +921,7 @@ function sc_get_event_date( $event_id = 0, $formatted = true ) {
 		$retval = $start_html;
 	}
 
-	// Return the date(s) & time(s)
+	// Return the dates & times
 	return $retval;
 }
 
@@ -1037,7 +954,7 @@ function sc_get_formatted_date( $event_id = 0, $timestamp = null ) {
 	// Maybe format a timestamp if one was found
 	if ( ! empty( $timestamp ) ) {
 		$format = sc_get_date_format();
-		$retval = date_i18n( $format, $timestamp );
+		$retval = sugar_calendar_format_date_i18n( $format, $timestamp );
 	}
 
 	// Return a possibly formatted start date & time
@@ -1104,8 +1021,10 @@ function sc_get_event_start_time( $event_id = 0 ) {
 	// Format time value if not null
 	if ( ( false !== $hour ) && ( false !== $minute ) ) {
 		$format = sc_get_time_format();
-		$mktime = mktime( $hour, $minute, 0, $month, $day, $year );
-		$time   = date_i18n( $format, $mktime );
+		$mktime = gmmktime( $hour, $minute, 0, $month, $day, $year );
+
+		// @todo needs time zone support
+		$time   = sugar_calendar_format_date_i18n( $format, $mktime );
 	}
 
 	return apply_filters( 'sc_event_start_time', $time, $hour, $minute, $am_pm );
@@ -1150,8 +1069,10 @@ function sc_get_event_end_time( $event_id = 0 ) {
 	// Format time value if not null
 	if ( ( false !== $hour ) && ( false !== $minute ) ) {
 		$format = sc_get_time_format();
-		$mktime = mktime( $hour, $minute, 0, $month, $day, $year );
-		$time   = date_i18n( $format, $mktime );
+		$mktime = gmmktime( $hour, $minute, 0, $month, $day, $year );
+
+		// @todo needs time zone support
+		$time   = sugar_calendar_format_date_i18n( $format, $mktime );
 	}
 
 	return apply_filters( 'sc_event_end_time', $time, $hour, $minute );
@@ -1249,6 +1170,8 @@ function sc_get_recurring_description( $event_id = 0 ) {
 					$retval = $format[ 'weekly' ];
 				} else {
 					$retval = sprintf( __( 'Starts %s then every %s until %s', 'sugar-calendar' ),
+
+						// @todo needs time zone support
 						date_i18n( $date_format, $event_date_time ),
 						date_i18n( 'l', $event_date_time ),
 						date_i18n( $date_format, $recur_until ) );
@@ -1261,6 +1184,8 @@ function sc_get_recurring_description( $event_id = 0 ) {
 					$retval = $format[ 'monthly' ];
 				} else {
 					$retval = sprintf( __( 'Starts %s then every month on the %s until %s', 'sugar-calendar' ),
+
+						// @todo needs time zone support
 						date_i18n( $date_format, $event_date_time ),
 						date_i18n( 'jS', $event_date_time ),
 						date_i18n( $date_format, $recur_until ) );
@@ -1273,6 +1198,8 @@ function sc_get_recurring_description( $event_id = 0 ) {
 					$retval = $format[ 'yearly' ];
 				} else {
 					$retval = sprintf( __( 'Starts %s then every year on the %s of %s until %s', 'sugar-calendar' ),
+
+						// @todo needs time zone support
 						date_i18n( $date_format, $event_date_time ),
 						date_i18n( 'jS', $event_date_time ),
 						date_i18n( 'F', $event_date_time ),
@@ -1291,6 +1218,8 @@ function sc_get_recurring_description( $event_id = 0 ) {
 					$retval = $format[ 'weekly' ];
 				} else {
 					$retval = sprintf( __( 'Starts %s then every %s', 'sugar-calendar' ),
+
+						// @todo needs time zone support
 						date_i18n( $date_format, $event_date_time ),
 						date_i18n( 'l', $event_date_time ) );
 				}
@@ -1302,6 +1231,8 @@ function sc_get_recurring_description( $event_id = 0 ) {
 					$retval = $format[ 'monthly' ];
 				} else {
 					$retval = sprintf( __( 'Starts %s then every month on the %s', 'sugar-calendar' ),
+
+						// @todo needs time zone support
 						date_i18n( $date_format, $event_date_time ),
 						date_i18n( 'jS', $event_date_time ) );
 				}
@@ -1313,6 +1244,8 @@ function sc_get_recurring_description( $event_id = 0 ) {
 					$retval = $format[ 'yearly' ];
 				} else {
 					$retval = sprintf( __( 'Starts %s then every year on the %s of %s', 'sugar-calendar' ),
+
+						// @todo needs time zone support
 						date_i18n( $date_format, $event_date_time ),
 						date_i18n( 'jS', $event_date_time ),
 						date_i18n( 'F', $event_date_time ) );
@@ -1588,13 +1521,13 @@ function sc_get_recurring_events( $time, $type, $category = null ) {
 		case 'weekly' :
 			$start_key = 'sc_event_day_of_week';
 			$end_key   = 'sc_event_end_day_of_week';
-			$date      = date( 'w', $time );
+			$date      = gmdate( 'w', $time );
 			break;
 
 		case 'monthly' :
 			$start_key = 'sc_event_day_of_month';
 			$end_key   = 'sc_event_end_day_of_month';
-			$date      = date( 'd', $time );
+			$date      = gmdate( 'd', $time );
 			break;
 
 		case 'yearly' :
@@ -1644,22 +1577,22 @@ function sc_get_recurring_events( $time, $type, $category = null ) {
 			'relation' => 'AND',
 			array(
 				'key'     => 'sc_event_day_of_month',
-				'value'   => date( 'j', $time ),
+				'value'   => gmdate( 'j', $time ),
 				'compare' => '<=',
 			),
 			array(
 				'key'     => 'sc_event_end_day_of_month',
-				'value'   => date( 'j', $time ),
+				'value'   => gmdate( 'j', $time ),
 				'compare' => '>=',
 			),
 			array(
 				'key'     => 'sc_event_month',
-				'value'   => date( 'm', $time ),
+				'value'   => gmdate( 'm', $time ),
 				'compare' => '<=',
 			),
 			array(
 				'key'     => 'sc_event_end_month',
-				'value'   => date( 'm', $time ),
+				'value'   => gmdate( 'm', $time ),
 				'compare' => '>=',
 			),
 			array(
@@ -1710,12 +1643,12 @@ function sc_get_events_for_day( $display_day, $display_month, $display_year, $ca
 			'relation' => 'AND',
 			array(
 				'key'     => 'sc_event_date',
-				'value'   => mktime( 0, 0, 0, $display_month, $display_day, $display_year ),
+				'value'   => gmmktime( 0, 0, 0, $display_month, $display_day, $display_year ),
 				'compare' => '<=',
 			),
 			array(
 				'key'     => 'sc_event_end_date',
-				'value'   => mktime( 0, 0, 0, $display_month, $display_day, $display_year ),
+				'value'   => gmmktime( 0, 0, 0, $display_month, $display_day, $display_year ),
 				'compare' => '>=',
 			),
 		),
@@ -1728,7 +1661,7 @@ function sc_get_events_for_day( $display_day, $display_month, $display_year, $ca
 
 	$single = get_posts( apply_filters( 'sc_calendar_query_args', $args ) );
 
-	$recurring_timestamp = mktime( 0, 0, 0, $display_month, $display_day, $display_year );
+	$recurring_timestamp = gmmktime( 0, 0, 0, $display_month, $display_day, $display_year );
 	$yearly  = sc_get_recurring_events( $recurring_timestamp, 'yearly',  $category );
 	$monthly = sc_get_recurring_events( $recurring_timestamp, 'monthly', $category );
 	$weekly  = sc_get_recurring_events( $recurring_timestamp, 'weekly',  $category );

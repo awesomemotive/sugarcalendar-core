@@ -326,7 +326,7 @@ final class Back_Compat {
 		// Format of column is a valid datetime value
 		} elseif ( ! $this->is_datetime_empty( $this->event->{$column} ) ) {
 			$date   = strtotime( $this->event->{$column} );
-			$retval = date( $key['read'], $date );
+			$retval = gmdate( $key['read'], $date );
 
 		// Otherwise false
 		} else {
@@ -383,14 +383,14 @@ final class Back_Compat {
 
 				// Loop through parts and break date apart
 				foreach ( $parts as $part ) {
-					$dates[ $part ] = date( $part, $date );
+					$dates[ $part ] = gmdate( $part, $date );
 				}
 
 				// Override the date part
 				$dates[ $key['write'] ] = $meta_value;
 
 				// Make the new date time
-				$writeval = mktime(
+				$writeval = gmmktime(
 					$dates['H'],
 					$dates['i'],
 					$dates['s'],
@@ -401,7 +401,7 @@ final class Back_Compat {
 
 			// Updating entire value
 			} else {
-				$writeval = date( $key['write'], $meta_value );
+				$writeval = gmdate( $key['write'], $meta_value );
 			}
 		}
 

@@ -128,8 +128,8 @@ final class Term_Colors extends UI {
 	public function help_tabs() {
 		get_current_screen()->add_help_tab( array(
 			'id'      => 'wp_term_color_help_tab',
-			'title'   => __( 'Calendar Color', 'sugar-calendar' ),
-			'content' => '<p>' . __( 'Calendars can have unique colors to help separate them from each other.', 'sugar-calendar' ) . '</p>',
+			'title'   => esc_html__( 'Color', 'sugar-calendar' ),
+			'content' => '<p>' . esc_html__( 'Calendars can have unique colors to help separate them from each other.', 'sugar-calendar' ) . '</p>',
 		) );
 	}
 

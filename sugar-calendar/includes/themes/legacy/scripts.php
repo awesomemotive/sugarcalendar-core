@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  */
 function sc_register_assets() {
 
-	// Script
+	// AJAX
 	wp_register_script(
 		'sc-ajax',
 		SC_PLUGIN_URL . 'includes/themes/legacy/js/sc-ajax.js',
@@ -25,7 +25,16 @@ function sc_register_assets() {
 		false
 	);
 
-	// Style
+	// Time zones
+	wp_register_script(
+		'sc-time-zones',
+		SC_PLUGIN_URL . 'includes/themes/legacy/js/sc-time-zones.js',
+		array( 'wp-date', 'sc-ajax' ),
+		sugar_calendar_get_assets_version(),
+		false
+	);
+
+	// Events
 	wp_register_style(
 		'sc-events',
 		SC_PLUGIN_URL . 'includes/themes/legacy/css/sc-events.css',
@@ -135,9 +144,22 @@ function sc_enqueue_scripts() {
 	// Front-end AJAX
 	wp_enqueue_script( 'sc-ajax' );
 
-	// Front-end AJAX URL
+	// Front-end Time Zones
+	if ( get_option( 'sc_timezone_convert' ) ) {
+		wp_enqueue_script( 'sc-time-zones' );
+	}
+
+	// Front-end vars
 	wp_localize_script( 'sc-ajax', 'sc_vars', array(
-		'ajaxurl' => admin_url( 'admin-ajax.php' )
+
+		// AJAX
+		'ajaxurl'       => admin_url( 'admin-ajax.php' ),
+
+		// Formatting values
+		'date_format'   => sc_get_date_format(),
+		'time_format'   => sc_get_time_format(),
+		'start_of_week' => sc_get_week_start_day(),
+		'timezone'      => sugar_calendar_get_timezone()
 	) );
 }
 

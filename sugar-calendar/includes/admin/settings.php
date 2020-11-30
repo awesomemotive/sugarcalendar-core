@@ -163,6 +163,12 @@ function get_subsections( $section = '' ) {
 					'name' => esc_html__( 'Editing', 'sugar-calendar' ),
 					'url'  => admin_url( 'admin.php?page=sc-settings' ),
 					'func' => 'Sugar_Calendar\\Admin\\Settings\\editing_subsection'
+				),
+				'timezones' => array(
+					'id'   => 'timezones',
+					'name' => esc_html__( 'Time Zones', 'sugar-calendar' ),
+					'url'  => admin_url( 'admin.php?page=sc-settings' ),
+					'func' => 'Sugar_Calendar\\Admin\\Settings\\time_zone_subsection'
 				)
 			)
 		);
@@ -401,25 +407,6 @@ function page() {
 <?php
 }
 
-/**
- * Registers our settings in the various options sections
- *
- * @since 1.0.0
- */
-function register_settings() {
-
-	// Date/Time Formatting
-	register_setting( 'sc_main_display', 'sc_number_of_events' );
-	register_setting( 'sc_main_display', 'sc_start_of_week' );
-	register_setting( 'sc_main_display', 'sc_date_format' );
-	register_setting( 'sc_main_display', 'sc_time_format' );
-
-	// Blocks
-	register_setting( 'sc_main_editing', 'sc_editor_type' );
-
-	do_action( 'sugar_calendar_register_settings' );
-}
-
 /** Sections ******************************************************************/
 
 /**
@@ -428,6 +415,9 @@ function register_settings() {
  * @since 2.0.0
  */
 function display_subsection() {
+	global $wp_locale;
+
+	// Get settings
 	$events_max_num = sc_get_number_of_events();
 	$start_of_week  = sc_get_week_start_day();
 	$sc_date_format = sc_get_date_format();
@@ -439,7 +429,7 @@ function display_subsection() {
 	 * @param string[] $default_date_formats Array of default date formats.
 	 */
 	$date_formats = array_unique( apply_filters( 'date_formats', array(
-		__( 'F j, Y', 'sugar-calendar' ),
+		esc_html__( 'F j, Y', 'sugar-calendar' ),
 		'Y-m-d',
 		'm/d/Y',
 		'd/m/Y',
@@ -455,13 +445,17 @@ function display_subsection() {
 	 * @param string[] $default_time_formats Array of default time formats.
 	 */
 	$time_formats = array_unique( apply_filters( 'time_formats', array(
-		__( 'g:i a', 'sugar-calendar' ),
+		esc_html__( 'g:i a', 'sugar-calendar' ),
 		'g:i A',
 		'H:i'
 	) ) );
 
 	// Is custom time checked?
-	$custom_time_checked = ! in_array( $sc_time_format, $time_formats, true ); ?>
+	$custom_time_checked = ! in_array( $sc_time_format, $time_formats, true );
+
+	// Format and translate
+	$looks_like_date = sugar_calendar_format_date_i18n( $sc_date_format );
+	$looks_like_time = sugar_calendar_format_date_i18n( $sc_time_format ); ?>
 
 	<table class="form-table">
 		<tbody>
@@ -483,13 +477,13 @@ function display_subsection() {
 				</th>
 				<td>
 					<select name="sc_start_of_week" id="sc_start_of_week" class="sc-select-chosen">
-						<option value="0" <?php selected( $start_of_week, 0); ?>><?php esc_html_e( 'Sunday', 'sugar-calendar' ); ?></option>
-						<option value="1" <?php selected( $start_of_week, 1); ?>><?php esc_html_e( 'Monday', 'sugar-calendar' ); ?></option>
-						<option value="2" <?php selected( $start_of_week, 2); ?>><?php esc_html_e( 'Tuesday', 'sugar-calendar' ); ?></option>
-						<option value="3" <?php selected( $start_of_week, 3); ?>><?php esc_html_e( 'Wednesday', 'sugar-calendar' ); ?></option>
-						<option value="4" <?php selected( $start_of_week, 4); ?>><?php esc_html_e( 'Thursday', 'sugar-calendar' ); ?></option>
-						<option value="5" <?php selected( $start_of_week, 5); ?>><?php esc_html_e( 'Friday', 'sugar-calendar' ); ?></option>
-						<option value="6" <?php selected( $start_of_week, 6); ?>><?php esc_html_e( 'Saturday', 'sugar-calendar' ); ?></option>
+						<option value="0" <?php selected( $start_of_week, 0 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 0 ) ); ?></option>
+						<option value="1" <?php selected( $start_of_week, 1 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 1 ) ); ?></option>
+						<option value="2" <?php selected( $start_of_week, 2 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 2 ) ); ?></option>
+						<option value="3" <?php selected( $start_of_week, 3 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 3 ) ); ?></option>
+						<option value="4" <?php selected( $start_of_week, 4 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 4 ) ); ?></option>
+						<option value="5" <?php selected( $start_of_week, 5 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 5 ) ); ?></option>
+						<option value="6" <?php selected( $start_of_week, 6 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 6 ) ); ?></option>
 					</select>
 					<p class="description">
 						<?php esc_html_e( 'Select the first day of the week', 'sugar-calendar' ); ?>
@@ -515,11 +509,14 @@ function display_subsection() {
 								: '';
 
 							// Checked?
-							$checked = checked( $format, $sc_date_format, false ); ?>
+							$checked = checked( $format, $sc_date_format, false );
+
+							// Format and translate
+							$date = sugar_calendar_format_date_i18n( $format ); ?>
 
 							<label>
 								<input type="radio" <?php echo $id; ?> name="sc_date_format" value="<?php echo esc_attr( $format ); ?>"<?php echo $checked; ?> />
-								<span class="date-time-text format-i18n"><?php echo date_i18n( $format );?></span>
+								<span class="date-time-text format-i18n"><?php echo esc_html( $date ); ?></span>
 								<code><?php echo esc_html( $format ); ?></code>
 							</label>
 							<br />
@@ -544,7 +541,7 @@ function display_subsection() {
 
 						<p class="description">
 							<strong><?php esc_html_e( 'Looks Like:', 'sugar-calendar' ); ?></strong>
-							<span class="example"><?php echo date_i18n( $sc_date_format ); ?></span>
+							<span class="example"><?php echo esc_html( $looks_like_date ); ?></span>
 							<span class='spinner'></span>
 						</p>
 					</fieldset>
@@ -569,11 +566,14 @@ function display_subsection() {
 								: '';
 
 							// Checked?
-							$checked = checked( $format, $sc_time_format, false ); ?>
+							$checked = checked( $format, $sc_time_format, false );
+
+							// Format and translate
+							$time = sugar_calendar_format_date_i18n( $format ); ?>
 
 							<label>
 								<input type="radio" <?php echo $id; ?> name="sc_time_format" value="<?php echo esc_attr( $format ); ?>"<?php echo $checked; ?> />
-								<span class="date-time-text format-i18n"><?php echo date_i18n( $format );?></span>
+								<span class="date-time-text format-i18n"><?php echo esc_html( $time );?></span>
 								<code><?php echo esc_html( $format ); ?></code>
 							</label>
 							<br />
@@ -598,7 +598,7 @@ function display_subsection() {
 
 						<p class="description">
 							<strong><?php esc_html_e( 'Looks Like:', 'sugar-calendar' ); ?></strong>
-							<span class="example"><?php echo date_i18n( $sc_time_format ); ?></span>
+							<span class="example"><?php echo esc_html( $looks_like_time ); ?></span>
 							<span class='spinner'></span>
 						</p>
 					</fieldset>
@@ -617,8 +617,9 @@ function display_subsection() {
  */
 function editing_subsection() {
 
-	// Get the current editor
-	$type = Editor\current();
+	// Get the current editor settings
+	$type   = Editor\current();
+	$fields = Editor\custom_fields();
 
 	// Get the registered editors
 	$editors = Editor\registered(); ?>
@@ -649,6 +650,94 @@ function editing_subsection() {
 					</p>
 				</td>
 			</tr>
+
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="sc_custom_fields"><?php esc_html_e( 'Custom Fields', 'sugar-calendar' ); ?></label>
+				</th>
+				<td>
+					<label>
+						<input type="checkbox" name="sc_custom_fields" id="sc_custom_fields" value="1" <?php checked( $fields ); ?> />
+						<?php esc_html_e( 'Enable Custom Fields', 'sugar-calendar' ); ?>
+					</label>
+					<p class="description">
+						<?php _e( 'Allow developers to extend post types that support <code>events</code>.', 'sugar-calendar' ); ?>
+					</p>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+<?php
+}
+
+/**
+ * Output the "Time Zone" subsection.
+ *
+ * @since 2.1.0
+ */
+function time_zone_subsection() {
+
+	// Get the current settings
+	$timezone  = get_option( 'sc_timezone',         ''    );
+	$tztype    = get_option( 'sc_timezone_type',    'off' );
+	$tzconvert = get_option( 'sc_timezone_convert', false );
+
+	// Types
+	$types = array(
+		'off'    => esc_html__( 'Off',    'sugar-calendar' ),
+		'single' => esc_html__( 'Single', 'sugar-calendar' ),
+		'multi'  => esc_html__( 'Multi',  'sugar-calendar' )
+	); ?>
+
+	<table class="form-table">
+		<tbody>
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="sc_timezone_type"><?php esc_html_e( 'Time Zones', 'sugar-calendar' ); ?></label>
+				</th>
+				<td>
+					<select name="sc_timezone_type" id="sc_timezone_type" class="sc-select-chosen">
+						<?php foreach ( $types as $type => $label ) : ?>
+
+							<option value="<?php echo esc_attr( $type ); ?>" <?php selected( $tztype,  $type ); ?>><?php echo esc_html( $label ); ?></option>
+
+						<?php endforeach; ?>
+					</select>
+					<p class="description">
+						<?php _e( '"Off" by default (Existing time zone data still appears).<br>"Single" allows Events to have one time zone.<br>"Multi" allows Events to have different start & end time zones.<br>"Single" and "Multi" will enable time zones for Calendars.', 'sugar-calendar' ); ?>
+					</p>
+				</td>
+			</tr>
+
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="sc_timezone"><?php esc_html_e( 'Default Time Zone', 'sugar-calendar' ); ?></label>
+				</th>
+				<td>
+					<?php sugar_calendar_timezone_dropdown( array(
+						'current' => $timezone
+					) ); ?>
+					<p class="description">
+						<?php _e( 'When time zones are enabled, new Events will default to this.<br>If you are unsure, leave empty or pick the time zone you are in.', 'sugar-calendar' ); ?>
+					</p>
+				</td>
+			</tr>
+
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="sc_timezone_convert"><?php esc_html_e( 'Visitor Conversion', 'sugar-calendar' ); ?></label>
+				</th>
+				<td>
+					<label>
+						<input type="checkbox" name="sc_timezone_convert" id="sc_timezone_convert" value="1" <?php checked( $tzconvert ); ?> />
+						<?php esc_html_e( 'Enable Conversion', 'sugar-calendar' ); ?>
+					</label>
+					<p class="description">
+						<?php _e( 'Attempts to update theme-side Event times according to visitor web browser location.<br>Depends on client-side browser support. May not work for all visitors.', 'sugar-calendar' ); ?>
+					</p>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 
@@ -661,7 +750,20 @@ function editing_subsection() {
  * @since 2.0.14
  */
 function ajax_date_format() {
-	wp_die( date_i18n( sanitize_option( 'date_format', wp_unslash( $_POST['sc_date'] ) ) ) );
+
+	// Sanitize
+	$date = ! empty( $_POST['sc_date'] )
+		? wp_unslash( $_POST['sc_date'] )
+		: '';
+
+	// Get format
+	$format = sanitize_option( 'date_format', $date );
+
+	// Format and translate
+	$retval = sugar_calendar_format_date_i18n( $format );
+
+	// Output
+	wp_die( $retval );
 }
 
 /**
@@ -670,7 +772,20 @@ function ajax_date_format() {
  * @since 2.0.14
  */
 function ajax_time_format() {
-	wp_die( date_i18n( sanitize_option( 'time_format', wp_unslash( $_POST['sc_date'] ) ) ) );
+
+	// Sanitize
+	$time = ! empty( $_POST['sc_date'] )
+		? wp_unslash( $_POST['sc_date'] )
+		: '';
+
+	// Get format
+	$format = sanitize_option( 'time_format', $time );
+
+	// Format and translate
+	$retval = sugar_calendar_format_date_i18n( $format );
+
+	// Output
+	wp_die( $retval );
 }
 
 /**

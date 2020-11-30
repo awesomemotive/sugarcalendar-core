@@ -16,6 +16,9 @@ add_action( 'init', 'sugar_calendar_register_meta_data'  );
 add_action( 'init', 'sugar_calendar_register_calendar_taxonomy', 9 );
 add_action( 'init', 'sugar_calendar_relate_taxonomy_to_post_types', 11 );
 
+// Settings
+add_action( 'init', 'sugar_calendar_register_settings' );
+
 // Caps
 add_filter( 'map_meta_cap', 'sugar_calendar_post_meta_caps',     10, 4 );
 add_filter( 'map_meta_cap', 'sugar_calendar_category_meta_caps', 10, 4 );

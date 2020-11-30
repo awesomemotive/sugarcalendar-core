@@ -65,14 +65,6 @@ abstract class Table extends Base {
 	protected $global = false;
 
 	/**
-	 * Passed directly into register_activation_hook()
-	 *
-	 * @since 1.0.0
-	 * @var   string
-	 */
-	protected $file = '';
-
-	/**
 	 * Database version key (saved in _options or _sitemeta)
 	 *
 	 * @since 1.0.0
@@ -165,24 +157,6 @@ abstract class Table extends Base {
 		// Maybe force upgrade if testing
 		if ( $this->is_testing() ) {
 			$this->maybe_upgrade();
-		}
-	}
-
-	/**
-	 * Compatibility for clone() method for PHP versions less than 7.0.
-	 *
-	 * See: https://github.com/sugarcalendar/core/issues/105
-	 *
-	 * This shim will be removed at a later date.
-	 *
-	 * @since 2.0.20
-	 *
-	 * @param string $function
-	 * @param array  $args
-	 */
-	public function __call( $function = '', $args = array() ) {
-		if ( 'clone' === $function ) {
-			call_user_func_array( array( $this, '_clone' ), $args );
 		}
 	}
 
@@ -354,7 +328,7 @@ abstract class Table extends Base {
 
 		// Bail if no database interface is available
 		if ( empty( $db ) ) {
-			return;
+			return false;
 		}
 
 		// Query statement
@@ -362,33 +336,6 @@ abstract class Table extends Base {
 		$like     = $db->esc_like( $this->table_name );
 		$prepared = $db->prepare( $query, $like );
 		$result   = $db->get_var( $prepared );
-
-		// Does the table exist?
-		return $this->is_success( $result );
-	}
-
-	/**
-	 * Check if table already exists.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return bool
-	 */
-	public function column_exists( $name = '' ) {
-
-		// Get the database interface
-		$db = $this->get_db();
-
-		// Bail if no database interface is available
-		if ( empty( $db ) ) {
-			return;
-		}
-
-		// Query statement
-		$query    = "SHOW COLUMNS FROM {$this->table_name} LIKE %s";
-		$like     = $db->esc_like( $name );
-		$prepared = $db->prepare( $query, $like );
-		$result   = $db->query( $prepared );
 
 		// Does the table exist?
 		return $this->is_success( $result );
@@ -408,7 +355,7 @@ abstract class Table extends Base {
 
 		// Bail if no database interface is available
 		if ( empty( $db ) ) {
-			return;
+			return false;
 		}
 
 		// Query statement
@@ -424,7 +371,7 @@ abstract class Table extends Base {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return mixed
+	 * @return bool
 	 */
 	public function drop() {
 
@@ -433,7 +380,7 @@ abstract class Table extends Base {
 
 		// Bail if no database interface is available
 		if ( empty( $db ) ) {
-			return;
+			return false;
 		}
 
 		// Query statement
@@ -449,7 +396,7 @@ abstract class Table extends Base {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return mixed
+	 * @return bool
 	 */
 	public function truncate() {
 
@@ -458,7 +405,7 @@ abstract class Table extends Base {
 
 		// Bail if no database interface is available
 		if ( empty( $db ) ) {
-			return;
+			return false;
 		}
 
 		// Query statement
@@ -474,7 +421,7 @@ abstract class Table extends Base {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return mixed
+	 * @return bool
 	 */
 	public function delete_all() {
 
@@ -483,7 +430,7 @@ abstract class Table extends Base {
 
 		// Bail if no database interface is available
 		if ( empty( $db ) ) {
-			return;
+			return false;
 		}
 
 		// Query statement
@@ -503,16 +450,16 @@ abstract class Table extends Base {
 	 *
 	 * @param string $new_table_name The name of the new table, without prefix
 	 *
-	 * @return mixed
+	 * @return bool
 	 */
-	public function _clone( $new_table_name = '' ) {
+	public function clone( $new_table_name = '' ) {
 
 		// Get the database interface
 		$db = $this->get_db();
 
 		// Bail if no database interface is available
 		if ( empty( $db ) ) {
-			return;
+			return false;
 		}
 
 		// Sanitize the new table name
@@ -520,7 +467,7 @@ abstract class Table extends Base {
 
 		// Bail if new table name is invalid
 		if ( empty( $table_name ) ) {
-			return;
+			return false;
 		}
 
 		// Query statement
@@ -541,7 +488,7 @@ abstract class Table extends Base {
 	 *
 	 * @param string $new_table_name The name of the new table, without prefix
 	 *
-	 * @return mixed
+	 * @return bool
 	 */
 	public function copy( $new_table_name = '' ) {
 
@@ -550,7 +497,7 @@ abstract class Table extends Base {
 
 		// Bail if no database interface is available
 		if ( empty( $db ) ) {
-			return;
+			return false;
 		}
 
 		// Sanitize the new table name
@@ -558,7 +505,7 @@ abstract class Table extends Base {
 
 		// Bail if new table name is invalid
 		if ( empty( $table_name ) ) {
-			return;
+			return false;
 		}
 
 		// Query statement
@@ -575,7 +522,7 @@ abstract class Table extends Base {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return mixed
+	 * @return int
 	 */
 	public function count() {
 
@@ -584,7 +531,7 @@ abstract class Table extends Base {
 
 		// Bail if no database interface is available
 		if ( empty( $db ) ) {
-			return;
+			return 0;
 		}
 
 		// Query statement
@@ -592,7 +539,66 @@ abstract class Table extends Base {
 		$count = $db->get_var( $query );
 
 		// Query success/fail
-		return $count;
+		return intval( $count );
+	}
+
+	/**
+	 * Check if column already exists.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $name Value
+	 *
+	 * @return bool
+	 */
+	public function column_exists( $name = '' ) {
+
+		// Get the database interface
+		$db = $this->get_db();
+
+		// Bail if no database interface is available
+		if ( empty( $db ) ) {
+			return false;
+		}
+
+		// Query statement
+		$query    = "SHOW COLUMNS FROM {$this->table_name} LIKE %s";
+		$like     = $db->esc_like( $name );
+		$prepared = $db->prepare( $query, $like );
+		$result   = $db->query( $prepared );
+
+		// Does the column exist?
+		return $this->is_success( $result );
+	}
+
+	/**
+	 * Check if index already exists.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $name   Value
+	 * @param string $column Column name
+	 *
+	 * @return bool
+	 */
+	public function index_exists( $name = '', $column = 'Key_name' ) {
+
+		// Get the database interface
+		$db = $this->get_db();
+
+		// Bail if no database interface is available
+		if ( empty( $db ) ) {
+			return false;
+		}
+
+		// Query statement
+		$query    = "SHOW INDEXES FROM {$this->table_name} WHERE %s LIKE %s";
+		$like     = $db->esc_like( $name );
+		$prepared = $db->prepare( $query, $column, $like );
+		$result   = $db->query( $prepared );
+
+		// Does the index exist?
+		return $this->is_success( $result );
 	}
 
 	/** Upgrades **************************************************************/
@@ -602,7 +608,7 @@ abstract class Table extends Base {
 	 *
 	 * @since 1.0.0
 	 *
-	 * return bool
+	 * @return bool
 	 */
 	public function upgrade() {
 
@@ -737,7 +743,7 @@ abstract class Table extends Base {
 
 		// Maybe create database key
 		if ( empty( $this->db_version_key ) ) {
-			$this->db_version_key = "wpdb_{$this->prefixed_name}_version";
+			$this->db_version_key = "{$this->db_global}_{$this->prefixed_name}_version";
 		}
 	}
 
@@ -839,8 +845,8 @@ abstract class Table extends Base {
 	 */
 	private function delete_db_version() {
 		$this->db_version = $this->is_global()
-			? delete_network_option( get_main_network_id(), $this->db_version_key, false )
-			:         delete_option(                        $this->db_version_key, false );
+			? delete_network_option( get_main_network_id(), $this->db_version_key )
+			:         delete_option(                        $this->db_version_key );
 	}
 
 	/**
@@ -849,9 +855,6 @@ abstract class Table extends Base {
 	 * @since 1.0.0
 	 */
 	private function add_hooks() {
-
-		// Activation hook
-		register_activation_hook( $this->file, array( $this, 'maybe_upgrade' ) );
 
 		// Add table to the global database object
 		add_action( 'switch_blog', array( $this, 'switch_blog'   ) );

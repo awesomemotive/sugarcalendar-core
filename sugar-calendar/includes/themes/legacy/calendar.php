@@ -52,18 +52,18 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 	// Year can be set via function parameter
 	$display_year = ! is_null( $year_override )
 		? absint( $year_override )
-		: date( 'Y', $display_time );
+		: gmdate( 'Y', $display_time );
 
 	// Month can be set via function parameter
 	$display_month = ! is_null( $month_override )
 		? absint( $month_override )
-		: date( 'n', $display_time );
+		: gmdate( 'n', $display_time );
 
 	// Day is always derived from time (for week & 4day views)
-	$display_day = date( 'j', $display_time );
+	$display_day = gmdate( 'j', $display_time );
 
 	// Recalculate display time for $calendar_func below
-	$display_time = mktime( 0, 0, 0, $display_month, $display_day, $display_year );
+	$display_time = gmmktime( 0, 0, 0, $display_month, $display_day, $display_year );
 
 	$months = array(
 		1  => sc_month_num_to_name(1),

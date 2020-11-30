@@ -66,8 +66,8 @@ class TimeZones extends \WP_UnitTestCase {
 	public function test_get_timezone_diff_midway_to_tongatapu() {
 		$assert = sugar_calendar_get_timezone_diff( 'Pacific/Midway', 'Pacific/Tongatapu', '2020-11-23 00:00:00' );
 		$same   = version_compare( phpversion(), '7.0', '=' )
-			? -24 * HOUR_IN_SECONDS
-			: -25 * HOUR_IN_SECONDS;
+			? -25 * HOUR_IN_SECONDS
+			: -24 * HOUR_IN_SECONDS;
 
 		$this->assertSame( $same, $assert );
 	}

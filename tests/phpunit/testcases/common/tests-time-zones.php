@@ -61,7 +61,7 @@ class TimeZones extends \WP_UnitTestCase {
 	/**
 	 * At 2020-11-23 00:00:00, Honalulu is 11 hours behind Midway.
 	 */
-	public function test_get_timezone_diff_midway_to_tongatapu() {
+	public function test_get_timezone_diff_midway_to_honalulu() {
 		$assert = sugar_calendar_get_timezone_diff( 'Pacific/Midway', 'Pacific/Honalulu', '2020-11-23 00:00:00' );
 		$same   = -11 * HOUR_IN_SECONDS;
 

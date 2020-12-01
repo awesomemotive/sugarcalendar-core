@@ -106,6 +106,15 @@ class Base_List_Table extends \WP_List_Table {
 	public $view_duration = 0;
 
 	/**
+	 * The time zone for the current view
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var object
+	 */
+	public $view_timezone = false;
+
+	/**
 	 * The items with pointers
 	 *
 	 * @since 2.0.0
@@ -149,6 +158,15 @@ class Base_List_Table extends \WP_List_Table {
 	 * @var int
 	 */
 	protected $today = '';
+
+	/**
+	 * The current time zone object, derived from $view_timezone
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var object
+	 */
+	protected $timezone = 'UTC';
 
 	/**
 	 * The timestamp for this exact microsecond.
@@ -292,6 +310,9 @@ class Base_List_Table extends \WP_List_Table {
 		$this->month = $this->get_month();
 		$this->day   = $this->get_day();
 
+		// Set time zone
+		$this->timezone = $this->get_timezone();
+
 		// Set "today" based on current request
 		$this->today = strtotime( "{$this->year}/{$this->month}/{$this->day}" );
 	}
@@ -359,10 +380,13 @@ class Base_List_Table extends \WP_List_Table {
 		$start_time = strtotime( $start );
 		$end_time   = strtotime( $end   );
 
-		// Set view properties
+		// Set view boundaries
 		$this->view_start    = $start;
 		$this->view_end      = $end;
 		$this->view_duration = ( $end_time - $start_time );
+
+		// Set view time zone
+		$this->view_timezone = sugar_calendar_get_timezone_object( $this->timezone );
 	}
 
 	/** Getters ***************************************************************/
@@ -497,7 +521,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_current_time() {
-		return sugar_calendar_get_request_time();
+		return sugar_calendar_get_request_time( 'timestamp', $this->get_timezone() );
 	}
 
 	/**
@@ -559,6 +583,7 @@ class Base_List_Table extends \WP_List_Table {
 			'cy'          => $this->get_year(),
 			'cm'          => $this->get_month(),
 			'cd'          => $this->get_day(),
+			'cz'          => $this->get_timezone(),
 			'mode'        => $this->get_mode(),
 			'status'      => $this->get_status(),
 			'object_type' => $this->get_object_type(),
@@ -772,6 +797,17 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	protected function get_year() {
 		return $this->get_request_var( 'cy', 'intval', gmdate( 'Y', $this->now ) );
+	}
+
+	/**
+	 * Get the current time zone
+	 *
+	 * @since 2.1.0
+	 *
+	 * @return int
+	 */
+	protected function get_timezone() {
+		return $this->get_request_var( 'cz', 'urldecode', sugar_calendar_get_timezone() );
 	}
 
 	/**
@@ -1490,19 +1526,6 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Get the time zone
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param string $timezone
-	 *
-	 * @return string
-	 */
-	protected function get_time_zone( $timezone = '' ) {
-		return sugar_calendar_format_timezone( $timezone );
-	}
-
-	/**
 	 * Get the time zone offset
 	 *
 	 * @since 2.1.0
@@ -1908,12 +1931,12 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Start time zone
 		if ( ! empty( $event->start_tz ) ) {
-			$stz = '<span class="sc-timezone">' . esc_html( $this->get_time_zone( $event->start_tz ) ) . '</span>';
+			$stz = '<span class="sc-timezone">' . esc_html( sugar_calendar_format_timezone( $event->start_tz ) ) . '</span>';
 		}
 
 		// End time zone
 		if ( ! empty( $event->end_tz ) ) {
-			$etz = '<span class="sc-timezone">' . esc_html( $this->get_time_zone( $event->end_tz ) ) . '</span>';
+			$etz = '<span class="sc-timezone">' . esc_html( sugar_calendar_format_timezone( $event->end_tz ) ) . '</span>';
 		} elseif ( ! empty( $stz ) ) {
 			$etz = $stz;
 		}
@@ -2437,6 +2460,7 @@ class Base_List_Table extends \WP_List_Table {
 				<input type="hidden" name="cd" value="<?php echo esc_attr( $this->get_day() ); ?>" />
 				<input type="hidden" name="cm" value="<?php echo esc_attr( $this->get_month() ); ?>" />
 				<input type="hidden" name="cy" value="<?php echo esc_attr( $this->get_year() ); ?>" />
+				<input type="hidden" name="cz" value="<?php echo esc_attr( $this->get_timezone() ); ?>" />
 				<input type="hidden" name="order" value="<?php echo esc_attr( $this->get_order() ); ?>" />
 				<input type="hidden" name="orderby" value="<?php echo esc_attr( $this->get_orderby() ); ?>" />
 			</div>

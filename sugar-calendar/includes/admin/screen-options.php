@@ -51,6 +51,23 @@ function display( $settings = '', $screen = false ) {
 }
 
 /**
+ * Return the default preferences
+ *
+ * @since 2.1.1
+ *
+ * @return array
+ */
+function get_defaults() {
+	return array(
+		'sc_events_max_num' => '100',
+		'date_format'       => 'F j, Y',
+		'time_format'       => 'g:i a',
+		'start_of_week'     => '1',
+		'timezone'          => ''
+	);
+}
+
+/**
  * Output the various screen option settings for Calendar page views and modes
  *
  * @since 2.0.0
@@ -58,13 +75,15 @@ function display( $settings = '', $screen = false ) {
 function preferences() {
 	global $wp_locale;
 
-	// Get the preferences
-	$preferences = array(
-		'sc_events_max_num' => '100',
-		'date_format'       => 'F j, Y',
-		'time_format'       => 'g:i a',
-		'start_of_week'     => '1',
-	);
+	// Default values
+	$start_of_week = null;
+	$sc_events_max_num = null;
+	$date_format = null;
+	$time_format = null;
+	$timezone = null;
+
+	// Get the default preferences
+	$preferences = get_defaults();
 
 	// Assign preferences to variable variables to use below
 	foreach ( $preferences as $key => $default ) {
@@ -124,6 +143,21 @@ function preferences() {
 					<label title="H:i"><input type="radio" name="time_format" value="H:i" <?php checked( 'H:i', $time_format ); ?>> <span><?php echo gmdate( 'H:i' ); ?></span></label><br/>
 				</td>
 			</tr>
+
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="timezone"><?php esc_html_e( 'Time Zone', 'sugar-calendar' ); ?></label>
+				</th>
+				<td>
+					<?php sugar_calendar_timezone_dropdown( array(
+						'id'      => 'timezone',
+						'name'    => 'timezone',
+						'class'   => '',
+						'none'    => esc_html__( 'Floating', 'sugar-calendar' ),
+						'current' => $timezone
+					) ); ?>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 
@@ -153,17 +187,13 @@ function save() {
 	// Nonce check
 	check_admin_referer( 'screen-options-nonce', 'screenoptionnonce' );
 
-	// Get the preferences
-	$preferences = array(
-		'sc_events_max_num' => '100',
-		'date_format'       => 'F j, Y',
-		'time_format'       => 'g:i a',
-		'start_of_week'     => '1',
-	);
+	// Get the default preferences
+	$preferences = get_defaults();
 
 	// Assign preferences to variable variables to use below
 	foreach ( $preferences as $key => $default ) {
 
+		// Get the POSTed value of this key
 		$pref = isset( $_POST[ $key ] )
 			? sanitize_text_field( $_POST[ $key ] )
 			: $default;

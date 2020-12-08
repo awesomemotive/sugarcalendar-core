@@ -983,7 +983,7 @@ function section_duration( $event = null ) {
 	/** Time Zones ************************************************************/
 
 	// Default time zone on "Add New"
-	if ( empty( $event->end_tz ) && ! empty( $tztype ) && ! $event->exists() ) {
+	if ( empty( $event->end_tz ) && ( 'off' !== $tztype ) && ! $event->exists() ) {
 		$end_tz = $timezone;
 
 	// Event end time zone
@@ -992,7 +992,7 @@ function section_duration( $event = null ) {
 	}
 
 	// Default time zone on "Add New"
-	if ( empty( $event->start_tz ) && ! empty( $tztype ) && ! $event->exists() ) {
+	if ( empty( $event->start_tz ) && ( 'off' !== $tztype ) && ! $event->exists() ) {
 		$start_tz = $timezone;
 
 	// Event start time zone

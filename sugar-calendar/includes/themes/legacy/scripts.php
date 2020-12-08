@@ -159,7 +159,7 @@ function sc_enqueue_scripts() {
 		'date_format'   => sc_get_date_format(),
 		'time_format'   => sc_get_time_format(),
 		'start_of_week' => sc_get_week_start_day(),
-		'timezone'      => sugar_calendar_get_timezone()
+		'timezone'      => sc_get_timezone()
 	) );
 }
 

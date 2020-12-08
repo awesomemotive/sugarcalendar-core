@@ -27,13 +27,13 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 2.0.3
  *
- * @param string   $type Type of time to retrieve. Accepts 'mysql', 'timestamp', or PHP date
- *                       format string (e.g. 'Y-m-d').
- * @param int|bool $gmt  Optional. Whether to use GMT time zone. Default false.
+ * @param string $type     Type of time to retrieve. Accepts 'mysql',
+ *                         'timestamp', or PHP date format string (e.g. 'Y-m-d').
+ * @param string $timezone Optional. Whether to use GMT time zone. Default false.
  *
  * @return int|string Integer if $type is 'timestamp', string otherwise.
  */
-function sugar_calendar_get_request_time( $type = 'timestamp', $gmt = 0 ) {
+function sugar_calendar_get_request_time( $type = 'timestamp', $timezone = 'UTC' ) {
 	global $timestart;
 
 	// Should never be empty, but just in case...
@@ -42,22 +42,41 @@ function sugar_calendar_get_request_time( $type = 'timestamp', $gmt = 0 ) {
 	}
 
 	// Get the offset
-	$offset = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+	$offset = sugar_calendar_get_timezone_offset( array(
+		'time'     => (int) $timestart,
+		'timezone' => $timezone,
+		'format'   => 'seconds'
+	) );
 
+	// What type of
 	switch ( $type ) {
-		case 'mysql':
-			return ! empty( $gmt )
+
+		// 'Y-m-d H:i:s'
+		case 'mysql' :
+		case 'Y-m-d H:i:s' :
+			$retval = ( 'UTC' === $timezone )
 				? gmdate( 'Y-m-d H:i:s' )
 				: gmdate( 'Y-m-d H:i:s', ( $timestart + $offset ) );
-		case 'timestamp':
-			return ! empty( $gmt )
+			break;
+
+		// Unix timestamp
+		case 'timestamp' :
+		case '' :
+			$retval = ( 'UTC' === $timezone )
 				? $timestart
 				: $timestart + $offset;
-		default:
-			return ! empty( $gmt )
+			break;
+
+		// Mixed string
+		default :
+			$retval = ( 'UTC' === $timezone )
 				? gmdate( $type )
 				: gmdate( $type, ( $timestart + $offset ) );
+			break;
 	}
+
+	// Return
+	return $retval;
 }
 
 /**
@@ -81,7 +100,7 @@ function sugar_calendar_get_request_time( $type = 'timestamp', $gmt = 0 ) {
  * @param int|bool   $newer_date Optional. Unix timestamp of date to compare older
  *                               date to. Default: false (current time).
  *
- * @return string String representing the time since the older date - 
+ * @return string String representing the time since the older date -
  *         "2 hours and 50 minutes".
  */
 function sugar_calendar_human_diff_time( $older_date, $newer_date = false ) {

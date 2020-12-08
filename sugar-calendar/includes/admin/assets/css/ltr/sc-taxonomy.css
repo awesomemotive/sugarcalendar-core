@@ -28,13 +28,20 @@ body.js.sugar-calendar.edit-tags-php .search-form {
 	position: relative;
 	box-sizing: border-box;
 	margin: 2px 0 25px;
-	padding: 11px;
+	padding: 11px 10px;
 	width: 100%;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 	border: 1px solid #ccd0d4;
 	background: #fff;
 	color: #555;
 	font-size: 13px;
+}
+
+body.js.sugar-calendar.edit-tags-php .search-form input[type="search"] {
+	float: none;
+	margin: 0;
+    width: 280px;
+    max-width: 100%;
 }
 
 body.js.sugar-calendar.edit-tags-php .search-form #search-submit {

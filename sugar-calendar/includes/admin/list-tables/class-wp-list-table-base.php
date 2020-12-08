@@ -3038,7 +3038,10 @@ class Base_List_Table extends \WP_List_Table {
 
 				<span class="sc-timezone"><?php echo esc_html( $timezone ); ?></span>
 
-			<?php endif; ?>
+			<?php endif;
+
+			// Before action
+			do_action( 'sugar_calendar_admin_before_pagination', $this ); ?>
 
 			<a href="#" class="hide-if-no-js screen-options">
 				<span class="screen-reader-text"><?php esc_html_e( 'Options', 'sugar-calendar' ); ?></span>
@@ -3069,6 +3072,12 @@ class Base_List_Table extends \WP_List_Table {
 				<span class="screen-reader-text"><?php echo esc_html( $r['labels']['next_large'] ); ?></span>
 				<span aria-hidden="true">&raquo;</span>
 			</a>
+
+			<?php
+
+			// After action
+			do_action( 'sugar_calendar_admin_after_pagination', $this ); ?>
+
 		</div>
 
 		<?php

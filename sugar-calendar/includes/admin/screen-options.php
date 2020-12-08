@@ -85,6 +85,9 @@ function preferences() {
 	// Get the default preferences
 	$preferences = get_defaults();
 
+	// Get the time zone type
+	$tztype = sugar_calendar_get_timezone_type();
+
 	// Assign preferences to variable variables to use below
 	foreach ( $preferences as $key => $default ) {
 		${$key} = sugar_calendar_get_user_preference( $key, $default );
@@ -144,20 +147,25 @@ function preferences() {
 				</td>
 			</tr>
 
-			<tr valign="top">
-				<th scope="row" valign="top">
-					<label for="sc_timezone"><?php esc_html_e( 'Time Zone', 'sugar-calendar' ); ?></label>
-				</th>
-				<td>
-					<?php sugar_calendar_timezone_dropdown( array(
-						'id'      => 'sc_timezone',
-						'name'    => 'sc_timezone',
-						'class'   => '',
-						'none'    => esc_html__( 'Floating', 'sugar-calendar' ),
-						'current' => $sc_timezone
-					) ); ?>
-				</td>
-			</tr>
+			<?php if ( 'off' !== $tztype ) : ?>
+
+				<tr valign="top">
+					<th scope="row" valign="top">
+						<label for="sc_timezone"><?php esc_html_e( 'Time Zone', 'sugar-calendar' ); ?></label>
+					</th>
+					<td>
+						<?php sugar_calendar_timezone_dropdown( array(
+							'id'      => 'sc_timezone',
+							'name'    => 'sc_timezone',
+							'class'   => '',
+							'none'    => esc_html__( 'Floating', 'sugar-calendar' ),
+							'current' => $sc_timezone
+						) ); ?>
+					</td>
+				</tr>
+
+			<?php endif; ?>
+
 		</tbody>
 	</table>
 

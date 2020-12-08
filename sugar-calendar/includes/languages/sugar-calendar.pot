@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.1.1\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2020-12-08 00:28:19+00:00\n"
+"POT-Creation-Date: 2020-12-08 02:40:33+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -502,7 +502,7 @@ msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:387
 #: sugar-calendar/includes/admin/meta-boxes.php:1176
-#: sugar-calendar/includes/admin/screen-options.php:149
+#: sugar-calendar/includes/admin/screen-options.php:154
 #: sugar-calendar/includes/classes/terms/class-term-timezones.php:79
 #: sugar-calendar/includes/classes/terms/class-term-timezones.php:137
 msgid "Time Zone"
@@ -839,7 +839,7 @@ msgstr ""
 msgid "Previous year"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3038
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3044
 #: sugar-calendar/includes/admin/settings.php:536
 #: sugar-calendar/includes/admin/settings.php:593
 msgid "Options"
@@ -1054,40 +1054,40 @@ msgstr ""
 msgid "Event draft updated."
 msgstr ""
 
-#: sugar-calendar/includes/admin/screen-options.php:97
+#: sugar-calendar/includes/admin/screen-options.php:100
 #: sugar-calendar/includes/admin/settings.php:464
 msgid "Maximum Events"
 msgstr ""
 
-#: sugar-calendar/includes/admin/screen-options.php:106
+#: sugar-calendar/includes/admin/screen-options.php:109
 #: sugar-calendar/includes/admin/settings.php:476
 msgid "Start of Week"
 msgstr ""
 
-#: sugar-calendar/includes/admin/screen-options.php:119
+#: sugar-calendar/includes/admin/screen-options.php:122
 #: sugar-calendar/includes/admin/settings.php:489
 msgid "Select the first day of the week"
 msgstr ""
 
-#: sugar-calendar/includes/admin/screen-options.php:126
+#: sugar-calendar/includes/admin/screen-options.php:129
 #: sugar-calendar/includes/admin/settings.php:496
 #: sugar-calendar/includes/admin/settings.php:501
 msgid "Date Format"
 msgstr ""
 
-#: sugar-calendar/includes/admin/screen-options.php:138
+#: sugar-calendar/includes/admin/screen-options.php:141
 #: sugar-calendar/includes/admin/settings.php:553
 #: sugar-calendar/includes/admin/settings.php:558
 msgid "Time Format"
 msgstr ""
 
-#: sugar-calendar/includes/admin/screen-options.php:156
+#: sugar-calendar/includes/admin/screen-options.php:161
 #: sugar-calendar/includes/common/time-zones.php:243
 #: sugar-calendar/includes/common/time-zones.php:739
 msgid "Floating"
 msgstr ""
 
-#: sugar-calendar/includes/admin/screen-options.php:168
+#: sugar-calendar/includes/admin/screen-options.php:176
 msgid "Apply"
 msgstr ""
 

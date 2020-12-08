@@ -3024,7 +3024,8 @@ class Base_List_Table extends \WP_List_Table {
 		$next_large_link = add_query_arg( $next_large_args, $today );
 
 		// Time zone
-		$timezone = ! empty( $this->timezone )
+		$tztype   = sugar_calendar_get_timezone_type();
+		$timezone = ! empty( $this->timezone ) & ( 'off' !== $tztype )
 			? sugar_calendar_format_timezone( $this->timezone )
 			: '';
 
@@ -3032,7 +3033,12 @@ class Base_List_Table extends \WP_List_Table {
 		ob_start(); ?>
 
 		<div class="tablenav-pages">
-			<span class="sc-timezone"><?php echo esc_html( $timezone ); ?></span>
+
+			<?php if ( 'off' !== $tztype ) : ?>
+
+				<span class="sc-timezone"><?php echo esc_html( $timezone ); ?></span>
+
+			<?php endif; ?>
 
 			<a href="#" class="hide-if-no-js screen-options">
 				<span class="screen-reader-text"><?php esc_html_e( 'Options', 'sugar-calendar' ); ?></span>

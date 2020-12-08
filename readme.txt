@@ -8,7 +8,7 @@ License:           GNU General Public License v2 or later
 Tags:              simple calendar, event calendar, event management, event list, schedule
 Requires PHP:      5.6.20
 Requires at least: 5.1
-Tested up to:      5.7
+Tested up to:      5.6
 Stable tag:        2.1.1
 
 You can easily manage events with this lightweight calendar. No complicated configuration. Simple to use. Sweeeet!

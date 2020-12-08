@@ -297,6 +297,9 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	protected function init_boundaries() {
 
+		// Set time zone first, so everything uses the same one
+		$this->timezone = $this->get_timezone();
+
 		// Set now once, so everything uses the same timestamp
 		$this->now = $this->get_current_time();
 
@@ -309,9 +312,6 @@ class Base_List_Table extends \WP_List_Table {
 		$this->year  = $this->get_year();
 		$this->month = $this->get_month();
 		$this->day   = $this->get_day();
-
-		// Set time zone
-		$this->timezone = $this->get_timezone();
 
 		// Set "today" based on current request
 		$this->today = strtotime( "{$this->year}/{$this->month}/{$this->day}" );
@@ -521,7 +521,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_current_time() {
-		return sugar_calendar_get_request_time( 'timestamp', $this->get_timezone() );
+		return sugar_calendar_get_request_time( 'timestamp', $this->timezone );
 	}
 
 	/**
@@ -585,6 +585,7 @@ class Base_List_Table extends \WP_List_Table {
 			'cd'          => $this->get_day(),
 			'cz'          => $this->get_timezone(),
 			'mode'        => $this->get_mode(),
+			'max'         => $this->get_max(),
 			'status'      => $this->get_status(),
 			'object_type' => $this->get_object_type(),
 			's'           => $this->get_search()
@@ -813,8 +814,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function get_timezone() {
-		$fallback = sugar_calendar_get_timezone();
-		$default  = sugar_calendar_get_user_preference( 'timezone', $fallback );
+		$default = sugar_calendar_get_timezone();
 
 		return $this->get_request_var( 'cz', 'urldecode', $default );
 	}
@@ -2469,6 +2469,7 @@ class Base_List_Table extends \WP_List_Table {
 				<input type="hidden" name="cz" value="<?php echo esc_attr( $this->get_timezone() ); ?>" />
 				<input type="hidden" name="order" value="<?php echo esc_attr( $this->get_order() ); ?>" />
 				<input type="hidden" name="orderby" value="<?php echo esc_attr( $this->get_orderby() ); ?>" />
+				<input type="hidden" name="max" value="<?php echo esc_attr( $this->get_max() ); ?>" />
 			</div>
 		</form>
 
@@ -3023,8 +3024,8 @@ class Base_List_Table extends \WP_List_Table {
 		$next_large_link = add_query_arg( $next_large_args, $today );
 
 		// Time zone
-		$timezone = $this->get_timezone()
-			? sugar_calendar_format_timezone( $this->get_timezone() )
+		$timezone = ! empty( $this->timezone )
+			? sugar_calendar_format_timezone( $this->timezone )
 			: '';
 
 		// Start an output buffer

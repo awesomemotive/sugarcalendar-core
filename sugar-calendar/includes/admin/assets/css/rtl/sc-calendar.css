@@ -110,7 +110,7 @@ body.sugar-calendar .tablenav a.screen-options .dashicons {
 body.sugar-calendar .tablenav a.screen-options:hover .dashicons {
 	color: #727272;
 }
-body.sugar-calendar .tablenav .tablenav-tools span {
+body.sugar-calendar .tablenav .tablenav-tools > span {
 	padding: 6px 10px;
 }
 

@@ -60,10 +60,10 @@ function display( $settings = '', $screen = false ) {
 function get_defaults() {
 	return array(
 		'sc_events_max_num' => '100',
-		'date_format'       => 'F j, Y',
-		'time_format'       => 'g:i a',
-		'start_of_week'     => '1',
-		'timezone'          => ''
+		'sc_start_of_week'  => '1',
+		'sc_date_format'    => 'F j, Y',
+		'sc_time_format'    => 'g:i a',
+		'sc_timezone'       => ''
 	);
 }
 
@@ -76,11 +76,11 @@ function preferences() {
 	global $wp_locale;
 
 	// Default values
-	$start_of_week = null;
 	$sc_events_max_num = null;
-	$date_format = null;
-	$time_format = null;
-	$timezone = null;
+	$sc_start_of_week = null;
+	$sc_date_format = null;
+	$sc_time_format = null;
+	$sc_timezone = null;
 
 	// Get the default preferences
 	$preferences = get_defaults();
@@ -103,17 +103,17 @@ function preferences() {
 
 			<tr valign="top">
 				<th scope="row" valign="top">
-					<label for="start_of_week"><?php esc_html_e( 'Start of Week', 'sugar-calendar' ); ?></label>
+					<label for="sc_start_of_week"><?php esc_html_e( 'Start of Week', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
-					<select id="start_of_week" name="start_of_week">
-						<option value="0" <?php selected( $start_of_week, 0 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 0 ) ); ?></option>
-						<option value="1" <?php selected( $start_of_week, 1 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 1 ) ); ?></option>
-						<option value="2" <?php selected( $start_of_week, 2 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 2 ) ); ?></option>
-						<option value="3" <?php selected( $start_of_week, 3 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 3 ) ); ?></option>
-						<option value="4" <?php selected( $start_of_week, 4 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 4 ) ); ?></option>
-						<option value="5" <?php selected( $start_of_week, 5 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 5 ) ); ?></option>
-						<option value="6" <?php selected( $start_of_week, 6 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 6 ) ); ?></option>
+					<select id="sc_start_of_week" name="sc_start_of_week">
+						<option value="0" <?php selected( $sc_start_of_week, 0 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 0 ) ); ?></option>
+						<option value="1" <?php selected( $sc_start_of_week, 1 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 1 ) ); ?></option>
+						<option value="2" <?php selected( $sc_start_of_week, 2 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 2 ) ); ?></option>
+						<option value="3" <?php selected( $sc_start_of_week, 3 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 3 ) ); ?></option>
+						<option value="4" <?php selected( $sc_start_of_week, 4 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 4 ) ); ?></option>
+						<option value="5" <?php selected( $sc_start_of_week, 5 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 5 ) ); ?></option>
+						<option value="6" <?php selected( $sc_start_of_week, 6 ); ?>><?php echo esc_html( $wp_locale->get_weekday( 6 ) ); ?></option>
 					</select>
 					<p class="description">
 						<?php esc_html_e( 'Select the first day of the week', 'sugar-calendar' ); ?>
@@ -123,38 +123,38 @@ function preferences() {
 
 			<tr valign="top">
 				<th scope="row" valign="top">
-					<label for="date_format"><?php esc_html_e( 'Date Format', 'sugar-calendar' ); ?></label>
+					<label for="sc_date_format"><?php esc_html_e( 'Date Format', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
-					<label title="F j, Y"><input type="radio" name="date_format" value="F j, Y" <?php checked( 'F j, Y', $date_format ); ?>> <span><?php echo gmdate( 'F j, Y' ); ?></span></label><br/>
-					<label title="d/m/Y"><input type="radio" name="date_format" value="d/m/Y" <?php checked( 'd/m/Y', $date_format ); ?>> <span><?php echo gmdate( 'd/m/Y' ); ?></span></label><br/>
-					<label title="m/d/Y"><input type="radio" name="date_format" value="m/d/Y" <?php checked( 'm/d/Y', $date_format ); ?>> <span><?php echo gmdate( 'm/d/Y' ); ?></span></label><br/>
-					<label title="Y-m-d"><input type="radio" name="date_format" value="Y-m-d" <?php checked( 'Y-m-d', $date_format ); ?>> <span><?php echo gmdate( 'Y-m-d' ); ?></span></label><br/>
+					<label title="F j, Y"><input type="radio" name="sc_date_format" value="F j, Y" <?php checked( 'F j, Y', $sc_date_format ); ?>> <span><?php echo gmdate( 'F j, Y' ); ?></span></label><br/>
+					<label title="d/m/Y"><input type="radio" name="sc_date_format" value="d/m/Y" <?php checked( 'd/m/Y', $sc_date_format ); ?>> <span><?php echo gmdate( 'd/m/Y' ); ?></span></label><br/>
+					<label title="m/d/Y"><input type="radio" name="sc_date_format" value="m/d/Y" <?php checked( 'm/d/Y', $sc_date_format ); ?>> <span><?php echo gmdate( 'm/d/Y' ); ?></span></label><br/>
+					<label title="Y-m-d"><input type="radio" name="sc_date_format" value="Y-m-d" <?php checked( 'Y-m-d', $sc_date_format ); ?>> <span><?php echo gmdate( 'Y-m-d' ); ?></span></label><br/>
 				</td>
 			</tr>
 
 			<tr valign="top">
 				<th scope="row" valign="top">
-					<label for="time_format"><?php esc_html_e( 'Time Format', 'sugar-calendar' ); ?></label>
+					<label for="sc_time_format"><?php esc_html_e( 'Time Format', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
-					<label title="g:i a"><input type="radio" name="time_format" value="g:i a" <?php checked( 'g:i a', $time_format ); ?>> <span><?php echo gmdate( 'g:i a' ); ?></span></label><br/>
-					<label title="g:i A"><input type="radio" name="time_format" value="g:i A" <?php checked( 'g:i A', $time_format ); ?>> <span><?php echo gmdate( 'g:i A' ); ?></span></label><br/>
-					<label title="H:i"><input type="radio" name="time_format" value="H:i" <?php checked( 'H:i', $time_format ); ?>> <span><?php echo gmdate( 'H:i' ); ?></span></label><br/>
+					<label title="g:i a"><input type="radio" name="sc_time_format" value="g:i a" <?php checked( 'g:i a', $sc_time_format ); ?>> <span><?php echo gmdate( 'g:i a' ); ?></span></label><br/>
+					<label title="g:i A"><input type="radio" name="sc_time_format" value="g:i A" <?php checked( 'g:i A', $sc_time_format ); ?>> <span><?php echo gmdate( 'g:i A' ); ?></span></label><br/>
+					<label title="H:i"><input type="radio" name="sc_time_format" value="H:i" <?php checked( 'H:i', $sc_time_format ); ?>> <span><?php echo gmdate( 'H:i' ); ?></span></label><br/>
 				</td>
 			</tr>
 
 			<tr valign="top">
 				<th scope="row" valign="top">
-					<label for="timezone"><?php esc_html_e( 'Time Zone', 'sugar-calendar' ); ?></label>
+					<label for="sc_timezone"><?php esc_html_e( 'Time Zone', 'sugar-calendar' ); ?></label>
 				</th>
 				<td>
 					<?php sugar_calendar_timezone_dropdown( array(
-						'id'      => 'timezone',
-						'name'    => 'timezone',
+						'id'      => 'sc_timezone',
+						'name'    => 'sc_timezone',
 						'class'   => '',
 						'none'    => esc_html__( 'Floating', 'sugar-calendar' ),
-						'current' => $timezone
+						'current' => $sc_timezone
 					) ); ?>
 				</td>
 			</tr>

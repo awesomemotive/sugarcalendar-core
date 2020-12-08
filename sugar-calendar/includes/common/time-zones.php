@@ -12,11 +12,12 @@ defined( 'ABSPATH' ) || exit;
  * Get the time zone.
  *
  * @since 2.1.0
- * @return string
+ *
+ * @return mixed
  */
 function sugar_calendar_get_timezone() {
 
-	// Get user time zone preference - default "Floating"
+	// Get user time zone preference
 	$retval = sugar_calendar_get_user_preference( 'sc_timezone', null );
 
 	// Filter & return

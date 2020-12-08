@@ -337,7 +337,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @since 2.0.0
 	 */
 	protected function init_max() {
-		$this->max = 100;
+		$this->max = sugar_calendar_get_user_preference( 'sc_events_max_num', 100 );
 	}
 
 	/**
@@ -774,7 +774,9 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function get_month() {
-		return $this->get_request_var( 'cm', 'intval', gmdate( 'n', $this->now ) );
+		$default = gmdate( 'n', $this->now );
+
+		return $this->get_request_var( 'cm', 'intval', $default );
 	}
 
 	/**
@@ -785,7 +787,9 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function get_day() {
-		return $this->get_request_var( 'cd', 'intval', gmdate( 'j', $this->now ) );
+		$default = gmdate( 'j', $this->now );
+
+		return $this->get_request_var( 'cd', 'intval', $default );
 	}
 
 	/**
@@ -796,7 +800,9 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function get_year() {
-		return $this->get_request_var( 'cy', 'intval', gmdate( 'Y', $this->now ) );
+		$default = gmdate( 'Y', $this->now );
+
+		return $this->get_request_var( 'cy', 'intval', $default );
 	}
 
 	/**
@@ -807,7 +813,10 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function get_timezone() {
-		return $this->get_request_var( 'cz', 'urldecode', sugar_calendar_get_timezone() );
+		$fallback = sugar_calendar_get_timezone();
+		$default  = sugar_calendar_get_user_preference( 'timezone', $fallback );
+
+		return $this->get_request_var( 'cz', 'urldecode', $default );
 	}
 
 	/**
@@ -907,6 +916,17 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Get the maximum number of events per iteration.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return int
+	 */
+	protected function get_max() {
+		return $this->get_request_var( 'max', 'absint', $this->max );
+	}
+
+	/**
 	 * Get a global request variable
 	 *
 	 * @since 2.0.0
@@ -955,20 +975,6 @@ class Base_List_Table extends \WP_List_Table {
 			'status',
 			'mode'
 		);
-	}
-
-	/**
-	 * Get the maximum number of events per iteration.
-	 *
-	 * Artificially limited to 100 in the base class to prevent overruns, but
-	 * should be overridden in subclasses as needed.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @return int
-	 */
-	protected function get_max() {
-		return absint( $this->max );
 	}
 
 	/**
@@ -1086,9 +1092,9 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Setup default args
 		$defaults = array(
-			'number'     => absint( get_option( 'sc_events_max_num', 100 ) ),
+			'number'     => $this->get_max(),
 			'orderby'    => $this->get_orderby(),
-			'order'      => strtoupper( $this->get_order() ),
+			'order'      => $this->get_order(),
 			'search'     => $this->get_search(),
 			'date_query' => $this->get_date_query_args()
 		);
@@ -3016,10 +3022,17 @@ class Base_List_Table extends \WP_List_Table {
 		$prev_large_link = add_query_arg( $prev_large_args, $today );
 		$next_large_link = add_query_arg( $next_large_args, $today );
 
+		// Time zone
+		$timezone = $this->get_timezone()
+			? sugar_calendar_format_timezone( $this->get_timezone() )
+			: '';
+
 		// Start an output buffer
 		ob_start(); ?>
 
 		<div class="tablenav-pages">
+			<span class="sc-timezone"><?php echo esc_html( $timezone ); ?></span>
+
 			<a href="#" class="hide-if-no-js screen-options">
 				<span class="screen-reader-text"><?php esc_html_e( 'Options', 'sugar-calendar' ); ?></span>
 				<span aria-hidden="true" class="dashicons dashicons-admin-generic"></span>

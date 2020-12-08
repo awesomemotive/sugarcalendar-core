@@ -1259,26 +1259,6 @@ function sc_get_recurring_description( $event_id = 0 ) {
 }
 
 /**
- * Retrieves the date format
- *
- * @access      public
- * @since       1.5
- * @return      string
- */
-function sc_get_date_format() {
-
-	$format = get_option( 'sc_date_format' );
-
-	// default to WordPress value
-	if ( empty( $format ) ) {
-		$format = get_option( 'date_format' );
-	}
-
-	// Filter and return
-	return apply_filters( 'sc_date_format', $format );
-}
-
-/**
  * Retrieves the maximum number of events to include in a theme-side query.
  *
  * @access      public
@@ -1296,6 +1276,26 @@ function sc_get_number_of_events() {
 
 	// Filter and return
 	return (int) apply_filters( 'sc_number_of_events', $number );
+}
+
+/**
+ * Retrieves the date format
+ *
+ * @access      public
+ * @since       1.5
+ * @return      string
+ */
+function sc_get_date_format() {
+
+	$format = get_option( 'sc_date_format' );
+
+	// default to WordPress value
+	if ( empty( $format ) ) {
+		$format = get_option( 'date_format' );
+	}
+
+	// Filter and return
+	return apply_filters( 'sc_date_format', $format );
 }
 
 /**
@@ -1336,6 +1336,26 @@ function sc_get_week_start_day() {
 
 	// Filter and return
 	return apply_filters( 'sc_week_start_day', $start_day );
+}
+
+/**
+ * Retrieves the time zone.
+ *
+ * @access      public
+ * @since       2.1.1
+ * @return      string
+ */
+function sc_get_timezone() {
+
+	$timezone = get_option( 'sc_timezone' );
+
+	// default to WordPress value
+	if ( empty( $timezone ) ) {
+		$timezone = get_option( 'timezone' );
+	}
+
+	// Filter and return
+	return apply_filters( 'sc_timezone', $timezone );
 }
 
 /**

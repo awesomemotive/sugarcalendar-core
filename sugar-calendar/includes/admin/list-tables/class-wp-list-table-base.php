@@ -106,6 +106,15 @@ class Base_List_Table extends \WP_List_Table {
 	public $view_duration = 0;
 
 	/**
+	 * The time zone for the current view
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var object
+	 */
+	public $view_timezone = false;
+
+	/**
 	 * The items with pointers
 	 *
 	 * @since 2.0.0
@@ -149,6 +158,15 @@ class Base_List_Table extends \WP_List_Table {
 	 * @var int
 	 */
 	protected $today = '';
+
+	/**
+	 * The current time zone object, derived from $view_timezone
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var object
+	 */
+	protected $timezone = 'UTC';
 
 	/**
 	 * The timestamp for this exact microsecond.
@@ -279,6 +297,9 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	protected function init_boundaries() {
 
+		// Set time zone first, so everything uses the same one
+		$this->timezone = $this->get_timezone();
+
 		// Set now once, so everything uses the same timestamp
 		$this->now = $this->get_current_time();
 
@@ -316,7 +337,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @since 2.0.0
 	 */
 	protected function init_max() {
-		$this->max = 100;
+		$this->max = sugar_calendar_get_user_preference( 'sc_events_max_num', 100 );
 	}
 
 	/**
@@ -359,10 +380,13 @@ class Base_List_Table extends \WP_List_Table {
 		$start_time = strtotime( $start );
 		$end_time   = strtotime( $end   );
 
-		// Set view properties
+		// Set view boundaries
 		$this->view_start    = $start;
 		$this->view_end      = $end;
 		$this->view_duration = ( $end_time - $start_time );
+
+		// Set view time zone
+		$this->view_timezone = sugar_calendar_get_timezone_object( $this->timezone );
 	}
 
 	/** Getters ***************************************************************/
@@ -497,7 +521,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_current_time() {
-		return sugar_calendar_get_request_time();
+		return sugar_calendar_get_request_time( 'timestamp', $this->timezone );
 	}
 
 	/**
@@ -559,7 +583,9 @@ class Base_List_Table extends \WP_List_Table {
 			'cy'          => $this->get_year(),
 			'cm'          => $this->get_month(),
 			'cd'          => $this->get_day(),
+			'cz'          => $this->get_timezone(),
 			'mode'        => $this->get_mode(),
+			'max'         => $this->get_max(),
 			'status'      => $this->get_status(),
 			'object_type' => $this->get_object_type(),
 			's'           => $this->get_search()
@@ -749,7 +775,9 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function get_month() {
-		return $this->get_request_var( 'cm', 'intval', gmdate( 'n', $this->now ) );
+		$default = gmdate( 'n', $this->now );
+
+		return $this->get_request_var( 'cm', 'intval', $default );
 	}
 
 	/**
@@ -760,7 +788,9 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function get_day() {
-		return $this->get_request_var( 'cd', 'intval', gmdate( 'j', $this->now ) );
+		$default = gmdate( 'j', $this->now );
+
+		return $this->get_request_var( 'cd', 'intval', $default );
 	}
 
 	/**
@@ -771,7 +801,22 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function get_year() {
-		return $this->get_request_var( 'cy', 'intval', gmdate( 'Y', $this->now ) );
+		$default = gmdate( 'Y', $this->now );
+
+		return $this->get_request_var( 'cy', 'intval', $default );
+	}
+
+	/**
+	 * Get the current time zone
+	 *
+	 * @since 2.1.0
+	 *
+	 * @return int
+	 */
+	protected function get_timezone() {
+		$default = sugar_calendar_get_timezone();
+
+		return $this->get_request_var( 'cz', 'urldecode', $default );
 	}
 
 	/**
@@ -871,6 +916,17 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Get the maximum number of events per iteration.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return int
+	 */
+	protected function get_max() {
+		return $this->get_request_var( 'max', 'absint', $this->max );
+	}
+
+	/**
 	 * Get a global request variable
 	 *
 	 * @since 2.0.0
@@ -919,20 +975,6 @@ class Base_List_Table extends \WP_List_Table {
 			'status',
 			'mode'
 		);
-	}
-
-	/**
-	 * Get the maximum number of events per iteration.
-	 *
-	 * Artificially limited to 100 in the base class to prevent overruns, but
-	 * should be overridden in subclasses as needed.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @return int
-	 */
-	protected function get_max() {
-		return absint( $this->max );
 	}
 
 	/**
@@ -1050,9 +1092,9 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Setup default args
 		$defaults = array(
-			'number'     => absint( get_option( 'sc_events_max_num', 100 ) ),
+			'number'     => $this->get_max(),
 			'orderby'    => $this->get_orderby(),
-			'order'      => strtoupper( $this->get_order() ),
+			'order'      => $this->get_order(),
 			'search'     => $this->get_search(),
 			'date_query' => $this->get_date_query_args()
 		);
@@ -1490,19 +1532,6 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Get the time zone
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param string $timezone
-	 *
-	 * @return string
-	 */
-	protected function get_time_zone( $timezone = '' ) {
-		return sugar_calendar_format_timezone( $timezone );
-	}
-
-	/**
 	 * Get the time zone offset
 	 *
 	 * @since 2.1.0
@@ -1908,12 +1937,12 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Start time zone
 		if ( ! empty( $event->start_tz ) ) {
-			$stz = '<span class="sc-timezone">' . esc_html( $this->get_time_zone( $event->start_tz ) ) . '</span>';
+			$stz = '<span class="sc-timezone">' . esc_html( sugar_calendar_format_timezone( $event->start_tz ) ) . '</span>';
 		}
 
 		// End time zone
 		if ( ! empty( $event->end_tz ) ) {
-			$etz = '<span class="sc-timezone">' . esc_html( $this->get_time_zone( $event->end_tz ) ) . '</span>';
+			$etz = '<span class="sc-timezone">' . esc_html( sugar_calendar_format_timezone( $event->end_tz ) ) . '</span>';
 		} elseif ( ! empty( $stz ) ) {
 			$etz = $stz;
 		}
@@ -2437,8 +2466,10 @@ class Base_List_Table extends \WP_List_Table {
 				<input type="hidden" name="cd" value="<?php echo esc_attr( $this->get_day() ); ?>" />
 				<input type="hidden" name="cm" value="<?php echo esc_attr( $this->get_month() ); ?>" />
 				<input type="hidden" name="cy" value="<?php echo esc_attr( $this->get_year() ); ?>" />
+				<input type="hidden" name="cz" value="<?php echo esc_attr( $this->get_timezone() ); ?>" />
 				<input type="hidden" name="order" value="<?php echo esc_attr( $this->get_order() ); ?>" />
 				<input type="hidden" name="orderby" value="<?php echo esc_attr( $this->get_orderby() ); ?>" />
+				<input type="hidden" name="max" value="<?php echo esc_attr( $this->get_max() ); ?>" />
 			</div>
 		</form>
 
@@ -2992,10 +3023,17 @@ class Base_List_Table extends \WP_List_Table {
 		$prev_large_link = add_query_arg( $prev_large_args, $today );
 		$next_large_link = add_query_arg( $next_large_args, $today );
 
+		// Time zone
+		$timezone = ! empty( $this->timezone )
+			? sugar_calendar_format_timezone( $this->timezone )
+			: '';
+
 		// Start an output buffer
 		ob_start(); ?>
 
 		<div class="tablenav-pages">
+			<span class="sc-timezone"><?php echo esc_html( $timezone ); ?></span>
+
 			<a href="#" class="hide-if-no-js screen-options">
 				<span class="screen-reader-text"><?php esc_html_e( 'Options', 'sugar-calendar' ); ?></span>
 				<span aria-hidden="true" class="dashicons dashicons-admin-generic"></span>

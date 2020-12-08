@@ -276,29 +276,15 @@ function save( $object_id = 0, $object = null ) {
 	$all_day  = prepare_all_day();
 	$start    = prepare_start();
 	$end      = prepare_end();
-
-	// Not all-day, so check time zones
-	if ( empty( $all_day ) ) {
-
-		// All time zone types save start
-		$start_tz = prepare_timezone( 'start' );
-
-		// Multi time zone uses its own end
-		$end_tz   = ( 'multi' === sugar_calendar_get_timezone_type() )
-			? prepare_timezone( 'end' )
-			: $start_tz;
-
-	// All-day events have no time zones
-	} else {
-		$start_tz = $end_tz = '';
-	}
+	$start_tz = prepare_timezone( 'start' );
+	$end_tz   = prepare_timezone( 'end' );
 
 	// Sanitize to prevent data entry errors
 	$start    = sanitize_start( $start, $end, $all_day );
 	$end      = sanitize_end( $end, $start, $all_day );
 	$all_day  = sanitize_all_day( $all_day, $start, $end );
-	$start_tz = sanitize_timezone( $start_tz );
-	$end_tz   = sanitize_timezone( $end_tz );
+	$start_tz = sanitize_timezone( $start_tz, $end_tz, $all_day );
+	$end_tz   = sanitize_timezone( $end_tz, $start_tz, $all_day );
 
 	// Shim these for now (need to make functions for them)
 	$title   = $object->post_title;
@@ -682,10 +668,32 @@ function sanitize_end( $end = '', $start = '', $all_day = false ) {
  *
  * @since 2.1.0
  *
- * @param string $timezone
+ * @param string $timezone1
+ * @param string $timezone2
+ * @param string $all_day
+ *
+ * @return string
  */
-function sanitize_timezone( $timezone = '' ) {
-	return sugar_calendar_sanitize_timezone( $timezone );
+function sanitize_timezone( $timezone1 = '', $timezone2 = '', $all_day = false ) {
+
+	// Default return value
+	$retval = $timezone1;
+
+	// All-day events have no time zones
+	if ( ! empty( $all_day ) ) {
+		$retval = '';
+
+	// Not all-day, so check time zones
+	} else {
+
+		// Maybe fallback to whatever time zone is not empty
+		$retval = ! empty( $timezone1 )
+			? $timezone1
+			: $timezone2;
+	}
+
+	// Sanitize & return
+	return sugar_calendar_sanitize_timezone( $retval );
 }
 
 /**
@@ -872,11 +880,17 @@ function section_duration( $event = null ) {
 		$event = new Sugar_Calendar\Event();
 	}
 
-	// Defaults
+	// Default dates & times
 	$date = $hour = $minute = $end_date = $end_hour = $end_minute = '';
 
 	// Default AM/PM
 	$am_pm = $end_am_pm = '';
+
+	// Default time zones
+	$start_tz = $end_tz = '';
+
+	// Default time zone UI
+	$show_multi_tz = $show_single_tz = false;
 
 	/** All Day ***************************************************************/
 
@@ -924,11 +938,6 @@ function section_duration( $event = null ) {
 		}
 	}
 
-	// Time zone
-	if ( ! empty( $tztype ) && empty( $event->end_tz ) && ! $event->exists() ) {
-		$event->end_tz = $timezone;
-	}
-
 	/** Starts ****************************************************************/
 
 	// Get date_time
@@ -971,17 +980,45 @@ function section_duration( $event = null ) {
 		}
 	}
 
-	// Time zone
-	if ( ! empty( $tztype ) && empty( $event->start_tz ) && ! $event->exists() ) {
-		$event->start_tz = $timezone;
+	/** Time Zones ************************************************************/
+
+	// Default time zone on "Add New"
+	if ( empty( $event->end_tz ) && ! empty( $tztype ) && ! $event->exists() ) {
+		$end_tz = $timezone;
+
+	// Event end time zone
+	} elseif ( ! empty( $end_date_time ) || ( $date_time !== $end_date_time ) ) {
+		$end_tz = $event->end_tz;
 	}
 
-	/** Time Zones ************************************************************/
+	// Default time zone on "Add New"
+	if ( empty( $event->start_tz ) && ! empty( $tztype ) && ! $event->exists() ) {
+		$start_tz = $timezone;
+
+	// Event start time zone
+	} elseif ( ! empty( $date_time ) ) {
+		$start_tz = $event->start_tz;
+	}
 
 	// All day Events have no time zone data
 	if ( ! empty( $all_day ) ) {
-		$event->start_tz = '';
-		$event->end_tz   = '';
+		$start_tz = '';
+		$end_tz   = '';
+	}
+
+	// Show multi time zone UI
+	if ( ( 'multi' === $tztype )
+		|| (
+			! empty( $end_tz )
+			&& ( $date_time !== $end_date_time )
+			&& ( $start_tz  !== $end_tz        )
+		)
+	) {
+		$show_multi_tz = true;
+
+	// Show single time zone UI
+	} elseif ( ( 'single' === $tztype ) || ! empty( $start_tz ) ) {
+		$show_single_tz = true;
 	}
 
 	/** Let's Go! *************************************************************/
@@ -1050,14 +1087,14 @@ function section_duration( $event = null ) {
 					?></div><?php
 
 					// Start Time Zone
-					if ( ( 'multi' === $tztype ) || ( ( 'off' === $tztype ) && ( $event->start_tz !== $event->end_tz ) ) ) :
+					if ( true === $show_multi_tz ) :
 
 						?><div class="event-time-zone"><?php
 
 							sugar_calendar_timezone_dropdown( array(
 								'id'      => 'start_tz',
 								'name'    => 'start_tz',
-								'current' => $event->start_tz
+								'current' => $start_tz
 							) );
 
 						?></div><?php
@@ -1112,14 +1149,14 @@ function section_duration( $event = null ) {
 					?></div><?php
 
 					// End Time Zone
-					if ( ( 'multi' === $tztype ) || ( ( 'off' === $tztype ) && ( $event->start_tz !== $event->end_tz ) ) ) :
+					if ( true === $show_multi_tz ) :
 
 						?><div class="event-time-zone"><?php
 
 							sugar_calendar_timezone_dropdown( array(
 								'id'      => 'end_tz',
 								'name'    => 'end_tz',
-								'current' => $event->end_tz
+								'current' => $end_tz
 							) );
 
 						?></div><?php
@@ -1129,7 +1166,10 @@ function section_duration( $event = null ) {
 				?></td>
 			</tr>
 
-			<?php if ( ( 'single' === $tztype ) || ( ( 'off' === $tztype ) && ( $event->start_tz === $event->end_tz ) ) ) : ?>
+			<?php
+
+			// Start & end time zones
+			if ( true === $show_single_tz ) : ?>
 
 				<tr class="time-zone-row" <?php echo $hidden; ?>>
 					<th>
@@ -1142,7 +1182,7 @@ function section_duration( $event = null ) {
 							sugar_calendar_timezone_dropdown( array(
 								'id'      => 'start_tz',
 								'name'    => 'start_tz',
-								'current' => $event->start_tz
+								'current' => $start_tz
 							) );
 
 						?></div>

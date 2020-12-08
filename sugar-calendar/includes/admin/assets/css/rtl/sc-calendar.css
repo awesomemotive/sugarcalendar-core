@@ -84,31 +84,34 @@ body.sugar-calendar .wp-filter {
 	vertical-align: middle;
 }
 
-body.sugar-calendar .tablenav .tablenav-pages {
+body.sugar-calendar .tablenav .tablenav-pages,
+body.sugar-calendar .tablenav .tablenav-tools {
+	float: left;
 	margin-bottom: 5px;
 }
 
-.tablenav .tablenav-pages a.button,
-.tablenav .tablenav-pages a.screen-options {
+body.sugar-calendar .tablenav .tablenav-pages > *,
+body.sugar-calendar .tablenav .tablenav-tools > * {
 	margin: 0;
-	min-height: 30px;
-	min-width: 30px;
+	display: inline-block;
 }
 
-.tablenav .tablenav-pages a.screen-options {
+body.sugar-calendar .tablenav a.screen-options {
 	padding: 0;
 	text-decoration: none;
 	text-align: center;
 }
-.tablenav .tablenav-pages a.screen-options .dashicons {
+body.sugar-calendar .tablenav a.screen-options .dashicons {
 	color: #b4b9be;
 	padding: 5px;
 	vertical-align: middle;
 	margin-top: -3px;
 }
-
-.tablenav .tablenav-pages a.screen-options:hover .dashicons {
+body.sugar-calendar .tablenav a.screen-options:hover .dashicons {
 	color: #727272;
+}
+body.sugar-calendar .tablenav .tablenav-tools span {
+	padding: 6px 10px;
 }
 
 body.sugar-calendar .view-switch .view-list:before {
@@ -627,7 +630,7 @@ table.day th.column-sunday {
 
 table.list span.sc-timechange,
 table.list span.sc-timezone,
-.tablenav-pages span.sc-timezone,
+.tablenav-tools span.sc-timezone,
 .wp-pointer-content span.sc-timezone {
 	font-size: 11px;
 	color: rgba(0, 0, 0, 0.4);

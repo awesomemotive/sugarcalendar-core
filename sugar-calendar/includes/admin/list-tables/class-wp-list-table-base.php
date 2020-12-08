@@ -2540,9 +2540,14 @@ class Base_List_Table extends \WP_List_Table {
 			// Output Month, Year tablenav
 			echo $this->extra_tablenav( $which );
 
-			// Output pagination on top only
+			// Top only output
 			if ( 'top' === $which ) :
+
+				// Pagination
 				echo $this->extra_tablenav( 'pagination' );
+
+				// Tools
+				echo $this->extra_tablenav( 'tools' );
 			endif;
 
 			?><br class="clear">
@@ -2955,6 +2960,10 @@ class Base_List_Table extends \WP_List_Table {
 		// Output pagination
 		elseif ( 'pagination' === $which ) :
 			echo $this->pagination();
+
+		// Output tools
+		elseif ( 'tools' === $which ) :
+			echo $this->tools();
 		endif;
 
 		// After action
@@ -2970,6 +2979,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @since 2.0.0
 	 *
 	 * @param array $args
+	 * @return string
 	 */
 	protected function pagination( $args = array() ) {
 
@@ -3023,22 +3033,12 @@ class Base_List_Table extends \WP_List_Table {
 		$prev_large_link = add_query_arg( $prev_large_args, $today );
 		$next_large_link = add_query_arg( $next_large_args, $today );
 
-		// Time zone
-		$tztype   = sugar_calendar_get_timezone_type();
-		$timezone = ! empty( $this->timezone ) & ( 'off' !== $tztype )
-			? sugar_calendar_format_timezone( $this->timezone )
-			: '';
-
 		// Start an output buffer
 		ob_start(); ?>
 
 		<div class="tablenav-pages">
 
-			<?php if ( 'off' !== $tztype ) : ?>
-
-				<span class="sc-timezone"><?php echo esc_html( $timezone ); ?></span>
-
-			<?php endif;
+			<?php
 
 			// Before action
 			do_action( 'sugar_calendar_admin_before_pagination', $this ); ?>
@@ -3077,6 +3077,47 @@ class Base_List_Table extends \WP_List_Table {
 
 			// After action
 			do_action( 'sugar_calendar_admin_after_pagination', $this ); ?>
+
+		</div>
+
+		<?php
+
+		// Return
+		return ob_get_clean();
+	}
+
+	/**
+	 * Additional tools
+	 *
+	 * @since 2.1.1
+	 * @return string
+	 */
+	private function tools() {
+
+		// Time zone
+		$tztype   = sugar_calendar_get_timezone_type();
+		$timezone = ! empty( $this->timezone ) & ( 'off' !== $tztype )
+			? sugar_calendar_format_timezone( $this->timezone )
+			: '';
+
+		// Start an output buffer
+		ob_start(); ?>
+
+		<div class="tablenav-tools">
+
+			<?php
+
+			// Before action
+			do_action( 'sugar_calendar_admin_before_tools', $this );
+
+			if ( 'off' !== $tztype ) : ?>
+
+				<span class="sc-timezone"><?php echo esc_html( $timezone ); ?></span>
+
+			<?php endif;
+
+			// Before action
+			do_action( 'sugar_calendar_admin_after_tools', $this ); ?>
 
 		</div>
 

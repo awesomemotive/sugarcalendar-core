@@ -38,7 +38,7 @@ final class Plugin {
 	 * @since 2.0.0
 	 * @var string
 	 */
-	private $version = '2.1.1';
+	private $version = '2.1.2';
 
 	/**
 	 * Prefix.

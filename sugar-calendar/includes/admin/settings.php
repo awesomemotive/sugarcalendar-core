@@ -454,8 +454,9 @@ function display_subsection() {
 	$custom_time_checked = ! in_array( $sc_time_format, $time_formats, true );
 
 	// Format and translate
-	$looks_like_date = sugar_calendar_format_date_i18n( $sc_date_format );
-	$looks_like_time = sugar_calendar_format_date_i18n( $sc_time_format ); ?>
+	$timezone        = sugar_calendar_get_timezone();
+	$looks_like_date = sugar_calendar_format_date_i18n( $sc_date_format, null, $timezone );
+	$looks_like_time = sugar_calendar_format_date_i18n( $sc_time_format, null, $timezone ); ?>
 
 	<table class="form-table">
 		<tbody>
@@ -512,7 +513,7 @@ function display_subsection() {
 							$checked = checked( $format, $sc_date_format, false );
 
 							// Format and translate
-							$date = sugar_calendar_format_date_i18n( $format ); ?>
+							$date = sugar_calendar_format_date_i18n( $format, null, $timezone ); ?>
 
 							<label>
 								<input type="radio" <?php echo $id; ?> name="sc_date_format" value="<?php echo esc_attr( $format ); ?>"<?php echo $checked; ?> />
@@ -569,7 +570,7 @@ function display_subsection() {
 							$checked = checked( $format, $sc_time_format, false );
 
 							// Format and translate
-							$time = sugar_calendar_format_date_i18n( $format ); ?>
+							$time = sugar_calendar_format_date_i18n( $format, null, $timezone ); ?>
 
 							<label>
 								<input type="radio" <?php echo $id; ?> name="sc_time_format" value="<?php echo esc_attr( $format ); ?>"<?php echo $checked; ?> />

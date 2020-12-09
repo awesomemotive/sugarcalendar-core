@@ -13,15 +13,28 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 2.1.0
  *
- * @return mixed
+ * @param array $args Preference key, Default string & fallback callback
+ * @return mixed Null if
  */
-function sugar_calendar_get_timezone() {
+function sugar_calendar_get_timezone( $args = array() ) {
+
+	// Parse arguments
+	$r = wp_parse_args( $args, array(
+		'key'      => 'sc_timezone',
+		'default'  => null,
+		'fallback' => null
+	) );
 
 	// Get user time zone preference
-	$retval = sugar_calendar_get_user_preference( 'sc_timezone', null );
+	$retval = sugar_calendar_get_user_preference( $r['key'], $r['default'] );
+
+	// Possible fallback
+	if ( is_null( $retval ) && ( ! is_null( $r['fallback'] ) && is_callable( $r['fallback'] ) ) ) {
+		$retval = call_user_func( $r['fallback'] );
+	}
 
 	// Filter & return
-	return apply_filters( 'sugar_calendar_get_timezone', $retval );
+	return apply_filters( 'sugar_calendar_get_timezone', $retval, $r, $args );
 }
 
 /**

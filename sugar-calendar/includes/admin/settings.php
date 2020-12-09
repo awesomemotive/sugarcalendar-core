@@ -757,10 +757,13 @@ function ajax_date_format() {
 		: '';
 
 	// Get format
-	$format = sanitize_option( 'date_format', $date );
+	$format   = sanitize_option( 'date_format', $date );
+
+	// Get the time zone
+	$timezone = sugar_calendar_get_timezone();
 
 	// Format and translate
-	$retval = sugar_calendar_format_date_i18n( $format );
+	$retval   = sugar_calendar_format_date_i18n( $format, null, $timezone );
 
 	// Output
 	wp_die( $retval );
@@ -779,10 +782,13 @@ function ajax_time_format() {
 		: '';
 
 	// Get format
-	$format = sanitize_option( 'time_format', $time );
+	$format   = sanitize_option( 'time_format', $time );
+
+	// Get the time zone
+	$timezone = sugar_calendar_get_timezone();
 
 	// Format and translate
-	$retval = sugar_calendar_format_date_i18n( $format );
+	$retval   = sugar_calendar_format_date_i18n( $format, null, $timezone );
 
 	// Output
 	wp_die( $retval );

@@ -12,7 +12,6 @@ defined( 'ABSPATH' ) || exit;
  * Get the time zone.
  *
  * @since 2.1.0
- *
  * @param array $args Preference key, Default string & fallback callback
  * @return mixed Null if
  */
@@ -41,12 +40,10 @@ function sugar_calendar_get_timezone( $args = array() ) {
  * Get the difference between two time zones, at a specific time.
  *
  * @since 2.1.0
- *
  * @param string $timezone1 First Olson time zone ID.
  * @param string $timezone2 Optional. Default: 'UTC'. Second Olson time zone ID.
  * @param mixed  $datetime  Optional. Default: 'now'. Time to use for diff.
  * @param string $format    Optional. Default: 'seconds'. Format to return.
- *
  * @return mixed Difference between 2 time zones.
  */
 function sugar_calendar_get_timezone_diff( $timezone1 = '', $timezone2 = 'UTC', $datetime = 'now', $format = 'seconds' ) {
@@ -67,9 +64,7 @@ function sugar_calendar_get_timezone_diff( $timezone1 = '', $timezone2 = 'UTC', 
  * Get the difference of an array of Olson time zone IDs.
  *
  * @since 2.1.0
- *
  * @param array $args
- *
  * @return int
  */
 function sugar_calendar_get_timezone_diff_multi( $args = array() ) {
@@ -149,10 +144,10 @@ function sugar_calendar_get_timezone_diff_multi( $args = array() ) {
  * - 4.25 hours
  * - -13.5 hours
  *
+ * @since 2.1.0
  * @param string $timezone1 First Olson time zone ID
  * @param string $timezone2 Optional. Default: 'UTC'. Second Olson time zone ID
  * @param mixed  $datetime  Optional. Default: 'now'. Time to use for diff
- *
  * @return string String representing the time difference - "2.5 hours"
  */
 function sugar_calendar_human_diff_timezone( $timezone1, $timezone2 = 'UTC', $datetime = 'now' ) {
@@ -242,7 +237,6 @@ function sugar_calendar_get_timezone_offset( $args = array() ) {
  * Format a time zone string.
  *
  * @since 2.1.0
- *
  * @param string $timezone Default ''. Olson time zone ID.
  * @return string
  */
@@ -412,53 +406,83 @@ function sugar_calendar_get_timezone_type() {
 /**
  * Get a date time object.
  *
+ * Accepts multiple time zones. The first one is used when the DateTime object
+ * is created, the second one is used to apply an offset relative to the first.
+ *
  * @since 2.1.0
- * @param string $time
- * @param string $timezone
+ * @param mixed  $timestamp Accepts any string compatible with strtotime()
+ * @param string $timezone1 Used as base for DateTime object
+ * @param string $timezone2 Used to apply offset based on $timezone1
  * @return object
  */
-function sugar_calendar_get_datetime_object( $time = null, $timezone = null ) {
+function sugar_calendar_get_datetime_object( $timestamp = null, $timezone1 = null, $timezone2 = null ) {
 
 	// Fallback to "now" timestamp
-	if ( null === $time ) {
-		$time = (int) sugar_calendar_get_request_time();
+	if ( null === $timestamp ) {
+		$timestamp = (int) sugar_calendar_get_request_time();
 
 	// Fallback to timestamp that strtotime() guesses
-	} elseif ( ! is_numeric( $time ) ) {
-		$time = strtotime( $time );
+	} elseif ( ! is_numeric( $timestamp ) ) {
+		$timestamp = strtotime( $timestamp );
 	}
 
-	// Maybe use the default
-	if ( false === $timezone ) {
-		$timezone = sugar_calendar_get_timezone();
-	}
+	// Format back to MySQL
+	$time = gmdate( 'Y-m-d H:i:s', $timestamp );
 
-	// Maybe get the DateTimeZone object
-	if ( is_string( $timezone ) ) {
-		$timezone = sugar_calendar_get_timezone_object( $timezone );
-	}
+	// Get the timezone object
+	$tzo = sugar_calendar_get_timezone_object( $timezone1 );
 
 	// Get DateTime object and use it to format
-	$retval = date_create( '@' . $time );
+	$retval = ( $tzo instanceof DateTimeZone )
+		? date_create( $time, $tzo )
+		: date_create( $time );
 
-	// Maybe set the time zone
-	if ( is_object( $timezone ) ) {
-		$retval->setTimezone( $timezone );
+	// Maybe set the timezone to a new one
+	if ( ! empty( $timezone2 ) && ( $timezone2 !== $timezone1 ) ) {
+		$retval = sugar_calendar_set_datetime_timezone( $retval, $timezone2 );
 	}
 
 	// Filter & return
-	return apply_filters( 'sugar_calendar_get_datetime_object', $retval, $time, $timezone );
+	return apply_filters( 'sugar_calendar_get_datetime_object', $retval, $time, $timezone1, $timezone2 );
+}
+
+/**
+ * Set the time zone for a date time object
+ *
+ * @since 2.1.2
+ * @param DateTime $dto
+ * @param string   $timezone
+ * @return DateTime The object from $dto with a new time zone
+ */
+function sugar_calendar_set_datetime_timezone( $dto = false, $timezone = false ) {
+
+	// Maybe get the DateTimeZone object
+	if ( ! empty( $timezone ) && is_string( $timezone ) ) {
+		$timezone = sugar_calendar_get_timezone_object( $timezone );
+	}
+
+	// Maybe set the time zone
+	if ( $timezone instanceof DateTimeZone ) {
+		$dto->setTimezone( $timezone );
+	}
+
+	// Return the updated Date
+	return $dto;
 }
 
 /**
  * Get a time zone object.
  *
  * @since 2.1.0
- *
  * @param string $timezone Default ''. Olson time zone ID.
  * @return object
  */
 function sugar_calendar_get_timezone_object( $timezone = '' ) {
+
+	// Bail if already a time zone object (avoid recursion)
+	if ( $timezone instanceof DateTimeZone ) {
+		return $timezone;
+	}
 
 	// Bail if time zone is invalid
 	$timezone = sugar_calendar_validate_timezone( $timezone, array(
@@ -472,13 +496,10 @@ function sugar_calendar_get_timezone_object( $timezone = '' ) {
 		? sugar_calendar_get_manual_timezone_offset_id( $timezone )
 		: $timezone;
 
-	// "Floating" is not valid, so set to "UTC" to avoid DateTimeZone erroring
-	if ( empty( $timezone ) ) {
-		$timezone = 'UTC';
-	}
-
 	// Create a time zone object
-	$retval = new \DateTimeZone( $timezone );
+	$retval = ! empty( $timezone )
+		? timezone_open( $timezone )
+		: false;
 
 	// Return the time zone object
 	return $retval;

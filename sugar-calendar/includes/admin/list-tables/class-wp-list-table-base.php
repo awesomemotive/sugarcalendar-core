@@ -673,15 +673,15 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param mixed $date_time
+	 * @param mixed $datetime
 	 * @return int
 	 */
-	protected function get_day_offset( $date_time = '' ) {
+	protected function get_day_offset( $datetime = '' ) {
 
-		// Maybe format
-		$timestamp  = ! is_numeric( $date_time )
-			? strtotime( $date_time )
-			: $date_time;
+		// Maybe make datetime into timestamp
+		$timestamp = ! is_int( $datetime )
+			? strtotime( $datetime )
+			: $datetime;
 
 		// Get date properties
 		$this_month = (int) gmdate( 'w', $timestamp );
@@ -1155,18 +1155,18 @@ class Base_List_Table extends \WP_List_Table {
 	protected function modify_datetime( $datetime = '', $args = array() ) {
 
 		// Maybe make datetime into timestamp
-		$time = ! is_int( $datetime )
+		$timestamp = ! is_int( $datetime )
 			? strtotime( $datetime )
 			: $datetime;
 
 		// Parse arguments
 		$r = wp_parse_args( $args, array(
-			'Y' => gmdate( 'Y', $time ),
-			'm' => gmdate( 'm', $time ),
-			'd' => gmdate( 'd', $time ),
-			'H' => gmdate( 'H', $time ),
-			'i' => gmdate( 'i', $time ),
-			's' => gmdate( 's', $time )
+			'Y' => gmdate( 'Y', $timestamp ),
+			'm' => gmdate( 'm', $timestamp ),
+			'd' => gmdate( 'd', $timestamp ),
+			'H' => gmdate( 'H', $timestamp ),
+			'i' => gmdate( 'i', $timestamp ),
+			's' => gmdate( 's', $timestamp )
 		) );
 
 		// Return merged
@@ -1510,13 +1510,13 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $date
+	 * @param string $datetime
 	 * @param string $timezone
 	 *
 	 * @return string
 	 */
-	protected function get_event_date( $date = '', $timezone = '' ) {
-		return sugar_calendar_format_date_i18n( $this->date_format, $date, $timezone );
+	protected function get_event_date( $datetime = '', $timezone = '' ) {
+		return sugar_calendar_format_date_i18n( $this->date_format, $datetime, $timezone, $this->timezone );
 	}
 
 	/**
@@ -1524,13 +1524,13 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $date
+	 * @param string $datetime
 	 * @param string $timezone
 	 *
 	 * @return string
 	 */
-	protected function get_event_time( $date = '', $timezone = '' ) {
-		return sugar_calendar_format_date_i18n( $this->time_format, $date, $timezone );
+	protected function get_event_time( $datetime = '', $timezone = '' ) {
+		return sugar_calendar_format_date_i18n( $this->time_format, $datetime, $timezone, $this->timezone );
 	}
 
 	/**

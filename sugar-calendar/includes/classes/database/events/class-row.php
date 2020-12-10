@@ -335,7 +335,7 @@ final class Event extends Row {
 	 * @return string
 	 */
 	public function start_date( $format = 'Y-m-d H:i:s' ) {
-		return $this->format_date( $format, $this->start );
+		return $this->format_date( $format, $this->start, $this->start_tz );
 	}
 
 	/**
@@ -348,7 +348,7 @@ final class Event extends Row {
 	 * @return string
 	 */
 	public function end_date( $format = 'Y-m-d H:i:s' ) {
-		return $this->format_date( $format, $this->end );
+		return $this->format_date( $format, $this->end, $this->end_tz );
 	}
 
 	/**

@@ -547,7 +547,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_date_format( $format = 'F j, Y' ) {
-		return sugar_calendar_get_user_preference( 'date_format', $format );
+		return sugar_calendar_get_user_preference( 'sc_date_format', $format );
 	}
 
 	/**
@@ -560,7 +560,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_time_format( $format = 'g:i a' ) {
-		return sugar_calendar_get_user_preference( 'time_format', $format );
+		return sugar_calendar_get_user_preference( 'sc_time_format', $format );
 	}
 
 	/**
@@ -1511,11 +1511,12 @@ class Base_List_Table extends \WP_List_Table {
 	 * @since 2.0.0
 	 *
 	 * @param string $date
+	 * @param string $timezone
 	 *
 	 * @return string
 	 */
-	protected function get_event_date( $date = '' ) {
-		return sugar_calendar_format_date_i18n( $this->date_format, $date );
+	protected function get_event_date( $date = '', $timezone = '' ) {
+		return sugar_calendar_format_date_i18n( $this->date_format, $date, $timezone );
 	}
 
 	/**
@@ -1524,11 +1525,12 @@ class Base_List_Table extends \WP_List_Table {
 	 * @since 2.0.0
 	 *
 	 * @param string $date
+	 * @param string $timezone
 	 *
 	 * @return string
 	 */
-	protected function get_event_time( $date = '' ) {
-		return sugar_calendar_format_date_i18n( $this->time_format, $date );
+	protected function get_event_time( $date = '', $timezone = '' ) {
+		return sugar_calendar_format_date_i18n( $this->time_format, $date, $timezone );
 	}
 
 	/**
@@ -1947,6 +1949,10 @@ class Base_List_Table extends \WP_List_Table {
 			$etz = $stz;
 		}
 
+		// Start & end
+		$start = $this->get_event_date( $event->start, $event->start_tz );
+		$end   = $this->get_event_date( $event->end, $event->end_tz );
+
 		// All day, single-day event
 		if ( $event->is_all_day() ) {
 
@@ -1956,29 +1962,29 @@ class Base_List_Table extends \WP_List_Table {
 				// Yearly
 				if ( 'yearly' === $event->recurrence ) {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = esc_html( $event->start_date( 'F j' ) ) . '</span>';
+					$pointer_dates['start']       = esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = esc_html( $event->end_date( 'F j' ) ) . '</span>';
+					$pointer_dates['end']         = esc_html( $end ) . '</span>';
 
 				// Monthly
 				} elseif ( 'monthly' === $event->recurrence ) {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = esc_html( $event->start_date( 'F j' ) ) . '</span>';
+					$pointer_dates['start']       = esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = esc_html( $event->end_date( 'F j' ) ) . '</span>';
+					$pointer_dates['end']         = esc_html( $end ) . '</span>';
 
 				// No recurrence
 				} else {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = esc_html( $this->get_event_date( $event->start ) ) . '</span>';
+					$pointer_dates['start']       = esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = esc_html( $this->get_event_date( $event->end ) ) . '</span>';
+					$pointer_dates['end']         = esc_html( $end ) . '</span>';
 				}
 
 			// Single all-day
 			} else {
 				$pointer_dates['all_day_title'] = '<strong>' . esc_html__( 'All Day', 'sugar-calendar' ) . '</strong>';
-				$pointer_dates['all_day']       = '<span>'   . esc_html( $this->get_event_date( $event->start ) ) . '</span>';
+				$pointer_dates['all_day']       = '<span>'   . esc_html( $start ) . '</span>';
 			}
 
 		// All other events
@@ -1990,23 +1996,23 @@ class Base_List_Table extends \WP_List_Table {
 				// Yearly
 				if ( 'yearly' === $event->recurrence ) {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = '<span>'   . esc_html( $event->start_date( 'F j' ) ) . '</span>';
+					$pointer_dates['start']       = '<span>'   . esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = '<span>'   . esc_html( $event->end_date( 'F j' ) ) . '</span>';
+					$pointer_dates['end']         = '<span>'   . esc_html( $end ) . '</span>';
 
 				// Monthly
 				} elseif ( 'monthly' === $event->recurrence ) {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = '<span>'   . esc_html( $event->start_date( 'F j' ) ) . '</span>';
+					$pointer_dates['start']       = '<span>'   . esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = '<span>'   . esc_html( $event->end_date( 'F j' ) ) . '</span>';
+					$pointer_dates['end']         = '<span>'   . esc_html( $end ) . '</span>';
 
 				// No recurrence
 				} else {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = '<span>'   . esc_html( $this->get_event_date( $event->start ) ) . '</span>';
+					$pointer_dates['start']       = '<span>'   . esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = '<span>'   . esc_html( $this->get_event_date( $event->end ) ) . '</span>';
+					$pointer_dates['end']         = '<span>'   . esc_html( $end ) . '</span>';
 				}
 
 			// Single day
@@ -2016,7 +2022,7 @@ class Base_List_Table extends \WP_List_Table {
 				if ( ! $event->is_empty_date( $event->start ) ) {
 					$start = esc_html( sprintf(
 						esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ),
-						$this->get_event_time( $event->start ),
+						$this->get_event_time( $event->start, $event->start_tz ),
 						$GLOBALS['wp_locale']->get_weekday( $event->start_date( 'w' ) )
 					) );
 
@@ -2033,7 +2039,7 @@ class Base_List_Table extends \WP_List_Table {
 				if ( ! $event->is_empty_date( $event->end ) && ( $event->start !== $event->end ) ) {
 					$end = esc_html( sprintf(
 						esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ),
-						$this->get_event_time( $event->end ),
+						$this->get_event_time( $event->end, $event->end_tz ),
 						$GLOBALS['wp_locale']->get_weekday( $event->end_date( 'w' ) )
 					) );
 

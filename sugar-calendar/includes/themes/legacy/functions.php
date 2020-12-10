@@ -1267,12 +1267,7 @@ function sc_get_recurring_description( $event_id = 0 ) {
  */
 function sc_get_number_of_events() {
 
-	$number = get_option( 'sc_number_of_events', false );
-
-	// default to WordPress value
-	if ( false === $number ) {
-		$number = 30;
-	}
+	$number = get_option( 'sc_number_of_events' );
 
 	// Filter and return
 	return (int) apply_filters( 'sc_number_of_events', $number );
@@ -1289,11 +1284,6 @@ function sc_get_date_format() {
 
 	$format = get_option( 'sc_date_format' );
 
-	// default to WordPress value
-	if ( empty( $format ) ) {
-		$format = get_option( 'date_format' );
-	}
-
 	// Filter and return
 	return apply_filters( 'sc_date_format', $format );
 }
@@ -1309,11 +1299,6 @@ function sc_get_time_format() {
 
 	$format = get_option( 'sc_time_format' );
 
-	// default to WordPress value
-	if ( empty( $format ) ) {
-		$format = get_option( 'time_format' );
-	}
-
 	// Filter and return
 	return apply_filters( 'sc_time_format', $format );
 }
@@ -1327,12 +1312,7 @@ function sc_get_time_format() {
  */
 function sc_get_week_start_day() {
 
-	$start_day = (int) get_option( 'sc_start_of_week' );
-
-	// default to WordPress value
-	if ( empty( $start_day ) && ( 0 !== $start_day ) ) {
-		$start_day = get_option( 'start_of_week' );
-	}
+	$start_day = get_option( 'sc_start_of_week' );
 
 	// Filter and return
 	return apply_filters( 'sc_week_start_day', $start_day );
@@ -1348,11 +1328,6 @@ function sc_get_week_start_day() {
 function sc_get_timezone() {
 
 	$timezone = get_option( 'sc_timezone' );
-
-	// default to WordPress value
-	if ( empty( $timezone ) ) {
-		$timezone = get_option( 'timezone' );
-	}
 
 	// Filter and return
 	return apply_filters( 'sc_timezone', $timezone );

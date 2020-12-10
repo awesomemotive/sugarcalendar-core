@@ -330,12 +330,12 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $format
-	 *
+	 * @param string $format   Compatible with DateTime::format().
+	 * @param string $timezone Used to offset from "start_tz".
 	 * @return string
 	 */
-	public function start_date( $format = 'Y-m-d H:i:s' ) {
-		return $this->format_date( $format, $this->start, $this->start_tz );
+	public function start_date( $format = 'Y-m-d H:i:s', $timezone = null ) {
+		return $this->format_date( $format, $this->start, $this->start_tz, $timezone );
 	}
 
 	/**
@@ -343,12 +343,12 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $format
-	 *
+	 * @param string $format   Compatible with DateTime::format().
+	 * @param string $timezone Used to offset from "end_tz".
 	 * @return string
 	 */
-	public function end_date( $format = 'Y-m-d H:i:s' ) {
-		return $this->format_date( $format, $this->end, $this->end_tz );
+	public function end_date( $format = 'Y-m-d H:i:s', $timezone = null ) {
+		return $this->format_date( $format, $this->end, $this->end_tz, $timezone );
 	}
 
 	/**
@@ -356,7 +356,7 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $format
+	 * @param string $format Compatible with DateTime::format().
 	 *
 	 * @return string
 	 */
@@ -369,14 +369,15 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $format   Defaults to MySQL datetime format.
-	 * @param mixed  $time     Defaults to "now".
-	 * @param string $timezone Defaults to time zone preference.
-	 * @param string $locale   Defaults to user/site preference.
+	 * @param string $format    Compatible with DateTime::format().
+	 * @param mixed  $timestamp Defaults to "now".
+	 * @param string $timezone1 Defaults to time zone preference.
+	 * @param string $timezone2 Used to offset from $timezone1.
+	 * @param string $locale    Defaults to user/site preference.
 	 *
 	 * @return string
 	 */
-	public static function format_date( $format = 'Y-m-d H:i:s', $time = null, $timezone = null, $locale = null ) {
-		return sugar_calendar_format_date_i18n( $format, $time, $timezone, $locale );
+	public static function format_date( $format = 'Y-m-d H:i:s', $timestamp = null, $timezone1 = null, $timezone2 = null, $locale = null ) {
+		return sugar_calendar_format_date_i18n( $format, $timestamp, $timezone1, $timezone2, $locale );
 	}
 }

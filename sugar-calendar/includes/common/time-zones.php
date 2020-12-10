@@ -443,7 +443,7 @@ function sugar_calendar_get_datetime_object( $timestamp = null, $timezone1 = nul
 	}
 
 	// Filter & return
-	return apply_filters( 'sugar_calendar_get_datetime_object', $retval, $time, $timezone1, $timezone2 );
+	return apply_filters( 'sugar_calendar_get_datetime_object', $retval, $timestamp, $timezone1, $timezone2 );
 }
 
 /**

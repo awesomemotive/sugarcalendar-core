@@ -1016,7 +1016,7 @@ function sc_get_event_start_time( $event_id = 0 ) {
 	}
 
 	// Default return value
-	$time = null;
+	$retval = null;
 
 	// Format time value if not null
 	if ( ( false !== $hour ) && ( false !== $minute ) ) {
@@ -1024,10 +1024,10 @@ function sc_get_event_start_time( $event_id = 0 ) {
 		$mktime = gmmktime( $hour, $minute, 0, $month, $day, $year );
 
 		// @todo needs time zone support
-		$time   = sugar_calendar_format_date_i18n( $format, $mktime );
+		$retval = sugar_calendar_format_date_i18n( $format, $mktime );
 	}
 
-	return apply_filters( 'sc_event_start_time', $time, $hour, $minute, $am_pm );
+	return apply_filters( 'sc_event_start_time', $retval, $hour, $minute, $am_pm );
 }
 
 /**
@@ -1064,7 +1064,7 @@ function sc_get_event_end_time( $event_id = 0 ) {
 	}
 
 	// Default return value
-	$time = null;
+	$retval = null;
 
 	// Format time value if not null
 	if ( ( false !== $hour ) && ( false !== $minute ) ) {
@@ -1072,10 +1072,10 @@ function sc_get_event_end_time( $event_id = 0 ) {
 		$mktime = gmmktime( $hour, $minute, 0, $month, $day, $year );
 
 		// @todo needs time zone support
-		$time   = sugar_calendar_format_date_i18n( $format, $mktime );
+		$retval = sugar_calendar_format_date_i18n( $format, $mktime );
 	}
 
-	return apply_filters( 'sc_event_end_time', $time, $hour, $minute );
+	return apply_filters( 'sc_event_end_time', $retval, $hour, $minute );
 }
 
 /**
@@ -1501,7 +1501,7 @@ function sc_order_events_by_time( $events ) {
  * @since       1.1
  * @deprecated  2.0.0
  *
- * @param string $time Timestamp that recurring event should include
+ * @param int    $time Timestamp that recurring event should include
  * @param string $type type of recurring event to retrieve
  * @param string|null $category Category to limit events
  *

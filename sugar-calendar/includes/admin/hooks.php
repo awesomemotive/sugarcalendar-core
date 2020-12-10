@@ -17,6 +17,7 @@ add_action( 'admin_init', __NAMESPACE__ . '\\Assets\\register' );
 
 // Admin screen options
 add_action( 'admin_init', __NAMESPACE__ . '\\Screen\\Options\\save' );
+add_action( 'admin_init', __NAMESPACE__ . '\\Screen\\Options\\reset' );
 
 // Admin upgrades
 add_action( 'admin_notices', __NAMESPACE__ . '\\Upgrades\\notices' );

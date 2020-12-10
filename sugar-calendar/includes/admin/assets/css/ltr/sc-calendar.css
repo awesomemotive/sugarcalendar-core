@@ -666,3 +666,17 @@ body.sugar-calendar form#adv-settings table.form-table td,
 body.sugar-calendar form#adv-settings table.form-table th {
 	padding: 10px 0;
 }
+
+body.sugar-calendar form#adv-settings .sc-date-time-prefs td label {
+	padding: 2px 0 2px 0;
+}
+
+body.sugar-calendar form#adv-settings .sc-date-time-prefs span.date-time-text {
+	display: inline-block;
+	min-width: 10em;
+}
+
+body.sugar-calendar form#adv-settings .sc-date-time-prefs input.small-text {
+	width: 75px;
+	margin: -2px 0;
+}

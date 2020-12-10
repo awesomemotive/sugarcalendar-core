@@ -285,7 +285,7 @@ function sugar_calendar_get_recurrence_types() {
 function sugar_calendar_get_clock_type() {
 
 	// Get user time format preference
-	$pref = sugar_calendar_get_user_preference( 'time_format', 'g:i a' );
+	$pref = sugar_calendar_get_user_preference( 'sc_time_format', 'g:i a' );
 
 	// Base clock type on time format preference
 	$retval = strstr( strtolower( $pref ), 'a' )

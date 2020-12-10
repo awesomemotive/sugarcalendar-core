@@ -534,7 +534,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_start_of_week( $start = '1' ) {
-		return (string) sugar_calendar_get_user_preference( 'start_of_week', (string) $start );
+		return (string) sugar_calendar_get_user_preference( 'sc_start_of_week', (string) $start );
 	}
 
 	/**

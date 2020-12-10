@@ -158,8 +158,8 @@ function localize() {
 
 	// User preferences
 	wp_localize_script( 'sugar_calendar_admin_meta_box', 'sc_vars', array(
-		'start_of_week' => sugar_calendar_get_user_preference( 'start_of_week' ),
-		'date_format'   => sugar_calendar_get_user_preference( 'date_format' ),
-		'time_format'   => sugar_calendar_get_user_preference( 'time_format' ),
+		'start_of_week' => sugar_calendar_get_user_preference( 'sc_start_of_week' ),
+		'date_format'   => sugar_calendar_get_user_preference( 'sc_date_format' ),
+		'time_format'   => sugar_calendar_get_user_preference( 'sc_time_format' ),
 	) );
 }

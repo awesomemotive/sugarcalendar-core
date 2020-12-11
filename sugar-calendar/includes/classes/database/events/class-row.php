@@ -286,8 +286,8 @@ final class Event extends Row {
 		}
 
 		// Turn datetimes to timestamps for easier comparisons
-		$item_start = $this->start_date( 'U' );
-		$item_end   = $this->end_date( 'U' );
+		$item_start = $this->format_date( 'U', $this->start );
+		$item_end   = $this->format_date( 'U', $this->end   );
 
 		// Boundary fits inside current cell
 		if ( ( $item_end <= $end ) && ( $item_start >= $start ) ) {

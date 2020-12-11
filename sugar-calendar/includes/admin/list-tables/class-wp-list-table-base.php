@@ -1207,11 +1207,30 @@ class Base_List_Table extends \WP_List_Table {
 			return false;
 		}
 
+		// Is item an All Day event?
+		$all_day = $item->is_all_day();
+
 		// Get the current cell
 		$current_cell = $this->get_current_cell();
 
+		// Adjust boundary based on all-day
+		$start = ( false === $all_day )
+			? $current_cell['start_dto']->getTimestamp()
+			: $current_cell['start'];
+
+		// Adjust boundary based on all-day
+		$end = ( false === $all_day )
+			? $current_cell['end_dto']->getTimestamp()
+			: $current_cell['start'];
+
+		// Get the mode
+		$mode = $this->get_mode();
+
+		// Get the time zone
+		$timezone = $this->timezone;
+
 		// Return if event belongs in cell
-		return $item->overlaps( $current_cell['start'], $current_cell['end'], $this->get_mode() );
+		return $item->overlaps( $start, $end, $mode, $timezone );
 	}
 
 	/**
@@ -1450,6 +1469,9 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Add date parts for start
 		if ( ! empty( $r['start'] ) ) {
+
+			// @todo only use DateTime object
+			$r['start_dto']     = sugar_calendar_get_datetime_object( $r['start'], $this->timezone );
 			$r['start_year']    = gmdate( 'Y', $r['start'] );
 			$r['start_month']   = gmdate( 'm', $r['start'] );
 			$r['start_day']     = gmdate( 'd', $r['start'] );
@@ -1463,6 +1485,9 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Add date parts for end
 		if ( ! empty( $r['end'] ) ) {
+
+			// @todo only use DateTime object
+			$r['end_dto']       = sugar_calendar_get_datetime_object( $r['end'], $this->timezone );
 			$r['end_year']      = gmdate( 'Y', $r['end'] );
 			$r['end_month']     = gmdate( 'm', $r['end'] );
 			$r['end_day']       = gmdate( 'd', $r['end'] );

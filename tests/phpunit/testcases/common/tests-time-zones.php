@@ -117,4 +117,64 @@ class TimeZones extends \WP_UnitTestCase {
 
 		$this->assertSame( $same, $offset );
 	}
+
+	/**
+	 * @group get_datetime_object
+	 */
+	public function test_get_datetime_object_chicago_greater_than_new_york() {
+
+		// 09:20 New York
+		$dto1 = sugar_calendar_get_datetime_object( '2020-12-11 09:20:00', 'America/New_York' );
+
+		// 09:20 Chicago viewed from New York (10:20)
+		$dto2 = sugar_calendar_get_datetime_object( '2020-12-11 09:20:00', 'America/Chicago', 'America/New_York' );
+
+		// Test that $dto2 is greater than $dto1
+		$this->assertGreaterThan( $dto1, $dto2 );
+	}
+
+	/**
+	 * @group get_datetime_object
+	 */
+	public function test_get_datetime_object_chicago_greater_than_los_angeles() {
+
+		// 09:20 Chicago
+		$dto1 = sugar_calendar_get_datetime_object( '2020-12-11 09:20:00', 'America/Chicago' );
+
+		// 09:20 Los Angeles viewed from Chicago (11:20)
+		$dto2 = sugar_calendar_get_datetime_object( '2020-12-11 09:20:00', 'America/Los_Angeles', 'America/Chicago' );
+
+		// Test that $dto2 is greater than $dto1
+		$this->assertGreaterThan( $dto1, $dto2 );
+	}
+
+	/**
+	 * @group get_datetime_object
+	 */
+	public function test_get_datetime_object_los_angeles_less_than_new_york() {
+
+		// 09:20 Los Angeles
+		$dto1 = sugar_calendar_get_datetime_object( '2020-12-11 09:20:00', 'America/Los_Angeles' );
+
+		// 09:20 New York
+		$dto2 = sugar_calendar_get_datetime_object( '2020-12-11 09:20:00', 'America/New_York' );
+
+		// Test that $dto2 is greater than $dto1
+		$this->assertLessThan( $dto1, $dto2 );
+	}
+
+	/**
+	 * @group get_datetime_object
+	 */
+	public function test_get_datetime_object_los_angeles_equal_to_new_york() {
+
+		// 09:20 Los Angeles timestamp
+		$dto1 = sugar_calendar_get_datetime_object( '2020-12-11 09:20:00', 'America/Los_Angeles' )->getTimestamp();
+
+		// 11:20 New York timestamp
+		$dto2 = sugar_calendar_get_datetime_object( '2020-12-11 12:20:00', 'America/New_York' )->getTimestamp();
+
+		// Test that $dto1 equals $dto2
+		$this->assertEquals( $dto1, $dto2 );
+	}
 }

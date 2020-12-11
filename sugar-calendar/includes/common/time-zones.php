@@ -411,8 +411,10 @@ function sugar_calendar_get_timezone_type() {
  *
  * @since 2.1.0
  * @param mixed  $timestamp Accepts any string compatible with strtotime()
- * @param string $timezone1 Used as base for DateTime object
- * @param string $timezone2 Used to apply offset based on $timezone1
+ * @param string $timezone1 Default null. Olson time zone ID. Used as base for
+ *                          DateTime object.
+ * @param string $timezone2 Default null. Olson time zone ID. Used to apply
+ *                          offset based on $timezone1.
  * @return object
  */
 function sugar_calendar_get_datetime_object( $timestamp = null, $timezone1 = null, $timezone2 = null ) {
@@ -450,8 +452,8 @@ function sugar_calendar_get_datetime_object( $timestamp = null, $timezone1 = nul
  * Set the time zone for a date time object
  *
  * @since 2.1.2
- * @param DateTime $dto
- * @param string   $timezone
+ * @param DateTime $dto      DateTime object.
+ * @param string   $timezone Default false. Olson time zone ID.
  * @return DateTime The object from $dto with a new time zone
  */
 function sugar_calendar_set_datetime_timezone( $dto = false, $timezone = false ) {
@@ -462,7 +464,7 @@ function sugar_calendar_set_datetime_timezone( $dto = false, $timezone = false )
 	}
 
 	// Maybe set the time zone
-	if ( $timezone instanceof DateTimeZone ) {
+	if ( ( $dto instanceof DateTime ) && ( $timezone instanceof DateTimeZone ) ) {
 		$dto->setTimezone( $timezone );
 	}
 

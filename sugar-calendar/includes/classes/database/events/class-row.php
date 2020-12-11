@@ -269,13 +269,14 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.1
 	 *
-	 * @param int    $start Unix timestamp
-	 * @param int    $end   Unix timestamp
-	 * @param string $mode  day|week|month|year
+	 * @param int    $start    Unix timestamp
+	 * @param int    $end      Unix timestamp
+	 * @param string $mode     day|week|month|year
+	 * @param string $timezone Default null. Olson time zone ID.
 	 *
 	 * @return bool
 	 */
-	public function overlaps( $start = '', $end = '', $mode = 'month' ) {
+	public function overlaps( $start = '', $end = '', $mode = 'month', $timezone = null ) {
 
 		// Default return value
 		$retval = false;
@@ -286,8 +287,8 @@ final class Event extends Row {
 		}
 
 		// Turn datetimes to timestamps for easier comparisons
-		$item_start = $this->format_date( 'U', $this->start );
-		$item_end   = $this->format_date( 'U', $this->end   );
+		$item_start = $this->format_date( 'U', $this->start, $this->start_tz, $timezone );
+		$item_end   = $this->format_date( 'U', $this->end,   $this->end_tz,   $timezone );
 
 		// Boundary fits inside current cell
 		if ( ( $item_end <= $end ) && ( $item_start >= $start ) ) {

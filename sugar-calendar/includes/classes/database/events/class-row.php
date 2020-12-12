@@ -300,7 +300,7 @@ final class Event extends Row {
 		}
 
 		// Filter and return
-		return (bool) apply_filters( 'sugar_calendar_event_overlaps', $retval, $this, $start, $end, $mode );
+		return (bool) apply_filters( 'sugar_calendar_event_overlaps', $retval, $this, $start, $end, $mode, $timezone );
 	}
 
 	/**

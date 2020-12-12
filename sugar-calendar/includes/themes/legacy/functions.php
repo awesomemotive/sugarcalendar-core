@@ -81,8 +81,14 @@ function sc_is_event_for_day( $event, $day = '01', $month = '01', $year = '1970'
 	$start = gmmktime( '00', '00', '00', $month, $day, $year );
 	$end   = gmmktime( '23', '59', '59', $month, $day, $year );
 
+	// All front-end modes are currently months
+	$mode  = 'month';
+
+	// Get the time zone, either by user preference or by settings
+	$timezone = sugar_calendar_get_timezone();
+
 	// Return
-	return $event->overlaps( $start, $end );
+	return $event->overlaps( $start, $end, $mode, $timezone );
 }
 
 /**

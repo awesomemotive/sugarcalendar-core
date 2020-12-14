@@ -41,12 +41,14 @@ function sugar_calendar_get_request_time( $type = 'timestamp', $timezone = 'UTC'
 		$timestart = microtime( true );
 	}
 
-	// Get the offset
-	$offset = sugar_calendar_get_timezone_offset( array(
-		'time'     => (int) $timestart,
-		'timezone' => $timezone,
-		'format'   => 'seconds'
-	) );
+	// Get the offset if not UTC
+	if ( 'UTC' !== $timezone ) {
+		$offset = sugar_calendar_get_timezone_offset( array(
+			'time'     => (int) $timestart,
+			'timezone' => $timezone,
+			'format'   => 'seconds'
+		) );
+	}
 
 	// What type of
 	switch ( $type ) {

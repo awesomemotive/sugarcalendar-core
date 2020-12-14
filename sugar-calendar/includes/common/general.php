@@ -76,7 +76,7 @@ function sugar_calendar_format_date( $format = 'Y-m-d H:i:s', $timestamp = null,
 	$retval = $dto->format( $format );
 
 	// Filter & return
-	return apply_filters( 'sugar_calendar_date', $retval, $format, $timestamp, $timezone1, $timezone2 );
+	return apply_filters( 'sugar_calendar_format_date', $retval, $format, $timestamp, $timezone1, $timezone2 );
 }
 
 /**
@@ -177,7 +177,7 @@ function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $timestamp = 
 	}
 
 	// Filter & return
-	return apply_filters( 'sugar_calendar_date_i18n', $retval, $format, $timestamp, $timezone1, $timezone2, $locale );
+	return apply_filters( 'sugar_calendar_format_date_i18n', $retval, $format, $timestamp, $timezone1, $timezone2, $locale );
 }
 
 /**

@@ -82,6 +82,11 @@ final class Back_Compat {
 			'read'   => 'z',
 			'write'  => false
 		),
+		'sc_event_timezone' => array(
+			'column' => 'start_tz',
+			'read'   => null,
+			'write'  => null
+		),
 
 		// End
 		'sc_event_end_date' => array(
@@ -139,6 +144,11 @@ final class Back_Compat {
 			'read'   => 'z',
 			'write'  => false
 		),
+		'sc_event_end_timezone' => array(
+			'column' => 'end_tz',
+			'read'   => null,
+			'write'  => null
+		),
 
 		// Recurring
 		'sc_event_recurring' => array(
@@ -150,6 +160,11 @@ final class Back_Compat {
 			'column' => 'recurrence_end',
 			'read'   => 'U',
 			'write'  => 'Y-m-d H:i:s'
+		),
+		'sc_recur_timezone' => array(
+			'column' => 'recurrence_end_tz',
+			'read'   => null,
+			'write'  => null
 		),
 		'sc_all_recurring' => array(
 			'column' => false,

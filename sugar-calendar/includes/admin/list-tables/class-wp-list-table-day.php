@@ -280,12 +280,17 @@ class Day extends Base_List_Table {
 			$classes[] = 'this-hour';
 		}
 
+		// Format based on clock type
+		$format = ( '12' === sugar_calendar_get_clock_type() )
+			? 'g:i a'
+			: 'H:i';
+
 		// Start an output buffer
 		ob_start(); ?>
 
 		<tr class="<?php echo implode( ' ', $classes ); ?>">
 			<th class="column-hour<?php echo $this->get_hour_class(); ?>">
-				<?php echo gmdate( 'g:i a', $start ); ?>
+				<?php echo gmdate( $format, $start ); ?>
 			</th>
 
 		<?php

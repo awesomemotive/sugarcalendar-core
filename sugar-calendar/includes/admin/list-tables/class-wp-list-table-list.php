@@ -341,11 +341,11 @@ class Basic extends Base_List_Table {
 
 		// Start the <time> tag, with timezone data
 		$retval  = '<time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '">';
-		$retval .= '<span class="sc-date">' . $this->get_event_date( $item->start ) . '</span>';
+		$retval .= '<span class="sc-date">' . $this->get_event_date( $item->start, $item->start_tz ) . '</span>';
 
 		// Maybe add time if not all-day
 		if ( ! $item->is_all_day() ) {
-			$retval .= '<br><span class="sc-time">' . $this->get_event_time( $item->start ) . '</span>';
+			$retval .= '<br><span class="sc-time">' . $this->get_event_time( $item->start, $item->start_tz ) . '</span>';
 
 			// Maybe add timezone
 			if ( ! empty( $item->start_tz ) ) {
@@ -419,11 +419,11 @@ class Basic extends Base_List_Table {
 
 		// Start the <time> tag, with timezone data
 		$retval  = '<time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '">';
-		$retval .= '<span class="sc-date">' . $this->get_event_date( $item->end ) . '</span>';
+		$retval .= '<span class="sc-date">' . $this->get_event_date( $item->end, $item->end_tz ) . '</span>';
 
 		// Maybe add time if not all-day
 		if ( ! $item->is_all_day() ) {
-			$retval .= '<br><span class="sc-time">' . $this->get_event_time( $item->end ) . '</span>';
+			$retval .= '<br><span class="sc-time">' . $this->get_event_time( $item->end, $item->end_tz ) . '</span>';
 
 			// Maybe add timezone
 			if ( ! empty( $item->end_tz ) ) {

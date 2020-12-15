@@ -269,13 +269,14 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.1
 	 *
-	 * @param int    $start Unix timestamp
-	 * @param int    $end   Unix timestamp
-	 * @param string $mode  day|week|month|year
+	 * @param int    $start    Unix timestamp
+	 * @param int    $end      Unix timestamp
+	 * @param string $mode     day|week|month|year
+	 * @param string $timezone Default null. Olson time zone ID.
 	 *
 	 * @return bool
 	 */
-	public function overlaps( $start = '', $end = '', $mode = 'month' ) {
+	public function overlaps( $start = '', $end = '', $mode = 'month', $timezone = null ) {
 
 		// Default return value
 		$retval = false;
@@ -285,9 +286,19 @@ final class Event extends Row {
 			return $retval;
 		}
 
+		// Set time zone to floating if no time zone offset
+		$start_tz = ! empty( $timezone )
+			? $this->start_tz
+			: '';
+
+		// Set time zone to floating if no time zone offset
+		$end_tz = ! empty( $timezone )
+			? $this->end_tz
+			: '';
+
 		// Turn datetimes to timestamps for easier comparisons
-		$item_start = $this->start_date( 'U' );
-		$item_end   = $this->end_date( 'U' );
+		$item_start = $this->format_date( 'U', $this->start, $start_tz, $timezone );
+		$item_end   = $this->format_date( 'U', $this->end,   $end_tz,   $timezone );
 
 		// Boundary fits inside current cell
 		if ( ( $item_end <= $end ) && ( $item_start >= $start ) ) {
@@ -299,7 +310,7 @@ final class Event extends Row {
 		}
 
 		// Filter and return
-		return (bool) apply_filters( 'sugar_calendar_event_overlaps', $retval, $this, $start, $end, $mode );
+		return (bool) apply_filters( 'sugar_calendar_event_overlaps', $retval, $this, $start, $end, $mode, $timezone );
 	}
 
 	/**
@@ -330,12 +341,12 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $format
-	 *
+	 * @param string $format   Compatible with DateTime::format().
+	 * @param string $timezone Used to offset from "start_tz".
 	 * @return string
 	 */
-	public function start_date( $format = 'Y-m-d H:i:s' ) {
-		return $this->format_date( $format, $this->start );
+	public function start_date( $format = 'Y-m-d H:i:s', $timezone = null ) {
+		return $this->format_date( $format, $this->start, $this->start_tz, $timezone );
 	}
 
 	/**
@@ -343,12 +354,12 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $format
-	 *
+	 * @param string $format   Compatible with DateTime::format().
+	 * @param string $timezone Used to offset from "end_tz".
 	 * @return string
 	 */
-	public function end_date( $format = 'Y-m-d H:i:s' ) {
-		return $this->format_date( $format, $this->end );
+	public function end_date( $format = 'Y-m-d H:i:s', $timezone = null ) {
+		return $this->format_date( $format, $this->end, $this->end_tz, $timezone );
 	}
 
 	/**
@@ -356,7 +367,7 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $format
+	 * @param string $format Compatible with DateTime::format().
 	 *
 	 * @return string
 	 */
@@ -369,14 +380,15 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $format   Defaults to MySQL datetime format.
-	 * @param mixed  $time     Defaults to "now".
-	 * @param string $timezone Defaults to time zone preference.
-	 * @param string $locale   Defaults to user/site preference.
+	 * @param string $format    Compatible with DateTime::format().
+	 * @param mixed  $timestamp Defaults to "now".
+	 * @param string $timezone1 Defaults to time zone preference.
+	 * @param string $timezone2 Used to offset from $timezone1.
+	 * @param string $locale    Defaults to user/site preference.
 	 *
 	 * @return string
 	 */
-	public static function format_date( $format = 'Y-m-d H:i:s', $time = null, $timezone = null, $locale = null ) {
-		return sugar_calendar_format_date_i18n( $format, $time, $timezone, $locale );
+	public static function format_date( $format = 'Y-m-d H:i:s', $timestamp = null, $timezone1 = null, $timezone2 = null, $locale = null ) {
+		return sugar_calendar_format_date_i18n( $format, $timestamp, $timezone1, $timezone2, $locale );
 	}
 }

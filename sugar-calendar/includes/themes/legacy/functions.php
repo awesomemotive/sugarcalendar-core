@@ -81,8 +81,14 @@ function sc_is_event_for_day( $event, $day = '01', $month = '01', $year = '1970'
 	$start = gmmktime( '00', '00', '00', $month, $day, $year );
 	$end   = gmmktime( '23', '59', '59', $month, $day, $year );
 
+	// All front-end modes are currently months
+	$mode  = 'month';
+
+	// Get the time zone, either by user preference or by settings
+	$timezone = sugar_calendar_get_timezone();
+
 	// Return
-	return $event->overlaps( $start, $end );
+	return $event->overlaps( $start, $end, $mode, $timezone );
 }
 
 /**
@@ -930,13 +936,13 @@ function sc_get_event_date( $event_id = 0, $formatted = true ) {
  * The timestamp is given because this could be a recurrence of an event.
  * Note: This does not display multi-day events, only start times.
  *
- * @access      public
- * @since       1.6.0
- * @param       int $event_id
- * @param 		int $timestamp
- * @return      string
+ * @since 1.6.0
+ * @param int $event_id
+ * @param int $timestamp
+ * @param string $timezone
+ * @return string
  */
-function sc_get_formatted_date( $event_id = 0, $timestamp = null ) {
+function sc_get_formatted_date( $event_id = 0, $timestamp = null, $timezone = null ) {
 
 	// Default return value
 	$retval = '';
@@ -949,12 +955,13 @@ function sc_get_formatted_date( $event_id = 0, $timestamp = null ) {
 	// Get a timestamp from the start date & time
 	if ( ! empty( $event_id ) && empty( $timestamp ) ) {
 		$timestamp = get_post_meta( $event_id, 'sc_event_date_time', true );
+		$timezone  = get_post_meta( $event_id, 'sc_event_timezone',  true );
 	}
 
 	// Maybe format a timestamp if one was found
 	if ( ! empty( $timestamp ) ) {
 		$format = sc_get_date_format();
-		$retval = sugar_calendar_format_date_i18n( $format, $timestamp );
+		$retval = sugar_calendar_format_date_i18n( $format, $timestamp, $timezone );
 	}
 
 	// Return a possibly formatted start date & time
@@ -1001,12 +1008,13 @@ function sc_get_event_start_time( $event_id = 0 ) {
 	}
 
 	// Use meta keys for back-compat
-	$day    = get_post_meta( $event_id, 'sc_event_day_of_month', true );
-	$month  = get_post_meta( $event_id, 'sc_event_month',        true );
-	$year   = get_post_meta( $event_id, 'sc_event_year',         true );
-	$hour   = get_post_meta( $event_id, 'sc_event_time_hour',    true );
-	$minute = get_post_meta( $event_id, 'sc_event_time_minute',  true );
-	$am_pm  = get_post_meta( $event_id, 'sc_event_time_am_pm',   true );
+	$day      = get_post_meta( $event_id, 'sc_event_day_of_month', true );
+	$month    = get_post_meta( $event_id, 'sc_event_month',        true );
+	$year     = get_post_meta( $event_id, 'sc_event_year',         true );
+	$hour     = get_post_meta( $event_id, 'sc_event_time_hour',    true );
+	$minute   = get_post_meta( $event_id, 'sc_event_time_minute',  true );
+	$am_pm    = get_post_meta( $event_id, 'sc_event_time_am_pm',   true );
+	$timezone = get_post_meta( $event_id, 'sc_event_timezone',     true );
 
 	// Adjust for meridiem
 	if ( ( $am_pm === 'pm' ) && ( $hour < 12 ) ) {
@@ -1016,18 +1024,16 @@ function sc_get_event_start_time( $event_id = 0 ) {
 	}
 
 	// Default return value
-	$time = null;
+	$retval = null;
 
 	// Format time value if not null
 	if ( ( false !== $hour ) && ( false !== $minute ) ) {
 		$format = sc_get_time_format();
 		$mktime = gmmktime( $hour, $minute, 0, $month, $day, $year );
-
-		// @todo needs time zone support
-		$time   = sugar_calendar_format_date_i18n( $format, $mktime );
+		$retval = sugar_calendar_format_date_i18n( $format, $mktime, $timezone );
 	}
 
-	return apply_filters( 'sc_event_start_time', $time, $hour, $minute, $am_pm );
+	return apply_filters( 'sc_event_start_time', $retval, $hour, $minute, $am_pm );
 }
 
 /**
@@ -1049,12 +1055,13 @@ function sc_get_event_end_time( $event_id = 0 ) {
 	}
 
 	// Use meta keys for back-compat
-	$day    = get_post_meta( $event_id, 'sc_event_end_day_of_month', true );
-	$month  = get_post_meta( $event_id, 'sc_event_end_month',        true );
-	$year   = get_post_meta( $event_id, 'sc_event_end_year',         true );
-	$hour   = get_post_meta( $event_id, 'sc_event_end_time_hour',    true );
-	$minute = get_post_meta( $event_id, 'sc_event_end_time_minute',  true );
-	$am_pm  = get_post_meta( $event_id, 'sc_event_end_time_am_pm',   true );
+	$day      = get_post_meta( $event_id, 'sc_event_end_day_of_month', true );
+	$month    = get_post_meta( $event_id, 'sc_event_end_month',        true );
+	$year     = get_post_meta( $event_id, 'sc_event_end_year',         true );
+	$hour     = get_post_meta( $event_id, 'sc_event_end_time_hour',    true );
+	$minute   = get_post_meta( $event_id, 'sc_event_end_time_minute',  true );
+	$am_pm    = get_post_meta( $event_id, 'sc_event_end_time_am_pm',   true );
+	$timezone = get_post_meta( $event_id, 'sc_event_end_timezone',     true );
 
 	// Adjust for meridiem
 	if ( ( $am_pm === 'pm' ) && ( $hour < 12 ) ) {
@@ -1064,18 +1071,16 @@ function sc_get_event_end_time( $event_id = 0 ) {
 	}
 
 	// Default return value
-	$time = null;
+	$retval = null;
 
 	// Format time value if not null
 	if ( ( false !== $hour ) && ( false !== $minute ) ) {
 		$format = sc_get_time_format();
 		$mktime = gmmktime( $hour, $minute, 0, $month, $day, $year );
-
-		// @todo needs time zone support
-		$time   = sugar_calendar_format_date_i18n( $format, $mktime );
+		$retval = sugar_calendar_format_date_i18n( $format, $mktime, $timezone );
 	}
 
-	return apply_filters( 'sc_event_end_time', $time, $hour, $minute );
+	return apply_filters( 'sc_event_end_time', $retval, $hour, $minute );
 }
 
 /**
@@ -1267,12 +1272,7 @@ function sc_get_recurring_description( $event_id = 0 ) {
  */
 function sc_get_number_of_events() {
 
-	$number = get_option( 'sc_number_of_events', false );
-
-	// default to WordPress value
-	if ( false === $number ) {
-		$number = 30;
-	}
+	$number = get_option( 'sc_number_of_events' );
 
 	// Filter and return
 	return (int) apply_filters( 'sc_number_of_events', $number );
@@ -1289,11 +1289,6 @@ function sc_get_date_format() {
 
 	$format = get_option( 'sc_date_format' );
 
-	// default to WordPress value
-	if ( empty( $format ) ) {
-		$format = get_option( 'date_format' );
-	}
-
 	// Filter and return
 	return apply_filters( 'sc_date_format', $format );
 }
@@ -1309,11 +1304,6 @@ function sc_get_time_format() {
 
 	$format = get_option( 'sc_time_format' );
 
-	// default to WordPress value
-	if ( empty( $format ) ) {
-		$format = get_option( 'time_format' );
-	}
-
 	// Filter and return
 	return apply_filters( 'sc_time_format', $format );
 }
@@ -1327,12 +1317,7 @@ function sc_get_time_format() {
  */
 function sc_get_week_start_day() {
 
-	$start_day = (int) get_option( 'sc_start_of_week' );
-
-	// default to WordPress value
-	if ( empty( $start_day ) && ( 0 !== $start_day ) ) {
-		$start_day = get_option( 'start_of_week' );
-	}
+	$start_day = get_option( 'sc_start_of_week' );
 
 	// Filter and return
 	return apply_filters( 'sc_week_start_day', $start_day );
@@ -1348,11 +1333,6 @@ function sc_get_week_start_day() {
 function sc_get_timezone() {
 
 	$timezone = get_option( 'sc_timezone' );
-
-	// default to WordPress value
-	if ( empty( $timezone ) ) {
-		$timezone = get_option( 'timezone' );
-	}
 
 	// Filter and return
 	return apply_filters( 'sc_timezone', $timezone );
@@ -1526,7 +1506,7 @@ function sc_order_events_by_time( $events ) {
  * @since       1.1
  * @deprecated  2.0.0
  *
- * @param string $time Timestamp that recurring event should include
+ * @param int    $time Timestamp that recurring event should include
  * @param string $type type of recurring event to retrieve
  * @param string|null $category Category to limit events
  *

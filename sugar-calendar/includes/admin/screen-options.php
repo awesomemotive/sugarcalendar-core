@@ -233,7 +233,7 @@ function preferences() {
 				</td>
 			</tr>
 
-			<?php if ( 'off' !== $tztype ) : ?>
+			<?php if ( ! empty( $sc_timezone ) || ( 'off' !== $tztype ) ) : ?>
 
 				<tr valign="top">
 					<th scope="row" valign="top">

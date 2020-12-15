@@ -286,9 +286,19 @@ final class Event extends Row {
 			return $retval;
 		}
 
+		// Set time zone to floating if no time zone offset
+		$start_tz = ! empty( $timezone )
+			? $this->start_tz
+			: '';
+
+		// Set time zone to floating if no time zone offset
+		$end_tz = ! empty( $timezone )
+			? $this->end_tz
+			: '';
+
 		// Turn datetimes to timestamps for easier comparisons
-		$item_start = $this->format_date( 'U', $this->start, $this->start_tz, $timezone );
-		$item_end   = $this->format_date( 'U', $this->end,   $this->end_tz,   $timezone );
+		$item_start = $this->format_date( 'U', $this->start, $start_tz, $timezone );
+		$item_end   = $this->format_date( 'U', $this->end,   $end_tz,   $timezone );
 
 		// Boundary fits inside current cell
 		if ( ( $item_end <= $end ) && ( $item_start >= $start ) ) {

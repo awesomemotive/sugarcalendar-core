@@ -149,6 +149,11 @@ function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $timestamp = 
 					$new_format .= addcslashes( $str, $slashes );
 					break;
 
+				case 'e' :
+					$str         = sugar_calendar_format_timezone( $dto->format( 'e' ) );
+					$new_format .= addcslashes( $str, $slashes );
+					break;
+
 				case '\\' :
 					$new_format .= $format[ $i ];
 

@@ -936,13 +936,13 @@ function sc_get_event_date( $event_id = 0, $formatted = true ) {
  * The timestamp is given because this could be a recurrence of an event.
  * Note: This does not display multi-day events, only start times.
  *
- * @access      public
- * @since       1.6.0
- * @param       int $event_id
- * @param 		int $timestamp
- * @return      string
+ * @since 1.6.0
+ * @param int $event_id
+ * @param int $timestamp
+ * @param string $timezone
+ * @return string
  */
-function sc_get_formatted_date( $event_id = 0, $timestamp = null ) {
+function sc_get_formatted_date( $event_id = 0, $timestamp = null, $timezone = null ) {
 
 	// Default return value
 	$retval = '';
@@ -955,12 +955,13 @@ function sc_get_formatted_date( $event_id = 0, $timestamp = null ) {
 	// Get a timestamp from the start date & time
 	if ( ! empty( $event_id ) && empty( $timestamp ) ) {
 		$timestamp = get_post_meta( $event_id, 'sc_event_date_time', true );
+		$timezone  = get_post_meta( $event_id, 'sc_event_timezone',  true );
 	}
 
 	// Maybe format a timestamp if one was found
 	if ( ! empty( $timestamp ) ) {
 		$format = sc_get_date_format();
-		$retval = sugar_calendar_format_date_i18n( $format, $timestamp );
+		$retval = sugar_calendar_format_date_i18n( $format, $timestamp, $timezone );
 	}
 
 	// Return a possibly formatted start date & time
@@ -1007,12 +1008,13 @@ function sc_get_event_start_time( $event_id = 0 ) {
 	}
 
 	// Use meta keys for back-compat
-	$day    = get_post_meta( $event_id, 'sc_event_day_of_month', true );
-	$month  = get_post_meta( $event_id, 'sc_event_month',        true );
-	$year   = get_post_meta( $event_id, 'sc_event_year',         true );
-	$hour   = get_post_meta( $event_id, 'sc_event_time_hour',    true );
-	$minute = get_post_meta( $event_id, 'sc_event_time_minute',  true );
-	$am_pm  = get_post_meta( $event_id, 'sc_event_time_am_pm',   true );
+	$day      = get_post_meta( $event_id, 'sc_event_day_of_month', true );
+	$month    = get_post_meta( $event_id, 'sc_event_month',        true );
+	$year     = get_post_meta( $event_id, 'sc_event_year',         true );
+	$hour     = get_post_meta( $event_id, 'sc_event_time_hour',    true );
+	$minute   = get_post_meta( $event_id, 'sc_event_time_minute',  true );
+	$am_pm    = get_post_meta( $event_id, 'sc_event_time_am_pm',   true );
+	$timezone = get_post_meta( $event_id, 'sc_event_timezone',     true );
 
 	// Adjust for meridiem
 	if ( ( $am_pm === 'pm' ) && ( $hour < 12 ) ) {
@@ -1028,9 +1030,7 @@ function sc_get_event_start_time( $event_id = 0 ) {
 	if ( ( false !== $hour ) && ( false !== $minute ) ) {
 		$format = sc_get_time_format();
 		$mktime = gmmktime( $hour, $minute, 0, $month, $day, $year );
-
-		// @todo needs time zone support
-		$retval = sugar_calendar_format_date_i18n( $format, $mktime );
+		$retval = sugar_calendar_format_date_i18n( $format, $mktime, $timezone );
 	}
 
 	return apply_filters( 'sc_event_start_time', $retval, $hour, $minute, $am_pm );
@@ -1055,12 +1055,13 @@ function sc_get_event_end_time( $event_id = 0 ) {
 	}
 
 	// Use meta keys for back-compat
-	$day    = get_post_meta( $event_id, 'sc_event_end_day_of_month', true );
-	$month  = get_post_meta( $event_id, 'sc_event_end_month',        true );
-	$year   = get_post_meta( $event_id, 'sc_event_end_year',         true );
-	$hour   = get_post_meta( $event_id, 'sc_event_end_time_hour',    true );
-	$minute = get_post_meta( $event_id, 'sc_event_end_time_minute',  true );
-	$am_pm  = get_post_meta( $event_id, 'sc_event_end_time_am_pm',   true );
+	$day      = get_post_meta( $event_id, 'sc_event_end_day_of_month', true );
+	$month    = get_post_meta( $event_id, 'sc_event_end_month',        true );
+	$year     = get_post_meta( $event_id, 'sc_event_end_year',         true );
+	$hour     = get_post_meta( $event_id, 'sc_event_end_time_hour',    true );
+	$minute   = get_post_meta( $event_id, 'sc_event_end_time_minute',  true );
+	$am_pm    = get_post_meta( $event_id, 'sc_event_end_time_am_pm',   true );
+	$timezone = get_post_meta( $event_id, 'sc_event_end_timezone',     true );
 
 	// Adjust for meridiem
 	if ( ( $am_pm === 'pm' ) && ( $hour < 12 ) ) {
@@ -1076,9 +1077,7 @@ function sc_get_event_end_time( $event_id = 0 ) {
 	if ( ( false !== $hour ) && ( false !== $minute ) ) {
 		$format = sc_get_time_format();
 		$mktime = gmmktime( $hour, $minute, 0, $month, $day, $year );
-
-		// @todo needs time zone support
-		$retval = sugar_calendar_format_date_i18n( $format, $mktime );
+		$retval = sugar_calendar_format_date_i18n( $format, $mktime, $timezone );
 	}
 
 	return apply_filters( 'sc_event_end_time', $retval, $hour, $minute );

@@ -263,6 +263,7 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Set class properties
 		$this->init_globals();
+		$this->init_timezone();
 		$this->init_boundaries();
 		$this->init_week_days();
 		$this->init_max();
@@ -291,14 +292,20 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Set the time zone
+	 *
+	 * @since 2.1.2
+	 */
+	protected function init_timezone() {
+		$this->timezone = sugar_calendar_get_timezone();
+	}
+
+	/**
 	 * Set the boundaries
 	 *
 	 * @since 2.0.0
 	 */
 	protected function init_boundaries() {
-
-		// Set time zone first, so everything uses the same one
-		$this->timezone = $this->get_timezone();
 
 		// Set now once, so everything uses the same timestamp
 		$this->now = $this->get_current_time();
@@ -609,6 +616,11 @@ class Base_List_Table extends \WP_List_Table {
 			unset( $r['s'] );
 		}
 
+		// Maybe unset default time zone
+		if ( empty( $r['cz'] ) || ( $this->timezone === $r['cz'] ) ) {
+			unset( $r['cz'] );
+		}
+
 		// Use the base URL
 		$url = $this->get_base_url();
 
@@ -811,10 +823,10 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.1.0
 	 *
-	 * @return int
+	 * @return string
 	 */
 	protected function get_timezone() {
-		$default = sugar_calendar_get_timezone();
+		$default = $this->timezone;
 
 		return $this->get_request_var( 'cz', 'urldecode', $default );
 	}
@@ -1215,22 +1227,25 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Adjust boundary based on all-day
 		$start = ( false === $all_day )
-			? $current_cell['start_dto']->getTimestamp()
+			? $current_cell['start_timestamp']
 			: $current_cell['start'];
 
 		// Adjust boundary based on all-day
 		$end = ( false === $all_day )
-			? $current_cell['end_dto']->getTimestamp()
-			: $current_cell['start'];
+			? $current_cell['end_timestamp']
+			: $current_cell['end'];
 
 		// Get the mode
 		$mode = $this->get_mode();
 
 		// Get the time zone
-		$timezone = $this->timezone;
+		$timezone = $this->get_timezone();
+
+		// Get overlaps
+		$retval = $item->overlaps( $start, $end, $mode, $timezone );
 
 		// Return if event belongs in cell
-		return $item->overlaps( $start, $end, $mode, $timezone );
+		return $retval;
 	}
 
 	/**
@@ -1467,36 +1482,37 @@ class Base_List_Table extends \WP_List_Table {
 			'type'   => 'normal'
 		) );
 
+		// Get the time zone
+		$timezone = $this->get_timezone();
+
 		// Add date parts for start
 		if ( ! empty( $r['start'] ) ) {
-
-			// @todo only use DateTime object
-			$r['start_dto']     = sugar_calendar_get_datetime_object( $r['start'], $this->timezone );
-			$r['start_year']    = gmdate( 'Y', $r['start'] );
-			$r['start_month']   = gmdate( 'm', $r['start'] );
-			$r['start_day']     = gmdate( 'd', $r['start'] );
-			$r['start_dow']     = gmdate( 'w', $r['start'] );
-			$r['start_doy']     = gmdate( 'z', $r['start'] );
-			$r['start_woy']     = gmdate( 'W', $r['start'] );
-			$r['start_hour']    = gmdate( 'H', $r['start'] );
-			$r['start_minutes'] = gmdate( 'i', $r['start'] );
-			$r['start_seconds'] = gmdate( 's', $r['start'] );
+			$r['start_dto']       = sugar_calendar_get_datetime_object( $r['start'], $timezone );
+			$r['start_year']      = $r['start_dto']->format( 'Y' );
+			$r['start_month']     = $r['start_dto']->format( 'm' );
+			$r['start_day']       = $r['start_dto']->format( 'd' );
+			$r['start_dow']       = $r['start_dto']->format( 'w' );
+			$r['start_doy']       = $r['start_dto']->format( 'z' );
+			$r['start_woy']       = $r['start_dto']->format( 'W' );
+			$r['start_hour']      = $r['start_dto']->format( 'H' );
+			$r['start_minutes']   = $r['start_dto']->format( 'i' );
+			$r['start_seconds']   = $r['start_dto']->format( 's' );
+			$r['start_timestamp'] = $r['start_dto']->getTimestamp();
 		}
 
 		// Add date parts for end
 		if ( ! empty( $r['end'] ) ) {
-
-			// @todo only use DateTime object
-			$r['end_dto']       = sugar_calendar_get_datetime_object( $r['end'], $this->timezone );
-			$r['end_year']      = gmdate( 'Y', $r['end'] );
-			$r['end_month']     = gmdate( 'm', $r['end'] );
-			$r['end_day']       = gmdate( 'd', $r['end'] );
-			$r['end_dow']       = gmdate( 'w', $r['end'] );
-			$r['end_doy']       = gmdate( 'z', $r['end'] );
-			$r['end_woy']       = gmdate( 'W', $r['end'] );
-			$r['end_hour']      = gmdate( 'H', $r['end'] );
-			$r['end_minutes']   = gmdate( 'i', $r['end'] );
-			$r['end_seconds']   = gmdate( 's', $r['end'] );
+			$r['end_dto']         = sugar_calendar_get_datetime_object( $r['end'], $timezone );
+			$r['end_year']        = $r['end_dto']->format( 'Y' );
+			$r['end_month']       = $r['end_dto']->format( 'm' );
+			$r['end_day']         = $r['end_dto']->format( 'd' );
+			$r['end_dow']         = $r['end_dto']->format( 'w' );
+			$r['end_doy']         = $r['end_dto']->format( 'z' );
+			$r['end_woy']         = $r['end_dto']->format( 'W' );
+			$r['end_hour']        = $r['end_dto']->format( 'H' );
+			$r['end_minutes']     = $r['end_dto']->format( 'i' );
+			$r['end_seconds']     = $r['end_dto']->format( 's' );
+			$r['end_timestamp']   = $r['end_dto']->getTimestamp();
 		}
 
 		// Set the current cell
@@ -1962,21 +1978,57 @@ class Base_List_Table extends \WP_List_Table {
 		$stz = '';
 		$etz = '';
 
+		// Strip time zone formats from date & time formats
+		$df = $this->strip_timezone_format( $this->date_format );
+		$tf = $this->strip_timezone_format( $this->time_format );
+
 		// Start time zone
 		if ( ! empty( $event->start_tz ) ) {
-			$stz = '<span class="sc-timezone">' . esc_html( sugar_calendar_format_timezone( $event->start_tz ) ) . '</span>';
+
+			// Maybe show the original date, time, and zone
+			if ( ! empty( $this->timezone ) && ( $this->timezone !== $event->start_tz ) ) {
+				$to = sprintf( '%s, %s - %s',
+					sugar_calendar_format_date_i18n( $df, $event->start, $event->start_tz ),
+					sugar_calendar_format_date_i18n( $tf, $event->start, $event->start_tz ),
+					sugar_calendar_format_timezone( $event->start_tz  )
+				);
+
+			// Single time zone
+			} else {
+				$to = sugar_calendar_format_timezone( $event->start_tz );
+			}
+
+			// Wrap in span
+			$stz = '<span class="sc-timezone">' . esc_html( $to ) . '</span>';
 		}
 
 		// End time zone
 		if ( ! empty( $event->end_tz ) ) {
-			$etz = '<span class="sc-timezone">' . esc_html( sugar_calendar_format_timezone( $event->end_tz ) ) . '</span>';
+
+			// Maybe show the original date, time, and zone
+			if ( ! empty( $this->timezone ) && ( $this->timezone !== $event->end_tz ) ) {
+				$to = sprintf( '%s, %s - %s',
+					sugar_calendar_format_date_i18n( $df, $event->end, $event->end_tz ),
+					sugar_calendar_format_date_i18n( $tf, $event->end, $event->end_tz ),
+					sugar_calendar_format_timezone( $event->end_tz )
+				);
+
+			// Single time zone
+			} else {
+				$to = sugar_calendar_format_timezone( $event->end_tz );
+			}
+
+			// Wrap in span
+			$etz = '<span class="sc-timezone">' . esc_html( $to ) . '</span>';
+
+		// Use the start time zone string
 		} elseif ( ! empty( $stz ) ) {
 			$etz = $stz;
 		}
 
 		// Start & end
 		$start = $this->get_event_date( $event->start, $event->start_tz );
-		$end   = $this->get_event_date( $event->end, $event->end_tz );
+		$end   = $this->get_event_date( $event->end,   $event->end_tz   );
 
 		// All day, single-day event
 		if ( $event->is_all_day() ) {
@@ -2045,10 +2097,12 @@ class Base_List_Table extends \WP_List_Table {
 
 				// Date & Time
 				if ( ! $event->is_empty_date( $event->start ) ) {
+					$time  = $this->get_event_time( $event->start, $event->start_tz );
+					$day   = sugar_calendar_format_date_i18n( 'w', $event->start, $event->start_tz, $this->timezone );
 					$start = esc_html( sprintf(
 						esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ),
-						$this->get_event_time( $event->start, $event->start_tz ),
-						$GLOBALS['wp_locale']->get_weekday( $event->start_date( 'w' ) )
+						$time,
+						$GLOBALS['wp_locale']->get_weekday( $day )
 					) );
 
 					// Maybe append time zone
@@ -2062,10 +2116,12 @@ class Base_List_Table extends \WP_List_Table {
 
 				// Date & Time
 				if ( ! $event->is_empty_date( $event->end ) && ( $event->start !== $event->end ) ) {
-					$end = esc_html( sprintf(
+					$time = $this->get_event_time( $event->end, $event->end_tz );
+					$day  = sugar_calendar_format_date_i18n( 'w', $event->end, $event->end_tz, $this->timezone );
+					$end  = esc_html( sprintf(
 						esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ),
-						$this->get_event_time( $event->end, $event->end_tz ),
-						$GLOBALS['wp_locale']->get_weekday( $event->end_date( 'w' ) )
+						$time,
+						$GLOBALS['wp_locale']->get_weekday( $day )
 					) );
 
 					// Maybe append time zone
@@ -2096,8 +2152,8 @@ class Base_List_Table extends \WP_List_Table {
 					$recurring = sprintf(
 						esc_html_x( '%s from %s until %s', 'Weekly from December 1, 2030 until December 31, 2030', 'sugar-calendar' ),
 						$intervals[ $event->recurrence ],
-						$this->get_event_date( $event->start ),
-						$this->get_event_date( $event->recurrence_end )
+						$this->get_event_date( $event->start, $event->start_tz ),
+						$this->get_event_date( $event->recurrence_end, $event->recurrence_end_tz )
 					);
 
 					$pointer_dates['recurrence_end'] = '<span>' . esc_html( $recurring ) . '</span>';
@@ -2107,7 +2163,7 @@ class Base_List_Table extends \WP_List_Table {
 					$recurring = sprintf(
 						esc_html_x( '%s starting %s', 'Weekly forever, starting May 15, 1980', 'sugar-calendar' ),
 						$intervals[ $event->recurrence ],
-						$this->get_event_date( $event->start )
+						$this->get_event_date( $event->start, $event->start_tz )
 					);
 
 					$pointer_dates['recurrence_end'] = '<span>' . esc_html( $recurring ) . '</span>';
@@ -3127,9 +3183,14 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Time zone
 		$tztype   = sugar_calendar_get_timezone_type();
-		$timezone = ! empty( $this->timezone ) & ( 'off' !== $tztype )
-			? sugar_calendar_format_timezone( $this->timezone )
-			: '';
+		$timezone = '';
+
+		// Maybe show "Floating" when time zones are not "off"
+		if ( 'off' !== $tztype ) {
+			$timezone = ! empty( $this->timezone )
+				? sugar_calendar_format_timezone( $this->timezone )
+				: esc_html__( 'Floating', 'sugar-calendar' );
+		}
 
 		// Start an output buffer
 		ob_start(); ?>
@@ -3213,6 +3274,25 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Return the output buffer
 		return ob_get_clean();
+	}
+
+	/**
+	 * Strip timezone formatting from a DateTime format string
+	 *
+	 * Used to avoid duplicate time zone output in the specific places where
+	 * we manually always output a formatted time zone string.
+	 *
+	 * @since 2.1.2
+	 * @param string $format
+	 * @return string
+	 */
+	private function strip_timezone_format( $format = '' ) {
+
+		// Time zone formats to remove
+		$tz_formats = array( 'e', 'I', 'O', 'P', 'T', 'Z' );
+
+		//
+		return str_replace( $tz_formats, '', $format );
 	}
 }
 endif;

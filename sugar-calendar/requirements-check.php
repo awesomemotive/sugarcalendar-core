@@ -63,11 +63,31 @@ final class Requirements_Check {
 	);
 
 	/**
-	 * Setup plugin requirements
+	 * Constructor
 	 *
 	 * @since 2.0.0
+	 * @param string $main_file Main plugin file
 	 */
 	public function __construct( $main_file = '' ) {
+		if ( ! empty( $main_file ) ) {
+			$this->init( $main_file );
+		}
+	}
+
+	/**
+	 * Initialize plugin requirements
+	 *
+	 * Abstracted out of the Constructor above to allow testing this class
+	 *
+	 * @since 2.1.2
+	 * @param string $main_file Main plugin file
+	 */
+	public function init( $main_file = '' ) {
+
+		// Bail if no main file passed
+		if ( empty( $main_file ) ) {
+			return;
+		}
 
 		// Setup file & base
 		$this->file = $main_file;

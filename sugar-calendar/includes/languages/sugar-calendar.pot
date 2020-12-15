@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.1.2\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2020-12-15 18:18:16+00:00\n"
+"POT-Creation-Date: 2020-12-15 19:15:35+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1735,23 +1735,23 @@ msgstr ""
 msgid "DESC"
 msgstr ""
 
-#: sugar-calendar-lite.php:193
+#: sugar-calendar/requirements-check.php:202
 msgid "This plugin is not fully active."
 msgstr ""
 
-#: sugar-calendar-lite.php:203
+#: sugar-calendar/requirements-check.php:212
 msgid "Requires %s (%s), but (%s) is installed."
 msgstr ""
 
-#: sugar-calendar-lite.php:213
+#: sugar-calendar/requirements-check.php:222
 msgid "Requires %s (%s), but it appears to be missing."
 msgstr ""
 
-#: sugar-calendar-lite.php:223
+#: sugar-calendar/requirements-check.php:232
 msgid "Requirements"
 msgstr ""
 
-#: sugar-calendar-lite.php:233
+#: sugar-calendar/requirements-check.php:242
 msgid "Sugar Calendar Requirements"
 msgstr ""
 

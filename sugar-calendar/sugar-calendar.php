@@ -51,7 +51,7 @@ final class Plugin {
 	/**
 	 * Main instance.
 	 *
-	 * Insures that only one instance exists in memory at any one time.
+	 * Ensures that only one instance exists in memory at any one time.
 	 * Also prevents needing to define globals all over the place.
 	 *
 	 * @since 2.0.0

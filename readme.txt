@@ -1,13 +1,15 @@
 === Simple Event Management – Sugar Calendar (Lite) ===
-Author:            Sandhills Development, LLC
 Contributors:      mordauk, johnjamesjacoby
+Author:            Sandhills Development, LLC
 Author URI:        https://sandhillsdev.com
 Plugin URI:        https://sugarcalendar.com
+License URI:       http://www.gnu.org/licenses/gpl-2.0.html
+License:           GNU General Public License v2 or later
 Tags:              simple calendar, event calendar, event management, event list, schedule
 Requires PHP:      5.6.20
 Requires at least: 5.1
 Tested up to:      5.6
-Stable tag:        2.0.19
+Stable tag:        2.1.2
 
 You can easily manage events with this lightweight calendar. No complicated configuration. Simple to use. Sweeeet!
 
@@ -78,18 +80,22 @@ If you purchase a premium license to Sugar Calendar you have access to:
 
 Extend Sugar Calendar with these free add-ons. We keep the plugin lightweight by letting you add what you need only if you need it!
 
-- **[Google Maps](https://sugarcalendar.com/downloads/google-maps/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This is an add-on plugin for Sugar Calendar that lets you easily display a Google Map of the event location on the event details page.
+- **[Google Maps](https://sugarcalendar.com/downloads/google-maps/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on to Sugar Calendar allows you to display a Google Map of the event location on the event details page.
 - **[Ninja Forms Form Embed](https://sugarcalendar.com/downloads/ninja-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on to Sugar Calendar allows you to add a Ninja Forms form to your event pages, so that you can easily add registration forms. If you have one of [Ninja Forms](https://ninjaforms.com/)’ payment gateway add-ons installed ([Stripe](http://ninjaforms.com/downloads/stripe/) or [Paypal Express](http://ninjaforms.com/downloads/paypal-express/)), you can even take payment for event registrations.
 - **[Gravity Forms Form Embed](https://sugarcalendar.com/downloads/gravity-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on to Sugar Calendar allows you to add a [Gravity Forms](https://gravityforms.com/) form to your event pages, so that you can easily add registration forms. If you have one of [Gravity Forms’ payment gateway add-ons](https://www.gravityforms.com/add-ons/) installed , you can even take payment for event registrations.
+- **[WP All Import](https://sugarcalendar.com/downloads/wp-all-import/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on to Sugar Calendar allows you to bulk import events into Sugar Calendar using [WP All Import](https://wordpress.org/plugins/wp-all-import/).
 
 = Pro add-ons =
 
 If you purchase an [Ultimate or Professional license](https://sugarcalendar.com/pricing/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) to Sugar Calendar you get access to all current and future pro add-ons.
 
-- **[Event Tickets](https://sugarcalendar.com/downloads/event-tickets/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on allows you to easily sell tickets to your events, whether they are virtual or in-person events. The plugin includes complete order and ticket management, attendee records, emailed and print versions of tickets, and a direct integration with [Stripe](https://stripe.com/) for payment processing.
+- **[Event Ticketing](https://sugarcalendar.com/downloads/event-tickets/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on allows you to easily sell tickets to your events, whether they are virtual or in-person events. The plugin includes complete order and ticket management, attendee records, emailed and print versions of tickets, and a direct integration with [Stripe](https://stripe.com/) for payment processing. Easily integrates with WooCommerce to allow event tickets to be purchased through existing WooCommerce checkout pages.
+- **[Frontend Event Submissions](https://sugarcalendar.com/downloads/frontend-event-submissions/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on allows you to set up event submission forms that provide a way for your community members to create their own events in your calendars.
 - **[Calendar Feeds](https://sugarcalendar.com/downloads/calendar-feeds/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - Easily subscribe to Events feeds for any of your calendars in Sugar Calendar from Google Calendar, iCal, Gnome Calendar, or just about any other calendar application.
 - **[Event URLs](https://sugarcalendar.com/downloads/event-urls/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - Add a custom URL to any event created through Sugar Calendar with this add-on. This lets you redirect to events on other web sites and pages or simply open them in a new tab.
 - **[Advanced Recurring](https://sugarcalendar.com/preview-of-the-upcoming-advanced-recurring-add-on/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)**  (coming soon!) - Create events that recur on specific days, every X period, recur X times, etc.
+
+Sugar Calendar is a verified member of the [Stripe partner program](https://stripe.com/accept-payments/sugar-calendar). This program recognizes software that meets Stripe's strict quality requirements and provides users of Sugar Calendar and Stripe with the confidence they need to trust us both with their payment integrations.
 
 = Upgrade from Sugar Calendar (Lite) =
 
@@ -141,7 +147,6 @@ If Sugar Calendar doesn’t quite fit your needs, take a look at some of our oth
 
 - [Easy Digital Downloads](https://easydigitaldownloads.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - Sell digital products with WordPress
 - [AffiliateWP](https://affiliatewp.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - A full-featured affiliate marketing solution
-- [Restrict Content Pro](https://restrictcontentpro.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - A powerful membership plugin for WordPress
 - [WP Simple Pay](https://wpsimplepay.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) - A lightweight Stripe payments plugin
 
 == Installation ==

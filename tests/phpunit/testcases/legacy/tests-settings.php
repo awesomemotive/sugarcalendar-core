@@ -19,7 +19,7 @@ class Settings extends \WP_UnitTestCase {
 		$pt       = sugar_calendar_get_event_post_type_id();
 		$post_ids = array();
 
-		// Create 30 posts
+		// Create some posts
 		for ( $x = 1; $x <= $this->max; $x++ ) {
 
 			// Post
@@ -69,6 +69,8 @@ class Settings extends \WP_UnitTestCase {
 	 * Five events
 	 *
 	 * @group settings
+	 * @group slow
+	 * @group get-events
 	 */
 	public function test_number_of_events_5() {
 
@@ -100,6 +102,8 @@ class Settings extends \WP_UnitTestCase {
 	 * Ten events
 	 *
 	 * @group settings
+	 * @group slow
+	 * @group get-events
 	 */
 	public function test_number_of_events_10() {
 
@@ -131,10 +135,12 @@ class Settings extends \WP_UnitTestCase {
 	 * All events
 	 *
 	 * @group settings
+	 * @group slow
+	 * @group get-events
 	 */
 	public function test_number_of_events_0() {
 
-		// Set number to 5
+		// Set number to 0
 		update_option( 'sc_number_of_events', 0 );
 
 		// Get the number

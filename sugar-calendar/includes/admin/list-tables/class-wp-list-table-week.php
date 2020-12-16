@@ -223,8 +223,8 @@ class Week extends Base_List_Table {
 
 				// Set the current cell
 				$this->set_current_cell( array(
-					'start' => gmmktime( 0,  0,  0, $month, $day, $year ),
-					'end'   => gmmktime( 23, 59, 0, $month, $day, $year ),
+					'start' => gmmktime( 0,  0,  0,  $month, $day, $year ),
+					'end'   => gmmktime( 23, 59, 59, $month, $day, $year ),
 					'type'  => 'all_day',
 					'index' => $i
 				) );
@@ -271,8 +271,8 @@ class Week extends Base_List_Table {
 
 				// Set the current cell
 				$this->set_current_cell( array(
-					'start' => gmmktime( 0,  0,  0, $month, $day, $year ),
-					'end'   => gmmktime( 23, 59, 0, $month, $day, $year ),
+					'start' => gmmktime( 0,  0,  0,  $month, $day, $year ),
+					'end'   => gmmktime( 23, 59, 59, $month, $day, $year ),
 					'type'  => 'multi_day',
 					'index' => $i
 				) );
@@ -424,8 +424,8 @@ class Week extends Base_List_Table {
 
 			// Setup cell boundaries
 			$this->set_current_cell( array(
-				'start'  => gmmktime( $row, 0,  0, $month, $day, $year ),
-				'end'    => gmmktime( $row, 59, 0, $month, $day, $year ),
+				'start'  => gmmktime( $row, 0,  0,  $month, $day, $year ),
+				'end'    => gmmktime( $row, 59, 59, $month, $day, $year ),
 				'row'    => $row,
 				'index'  => $i,
 				'offset' => $column

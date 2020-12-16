@@ -124,13 +124,22 @@ class Base_List_Table extends \WP_List_Table {
 	public $pointers = array();
 
 	/**
+	 * The start year being viewed (for list-mode)
+	 *
+	 * @since 2.0.0
+	 *
+	 * @var int
+	 */
+	protected $start_year = 2020;
+
+	/**
 	 * The year being viewed
 	 *
 	 * @since 2.0.0
 	 *
 	 * @var int
 	 */
-	protected $year = 2015;
+	protected $year = 2020;
 
 	/**
 	 * The month being viewed
@@ -320,6 +329,9 @@ class Base_List_Table extends \WP_List_Table {
 		$this->month = $this->get_month();
 		$this->day   = $this->get_day();
 
+		// Set list-mode specific year
+		$this->start_year = $this->get_start_year();
+
 		// Set "today" based on current request
 		$this->today = strtotime( "{$this->year}/{$this->month}/{$this->day}" );
 	}
@@ -388,8 +400,8 @@ class Base_List_Table extends \WP_List_Table {
 		$end_time   = strtotime( $end   );
 
 		// Set view boundaries
-		$this->view_start    = $start;
-		$this->view_end      = $end;
+		$this->view_start    = min( $start, $end );
+		$this->view_end      = max( $start, $end );
 		$this->view_duration = ( $end_time - $start_time );
 
 		// Set view time zone
@@ -587,6 +599,7 @@ class Base_List_Table extends \WP_List_Table {
 		// Query arg defaults
 		$defaults = array(
 			'page'        => $this->get_page(),
+			'cystart'     => $this->get_start_year(),
 			'cy'          => $this->get_year(),
 			'cm'          => $this->get_month(),
 			'cd'          => $this->get_day(),
@@ -619,6 +632,11 @@ class Base_List_Table extends \WP_List_Table {
 		// Maybe unset default time zone
 		if ( empty( $r['cz'] ) || ( $this->timezone === $r['cz'] ) ) {
 			unset( $r['cz'] );
+		}
+
+		// Maybe unset list-years
+		if ( 'list' !== $r['mode'] ) {
+			unset( $r['cystart'] );
 		}
 
 		// Use the base URL
@@ -816,6 +834,19 @@ class Base_List_Table extends \WP_List_Table {
 		$default = gmdate( 'Y', $this->now );
 
 		return $this->get_request_var( 'cy', 'intval', $default );
+	}
+
+	/**
+	 * Get the requested start year for the list boundary
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return int
+	 */
+	protected function get_start_year() {
+		$default = gmdate( 'Y', $this->now );
+
+		return $this->get_request_var( 'cystart', 'intval', $default );
 	}
 
 	/**
@@ -2552,7 +2583,12 @@ class Base_List_Table extends \WP_List_Table {
 				<input type="hidden" name="page" value="<?php echo esc_attr( $this->get_page() ); ?>" />
 				<input type="hidden" name="cd" value="<?php echo esc_attr( $this->get_day() ); ?>" />
 				<input type="hidden" name="cm" value="<?php echo esc_attr( $this->get_month() ); ?>" />
-				<input type="hidden" name="cy" value="<?php echo esc_attr( $this->get_year() ); ?>" />
+				<?php if ( 'list' === $this->get_mode() ) : ?>
+					<input type="hidden" name="cy"      value="<?php echo esc_attr( $this->get_year() ); ?>" />
+					<input type="hidden" name="cystart" value="<?php echo esc_attr( $this->get_start_year() ); ?>" />
+				<?php else : ?>
+					<input type="hidden" name="cy" value="<?php echo esc_attr( $this->get_year() ); ?>" />
+				<?php endif; ?>
 				<input type="hidden" name="cz" value="<?php echo esc_attr( $this->get_timezone() ); ?>" />
 				<input type="hidden" name="order" value="<?php echo esc_attr( $this->get_order() ); ?>" />
 				<input type="hidden" name="orderby" value="<?php echo esc_attr( $this->get_orderby() ); ?>" />
@@ -2984,7 +3020,7 @@ class Base_List_Table extends \WP_List_Table {
 		elseif ( 'top' === $which ) :
 
 			// Hide the month picker UI in List mode
-			if ( $this->get_mode() !== 'list' ) : ?>
+			if ( 'list' !== $this->get_mode() ) : ?>
 
 				<label for="cm" class="screen-reader-text"><?php esc_html_e( 'Switch to this month', 'sugar-calendar' ); ?></label>
 				<select name="cm" id="cm" class="sc-select-chosen">
@@ -3000,7 +3036,7 @@ class Base_List_Table extends \WP_List_Table {
 			<?php endif;
 
 			// Show the day input UI for day mode only
-			if ( $this->get_mode() === 'day' ) : ?>
+			if ( 'day' === $this->get_mode() ) : ?>
 
 				<label for="cd" class="screen-reader-text"><?php esc_html_e( 'Set the day', 'sugar-calendar' ); ?></label>
 				<input type="number" name="cd" id="cd" value="<?php echo (int) $this->day; ?>" size="2">
@@ -3008,14 +3044,33 @@ class Base_List_Table extends \WP_List_Table {
 			<?php
 
 			// Hide the day input UI for week mode
-			elseif ( $this->get_mode() === 'week' ) : ?>
+			elseif ( 'week' === $this->get_mode() ) : ?>
 
 				<input type="hidden" name="cd" id="cd" value="<?php echo (int) $this->day; ?>">
 
+			<?php endif;
+
+			// Show start & end years for list mode
+			if ( 'list' === $this->get_mode() ) : ?>
+
+				<label for="cystart" class="screen-reader-text"><?php esc_html_e( 'Set the first year', 'sugar-calendar' ); ?></label>
+				<input type="number" name="cystart" id="cystart" value="<?php echo (int) $this->get_start_year(); ?>">
+
+				<span><?php esc_html_e( 'to', 'sugar-calendar' ); ?></span>
+
+				<label for="cy" class="screen-reader-text"><?php esc_html_e( 'Set the last year', 'sugar-calendar' ); ?></label>
+				<input type="number" name="cy" id="cy" value="<?php echo (int) $this->get_year(); ?>">
+
+			<?php
+
+			// Show single year for non-list modes
+			else : ?>
+
+				<label for="cy" class="screen-reader-text"><?php esc_html_e( 'Set the year', 'sugar-calendar' ); ?></label>
+				<input type="number" name="cy" id="cy" value="<?php echo (int) $this->year; ?>">
+
 			<?php endif; ?>
 
-			<label for="cy" class="screen-reader-text"><?php esc_html_e( 'Set the year', 'sugar-calendar' ); ?></label>
-			<input type="number" name="cy" id="cy" value="<?php echo (int) $this->year; ?>">
 			<input type="hidden" name="mode" value="<?php echo esc_attr( $this->get_mode() ); ?>" />
 
 			<input type="hidden" name="order" value="<?php echo esc_attr( $this->get_order() ); ?>" />

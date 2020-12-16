@@ -527,14 +527,17 @@ class Basic extends Base_List_Table {
 	}
 
 	/**
+	 * Output all rows
 	 *
 	 * @since 2.0.0
 	 */
 	public function display_mode() {
 
 		// Attempt to display rows
-		if ( ! empty( $this->query->items ) ) {
-			foreach ( $this->query->items as $item ) {
+		if ( ! empty( $this->filtered_items ) ) {
+
+			// Loop through items and show them
+			foreach ( $this->filtered_items as $item ) {
 				$this->single_row( $item );
 			}
 

@@ -28,24 +28,6 @@ class Basic extends Base_List_Table {
 	public $mode = 'list';
 
 	/**
-	 * Unix time month start
-	 *
-	 * @since 2.0.0
-	 *
-	 * @var int
-	 */
-	private $list_start = 0;
-
-	/**
-	 * Unix time month end
-	 *
-	 * @since 2.0.0
-	 *
-	 * @var int
-	 */
-	private $list_end = 0;
-
-	/**
 	 * Whether an item has an end
 	 *
 	 * @since 2.0.15
@@ -62,20 +44,14 @@ class Basic extends Base_List_Table {
 	public function __construct( $args = array() ) {
 		parent::__construct( $args );
 
-		// Detect the range
-		$range_type   = 'year';
-		$range_length = '1';
-
-		// View start
-		$view_start = "{$this->year}-01-01 00:00:00";
-		$boundary   = "+{$range_length} {$range_type} -1 second";
-
-		// Month boundaries
-		$this->list_start = mysql2date( 'U', $view_start );
-		$this->list_end   = strtotime( $boundary, $this->list_start );
-
-		// View end
-		$view_end = gmdate( 'Y-m-d H:i:s', $this->list_end );
+		// Compensate for inverted user supplied values
+		if ( $this->start_year >= $this->year ) {
+			$view_start = "{$this->year}-01-01 00:00:00";
+			$view_end   = "{$this->start_year}-12-31 23:59:59";
+		} else {
+			$view_start = "{$this->start_year}-01-01 00:00:00";
+			$view_end   = "{$this->year}-12-31 23:59:59";
+		}
 
 		// Set the view
 		$this->set_view( $view_start, $view_end );
@@ -340,7 +316,7 @@ class Basic extends Base_List_Table {
 		}
 
 		// Start the <time> tag, with timezone data
-		$retval  = '<time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '">';
+		$retval  = '<time datetime="' . esc_attr( $dt ) . '" title="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '">';
 		$retval .= '<span class="sc-date">' . $this->get_event_date( $item->start, $item->start_tz ) . '</span>';
 
 		// Maybe add time if not all-day
@@ -349,7 +325,7 @@ class Basic extends Base_List_Table {
 
 			// Maybe add timezone
 			if ( ! empty( $item->start_tz ) ) {
-				$retval .= '<br><span class="sc-timezone">' . $this->get_time_zone( $tz ) . '</span>';
+				$retval .= '<br><span class="sc-timezone">' . sugar_calendar_format_timezone( $tz ) . '</span>';
 			}
 		}
 
@@ -418,7 +394,7 @@ class Basic extends Base_List_Table {
 		}
 
 		// Start the <time> tag, with timezone data
-		$retval  = '<time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '">';
+		$retval  = '<time datetime="' . esc_attr( $dt ) . '" title="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '">';
 		$retval .= '<span class="sc-date">' . $this->get_event_date( $item->end, $item->end_tz ) . '</span>';
 
 		// Maybe add time if not all-day
@@ -427,7 +403,7 @@ class Basic extends Base_List_Table {
 
 			// Maybe add timezone
 			if ( ! empty( $item->end_tz ) ) {
-				$retval .= '<br><span class="sc-timezone">' . $this->get_time_zone( $tz ) . '</span>';
+				$retval .= '<br><span class="sc-timezone">' . sugar_calendar_format_timezone( $tz ) . '</span>';
 			}
 		}
 
@@ -551,14 +527,17 @@ class Basic extends Base_List_Table {
 	}
 
 	/**
+	 * Output all rows
 	 *
 	 * @since 2.0.0
 	 */
 	public function display_mode() {
 
 		// Attempt to display rows
-		if ( ! empty( $this->query->items ) ) {
-			foreach ( $this->query->items as $item ) {
+		if ( ! empty( $this->filtered_items ) ) {
+
+			// Loop through items and show them
+			foreach ( $this->filtered_items as $item ) {
 				$this->single_row( $item );
 			}
 

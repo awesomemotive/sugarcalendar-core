@@ -124,13 +124,22 @@ class Base_List_Table extends \WP_List_Table {
 	public $pointers = array();
 
 	/**
+	 * The start year being viewed (for list-mode)
+	 *
+	 * @since 2.0.0
+	 *
+	 * @var int
+	 */
+	protected $start_year = 2020;
+
+	/**
 	 * The year being viewed
 	 *
 	 * @since 2.0.0
 	 *
 	 * @var int
 	 */
-	protected $year = 2015;
+	protected $year = 2020;
 
 	/**
 	 * The month being viewed
@@ -252,6 +261,15 @@ class Base_List_Table extends \WP_List_Table {
 	);
 
 	/**
+	 * Array of queried items, filtered, usually by status
+	 *
+	 * @since 2.1.2
+	 *
+	 * @var array
+	 */
+	protected $filtered_items = array();
+
+	/**
 	 * The main constructor method
 	 *
 	 * @since 2.0.0
@@ -319,6 +337,9 @@ class Base_List_Table extends \WP_List_Table {
 		$this->year  = $this->get_year();
 		$this->month = $this->get_month();
 		$this->day   = $this->get_day();
+
+		// Set list-mode specific year
+		$this->start_year = $this->get_start_year();
 
 		// Set "today" based on current request
 		$this->today = strtotime( "{$this->year}/{$this->month}/{$this->day}" );
@@ -388,12 +409,36 @@ class Base_List_Table extends \WP_List_Table {
 		$end_time   = strtotime( $end   );
 
 		// Set view boundaries
-		$this->view_start    = $start;
-		$this->view_end      = $end;
+		$this->view_start    = min( $start, $end );
+		$this->view_end      = max( $start, $end );
 		$this->view_duration = ( $end_time - $start_time );
 
 		// Set view time zone
 		$this->view_timezone = sugar_calendar_get_timezone_object( $this->timezone );
+	}
+
+	/**
+	 * Set the filtered items
+	 *
+	 * @since 2.1.2
+	 */
+	protected function set_filtered_items() {
+
+		// Get the filter
+		$filter = $this->get_items_filter();
+
+		// No queried items
+		if ( empty( $this->query->items ) ) {
+			$this->filtered_items = array();
+
+		// No filter
+		} elseif ( empty( $filter ) ) {
+			$this->filtered_items = $this->query->items;
+
+		// Filter queried items
+		} else {
+			$this->filtered_items = wp_list_filter( $this->query->items, $filter );
+		}
 	}
 
 	/** Getters ***************************************************************/
@@ -443,6 +488,29 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Return array of filters used on queried items
+	 *
+	 * @since 2.1.2
+	 *
+	 * @return array
+	 */
+	protected function get_items_filter() {
+
+		// Get the status
+		$status = $this->get_status();
+
+		// Bail if viewing all
+		if ( 'all' === $status ) {
+			return array();
+		}
+
+		// Return filter by status
+		return array(
+			'status' => $this->get_status()
+		);
+	}
+
+	/**
 	 * Return a properly formatted, multi-dimensional array of event counts,
 	 * grouped by status.
 	 *
@@ -451,7 +519,42 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	protected function get_item_counts() {
-		return sugar_calendar_get_event_counts( $this->all_query_args() );
+
+		// Default return value
+		$retval = array(
+			'total' => 0
+		);
+
+		// Items to count
+		if ( ! empty( $this->query->items ) ) {
+
+			// Pluck all queried statuses
+			$statuses = wp_list_pluck( $this->query->items, 'status' );
+
+			// Get unique statuses only
+			$statuses = array_unique( $statuses );
+
+			// Set total to count of all items
+			$retval['total'] = count( $this->query->items );
+
+			// Loop through statuses
+			foreach ( $statuses as $status ) {
+
+				// Get items of this status
+				$items = wp_filter_object_list(
+					$this->query->items,
+					array(
+						'status' => $status
+					)
+				);
+
+				// Add count to return value
+				$retval[ $status ] = count( $items );
+			}
+		}
+
+		// Filter & return
+		return apply_filters( 'sugar_calendar_list_table_get_item_counts', $retval, $statuses );
 	}
 
 	/**
@@ -587,6 +690,7 @@ class Base_List_Table extends \WP_List_Table {
 		// Query arg defaults
 		$defaults = array(
 			'page'        => $this->get_page(),
+			'cystart'     => $this->get_start_year(),
 			'cy'          => $this->get_year(),
 			'cm'          => $this->get_month(),
 			'cd'          => $this->get_day(),
@@ -619,6 +723,11 @@ class Base_List_Table extends \WP_List_Table {
 		// Maybe unset default time zone
 		if ( empty( $r['cz'] ) || ( $this->timezone === $r['cz'] ) ) {
 			unset( $r['cz'] );
+		}
+
+		// Maybe unset list-years
+		if ( 'list' !== $r['mode'] ) {
+			unset( $r['cystart'] );
 		}
 
 		// Use the base URL
@@ -819,6 +928,19 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Get the requested start year for the list boundary
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return int
+	 */
+	protected function get_start_year() {
+		$default = gmdate( 'Y', $this->now );
+
+		return $this->get_request_var( 'cystart', 'intval', $default );
+	}
+
+	/**
 	 * Get the current time zone
 	 *
 	 * @since 2.1.0
@@ -997,7 +1119,15 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return array List of CSS classes for the table tag.
 	 */
 	protected function get_table_classes() {
-		return array( 'widefat', 'fixed', 'striped', 'calendar', $this->get_mode(), $this->_args['plural'] );
+		return array(
+			'widefat',
+			'fixed',
+			'striped',
+			'calendar',
+			$this->get_mode(),
+			$this->get_status(),
+			$this->_args['plural']
+		);
 	}
 
 	/**
@@ -1261,7 +1391,7 @@ class Base_List_Table extends \WP_List_Table {
 		$retval = '';
 
 		// Bail if no items
-		if ( empty( $this->query->items ) ) {
+		if ( empty( $this->filtered_items ) ) {
 			return $retval;
 		}
 
@@ -1269,7 +1399,7 @@ class Base_List_Table extends \WP_List_Table {
 		$items = array();
 
 		// Loop through items
-		foreach ( $this->query->items as $item ) {
+		foreach ( $this->filtered_items as $item ) {
 
 			// Skip if event is not for cell
 			if ( ! $this->is_item_for_cell( $item ) ) {
@@ -2511,15 +2641,14 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	public function prepare_items() {
 
-		// Juggle the Trash status specifically
-		$args = ( 'all' !== $this->get_status() )
-			? array( 'status'         => $this->get_status() )
-			: array( 'status__not_in' => array( 'trash' )    );
+		// Get query arguments
+		$args = $this->all_query_args();
 
 		// Query for events in the view
-		$this->query = new \Sugar_Calendar\Event_Query(
-			$this->all_query_args( $args )
-		);
+		$this->query = new \Sugar_Calendar\Event_Query( $args );
+
+		// Set filtered items
+		$this->set_filtered_items();
 	}
 
 	/**
@@ -2552,7 +2681,12 @@ class Base_List_Table extends \WP_List_Table {
 				<input type="hidden" name="page" value="<?php echo esc_attr( $this->get_page() ); ?>" />
 				<input type="hidden" name="cd" value="<?php echo esc_attr( $this->get_day() ); ?>" />
 				<input type="hidden" name="cm" value="<?php echo esc_attr( $this->get_month() ); ?>" />
-				<input type="hidden" name="cy" value="<?php echo esc_attr( $this->get_year() ); ?>" />
+				<?php if ( 'list' === $this->get_mode() ) : ?>
+					<input type="hidden" name="cy"      value="<?php echo esc_attr( $this->get_year() ); ?>" />
+					<input type="hidden" name="cystart" value="<?php echo esc_attr( $this->get_start_year() ); ?>" />
+				<?php else : ?>
+					<input type="hidden" name="cy" value="<?php echo esc_attr( $this->get_year() ); ?>" />
+				<?php endif; ?>
 				<input type="hidden" name="cz" value="<?php echo esc_attr( $this->get_timezone() ); ?>" />
 				<input type="hidden" name="order" value="<?php echo esc_attr( $this->get_order() ); ?>" />
 				<input type="hidden" name="orderby" value="<?php echo esc_attr( $this->get_orderby() ); ?>" />
@@ -2984,7 +3118,7 @@ class Base_List_Table extends \WP_List_Table {
 		elseif ( 'top' === $which ) :
 
 			// Hide the month picker UI in List mode
-			if ( $this->get_mode() !== 'list' ) : ?>
+			if ( 'list' !== $this->get_mode() ) : ?>
 
 				<label for="cm" class="screen-reader-text"><?php esc_html_e( 'Switch to this month', 'sugar-calendar' ); ?></label>
 				<select name="cm" id="cm" class="sc-select-chosen">
@@ -3000,7 +3134,7 @@ class Base_List_Table extends \WP_List_Table {
 			<?php endif;
 
 			// Show the day input UI for day mode only
-			if ( $this->get_mode() === 'day' ) : ?>
+			if ( 'day' === $this->get_mode() ) : ?>
 
 				<label for="cd" class="screen-reader-text"><?php esc_html_e( 'Set the day', 'sugar-calendar' ); ?></label>
 				<input type="number" name="cd" id="cd" value="<?php echo (int) $this->day; ?>" size="2">
@@ -3008,14 +3142,33 @@ class Base_List_Table extends \WP_List_Table {
 			<?php
 
 			// Hide the day input UI for week mode
-			elseif ( $this->get_mode() === 'week' ) : ?>
+			elseif ( 'week' === $this->get_mode() ) : ?>
 
 				<input type="hidden" name="cd" id="cd" value="<?php echo (int) $this->day; ?>">
 
+			<?php endif;
+
+			// Show start & end years for list mode
+			if ( 'list' === $this->get_mode() ) : ?>
+
+				<label for="cystart" class="screen-reader-text"><?php esc_html_e( 'Set the first year', 'sugar-calendar' ); ?></label>
+				<input type="number" name="cystart" id="cystart" value="<?php echo (int) $this->get_start_year(); ?>">
+
+				<span><?php esc_html_e( 'to', 'sugar-calendar' ); ?></span>
+
+				<label for="cy" class="screen-reader-text"><?php esc_html_e( 'Set the last year', 'sugar-calendar' ); ?></label>
+				<input type="number" name="cy" id="cy" value="<?php echo (int) $this->get_year(); ?>">
+
+			<?php
+
+			// Show single year for non-list modes
+			else : ?>
+
+				<label for="cy" class="screen-reader-text"><?php esc_html_e( 'Set the year', 'sugar-calendar' ); ?></label>
+				<input type="number" name="cy" id="cy" value="<?php echo (int) $this->year; ?>">
+
 			<?php endif; ?>
 
-			<label for="cy" class="screen-reader-text"><?php esc_html_e( 'Set the year', 'sugar-calendar' ); ?></label>
-			<input type="number" name="cy" id="cy" value="<?php echo (int) $this->year; ?>">
 			<input type="hidden" name="mode" value="<?php echo esc_attr( $this->get_mode() ); ?>" />
 
 			<input type="hidden" name="order" value="<?php echo esc_attr( $this->get_order() ); ?>" />

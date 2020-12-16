@@ -333,7 +333,7 @@ table.calendar a.post-password-required:before {
 	content: "\f103";
 }
 
-table.calendar a.status-draft,
+table.calendar:not(.draft) a.status-draft,
 table.calendar:not(.trash) a.status-trash {
 	opacity: 0.5;
 }

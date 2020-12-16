@@ -241,6 +241,16 @@ table.calendar a.type-page:before {
 	content: '\f105';
 }
 
+.wp-pointer-content h3.has-location:before,
+table.calendar a.has-location:before {
+	content: "\f230";
+}
+
+.wp-pointer-content h3.all-day:before,
+table.calendar a.all-day:before {
+	content: '\f469';
+}
+
 .wp-pointer-content h3.status-trash:before,
 table.calendar a.status-trash:before {
 	content: '\f182';
@@ -254,16 +264,6 @@ table.calendar a.status-private:before {
 .wp-pointer-content h3.post-password-required:before,
 table.calendar a.post-password-required:before {
 	content: '\f315';
-}
-
-.wp-pointer-content h3.has-location:before,
-table.calendar a.has-location:before {
-	content: "\f230";
-}
-
-.wp-pointer-content h3.all-day:before,
-table.calendar a.all-day:before {
-	content: '\f469';
 }
 
 .wp-pointer.sugar-calendar .wp-pointer-content p strong,
@@ -333,7 +333,8 @@ table.calendar a.all-day:before {
 	content: "\f103";
 }
 
-table.calendar a.status-draft {
+table.calendar a.status-draft,
+table.calendar:not(.trash) a.status-trash {
 	opacity: 0.5;
 }
 

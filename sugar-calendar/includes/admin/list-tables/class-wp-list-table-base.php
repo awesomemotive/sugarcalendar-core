@@ -261,6 +261,15 @@ class Base_List_Table extends \WP_List_Table {
 	);
 
 	/**
+	 * Array of queried items, filtered, usually by status
+	 *
+	 * @since 2.1.2
+	 *
+	 * @var array
+	 */
+	protected $filtered_items = array();
+
+	/**
 	 * The main constructor method
 	 *
 	 * @since 2.0.0
@@ -408,6 +417,30 @@ class Base_List_Table extends \WP_List_Table {
 		$this->view_timezone = sugar_calendar_get_timezone_object( $this->timezone );
 	}
 
+	/**
+	 * Set the filtered items
+	 *
+	 * @since 2.1.2
+	 */
+	protected function set_filtered_items() {
+
+		// Get the filter
+		$filter = $this->get_items_filter();
+
+		// No queried items
+		if ( empty( $this->query->items ) ) {
+			$this->filtered_items = array();
+
+		// No filter
+		} elseif ( empty( $filter ) ) {
+			$this->filtered_items = $this->query->items;
+
+		// Filter queried items
+		} else {
+			$this->filtered_items = wp_list_filter( $this->query->items, $filter );
+		}
+	}
+
 	/** Getters ***************************************************************/
 
 	/**
@@ -455,6 +488,29 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Return array of filters used on queried items
+	 *
+	 * @since 2.1.2
+	 *
+	 * @return array
+	 */
+	protected function get_items_filter() {
+
+		// Get the status
+		$status = $this->get_status();
+
+		// Bail if viewing all
+		if ( 'all' === $status ) {
+			return array();
+		}
+
+		// Return filter by status
+		return array(
+			'status' => $this->get_status()
+		);
+	}
+
+	/**
 	 * Return a properly formatted, multi-dimensional array of event counts,
 	 * grouped by status.
 	 *
@@ -463,7 +519,42 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	protected function get_item_counts() {
-		return sugar_calendar_get_event_counts( $this->all_query_args() );
+
+		// Default return value
+		$retval = array(
+			'total' => 0
+		);
+
+		// Items to count
+		if ( ! empty( $this->query->items ) ) {
+
+			// Pluck all queried statuses
+			$statuses = wp_list_pluck( $this->query->items, 'status' );
+
+			// Get unique statuses only
+			$statuses = array_unique( $statuses );
+
+			// Set total to count of all items
+			$retval['total'] = count( $this->query->items );
+
+			// Loop through statuses
+			foreach ( $statuses as $status ) {
+
+				// Get items of this status
+				$items = wp_filter_object_list(
+					$this->query->items,
+					array(
+						'status' => $status
+					)
+				);
+
+				// Add count to return value
+				$retval[ $status ] = count( $items );
+			}
+		}
+
+		// Filter & return
+		return apply_filters( 'sugar_calendar_list_table_get_item_counts', $retval, $statuses );
 	}
 
 	/**
@@ -1028,7 +1119,15 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return array List of CSS classes for the table tag.
 	 */
 	protected function get_table_classes() {
-		return array( 'widefat', 'fixed', 'striped', 'calendar', $this->get_mode(), $this->_args['plural'] );
+		return array(
+			'widefat',
+			'fixed',
+			'striped',
+			'calendar',
+			$this->get_mode(),
+			$this->get_status(),
+			$this->_args['plural']
+		);
 	}
 
 	/**
@@ -1292,7 +1391,7 @@ class Base_List_Table extends \WP_List_Table {
 		$retval = '';
 
 		// Bail if no items
-		if ( empty( $this->query->items ) ) {
+		if ( empty( $this->filtered_items ) ) {
 			return $retval;
 		}
 
@@ -1300,7 +1399,7 @@ class Base_List_Table extends \WP_List_Table {
 		$items = array();
 
 		// Loop through items
-		foreach ( $this->query->items as $item ) {
+		foreach ( $this->filtered_items as $item ) {
 
 			// Skip if event is not for cell
 			if ( ! $this->is_item_for_cell( $item ) ) {
@@ -2542,15 +2641,14 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	public function prepare_items() {
 
-		// Juggle the Trash status specifically
-		$args = ( 'all' !== $this->get_status() )
-			? array( 'status'         => $this->get_status() )
-			: array( 'status__not_in' => array( 'trash' )    );
+		// Get query arguments
+		$args = $this->all_query_args();
 
 		// Query for events in the view
-		$this->query = new \Sugar_Calendar\Event_Query(
-			$this->all_query_args( $args )
-		);
+		$this->query = new \Sugar_Calendar\Event_Query( $args );
+
+		// Set filtered items
+		$this->set_filtered_items();
 	}
 
 	/**

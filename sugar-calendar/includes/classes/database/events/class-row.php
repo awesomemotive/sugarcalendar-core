@@ -268,6 +268,7 @@ final class Event extends Row {
 	 * Does an event overlap a specific start & end time?
 	 *
 	 * @since 2.0.1
+	 * @deprecated 2.1.2 Use intersects() with DateTime objects instead
 	 *
 	 * @param int    $start    Unix timestamp
 	 * @param int    $end      Unix timestamp
@@ -278,6 +279,35 @@ final class Event extends Row {
 	 */
 	public function overlaps( $start = '', $end = '', $mode = 'month', $timezone = null ) {
 
+		// Bail if start or end are empty
+		if ( empty( $start ) || empty( $end ) ) {
+			return false;
+		}
+
+		// Turn datetimes to timestamps for easier comparisons
+		$start_dto = sugar_calendar_get_datetime_object( $start, $timezone );
+		$end_dto   = sugar_calendar_get_datetime_object( $end,   $timezone );
+
+		// Call intersects
+		$retval = $this->intersects( $start_dto, $end_dto, $mode );
+
+		// Filter and return
+		return (bool) apply_filters( 'sugar_calendar_event_overlaps', $retval, $this, $start, $end, $mode, $timezone );
+	}
+
+	/**
+	 * Does an event overlap a specific start & end time?
+	 *
+	 * @since 2.1.2
+	 *
+	 * @param DateTime $start Start boundary
+	 * @param DateTime $end   End boundary
+	 * @param string   $mode  day|week|month|year
+	 *
+	 * @return bool
+	 */
+	public function intersects( $start = '', $end = '', $mode = 'month' ) {
+
 		// Default return value
 		$retval = false;
 
@@ -286,31 +316,39 @@ final class Event extends Row {
 			return $retval;
 		}
 
-		// Set time zone to floating if no time zone offset
-		$start_tz = ! empty( $timezone )
-			? $this->start_tz
-			: '';
+		// Default to "floating" time zone
+		$start_tz = $start->getTimezone();
+		$end_tz   = $end->getTimezone();
 
-		// Set time zone to floating if no time zone offset
-		$end_tz = ! empty( $timezone )
-			? $this->end_tz
-			: '';
+		// All day checks simply match the boundaries
+		if ( ! $this->is_all_day() && ! sugar_calendar_is_timezone_floating() ) {
+
+			// Maybe use start time zone
+			if ( ! empty( $this->start_tz ) ) {
+				$start_tz = $this->start_tz;
+			}
+
+			// Maybe use end time zone
+			if ( ! empty( $this->end_tz ) ) {
+				$end_tz = $this->end_tz;
+			}
+		}
 
 		// Turn datetimes to timestamps for easier comparisons
-		$item_start = $this->format_date( 'U', $this->start, $start_tz, $timezone );
-		$item_end   = $this->format_date( 'U', $this->end,   $end_tz,   $timezone );
+		$start_dto = sugar_calendar_get_datetime_object( $this->start, $start_tz, $start->getTimezone() );
+		$end_dto   = sugar_calendar_get_datetime_object( $this->end,   $end_tz,   $end->getTimezone()   );
 
 		// Boundary fits inside current cell
-		if ( ( $item_end <= $end ) && ( $item_start >= $start ) ) {
+		if ( ( $end_dto <= $end ) && ( $start_dto >= $start ) ) {
 			$retval = true;
 
 		// Boundary fits outside current cell
-		} elseif ( ( $item_end >= $start ) && ( $item_start <= $end ) ) {
+		} elseif ( ( $end_dto >= $start ) && ( $start_dto <= $end ) ) {
 			$retval = true;
 		}
 
 		// Filter and return
-		return (bool) apply_filters( 'sugar_calendar_event_overlaps', $retval, $this, $start, $end, $mode, $timezone );
+		return (bool) apply_filters( 'sugar_calendar_event_intersects', $retval, $this, $start, $end, $mode );
 	}
 
 	/**

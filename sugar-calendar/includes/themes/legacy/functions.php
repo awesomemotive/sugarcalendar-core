@@ -67,6 +67,7 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
  * Return if an event overlaps a day, month, and year combination
  *
  * @since 2.0.0
+ * @since 2.1.2 Prefers Event::intersects() over Event::overlaps()
  *
  * @param array  $event
  * @param string $day
@@ -77,18 +78,22 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
  */
 function sc_is_event_for_day( $event, $day = '01', $month = '01', $year = '1970' ) {
 
-	// Make start & end
-	$start = gmmktime( '00', '00', '00', $month, $day, $year );
-	$end   = gmmktime( '23', '59', '59', $month, $day, $year );
-
-	// All front-end modes are currently months
-	$mode  = 'month';
-
 	// Get the time zone, either by user preference or by settings
 	$timezone = sugar_calendar_get_timezone();
 
+	// Make time stamps
+	$start_ts = gmmktime( 00, 00, 00, (int) $month, (int) $day, (int) $year );
+	$end_ts   = gmmktime( 23, 59, 59, (int) $month, (int) $day, (int) $year );
+
+	// Get start & end objects
+	$start    = sugar_calendar_get_datetime_object( $start_ts, $timezone );
+	$end      = sugar_calendar_get_datetime_object( $end_ts,   $timezone );
+
+	// All front-end modes are currently months
+	$mode     = 'month';
+
 	// Return
-	return $event->overlaps( $start, $end, $mode, $timezone );
+	return $event->intersects( $start, $end, $mode );
 }
 
 /**

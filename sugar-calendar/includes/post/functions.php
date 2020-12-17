@@ -30,11 +30,11 @@ function sugar_calendar_get_event_start_date_time( $post = false ) {
 	if ( ! empty( $event->start ) ) {
 
 		// Date
-		$retval = $event->start_date( get_option( 'date_format' ) );
+		$retval = $event->start_date( get_option( 'sc_date_format' ) );
 
 		// Time
 		if ( empty( $event->all_day ) ) {
-			$retval .= '<br>' . $event->start_date( get_option( 'time_format' ) );
+			$retval .= '<br>' . $event->start_date( get_option( 'sc_time_format' ) );
 		}
 	}
 
@@ -63,11 +63,11 @@ function sugar_calendar_get_event_end_date_time( $post = false ) {
 	if ( ! empty( $event->end ) ) {
 
 		// Date
-		$retval = $event->end_date( get_option( 'date_format' ) );
+		$retval = $event->end_date( get_option( 'sc_date_format' ) );
 
 		// Time
 		if ( empty( $event->all_day ) ) {
-			$retval .= '<br>' . $event->end_date( get_option( 'time_format' ) );
+			$retval .= '<br>' . $event->end_date( get_option( 'sc_time_format' ) );
 		}
 	}
 

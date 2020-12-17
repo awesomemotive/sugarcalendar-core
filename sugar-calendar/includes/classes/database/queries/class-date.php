@@ -1078,10 +1078,10 @@ class Date extends Base {
 	 *
 	 * @return string SQL clause.
 	 */
-	public function build_mysql_week( $column = '', $start_of_week = 0 ) {
+	public function build_mysql_week( $column = '', $start_of_week = false ) {
 
 		// Start of week option
-		$start_of_week = (int) get_option( 'start_of_week', $start_of_week );
+		$start_of_week = (int) get_option( 'sc_start_of_week', $start_of_week );
 
 		// When does the week start?
 		switch ( $start_of_week ) {

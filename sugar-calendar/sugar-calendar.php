@@ -38,7 +38,7 @@ final class Plugin {
 	 * @since 2.0.0
 	 * @var string
 	 */
-	private $version = '2.1.1';
+	private $version = '2.1.2';
 
 	/**
 	 * Prefix.
@@ -51,7 +51,7 @@ final class Plugin {
 	/**
 	 * Main instance.
 	 *
-	 * Insures that only one instance exists in memory at any one time.
+	 * Ensures that only one instance exists in memory at any one time.
 	 * Also prevents needing to define globals all over the place.
 	 *
 	 * @since 2.0.0

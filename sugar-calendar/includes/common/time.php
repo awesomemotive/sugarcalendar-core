@@ -41,12 +41,14 @@ function sugar_calendar_get_request_time( $type = 'timestamp', $timezone = 'UTC'
 		$timestart = microtime( true );
 	}
 
-	// Get the offset
-	$offset = sugar_calendar_get_timezone_offset( array(
-		'time'     => (int) $timestart,
-		'timezone' => $timezone,
-		'format'   => 'seconds'
-	) );
+	// Get the offset if not UTC
+	if ( 'UTC' !== $timezone ) {
+		$offset = sugar_calendar_get_timezone_offset( array(
+			'time'     => (int) $timestart,
+			'timezone' => $timezone,
+			'format'   => 'seconds'
+		) );
+	}
 
 	// What type of
 	switch ( $type ) {
@@ -285,7 +287,7 @@ function sugar_calendar_get_recurrence_types() {
 function sugar_calendar_get_clock_type() {
 
 	// Get user time format preference
-	$pref = sugar_calendar_get_user_preference( 'time_format', 'g:i a' );
+	$pref = sugar_calendar_get_user_preference( 'sc_time_format', 'g:i a' );
 
 	// Base clock type on time format preference
 	$retval = strstr( strtolower( $pref ), 'a' )

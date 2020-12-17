@@ -124,19 +124,52 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 		echo '<span class="sc_event_title">' . get_the_title( $event_id ) . '</span></a>';
 
 		if ( ! empty( $show['date'] ) ) {
-			echo '<span class="sc_event_date">' . sc_get_formatted_date( $event_id ) . '</span>';
+			$date_tag = sugar_calendar_get_time_tag( array(
+				'time'     => $event->start,
+				'timezone' => $event->start_tz,
+				'format'   => sc_get_date_format(),
+				'dtformat' => 'Y-m-dO'
+			) );
+
+			echo '<span class="sc_event_date">' . $date_tag . '</span>';
 		}
 
 		if ( isset( $show['time'] ) && $show['time'] ) {
 			$start_time = sc_get_event_start_time( $event_id );
 			$end_time   = sc_get_event_end_time( $event_id );
+			$tf         = sc_get_time_format();
 
+			// Output all day
 			if ( $event->is_all_day() ) {
 				echo '<span class="sc_event_time">' . esc_html__( 'All-day', 'sugar-calendar' ) . '</span>';
+
+			// Output both
 			} elseif ( $end_time !== $start_time ) {
-				echo '<span class="sc_event_time">' . esc_html( $start_time ) . '&nbsp;&ndash;&nbsp;' . esc_html( $end_time ) . '</span>';
+
+				$start_tag = sugar_calendar_get_time_tag( array(
+					'time'     => $event->start,
+					'timezone' => $event->start_tz,
+					'format'   => $tf
+				) );
+
+				$end_tag = sugar_calendar_get_time_tag( array(
+					'time'     => $event->end,
+					'timezone' => $event->end_tz,
+					'format'   => $tf
+				) );
+
+				echo '<span class="sc_event_time">' . $start_tag . '&nbsp;&ndash;&nbsp;' . $end_tag . '</span>';
+
+			// Output only start
 			} elseif ( ! empty( $start_time ) ) {
-				echo '<span class="sc_event_time">' . esc_html( $start_time ) . '</span>';
+
+				$start_tag = sugar_calendar_get_time_tag( array(
+					'time'     => $event->start,
+					'timezone' => $event->start_tz,
+					'format'   => $tf
+				) );
+
+				echo '<span class="sc_event_time">' . $start_tag . '</span>';
 			}
 		}
 

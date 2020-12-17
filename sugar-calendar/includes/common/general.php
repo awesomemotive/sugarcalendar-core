@@ -61,23 +61,22 @@ function sugar_calendar_get_assets_version() {
  * sugar_calendar_date_i18n() instead.
  *
  * @since 2.1.0
- *
- * @param string $format   Defaults to MySQL datetime format.
- * @param mixed  $time     Defaults to "now".
- * @param string $timezone Defaults to time zone preference.
- *
+ * @param string $format    Compatible with DateTime::format().
+ * @param mixed  $timestamp Defaults to "now".
+ * @param string $timezone1 Defaults to time zone preference.
+ * @param string $timezone2 Defaults null.
  * @return string
  */
-function sugar_calendar_format_date( $format = 'Y-m-d H:i:s', $time = null, $timezone = null ) {
+function sugar_calendar_format_date( $format = 'Y-m-d H:i:s', $timestamp = null, $timezone1 = null, $timezone2 = null ) {
 
 	// Get DateTime object (with time zone) and use it to format
-	$dto = sugar_calendar_get_datetime_object( $time, $timezone );
+	$dto = sugar_calendar_get_datetime_object( $timestamp, $timezone1, $timezone2 );
 
 	// Format
 	$retval = $dto->format( $format );
 
 	// Filter & return
-	return apply_filters( 'sugar_calendar_date', $retval, $format, $time, $timezone );
+	return apply_filters( 'sugar_calendar_format_date', $retval, $format, $timestamp, $timezone1, $timezone2 );
 }
 
 /**
@@ -86,15 +85,14 @@ function sugar_calendar_format_date( $format = 'Y-m-d H:i:s', $time = null, $tim
  * Loosely based on wp_date() but without the site-specific time zone fallback.
  *
  * @since 2.1.0
- *
- * @param string $format   Defaults to MySQL datetime format.
- * @param mixed  $time     Defaults to "now".
- * @param string $timezone Defaults to time zone preference.
- * @param string $locale   Defaults to user/site preference.
- *
+ * @param string $format    Compatible with DateTime::format().
+ * @param mixed  $timestamp Defaults to "now".
+ * @param string $timezone1 Defaults to time zone preference.
+ * @param string $timezone2 Defaults null.
+ * @param string $locale    Defaults to user/site preference.
  * @return string
  */
-function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $time = null, $timezone = null, $locale = null ) {
+function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $timestamp = null, $timezone1 = null, $timezone2 = null, $locale = null ) {
 	global $wp_locale;
 
 	// Switch!
@@ -102,8 +100,8 @@ function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $time = null,
 		switch_to_locale( $locale );
 	}
 
-	// Get DateTime object (with time zone) and use it to format
-	$dto = sugar_calendar_get_datetime_object( $time, $timezone );
+	// Get DateTime object (with time zones) and use it to format
+	$dto = sugar_calendar_get_datetime_object( $timestamp, $timezone1, $timezone2 );
 
 	// No locale available, so fallback to regular date formatting
 	if ( empty( $wp_locale->month ) || empty( $wp_locale->weekday ) ) {
@@ -151,6 +149,11 @@ function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $time = null,
 					$new_format .= addcslashes( $str, $slashes );
 					break;
 
+				case 'e' :
+					$str         = sugar_calendar_format_timezone( $dto->format( 'e' ) );
+					$new_format .= addcslashes( $str, $slashes );
+					break;
+
 				case '\\' :
 					$new_format .= $format[ $i ];
 
@@ -179,7 +182,7 @@ function sugar_calendar_format_date_i18n( $format = 'Y-m-d H:i:s', $time = null,
 	}
 
 	// Filter & return
-	return apply_filters( 'sugar_calendar_date_i18n', $retval, $format, $time, $timezone, $locale );
+	return apply_filters( 'sugar_calendar_format_date_i18n', $retval, $format, $timestamp, $timezone1, $timezone2, $locale );
 }
 
 /**
@@ -199,8 +202,8 @@ function sugar_calendar_get_time_tag( $args = array() ) {
 	$r = wp_parse_args( $args, array(
 		'time'     => null,
 		'timezone' => null,
-		'format'   => 'Y-m-d H:i:s',
-		'dtformat' => 'Y-m-d\TH:i:s',
+		'format'   => null,
+		'dtformat' => DATE_ISO8601,
 		'data'     => $ddata,
 		'attr'     => $dattr
 	) );
@@ -220,14 +223,17 @@ function sugar_calendar_get_time_tag( $args = array() ) {
 		? $r['timezone']
 		: 'floating';
 
-	// Non-floating
+	// Get the DateTime object
+	$dto = sugar_calendar_get_datetime_object( $r['time'] );
+
+	// Non-floating so set time zone and get the offset
 	if ( ! empty( $r['timezone'] ) && ( 'floating' !== $r['timezone'] ) ) {
 
+		// Maybe set the time zone
+		$dto = sugar_calendar_set_datetime_timezone( $dto, $r['timezone'] );
+
 		// Add the offset
-		$r['data']['offset'] = sugar_calendar_get_timezone_offset( array(
-			'time'     => $r['time'],
-			'timezone' => $r['timezone']
-		) );
+		$r['data']['offset'] = $dto->getOffset();
 	}
 
 	// Format the time
@@ -236,6 +242,7 @@ function sugar_calendar_get_time_tag( $args = array() ) {
 
 	// Default attribute string
 	$r['attr']['datetime'] = esc_attr( $dtf );
+	$r['attr']['title']    = esc_attr( $dtf );
 
 	// Default array
 	$arr = $r['attr'];
@@ -247,11 +254,14 @@ function sugar_calendar_get_time_tag( $args = array() ) {
 		}
 	}
 
+	// Default attribute string
+	$attr = '';
+
 	// Concatenate HTML tag attributes
 	if ( ! empty( $arr ) ) {
 
 		// Remove empties and duplicates
-		$arr = array_unique( array_filter( $arr ) );
+		$arr = array_filter( $arr );
 
 		// Build
 		foreach ( $arr as $key => $value ) {

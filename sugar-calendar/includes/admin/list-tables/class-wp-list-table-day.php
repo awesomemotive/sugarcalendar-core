@@ -186,8 +186,8 @@ class Day extends Base_List_Table {
 
 			// Set the current cell
 			$this->set_current_cell( array(
-				'start' => gmmktime( 0,  0,  0, $this->month, $day, $this->year ),
-				'end'   => gmmktime( 23, 59, 0, $this->month, $day, $this->year ),
+				'start' => gmmktime( 0,  0,  0,  $this->month, $day, $this->year ),
+				'end'   => gmmktime( 23, 59, 59, $this->month, $day, $this->year ),
 				'type'  => 'all_day',
 				'index' => 0
 			) );
@@ -221,8 +221,8 @@ class Day extends Base_List_Table {
 
 			// Set the current cell
 			$this->set_current_cell( array(
-				'start' => gmmktime( 0,  0,  0, $this->month, $day, $this->year ),
-				'end'   => gmmktime( 23, 59, 0, $this->month, $day, $this->year ),
+				'start' => gmmktime( 0,  0,  0,  $this->month, $day, $this->year ),
+				'end'   => gmmktime( 23, 59, 59, $this->month, $day, $this->year ),
 				'type'  => 'multi_day',
 				'index' => 0
 			) );
@@ -280,12 +280,17 @@ class Day extends Base_List_Table {
 			$classes[] = 'this-hour';
 		}
 
+		// Format based on clock type
+		$format = ( '12' === sugar_calendar_get_clock_type() )
+			? 'g:i a'
+			: 'H:i';
+
 		// Start an output buffer
 		ob_start(); ?>
 
 		<tr class="<?php echo implode( ' ', $classes ); ?>">
 			<th class="column-hour<?php echo $this->get_hour_class(); ?>">
-				<?php echo gmdate( 'g:i a', $start ); ?>
+				<?php echo gmdate( $format, $start ); ?>
 			</th>
 
 		<?php
@@ -355,8 +360,8 @@ class Day extends Base_List_Table {
 
 			// Setup cell boundaries
 			$this->set_current_cell( array(
-				'start'  => gmmktime( $row, 0,  0, $this->month, $this->day, $this->year ),
-				'end'    => gmmktime( $row, 59, 0, $this->month, $this->day, $this->year ),
+				'start'  => gmmktime( $row, 0,  0,  $this->month, $this->day, $this->year ),
+				'end'    => gmmktime( $row, 59, 59, $this->month, $this->day, $this->year ),
 				'row'    => $row,
 				'index'  => $i,
 				'offset' => 0

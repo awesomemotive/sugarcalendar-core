@@ -106,7 +106,7 @@ class Base_List_Table extends \WP_List_Table {
 	public $view_duration = 0;
 
 	/**
-	 * The time zone for the current view
+	 * The current time zone object, derived from $view_timezone
 	 *
 	 * @since 2.1.0
 	 *
@@ -124,13 +124,22 @@ class Base_List_Table extends \WP_List_Table {
 	public $pointers = array();
 
 	/**
+	 * The start year being viewed (for list-mode)
+	 *
+	 * @since 2.0.0
+	 *
+	 * @var int
+	 */
+	protected $start_year = 2020;
+
+	/**
 	 * The year being viewed
 	 *
 	 * @since 2.0.0
 	 *
 	 * @var int
 	 */
-	protected $year = 2015;
+	protected $year = 2020;
 
 	/**
 	 * The month being viewed
@@ -160,7 +169,7 @@ class Base_List_Table extends \WP_List_Table {
 	protected $today = '';
 
 	/**
-	 * The current time zone object, derived from $view_timezone
+	 * The time zone for the current view
 	 *
 	 * @since 2.1.0
 	 *
@@ -252,6 +261,15 @@ class Base_List_Table extends \WP_List_Table {
 	);
 
 	/**
+	 * Array of queried items, filtered, usually by status
+	 *
+	 * @since 2.1.2
+	 *
+	 * @var array
+	 */
+	protected $filtered_items = array();
+
+	/**
 	 * The main constructor method
 	 *
 	 * @since 2.0.0
@@ -263,6 +281,7 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Set class properties
 		$this->init_globals();
+		$this->init_timezone();
 		$this->init_boundaries();
 		$this->init_week_days();
 		$this->init_max();
@@ -291,14 +310,20 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Set the time zone
+	 *
+	 * @since 2.1.2
+	 */
+	protected function init_timezone() {
+		$this->timezone = sugar_calendar_get_timezone();
+	}
+
+	/**
 	 * Set the boundaries
 	 *
 	 * @since 2.0.0
 	 */
 	protected function init_boundaries() {
-
-		// Set time zone first, so everything uses the same one
-		$this->timezone = $this->get_timezone();
 
 		// Set now once, so everything uses the same timestamp
 		$this->now = $this->get_current_time();
@@ -312,6 +337,9 @@ class Base_List_Table extends \WP_List_Table {
 		$this->year  = $this->get_year();
 		$this->month = $this->get_month();
 		$this->day   = $this->get_day();
+
+		// Set list-mode specific year
+		$this->start_year = $this->get_start_year();
 
 		// Set "today" based on current request
 		$this->today = strtotime( "{$this->year}/{$this->month}/{$this->day}" );
@@ -381,12 +409,36 @@ class Base_List_Table extends \WP_List_Table {
 		$end_time   = strtotime( $end   );
 
 		// Set view boundaries
-		$this->view_start    = $start;
-		$this->view_end      = $end;
+		$this->view_start    = min( $start, $end );
+		$this->view_end      = max( $start, $end );
 		$this->view_duration = ( $end_time - $start_time );
 
 		// Set view time zone
 		$this->view_timezone = sugar_calendar_get_timezone_object( $this->timezone );
+	}
+
+	/**
+	 * Set the filtered items
+	 *
+	 * @since 2.1.2
+	 */
+	protected function set_filtered_items() {
+
+		// Get the filter
+		$filter = $this->get_items_filter();
+
+		// No queried items
+		if ( empty( $this->query->items ) ) {
+			$this->filtered_items = array();
+
+		// No filter
+		} elseif ( empty( $filter ) ) {
+			$this->filtered_items = $this->query->items;
+
+		// Filter queried items
+		} else {
+			$this->filtered_items = wp_list_filter( $this->query->items, $filter );
+		}
 	}
 
 	/** Getters ***************************************************************/
@@ -436,6 +488,29 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Return array of filters used on queried items
+	 *
+	 * @since 2.1.2
+	 *
+	 * @return array
+	 */
+	protected function get_items_filter() {
+
+		// Get the status
+		$status = $this->get_status();
+
+		// Bail if viewing all
+		if ( 'all' === $status ) {
+			return array();
+		}
+
+		// Return filter by status
+		return array(
+			'status' => $this->get_status()
+		);
+	}
+
+	/**
 	 * Return a properly formatted, multi-dimensional array of event counts,
 	 * grouped by status.
 	 *
@@ -444,7 +519,45 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	protected function get_item_counts() {
-		return sugar_calendar_get_event_counts( $this->all_query_args() );
+
+		// Default return value
+		$retval = array(
+			'total' => 0
+		);
+
+		// Default statuses
+		$statuses = array();
+
+		// Items to count
+		if ( ! empty( $this->query->items ) ) {
+
+			// Pluck all queried statuses
+			$statuses = wp_list_pluck( $this->query->items, 'status' );
+
+			// Get unique statuses only
+			$statuses = array_unique( $statuses );
+
+			// Set total to count of all items
+			$retval['total'] = count( $this->query->items );
+
+			// Loop through statuses
+			foreach ( $statuses as $status ) {
+
+				// Get items of this status
+				$items = wp_filter_object_list(
+					$this->query->items,
+					array(
+						'status' => $status
+					)
+				);
+
+				// Add count to return value
+				$retval[ $status ] = count( $items );
+			}
+		}
+
+		// Filter & return
+		return apply_filters( 'sugar_calendar_list_table_get_item_counts', $retval, $statuses );
 	}
 
 	/**
@@ -534,7 +647,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_start_of_week( $start = '1' ) {
-		return (string) sugar_calendar_get_user_preference( 'start_of_week', (string) $start );
+		return (string) sugar_calendar_get_user_preference( 'sc_start_of_week', (string) $start );
 	}
 
 	/**
@@ -547,7 +660,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_date_format( $format = 'F j, Y' ) {
-		return sugar_calendar_get_user_preference( 'date_format', $format );
+		return sugar_calendar_get_user_preference( 'sc_date_format', $format );
 	}
 
 	/**
@@ -560,7 +673,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_time_format( $format = 'g:i a' ) {
-		return sugar_calendar_get_user_preference( 'time_format', $format );
+		return sugar_calendar_get_user_preference( 'sc_time_format', $format );
 	}
 
 	/**
@@ -580,6 +693,7 @@ class Base_List_Table extends \WP_List_Table {
 		// Query arg defaults
 		$defaults = array(
 			'page'        => $this->get_page(),
+			'cystart'     => $this->get_start_year(),
 			'cy'          => $this->get_year(),
 			'cm'          => $this->get_month(),
 			'cd'          => $this->get_day(),
@@ -607,6 +721,16 @@ class Base_List_Table extends \WP_List_Table {
 		// Maybe unset default search
 		if ( empty( $r['s'] ) ) {
 			unset( $r['s'] );
+		}
+
+		// Maybe unset default time zone
+		if ( empty( $r['cz'] ) || ( $this->timezone === $r['cz'] ) ) {
+			unset( $r['cz'] );
+		}
+
+		// Maybe unset list-years
+		if ( 'list' !== $r['mode'] ) {
+			unset( $r['cystart'] );
 		}
 
 		// Use the base URL
@@ -673,15 +797,15 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param mixed $date_time
+	 * @param mixed $datetime
 	 * @return int
 	 */
-	protected function get_day_offset( $date_time = '' ) {
+	protected function get_day_offset( $datetime = '' ) {
 
-		// Maybe format
-		$timestamp  = ! is_numeric( $date_time )
-			? strtotime( $date_time )
-			: $date_time;
+		// Maybe make datetime into timestamp
+		$timestamp = ! is_int( $datetime )
+			? strtotime( $datetime )
+			: $datetime;
 
 		// Get date properties
 		$this_month = (int) gmdate( 'w', $timestamp );
@@ -807,14 +931,27 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Get the requested start year for the list boundary
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return int
+	 */
+	protected function get_start_year() {
+		$default = gmdate( 'Y', $this->now );
+
+		return $this->get_request_var( 'cystart', 'intval', $default );
+	}
+
+	/**
 	 * Get the current time zone
 	 *
 	 * @since 2.1.0
 	 *
-	 * @return int
+	 * @return string
 	 */
 	protected function get_timezone() {
-		$default = sugar_calendar_get_timezone();
+		$default = $this->timezone;
 
 		return $this->get_request_var( 'cz', 'urldecode', $default );
 	}
@@ -985,7 +1122,15 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return array List of CSS classes for the table tag.
 	 */
 	protected function get_table_classes() {
-		return array( 'widefat', 'fixed', 'striped', 'calendar', $this->get_mode(), $this->_args['plural'] );
+		return array(
+			'widefat',
+			'fixed',
+			'striped',
+			'calendar',
+			$this->get_mode(),
+			$this->get_status(),
+			$this->_args['plural']
+		);
 	}
 
 	/**
@@ -1155,18 +1300,18 @@ class Base_List_Table extends \WP_List_Table {
 	protected function modify_datetime( $datetime = '', $args = array() ) {
 
 		// Maybe make datetime into timestamp
-		$time = ! is_int( $datetime )
+		$timestamp = ! is_int( $datetime )
 			? strtotime( $datetime )
 			: $datetime;
 
 		// Parse arguments
 		$r = wp_parse_args( $args, array(
-			'Y' => gmdate( 'Y', $time ),
-			'm' => gmdate( 'm', $time ),
-			'd' => gmdate( 'd', $time ),
-			'H' => gmdate( 'H', $time ),
-			'i' => gmdate( 'i', $time ),
-			's' => gmdate( 's', $time )
+			'Y' => gmdate( 'Y', $timestamp ),
+			'm' => gmdate( 'm', $timestamp ),
+			'd' => gmdate( 'd', $timestamp ),
+			'H' => gmdate( 'H', $timestamp ),
+			'i' => gmdate( 'i', $timestamp ),
+			's' => gmdate( 's', $timestamp )
 		) );
 
 		// Return merged
@@ -1196,6 +1341,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * Does an event belong inside the current cell?
 	 *
 	 * @since 2.0.0
+	 * @since 2.1.2 Prefers Event::intersects() over Event::overlaps()
 	 *
 	 * @param object $item
 	 * @return boolean
@@ -1207,11 +1353,20 @@ class Base_List_Table extends \WP_List_Table {
 			return false;
 		}
 
-		// Get the current cell
-		$current_cell = $this->get_current_cell();
+		// Start boundary
+		$start  = $this->get_current_cell( 'start_dto' );
+
+		// End boundary
+		$end    = $this->get_current_cell( 'end_dto' );
+
+		// Get the mode
+		$mode   = $this->get_mode();
+
+		// Get intersects
+		$retval = $item->intersects( $start, $end, $mode );
 
 		// Return if event belongs in cell
-		return $item->overlaps( $current_cell['start'], $current_cell['end'], $this->get_mode() );
+		return $retval;
 	}
 
 	/**
@@ -1227,7 +1382,7 @@ class Base_List_Table extends \WP_List_Table {
 		$retval = '';
 
 		// Bail if no items
-		if ( empty( $this->query->items ) ) {
+		if ( empty( $this->filtered_items ) ) {
 			return $retval;
 		}
 
@@ -1235,7 +1390,7 @@ class Base_List_Table extends \WP_List_Table {
 		$items = array();
 
 		// Loop through items
-		foreach ( $this->query->items as $item ) {
+		foreach ( $this->filtered_items as $item ) {
 
 			// Skip if event is not for cell
 			if ( ! $this->is_item_for_cell( $item ) ) {
@@ -1448,30 +1603,35 @@ class Base_List_Table extends \WP_List_Table {
 			'type'   => 'normal'
 		) );
 
+		// Get the time zone
+		$timezone = $this->get_timezone();
+
 		// Add date parts for start
 		if ( ! empty( $r['start'] ) ) {
-			$r['start_year']    = gmdate( 'Y', $r['start'] );
-			$r['start_month']   = gmdate( 'm', $r['start'] );
-			$r['start_day']     = gmdate( 'd', $r['start'] );
-			$r['start_dow']     = gmdate( 'w', $r['start'] );
-			$r['start_doy']     = gmdate( 'z', $r['start'] );
-			$r['start_woy']     = gmdate( 'W', $r['start'] );
-			$r['start_hour']    = gmdate( 'H', $r['start'] );
-			$r['start_minutes'] = gmdate( 'i', $r['start'] );
-			$r['start_seconds'] = gmdate( 's', $r['start'] );
+			$r['start_dto']     = sugar_calendar_get_datetime_object( $r['start'], $timezone );
+			$r['start_year']    = $r['start_dto']->format( 'Y' );
+			$r['start_month']   = $r['start_dto']->format( 'm' );
+			$r['start_day']     = $r['start_dto']->format( 'd' );
+			$r['start_dow']     = $r['start_dto']->format( 'w' );
+			$r['start_doy']     = $r['start_dto']->format( 'z' );
+			$r['start_woy']     = $r['start_dto']->format( 'W' );
+			$r['start_hour']    = $r['start_dto']->format( 'H' );
+			$r['start_minutes'] = $r['start_dto']->format( 'i' );
+			$r['start_seconds'] = $r['start_dto']->format( 's' );
 		}
 
 		// Add date parts for end
 		if ( ! empty( $r['end'] ) ) {
-			$r['end_year']      = gmdate( 'Y', $r['end'] );
-			$r['end_month']     = gmdate( 'm', $r['end'] );
-			$r['end_day']       = gmdate( 'd', $r['end'] );
-			$r['end_dow']       = gmdate( 'w', $r['end'] );
-			$r['end_doy']       = gmdate( 'z', $r['end'] );
-			$r['end_woy']       = gmdate( 'W', $r['end'] );
-			$r['end_hour']      = gmdate( 'H', $r['end'] );
-			$r['end_minutes']   = gmdate( 'i', $r['end'] );
-			$r['end_seconds']   = gmdate( 's', $r['end'] );
+			$r['end_dto']       = sugar_calendar_get_datetime_object( $r['end'], $timezone );
+			$r['end_year']      = $r['end_dto']->format( 'Y' );
+			$r['end_month']     = $r['end_dto']->format( 'm' );
+			$r['end_day']       = $r['end_dto']->format( 'd' );
+			$r['end_dow']       = $r['end_dto']->format( 'w' );
+			$r['end_doy']       = $r['end_dto']->format( 'z' );
+			$r['end_woy']       = $r['end_dto']->format( 'W' );
+			$r['end_hour']      = $r['end_dto']->format( 'H' );
+			$r['end_minutes']   = $r['end_dto']->format( 'i' );
+			$r['end_seconds']   = $r['end_dto']->format( 's' );
 		}
 
 		// Set the current cell
@@ -1510,12 +1670,13 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $date
+	 * @param string $datetime
+	 * @param string $timezone
 	 *
 	 * @return string
 	 */
-	protected function get_event_date( $date = '' ) {
-		return sugar_calendar_format_date_i18n( $this->date_format, $date );
+	protected function get_event_date( $datetime = '', $timezone = '' ) {
+		return sugar_calendar_format_date_i18n( $this->date_format, $datetime, $timezone, $this->timezone );
 	}
 
 	/**
@@ -1523,12 +1684,13 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string $date
+	 * @param string $datetime
+	 * @param string $timezone
 	 *
 	 * @return string
 	 */
-	protected function get_event_time( $date = '' ) {
-		return sugar_calendar_format_date_i18n( $this->time_format, $date );
+	protected function get_event_time( $datetime = '', $timezone = '' ) {
+		return sugar_calendar_format_date_i18n( $this->time_format, $datetime, $timezone, $this->timezone );
 	}
 
 	/**
@@ -1935,17 +2097,57 @@ class Base_List_Table extends \WP_List_Table {
 		$stz = '';
 		$etz = '';
 
+		// Strip time zone formats from date & time formats
+		$df = $this->strip_timezone_format( $this->date_format );
+		$tf = $this->strip_timezone_format( $this->time_format );
+
 		// Start time zone
 		if ( ! empty( $event->start_tz ) ) {
-			$stz = '<span class="sc-timezone">' . esc_html( sugar_calendar_format_timezone( $event->start_tz ) ) . '</span>';
+
+			// Maybe show the original date, time, and zone
+			if ( ! empty( $this->timezone ) && ( $this->timezone !== $event->start_tz ) ) {
+				$to = sprintf(
+					esc_html_x( '%s %s', 'Time Time Zone', 'sugar-calendar' ),
+					sugar_calendar_format_date_i18n( $tf, $event->start, $event->start_tz ),
+					sugar_calendar_format_timezone( $event->start_tz  )
+				);
+
+			// Single time zone
+			} else {
+				$to = sugar_calendar_format_timezone( $event->start_tz );
+			}
+
+			// Wrap in span
+			$stz = '<span class="sc-timezone">' . esc_html( $to ) . '</span>';
 		}
 
 		// End time zone
 		if ( ! empty( $event->end_tz ) ) {
-			$etz = '<span class="sc-timezone">' . esc_html( sugar_calendar_format_timezone( $event->end_tz ) ) . '</span>';
+
+			// Maybe show the original date, time, and zone
+			if ( ! empty( $this->timezone ) && ( $this->timezone !== $event->end_tz ) ) {
+				$to = sprintf(
+					esc_html_x( '%s %s', 'Time Time Zone', 'sugar-calendar' ),
+					sugar_calendar_format_date_i18n( $tf, $event->end, $event->end_tz ),
+					sugar_calendar_format_timezone( $event->end_tz )
+				);
+
+			// Single time zone
+			} else {
+				$to = sugar_calendar_format_timezone( $event->end_tz );
+			}
+
+			// Wrap in span
+			$etz = '<span class="sc-timezone">' . esc_html( $to ) . '</span>';
+
+		// Use the start time zone string
 		} elseif ( ! empty( $stz ) ) {
 			$etz = $stz;
 		}
+
+		// Start & end
+		$start = $this->get_event_date( $event->start, $event->start_tz );
+		$end   = $this->get_event_date( $event->end,   $event->end_tz   );
 
 		// All day, single-day event
 		if ( $event->is_all_day() ) {
@@ -1956,29 +2158,29 @@ class Base_List_Table extends \WP_List_Table {
 				// Yearly
 				if ( 'yearly' === $event->recurrence ) {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = esc_html( $event->start_date( 'F j' ) ) . '</span>';
+					$pointer_dates['start']       = esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = esc_html( $event->end_date( 'F j' ) ) . '</span>';
+					$pointer_dates['end']         = esc_html( $end ) . '</span>';
 
 				// Monthly
 				} elseif ( 'monthly' === $event->recurrence ) {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = esc_html( $event->start_date( 'F j' ) ) . '</span>';
+					$pointer_dates['start']       = esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = esc_html( $event->end_date( 'F j' ) ) . '</span>';
+					$pointer_dates['end']         = esc_html( $end ) . '</span>';
 
 				// No recurrence
 				} else {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = esc_html( $this->get_event_date( $event->start ) ) . '</span>';
+					$pointer_dates['start']       = esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = esc_html( $this->get_event_date( $event->end ) ) . '</span>';
+					$pointer_dates['end']         = esc_html( $end ) . '</span>';
 				}
 
 			// Single all-day
 			} else {
 				$pointer_dates['all_day_title'] = '<strong>' . esc_html__( 'All Day', 'sugar-calendar' ) . '</strong>';
-				$pointer_dates['all_day']       = '<span>'   . esc_html( $this->get_event_date( $event->start ) ) . '</span>';
+				$pointer_dates['all_day']       = '<span>'   . esc_html( $start ) . '</span>';
 			}
 
 		// All other events
@@ -1990,23 +2192,23 @@ class Base_List_Table extends \WP_List_Table {
 				// Yearly
 				if ( 'yearly' === $event->recurrence ) {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = '<span>'   . esc_html( $event->start_date( 'F j' ) ) . '</span>';
+					$pointer_dates['start']       = '<span>'   . esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = '<span>'   . esc_html( $event->end_date( 'F j' ) ) . '</span>';
+					$pointer_dates['end']         = '<span>'   . esc_html( $end ) . '</span>';
 
 				// Monthly
 				} elseif ( 'monthly' === $event->recurrence ) {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = '<span>'   . esc_html( $event->start_date( 'F j' ) ) . '</span>';
+					$pointer_dates['start']       = '<span>'   . esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = '<span>'   . esc_html( $event->end_date( 'F j' ) ) . '</span>';
+					$pointer_dates['end']         = '<span>'   . esc_html( $end ) . '</span>';
 
 				// No recurrence
 				} else {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = '<span>'   . esc_html( $this->get_event_date( $event->start ) ) . '</span>';
+					$pointer_dates['start']       = '<span>'   . esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = '<span>'   . esc_html( $this->get_event_date( $event->end ) ) . '</span>';
+					$pointer_dates['end']         = '<span>'   . esc_html( $end ) . '</span>';
 				}
 
 			// Single day
@@ -2014,10 +2216,12 @@ class Base_List_Table extends \WP_List_Table {
 
 				// Date & Time
 				if ( ! $event->is_empty_date( $event->start ) ) {
+					$time  = $this->get_event_time( $event->start, $event->start_tz );
+					$day   = sugar_calendar_format_date_i18n( 'w', $event->start, $event->start_tz, $this->timezone );
 					$start = esc_html( sprintf(
 						esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ),
-						$this->get_event_time( $event->start ),
-						$GLOBALS['wp_locale']->get_weekday( $event->start_date( 'w' ) )
+						$time,
+						$GLOBALS['wp_locale']->get_weekday( $day )
 					) );
 
 					// Maybe append time zone
@@ -2031,10 +2235,12 @@ class Base_List_Table extends \WP_List_Table {
 
 				// Date & Time
 				if ( ! $event->is_empty_date( $event->end ) && ( $event->start !== $event->end ) ) {
-					$end = esc_html( sprintf(
+					$time = $this->get_event_time( $event->end, $event->end_tz );
+					$day  = sugar_calendar_format_date_i18n( 'w', $event->end, $event->end_tz, $this->timezone );
+					$end  = esc_html( sprintf(
 						esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ),
-						$this->get_event_time( $event->end ),
-						$GLOBALS['wp_locale']->get_weekday( $event->end_date( 'w' ) )
+						$time,
+						$GLOBALS['wp_locale']->get_weekday( $day )
 					) );
 
 					// Maybe append time zone
@@ -2065,8 +2271,8 @@ class Base_List_Table extends \WP_List_Table {
 					$recurring = sprintf(
 						esc_html_x( '%s from %s until %s', 'Weekly from December 1, 2030 until December 31, 2030', 'sugar-calendar' ),
 						$intervals[ $event->recurrence ],
-						$this->get_event_date( $event->start ),
-						$this->get_event_date( $event->recurrence_end )
+						$this->get_event_date( $event->start, $event->start_tz ),
+						$this->get_event_date( $event->recurrence_end, $event->recurrence_end_tz )
 					);
 
 					$pointer_dates['recurrence_end'] = '<span>' . esc_html( $recurring ) . '</span>';
@@ -2076,7 +2282,7 @@ class Base_List_Table extends \WP_List_Table {
 					$recurring = sprintf(
 						esc_html_x( '%s starting %s', 'Weekly forever, starting May 15, 1980', 'sugar-calendar' ),
 						$intervals[ $event->recurrence ],
-						$this->get_event_date( $event->start )
+						$this->get_event_date( $event->start, $event->start_tz )
 					);
 
 					$pointer_dates['recurrence_end'] = '<span>' . esc_html( $recurring ) . '</span>';
@@ -2424,15 +2630,14 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	public function prepare_items() {
 
-		// Juggle the Trash status specifically
-		$args = ( 'all' !== $this->get_status() )
-			? array( 'status'         => $this->get_status() )
-			: array( 'status__not_in' => array( 'trash' )    );
+		// Get query arguments
+		$args = $this->all_query_args();
 
 		// Query for events in the view
-		$this->query = new \Sugar_Calendar\Event_Query(
-			$this->all_query_args( $args )
-		);
+		$this->query = new \Sugar_Calendar\Event_Query( $args );
+
+		// Set filtered items
+		$this->set_filtered_items();
 	}
 
 	/**
@@ -2465,7 +2670,12 @@ class Base_List_Table extends \WP_List_Table {
 				<input type="hidden" name="page" value="<?php echo esc_attr( $this->get_page() ); ?>" />
 				<input type="hidden" name="cd" value="<?php echo esc_attr( $this->get_day() ); ?>" />
 				<input type="hidden" name="cm" value="<?php echo esc_attr( $this->get_month() ); ?>" />
-				<input type="hidden" name="cy" value="<?php echo esc_attr( $this->get_year() ); ?>" />
+				<?php if ( 'list' === $this->get_mode() ) : ?>
+					<input type="hidden" name="cy"      value="<?php echo esc_attr( $this->get_year() ); ?>" />
+					<input type="hidden" name="cystart" value="<?php echo esc_attr( $this->get_start_year() ); ?>" />
+				<?php else : ?>
+					<input type="hidden" name="cy" value="<?php echo esc_attr( $this->get_year() ); ?>" />
+				<?php endif; ?>
 				<input type="hidden" name="cz" value="<?php echo esc_attr( $this->get_timezone() ); ?>" />
 				<input type="hidden" name="order" value="<?php echo esc_attr( $this->get_order() ); ?>" />
 				<input type="hidden" name="orderby" value="<?php echo esc_attr( $this->get_orderby() ); ?>" />
@@ -2897,7 +3107,7 @@ class Base_List_Table extends \WP_List_Table {
 		elseif ( 'top' === $which ) :
 
 			// Hide the month picker UI in List mode
-			if ( $this->get_mode() !== 'list' ) : ?>
+			if ( 'list' !== $this->get_mode() ) : ?>
 
 				<label for="cm" class="screen-reader-text"><?php esc_html_e( 'Switch to this month', 'sugar-calendar' ); ?></label>
 				<select name="cm" id="cm" class="sc-select-chosen">
@@ -2913,7 +3123,7 @@ class Base_List_Table extends \WP_List_Table {
 			<?php endif;
 
 			// Show the day input UI for day mode only
-			if ( $this->get_mode() === 'day' ) : ?>
+			if ( 'day' === $this->get_mode() ) : ?>
 
 				<label for="cd" class="screen-reader-text"><?php esc_html_e( 'Set the day', 'sugar-calendar' ); ?></label>
 				<input type="number" name="cd" id="cd" value="<?php echo (int) $this->day; ?>" size="2">
@@ -2921,14 +3131,33 @@ class Base_List_Table extends \WP_List_Table {
 			<?php
 
 			// Hide the day input UI for week mode
-			elseif ( $this->get_mode() === 'week' ) : ?>
+			elseif ( 'week' === $this->get_mode() ) : ?>
 
 				<input type="hidden" name="cd" id="cd" value="<?php echo (int) $this->day; ?>">
 
+			<?php endif;
+
+			// Show start & end years for list mode
+			if ( 'list' === $this->get_mode() ) : ?>
+
+				<label for="cystart" class="screen-reader-text"><?php esc_html_e( 'Set the first year', 'sugar-calendar' ); ?></label>
+				<input type="number" name="cystart" id="cystart" value="<?php echo (int) $this->get_start_year(); ?>">
+
+				<span><?php esc_html_e( 'to', 'sugar-calendar' ); ?></span>
+
+				<label for="cy" class="screen-reader-text"><?php esc_html_e( 'Set the last year', 'sugar-calendar' ); ?></label>
+				<input type="number" name="cy" id="cy" value="<?php echo (int) $this->get_year(); ?>">
+
+			<?php
+
+			// Show single year for non-list modes
+			else : ?>
+
+				<label for="cy" class="screen-reader-text"><?php esc_html_e( 'Set the year', 'sugar-calendar' ); ?></label>
+				<input type="number" name="cy" id="cy" value="<?php echo (int) $this->year; ?>">
+
 			<?php endif; ?>
 
-			<label for="cy" class="screen-reader-text"><?php esc_html_e( 'Set the year', 'sugar-calendar' ); ?></label>
-			<input type="number" name="cy" id="cy" value="<?php echo (int) $this->year; ?>">
 			<input type="hidden" name="mode" value="<?php echo esc_attr( $this->get_mode() ); ?>" />
 
 			<input type="hidden" name="order" value="<?php echo esc_attr( $this->get_order() ); ?>" />
@@ -3095,10 +3324,8 @@ class Base_List_Table extends \WP_List_Table {
 	private function tools() {
 
 		// Time zone
-		$tztype   = sugar_calendar_get_timezone_type();
-		$timezone = ! empty( $this->timezone ) & ( 'off' !== $tztype )
-			? sugar_calendar_format_timezone( $this->timezone )
-			: '';
+		$floating = sugar_calendar_is_timezone_floating();
+		$timezone = sugar_calendar_format_timezone( $this->timezone );
 
 		// Start an output buffer
 		ob_start(); ?>
@@ -3110,7 +3337,7 @@ class Base_List_Table extends \WP_List_Table {
 			// Before action
 			do_action( 'sugar_calendar_admin_before_tools', $this );
 
-			if ( 'off' !== $tztype ) : ?>
+			if ( false === $floating ) : ?>
 
 				<span class="sc-timezone"><?php echo esc_html( $timezone ); ?></span>
 
@@ -3182,6 +3409,25 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Return the output buffer
 		return ob_get_clean();
+	}
+
+	/**
+	 * Strip timezone formatting from a DateTime format string
+	 *
+	 * Used to avoid duplicate time zone output in the specific places where
+	 * we manually always output a formatted time zone string.
+	 *
+	 * @since 2.1.2
+	 * @param string $format
+	 * @return string
+	 */
+	private function strip_timezone_format( $format = '' ) {
+
+		// Time zone formats to remove
+		$tz_formats = array( 'e', 'I', 'O', 'P', 'T', 'Z' );
+
+		//
+		return str_replace( $tz_formats, '', $format );
 	}
 }
 endif;

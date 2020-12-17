@@ -89,7 +89,7 @@ function sc_add_event_details( $post_id = 0 ) {
 	<div class="sc_event_details" id="sc_event_details_<?php echo esc_attr( $post_id ); ?>">
 		<div class="sc_event_details_inner"><?php
 
-			// Output the event details
+			// Output the event details, unescaped
 			echo $details;
 
 		?></div><!--end .sc_event_details_inner-->
@@ -140,12 +140,18 @@ function sc_add_date_time_details( $post_id = 0 ) {
 	// Start & end TIMES
 	if ( ! empty( $start_time ) ) :
 
+		// Set to all-day and noop the end time
+		if ( ! empty( $all_day ) ) :
+			$start_time = esc_html__( 'All-day', 'sugar-calendar' );
+			$end_time   = false;
+		endif;
+
 		// Default format
 		$format = 'Y-m-d\TH:i:s';
 		$tz     = 'floating';
 
 		// Non-floating
-		if ( ! empty( $event->start_tz ) ) {
+		if ( ! empty( $event->start_tz ) && ( $end_time !== $start_time ) ) {
 
 			// Get the offset
 			$offset = sugar_calendar_get_timezone_offset( array(
@@ -165,20 +171,17 @@ function sc_add_date_time_details( $post_id = 0 ) {
 			$tz = $event->start_tz;
 		}
 
-		// Set to all-day and noop the end time
-		if ( ! empty( $all_day ) ) :
-			$start_time = esc_html__( 'All-day', 'sugar-calendar' );
-			$end_time   = false;
-		endif;
-
 		// Output start (or all-day)
 		?><div class="sc_event_time">
-			<span class="sc_event_start_time">
-				<?php esc_html_e( 'Time:', 'sugar-calendar' ); ?>
+			<span class="sc_event_start_time"><?php
 
-				<time datetime="<?php echo esc_attr( $dt ); ?>" title="<?php echo esc_attr( $dt ); ?>" data-timezone="<?php echo esc_attr( $tz ); ?>">
-					<?php echo esc_html( $start_time ); ?>
-				</time>
+				esc_html_e( 'Time:', 'sugar-calendar' ); ?>
+
+				<time datetime="<?php echo esc_attr( $dt ); ?>" title="<?php echo esc_attr( $dt ); ?>" data-timezone="<?php echo esc_attr( $tz ); ?>"><?php
+
+					echo esc_html( $start_time );
+
+				?></time>
 			</span><?php
 
 			// Maybe output a separator and the end time
@@ -213,14 +216,18 @@ function sc_add_date_time_details( $post_id = 0 ) {
 					$tz = $event->start_tz;
 				} ?>
 
-				<span class="sc_event_time_sep">
-					<?php esc_html_e( 'to', 'sugar-calendar' ); ?>
-				</span>
+				<span class="sc_event_time_sep"><?php
+
+					esc_html_e( 'to', 'sugar-calendar' );
+
+				?></span>
 
 				<span class="sc_event_end_time">
-					<time datetime="<?php echo esc_attr( $dt ); ?>" title="<?php echo esc_attr( $dt ); ?>" data-timezone="<?php echo esc_attr( $tz ); ?>">
-						<?php echo esc_html( $end_time ); ?>
-					</time>
+					<time datetime="<?php echo esc_attr( $dt ); ?>" title="<?php echo esc_attr( $dt ); ?>" data-timezone="<?php echo esc_attr( $tz ); ?>"><?php
+
+						echo esc_html( $end_time );
+
+					?></time>
 				</span>
 
 			<?php endif; ?>
@@ -240,14 +247,16 @@ function sc_add_date_time_details( $post_id = 0 ) {
 function sc_add_location_details( $post_id = 0 ) {
 
 	// New in 2.0
-	$location   = sugar_calendar_get_event_by_object( $post_id, 'post' )->location;
+	$location = sugar_calendar_get_event_by_object( $post_id, 'post' )->location;
 
 	// Maybe add location
 	if ( ! empty( $location ) ) : ?>
 
-		<div class="sc_event_location">
-			<?php echo __( 'Location:', 'sugar-calendar' ) . ' ' . esc_html( $location ); ?>
-		</div>
+		<div class="sc_event_location"><?php
+
+			echo esc_html__( 'Location:', 'sugar-calendar' ) . ' ' . esc_html( $location );
+
+		?></div>
 
 	<?php endif;
 }

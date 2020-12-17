@@ -106,7 +106,7 @@ class Base_List_Table extends \WP_List_Table {
 	public $view_duration = 0;
 
 	/**
-	 * The time zone for the current view
+	 * The current time zone object, derived from $view_timezone
 	 *
 	 * @since 2.1.0
 	 *
@@ -169,7 +169,7 @@ class Base_List_Table extends \WP_List_Table {
 	protected $today = '';
 
 	/**
-	 * The current time zone object, derived from $view_timezone
+	 * The time zone for the current view
 	 *
 	 * @since 2.1.0
 	 *
@@ -524,6 +524,9 @@ class Base_List_Table extends \WP_List_Table {
 		$retval = array(
 			'total' => 0
 		);
+
+		// Default statuses
+		$statuses = array();
 
 		// Items to count
 		if ( ! empty( $this->query->items ) ) {
@@ -1338,6 +1341,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * Does an event belong inside the current cell?
 	 *
 	 * @since 2.0.0
+	 * @since 2.1.2 Prefers Event::intersects() over Event::overlaps()
 	 *
 	 * @param object $item
 	 * @return boolean
@@ -1349,30 +1353,17 @@ class Base_List_Table extends \WP_List_Table {
 			return false;
 		}
 
-		// Is item an All Day event?
-		$all_day = $item->is_all_day();
+		// Start boundary
+		$start  = $this->get_current_cell( 'start_dto' );
 
-		// Get the current cell
-		$current_cell = $this->get_current_cell();
-
-		// Adjust boundary based on all-day
-		$start = ( false === $all_day )
-			? $current_cell['start_timestamp']
-			: $current_cell['start'];
-
-		// Adjust boundary based on all-day
-		$end = ( false === $all_day )
-			? $current_cell['end_timestamp']
-			: $current_cell['end'];
+		// End boundary
+		$end    = $this->get_current_cell( 'end_dto' );
 
 		// Get the mode
-		$mode = $this->get_mode();
+		$mode   = $this->get_mode();
 
-		// Get the time zone
-		$timezone = $this->get_timezone();
-
-		// Get overlaps
-		$retval = $item->overlaps( $start, $end, $mode, $timezone );
+		// Get intersects
+		$retval = $item->intersects( $start, $end, $mode );
 
 		// Return if event belongs in cell
 		return $retval;
@@ -1617,32 +1608,30 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Add date parts for start
 		if ( ! empty( $r['start'] ) ) {
-			$r['start_dto']       = sugar_calendar_get_datetime_object( $r['start'], $timezone );
-			$r['start_year']      = $r['start_dto']->format( 'Y' );
-			$r['start_month']     = $r['start_dto']->format( 'm' );
-			$r['start_day']       = $r['start_dto']->format( 'd' );
-			$r['start_dow']       = $r['start_dto']->format( 'w' );
-			$r['start_doy']       = $r['start_dto']->format( 'z' );
-			$r['start_woy']       = $r['start_dto']->format( 'W' );
-			$r['start_hour']      = $r['start_dto']->format( 'H' );
-			$r['start_minutes']   = $r['start_dto']->format( 'i' );
-			$r['start_seconds']   = $r['start_dto']->format( 's' );
-			$r['start_timestamp'] = $r['start_dto']->getTimestamp();
+			$r['start_dto']     = sugar_calendar_get_datetime_object( $r['start'], $timezone );
+			$r['start_year']    = $r['start_dto']->format( 'Y' );
+			$r['start_month']   = $r['start_dto']->format( 'm' );
+			$r['start_day']     = $r['start_dto']->format( 'd' );
+			$r['start_dow']     = $r['start_dto']->format( 'w' );
+			$r['start_doy']     = $r['start_dto']->format( 'z' );
+			$r['start_woy']     = $r['start_dto']->format( 'W' );
+			$r['start_hour']    = $r['start_dto']->format( 'H' );
+			$r['start_minutes'] = $r['start_dto']->format( 'i' );
+			$r['start_seconds'] = $r['start_dto']->format( 's' );
 		}
 
 		// Add date parts for end
 		if ( ! empty( $r['end'] ) ) {
-			$r['end_dto']         = sugar_calendar_get_datetime_object( $r['end'], $timezone );
-			$r['end_year']        = $r['end_dto']->format( 'Y' );
-			$r['end_month']       = $r['end_dto']->format( 'm' );
-			$r['end_day']         = $r['end_dto']->format( 'd' );
-			$r['end_dow']         = $r['end_dto']->format( 'w' );
-			$r['end_doy']         = $r['end_dto']->format( 'z' );
-			$r['end_woy']         = $r['end_dto']->format( 'W' );
-			$r['end_hour']        = $r['end_dto']->format( 'H' );
-			$r['end_minutes']     = $r['end_dto']->format( 'i' );
-			$r['end_seconds']     = $r['end_dto']->format( 's' );
-			$r['end_timestamp']   = $r['end_dto']->getTimestamp();
+			$r['end_dto']       = sugar_calendar_get_datetime_object( $r['end'], $timezone );
+			$r['end_year']      = $r['end_dto']->format( 'Y' );
+			$r['end_month']     = $r['end_dto']->format( 'm' );
+			$r['end_day']       = $r['end_dto']->format( 'd' );
+			$r['end_dow']       = $r['end_dto']->format( 'w' );
+			$r['end_doy']       = $r['end_dto']->format( 'z' );
+			$r['end_woy']       = $r['end_dto']->format( 'W' );
+			$r['end_hour']      = $r['end_dto']->format( 'H' );
+			$r['end_minutes']   = $r['end_dto']->format( 'i' );
+			$r['end_seconds']   = $r['end_dto']->format( 's' );
 		}
 
 		// Set the current cell
@@ -2117,8 +2106,8 @@ class Base_List_Table extends \WP_List_Table {
 
 			// Maybe show the original date, time, and zone
 			if ( ! empty( $this->timezone ) && ( $this->timezone !== $event->start_tz ) ) {
-				$to = sprintf( '%s, %s - %s',
-					sugar_calendar_format_date_i18n( $df, $event->start, $event->start_tz ),
+				$to = sprintf(
+					esc_html_x( '%s %s', 'Time Time Zone', 'sugar-calendar' ),
 					sugar_calendar_format_date_i18n( $tf, $event->start, $event->start_tz ),
 					sugar_calendar_format_timezone( $event->start_tz  )
 				);
@@ -2137,8 +2126,8 @@ class Base_List_Table extends \WP_List_Table {
 
 			// Maybe show the original date, time, and zone
 			if ( ! empty( $this->timezone ) && ( $this->timezone !== $event->end_tz ) ) {
-				$to = sprintf( '%s, %s - %s',
-					sugar_calendar_format_date_i18n( $df, $event->end, $event->end_tz ),
+				$to = sprintf(
+					esc_html_x( '%s %s', 'Time Time Zone', 'sugar-calendar' ),
 					sugar_calendar_format_date_i18n( $tf, $event->end, $event->end_tz ),
 					sugar_calendar_format_timezone( $event->end_tz )
 				);
@@ -3335,15 +3324,8 @@ class Base_List_Table extends \WP_List_Table {
 	private function tools() {
 
 		// Time zone
-		$tztype   = sugar_calendar_get_timezone_type();
-		$timezone = '';
-
-		// Maybe show "Floating" when time zones are not "off"
-		if ( 'off' !== $tztype ) {
-			$timezone = ! empty( $this->timezone )
-				? sugar_calendar_format_timezone( $this->timezone )
-				: esc_html__( 'Floating', 'sugar-calendar' );
-		}
+		$floating = sugar_calendar_is_timezone_floating();
+		$timezone = sugar_calendar_format_timezone( $this->timezone );
 
 		// Start an output buffer
 		ob_start(); ?>
@@ -3355,7 +3337,7 @@ class Base_List_Table extends \WP_List_Table {
 			// Before action
 			do_action( 'sugar_calendar_admin_before_tools', $this );
 
-			if ( 'off' !== $tztype ) : ?>
+			if ( false === $floating ) : ?>
 
 				<span class="sc-timezone"><?php echo esc_html( $timezone ); ?></span>
 

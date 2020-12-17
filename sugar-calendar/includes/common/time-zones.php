@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 2.1.0
  * @param array $args Preference key, Default string & fallback callback
- * @return mixed Null if
+ * @return mixed
  */
 function sugar_calendar_get_timezone( $args = array() ) {
 
@@ -34,6 +34,30 @@ function sugar_calendar_get_timezone( $args = array() ) {
 
 	// Filter & return
 	return apply_filters( 'sugar_calendar_get_timezone', $retval, $r, $args );
+}
+
+/**
+ * Is the current time zone preference floating?
+ *
+ * @since 2.1.2
+ * @return bool
+ */
+function sugar_calendar_is_timezone_floating() {
+
+	// Default to true
+	$retval = true;
+
+	// Get the time zone and type
+	$tz     = sugar_calendar_get_timezone();
+	$tztype = sugar_calendar_get_timezone_type();
+
+	// Maybe not floating
+	if ( ( 'off' !== $tztype ) || ! empty( $tz ) ) {
+		$retval = false;
+	}
+
+	// Filter & return
+	return apply_filters( 'sugar_calendar_is_timezone_floating', $retval );
 }
 
 /**
@@ -484,6 +508,11 @@ function sugar_calendar_get_timezone_object( $timezone = '' ) {
 	// Bail if already a time zone object (avoid recursion)
 	if ( $timezone instanceof DateTimeZone ) {
 		return $timezone;
+	}
+
+	// Bail if time zone is floating
+	if ( sugar_calendar_is_timezone_floating() ) {
+		return false;
 	}
 
 	// Bail if time zone is invalid

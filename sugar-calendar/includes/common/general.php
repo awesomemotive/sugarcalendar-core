@@ -202,8 +202,8 @@ function sugar_calendar_get_time_tag( $args = array() ) {
 	$r = wp_parse_args( $args, array(
 		'time'     => null,
 		'timezone' => null,
-		'format'   => 'Y-m-d H:i:s',
-		'dtformat' => 'Y-m-d\TH:i:s',
+		'format'   => null,
+		'dtformat' => DATE_ISO8601,
 		'data'     => $ddata,
 		'attr'     => $dattr
 	) );
@@ -223,14 +223,17 @@ function sugar_calendar_get_time_tag( $args = array() ) {
 		? $r['timezone']
 		: 'floating';
 
-	// Non-floating
+	// Get the DateTime object
+	$dto = sugar_calendar_get_datetime_object( $r['time'] );
+
+	// Non-floating so set time zone and get the offset
 	if ( ! empty( $r['timezone'] ) && ( 'floating' !== $r['timezone'] ) ) {
 
+		// Maybe set the time zone
+		$dto = sugar_calendar_set_datetime_timezone( $dto, $r['timezone'] );
+
 		// Add the offset
-		$r['data']['offset'] = sugar_calendar_get_timezone_offset( array(
-			'time'     => $r['time'],
-			'timezone' => $r['timezone']
-		) );
+		$r['data']['offset'] = $dto->getOffset();
 	}
 
 	// Format the time
@@ -239,6 +242,7 @@ function sugar_calendar_get_time_tag( $args = array() ) {
 
 	// Default attribute string
 	$r['attr']['datetime'] = esc_attr( $dtf );
+	$r['attr']['title']    = esc_attr( $dtf );
 
 	// Default array
 	$arr = $r['attr'];
@@ -250,11 +254,14 @@ function sugar_calendar_get_time_tag( $args = array() ) {
 		}
 	}
 
+	// Default attribute string
+	$attr = '';
+
 	// Concatenate HTML tag attributes
 	if ( ! empty( $arr ) ) {
 
 		// Remove empties and duplicates
-		$arr = array_unique( array_filter( $arr ) );
+		$arr = array_filter( $arr );
 
 		// Build
 		foreach ( $arr as $key => $value ) {

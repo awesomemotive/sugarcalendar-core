@@ -3,7 +3,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Get elements and browser time zone
 	var dates   = $( '.sc-date-start time, .sc-date-end time' ),
-		times   = $( '.sc_event_start_time time, .sc_event_end_time time' ),
+		times   = $( '.sc_event_time time, .sc_event_start_time time, .sc_event_end_time time' ),
 		tz      = Intl.DateTimeFormat().resolvedOptions().timeZone,
 		convert = wp.date.dateI18n;
 

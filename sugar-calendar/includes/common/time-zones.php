@@ -510,7 +510,12 @@ function sugar_calendar_get_timezone_object( $timezone = '' ) {
 		return $timezone;
 	}
 
-	// Bail if time zone is floating
+	// Bail if time zone param is floating
+	if ( 'floating' === strtolower( $timezone ) ) {
+		return false;
+	}
+
+	// Bail if time zone environment is floating
 	if ( sugar_calendar_is_timezone_floating() ) {
 		return false;
 	}

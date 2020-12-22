@@ -215,15 +215,18 @@ class Month extends Base_List_Table {
 	protected function get_row_cell() {
 
 		// Calculate the day of the month
-		$day = $this->get_current_cell( 'start_day' );
+		$day  = $this->get_current_cell( 'start_day' );
 
-		// Calculate link to day view
-		$link_to_day  = add_query_arg( array(
+		// Arguments
+		$args = array(
 			'mode' => 'day',
 			'cy'   => $this->year,
 			'cm'   => $this->month,
 			'cd'   => $day
-		), $this->get_base_url() );
+		);
+
+		// Calculate link to day view
+		$link_to_day = add_query_arg( $args, $this->get_base_url() );
 
 		// Link to add new event on this day
 		$add_event_for_day = add_query_arg( array(
@@ -261,33 +264,25 @@ class Month extends Base_List_Table {
 	 */
 	protected function display_mode() {
 
-		// Get maximum, offset, and row
-		$maximum = ceil( ( $this->grid_end - $this->grid_start ) / DAY_IN_SECONDS );
-		$offset  = $this->get_day_offset( $this->grid_start );
-		$row     = 0;
+		// Get offset
+		$offset = $this->get_day_offset( $this->grid_start );
 
 		// Loop through days of the month
-		for ( $i = 0; $i < ( $maximum + $offset ); $i++ ) {
+		foreach ( $this->cells as $cell ) {
 
-			// Setup the day
-			$day = ( $i - $offset ) + 1;
-
-			// Setup cell boundaries
-			$this->set_current_cell( array(
-				'start'  => gmmktime( 0,  0,  0,  $this->month, $day, $this->year ),
-				'end'    => gmmktime( 23, 59, 59, $this->month, $day, $this->year ),
-				'row'    => $row,
-				'index'  => $i,
-				'offset' => $offset
-			) );
+			// Set the current cell
+			$this->current_cell = $cell;
 
 			// Maybe start a new row?
 			if ( $this->start_row() ) {
 				echo $this->get_row_start();
 			}
 
+			// Get the index
+			$index = $this->get_current_cell( 'index' );
+
 			// Pad day(s)
-			if ( $i < $offset ) {
+			if ( $index < $offset ) {
 				echo $this->get_row_pad();
 
 			// Month day
@@ -298,7 +293,6 @@ class Month extends Base_List_Table {
 			// Maybe end the row?
 			if ( $this->end_row() ) {
 				echo $this->get_row_end();
-				++$row;
 			}
 		}
 	}

@@ -3324,6 +3324,7 @@ class Base_List_Table extends \WP_List_Table {
 	private function tools() {
 
 		// Time zone
+		$tztype   = sugar_calendar_get_timezone_type();
 		$floating = sugar_calendar_is_timezone_floating();
 		$timezone = sugar_calendar_format_timezone( $this->timezone );
 
@@ -3337,7 +3338,8 @@ class Base_List_Table extends \WP_List_Table {
 			// Before action
 			do_action( 'sugar_calendar_admin_before_tools', $this );
 
-			if ( false === $floating ) : ?>
+			// Output time zone if not floating or support is enabled
+			if ( ( false === $floating ) || ( 'off' !== $tztype ) ) : ?>
 
 				<span class="sc-timezone"><?php echo esc_html( $timezone ); ?></span>
 

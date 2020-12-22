@@ -123,17 +123,18 @@ class Month extends Base_List_Table {
 	protected function get_row_start() {
 
 		// Get cells
-		$start = $this->get_current_cell( 'start' );
-		$day   = $this->get_current_cell( 'start_day' );
+		$day   = $this->get_current_cell( 'start_day'   );
+		$month = $this->get_current_cell( 'start_month' );
+		$year  = $this->get_current_cell( 'start_year'  );
 
 		// Week for row
-		$week = gmdate( 'W', $start );
+		$week  = $this->get_current_cell( 'start_woy'   );
 
 		// Calculate link to week view
 		$link_to_day  = add_query_arg( array(
 			'mode' => 'week',
-			'cy'   => $this->year,
-			'cm'   => $this->month,
+			'cy'   => $year,
+			'cm'   => $month,
 			'cd'   => $day
 		), $this->get_base_url() );
 

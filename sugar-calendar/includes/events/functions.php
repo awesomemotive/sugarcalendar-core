@@ -301,9 +301,19 @@ function sugar_calendar_get_date_query_args( $mode = 'month', $start = '', $end 
 	$recurring     = sugar_calendar_get_recurring_date_query_args( $mode, $start, $end );
 	$non_recurring = sugar_calendar_get_non_recurring_date_query_args( $mode, $start, $end );
 
+	// Get the start-of-week preference
+	$start_of_week = sugar_calendar_get_user_preference( 'sc_start_of_week' );
+
 	// Setup the return value for all query arguments
 	$r = array(
+
+		// Makes sure that any week queries use the preference
+		'start_of_week' => (int) $start_of_week,
+
+		// Recurring OR non-recurring (treat them as separate)
 		'relation'      => 'OR',
+
+		// Queries
 		'recurring'     => $recurring,
 		'non-recurring' => $non_recurring
 	);

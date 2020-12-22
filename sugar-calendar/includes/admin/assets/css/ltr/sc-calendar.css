@@ -134,6 +134,50 @@ body.sugar-calendar .view-switch .view-list:before {
 	content: '\f163';
 }
 
+.view-switch a.current {
+	background-color: #007cba;
+	border-radius: 3px;
+}
+
+.view-switch a.current:before {
+	color: #fff;
+}
+
+/* Color schemes */
+body.admin-color-fresh .view-switch a.current {
+	background-color: #007cba;
+}
+body.admin-color-blue .view-switch a.current {
+	background-color: #096484;
+}
+body.admin-color-coffee .view-switch a.current {
+	background-color: #c7a589;
+}
+body.admin-color-ectoplasm .view-switch a.current {
+	background-color: #a3b745;
+}
+body.admin-color-midnight .view-switch a.current {
+	background-color: #e14d43;
+}
+body.admin-color-modern .view-switch a.current {
+	background-color: #3858e9;
+}
+body.admin-color-ocean .view-switch a.current {
+	background-color: #9ebaa0;
+}
+body.admin-color-sunrise .view-switch a.current {
+	background-color: #dd823b;
+}
+body.admin-color-light .view-switch a.current {
+	background-color: #04a4cc;
+}
+body.admin-color-evergreen .view-switch a.current {
+	background-color: #36533f;
+}
+body.admin-color-mint .view-switch a.current {
+	background-color: #4f6d59;
+}
+
 table.calendar:not(.list) {
 	table-layout: fixed;
 	-webkit-touch-callout: none; /* iOS Safari */

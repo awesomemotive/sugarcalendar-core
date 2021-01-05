@@ -48,11 +48,10 @@ function sugar_calendar_is_timezone_floating() {
 	$retval = true;
 
 	// Get the time zone and type
-	$tz     = sugar_calendar_get_timezone();
-	$tztype = sugar_calendar_get_timezone_type();
+	$tz = sugar_calendar_get_timezone();
 
 	// Maybe not floating
-	if ( ( 'off' !== $tztype ) || ! empty( $tz ) ) {
+	if ( ! empty( $tz ) ) {
 		$retval = false;
 	}
 

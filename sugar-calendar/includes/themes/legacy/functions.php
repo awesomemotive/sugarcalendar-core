@@ -204,6 +204,99 @@ function sc_get_event_class( $object_id = false ) {
 }
 
 /**
+ * Get names of days for a calendar view
+ *
+ * Return value is shifted according to the start-of-week setting by default,
+ * and can be flipped to only returning the day-of-week keys.
+ *
+ * @since 2.1.3
+ *
+ * @global WP_Locale $wp_locale
+ * @param string $size Default large. "large" or "small".
+ * @param bool   $sow  Default true. True uses start-of-week, False uses Sunday.
+ *                     Accepts numeric value 0-6 or name of day to override.
+ * @param string $type Default values. "values" or "keys".
+ *
+ * @return array
+ */
+function sc_get_calendar_day_names( $size = 'large', $sow = true, $type = 'values' ) {
+	global $wp_locale;
+
+	// Day values ("Sunday" or "S")
+	$days = ( 'small' === $size )
+		? array_values( $wp_locale->weekday_initial )
+		: $wp_locale->weekday;
+
+	// Maybe shift according to the start-of-week setting
+	if ( false !== $sow ) {
+
+		// Use setting
+		if ( in_array( $sow, array( 'true', true, null ), true ) ) {
+			$sow = sc_get_week_start_day();
+
+		// 0 - 6 for Sunday - Saturday
+		} elseif ( is_numeric( $sow ) ) {
+			$sow = (int) $sow;
+
+		// Search for the day
+		} elseif ( is_string( $sow ) ) {
+			$sow = array_search(
+				strtolower( $sow ),
+				array_map( 'strtolower', $days )
+			);
+		}
+
+		// Split the days in half by start-of-week
+		$index = array_search( $sow, array_keys( $days ) );
+		$start = array_slice( $days, $index, count( $days ), true );
+		$end   = array_slice( $days, 0,      $index,         true );
+
+		// Combine the halves
+		$days  = $start + $end;
+	}
+
+	// Return keys
+	if ( 'keys' === $type ) {
+		$days = array_keys( $days );
+
+	// Return values
+	} elseif ( 'values' === $type ) {
+		$days = array_values( $days );
+	}
+
+	// Return the days
+	return $days;
+}
+
+/**
+ * Get day offset for a calendar
+ *
+ * Returns the number of days into a calendar view the timestamp is, taking into
+ * account the start-of-week setting.
+ *
+ * @since 2.1.3
+ *
+ * @param int $timestamp
+ *
+ * @return int
+ */
+function sc_get_calendar_day_offset( $timestamp = '' ) {
+
+	// Day name keys, with offset
+	$days = sc_get_calendar_day_names( 'large', true, 'keys' );
+
+	// Get the offset
+	$off  = (int) gmdate( 'w', $timestamp );
+
+	// Return the offset
+	return (int) array_search(
+		$off,
+		$days,
+		true
+	);
+}
+
+/**
  * Build Calendar for Event post type
  * @author Syamil MJ
  * @credit http://davidwalsh.name/php-calendar
@@ -214,25 +307,14 @@ function sc_get_event_class( $object_id = false ) {
  * @param $year
  * @param string $size
  * @param null|string $category
+ * @param null|string $start_of_week
  *
  * @return string
  */
-function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
-	global $wp_locale;
+function sc_draw_calendar( $month, $year, $size = 'large', $category = null, $start_of_week = null ) {
 
-	$day_names_large = $wp_locale->weekday;
-	$day_names_small = array_values( $wp_locale->weekday_initial );
-
-	$week_start_day = sc_get_week_start_day();
-
-	$day_names = $size == 'small' ? $day_names_small : $day_names_large;
-
-	// adjust day names for sites with Monday set as the start day
-	if ( $week_start_day == 1 ) {
-		$end_day = $day_names[ 0 ];
-		array_shift( $day_names );
-		$day_names[] = $end_day;
-	}
+	// Day names
+	$day_names = sc_get_calendar_day_names( $size, $start_of_week );
 
 	//start draw table
 	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
@@ -244,13 +326,11 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
 	$calendar .= '</tr>';
 
 	//days and weeks vars now
-	$running_day = gmdate( 'w', gmmktime( 0, 0, 0, $month, 1, $year ) );
-	if ( $week_start_day == 1 ) {
-		$running_day = ( $running_day > 0 ) ? $running_day - 1 : 6;
-	}
-	$days_in_month = gmdate( 't', gmmktime( 0, 0, 0, $month, 1, $year ) );
+	$display_time      = gmmktime( 0, 0, 0, $month, 1, $year );
+	$running_day       = sc_get_calendar_day_offset( $display_time );
+	$days_in_month     = gmdate( 't', $display_time );
 	$days_in_this_week = 1;
-	$day_counter = 0;
+	$day_counter       = 0;
 
 	//get today's date
 	$time        = (int) sugar_calendar_get_request_time();
@@ -339,48 +419,44 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null ) {
 /**
  * Added function to call default sc_draw_calendar()
  *
- * @since 1.0.0
- *
- * @param $display_time
- * @param string $size
- * @param null $category
- *
- * @return string
- */
-function sc_draw_calendar_month( $display_time, $size = 'large', $category = null ) {
-	$month = gmdate( 'n', $display_time );
-	$year  = gmdate( 'Y', $display_time );
-
-	return sc_draw_calendar( $month, $year, $size, $category );
-}
-
-/**
- * Draw the weekly calendar
+ * Uses the start-of-week setting along with the requested display time to
+ * determine the best possible starting day to show a full month view.
  *
  * @since 1.0.0
  *
  * @param $display_time
  * @param string $size
  * @param null|string $category
+ * @param null|string $start_of_week
  *
  * @return string
  */
-function sc_draw_calendar_week( $display_time, $size = 'large', $category = null ) {
-	global $wp_locale;
+function sc_draw_calendar_month( $display_time, $size = 'large', $category = null, $start_of_week = null ) {
+	$month = gmdate( 'n', $display_time );
+	$year  = gmdate( 'Y', $display_time );
 
-	$day_names_large = $wp_locale->weekday;
-	$day_names_small = array_values( $wp_locale->weekday_initial );
+	return sc_draw_calendar( $month, $year, $size, $category, $start_of_week );
+}
 
-	$week_start_day = sc_get_week_start_day();
+/**
+ * Draw the weekly calendar
+ *
+ * Uses the start-of-week setting along with the requested display time to
+ * determine the best possible starting day to show a full 1 week view.
+ *
+ * @since 1.0.0
+ *
+ * @param $display_time
+ * @param string $size
+ * @param null|string $category
+ * @param null|string $start_of_week
+ *
+ * @return string
+ */
+function sc_draw_calendar_week( $display_time, $size = 'large', $category = null, $start_of_week = null ) {
 
-	$day_names = $size == 'small' ? $day_names_small : $day_names_large;
-
-	// adjust day names for sites with Monday set as the start day
-	if ( $week_start_day == 1 ) {
-		$end_day = $day_names[ 0 ];
-		array_shift( $day_names );
-		$day_names[] = $end_day;
-	}
+	// Day names
+	$day_names = sc_get_calendar_day_names( $size, $start_of_week );
 
 	//start draw table
 	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
@@ -392,7 +468,7 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 	$calendar .= '</tr>';
 
 	// get the values for the first day of week where $display_time occurs
-	$day_of_week   = gmdate( 'w', $display_time );
+	$day_of_week   = sc_get_calendar_day_offset( $display_time );
 	$display_time  = strtotime( '-' . $day_of_week . ' days', $display_time );
 	$display_day   = gmdate( 'j', $display_time );
 	$display_month = gmdate( 'n', $display_time );
@@ -464,30 +540,22 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 /**
  * Draw the two week calendar
  *
+ * Uses the start-of-week setting along with the requested display time to
+ * determine the best possible starting day to show a full 2 week view.
+ *
  * @since 1.0.0
  *
  * @param $display_time
  * @param string $size
  * @param null|string $category
+ * @param null|string $start_of_week
  *
  * @return string
  */
-function sc_draw_calendar_2week( $display_time, $size = 'large', $category = null ) {
-	global $wp_locale;
+function sc_draw_calendar_2week( $display_time, $size = 'large', $category = null, $start_of_week = null ) {
 
-	$day_names_large = $wp_locale->weekday;
-	$day_names_small = array_values( $wp_locale->weekday_initial );
-
-	$week_start_day = sc_get_week_start_day();
-
-	$day_names = $size == 'small' ? $day_names_small : $day_names_large;
-
-	// adjust day names for sites with Monday set as the start day
-	if ( $week_start_day == 1 ) {
-		$end_day = $day_names[ 0 ];
-		array_shift( $day_names );
-		$day_names[] = $end_day;
-	}
+	// Day names
+	$day_names = sc_get_calendar_day_names( $size, $start_of_week );
 
 	//start draw table
 	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
@@ -499,7 +567,7 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 	$calendar .= '</tr>';
 
 	// get the values for the first day of week where $display_time occurs
-	$day_of_week   = gmdate( 'w', $display_time );
+	$day_of_week   = sc_get_calendar_day_offset( $display_time );
 	$display_time  = strtotime( '-' . $day_of_week . ' days', $display_time );
 	$display_day   = gmdate( 'j', $display_time );
 	$display_month = gmdate( 'n', $display_time );
@@ -576,28 +644,29 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 /**
  * Draw the daily calendar
  *
+ * The start-of-week setting is ignored, and only the display time is used.
+ *
  * @since 1.0.0
  *
  * @param $display_time
  * @param string $size
  * @param null|string $category
+ * @param null|string $start_of_week
  *
  * @return string
  */
-function sc_draw_calendar_day( $display_time, $size = 'large', $category = null ) {
-	global $wp_locale;
+function sc_draw_calendar_day( $display_time, $size = 'large', $category = null, $start_of_week = null ) {
 
-	$day_names_large = $wp_locale->weekday;
-	$day_names_small = array_values( $wp_locale->weekday_initial );
-
-	$day_of_week = gmdate( 'w', $display_time );
-
-	$day_names = $size == 'small' ? $day_names_small : $day_names_large;
+	// Day & names
+	$day_of_week   = gmdate( 'w', $display_time );
+	$start_of_week = false; // Always override
+	$day_names     = sc_get_calendar_day_names( $size, $start_of_week );
+	$day_name      = $day_names[ $day_of_week ];
 
 	//start draw table
 	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar">';
 	$calendar .= '<tr class="calendar-row">';
-	$calendar .= '<th class="calendar-day-head">' . esc_html( $day_names[ $day_of_week ] ) . '</th>';
+	$calendar .= '<th class="calendar-day-head">' . esc_html( $day_name ) . '</th>';
 	$calendar .= '</tr>';
 
 	$display_day   = gmdate( 'j', $display_time );
@@ -663,30 +732,32 @@ function sc_draw_calendar_day( $display_time, $size = 'large', $category = null 
 /**
  * Draw the four day calendar
  *
+ * The start-of-week setting is ignored, and only the display time is used.
+ *
  * @since 1.0.0
  *
  * @param $display_time
  * @param string $size
  * @param null|string $category
+ * @param null|string $start_of_week
  *
  * @return string
  */
-function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null ) {
-	global $wp_locale;
+function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null, $start_of_week = false ) {
 
-	$day_names_large = $wp_locale->weekday;
-	$day_names_small = array_values( $wp_locale->weekday_initial );
-
-	$day_of_week = gmdate( 'w', $display_time );
-
-	$day_names = $size == 'small' ? $day_names_small : $day_names_large;
+	// Day & name
+	$day_of_week   = gmdate( 'w', $display_time );
+	$start_of_week = false; // Always override
+	$day_names     = sc_get_calendar_day_names( $size, $start_of_week );
 
 	//start draw table
 	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
 
 	for ( $i = 0; $i <= 3; $i++ ) {
-		$calendar .= '<th class="calendar-day-head">' . esc_html( $day_names[ $day_of_week ] ) . '</th>';
+		$day_name  = $day_names[ $day_of_week ];
+		$calendar .= '<th class="calendar-day-head">' . esc_html( $day_name ) . '</th>';
+
 		if ( $day_of_week == 6 ) {
 			$day_of_week = 0;
 		} else {

@@ -34,24 +34,39 @@ function sc_add_shortcodes() {
  *
  * @return string
  */
-function sc_events_calendar_shortcode( $atts, $content = null ) {
+function sc_events_calendar_shortcode( $atts = array(), $content = null ) {
 
+	// Parse
 	$atts = shortcode_atts( array(
 		'size'     => 'large',
 		'category' => null,
-		'type'     => 'month'
+		'type'     => 'month',
+		'month'    => null,
+		'year'     => null,
+		'sow'      => null
 	), $atts );
 
-	$size        = isset( $atts['size']     ) ? $atts['size']     : '';
-	$category    = isset( $atts['category'] ) ? $atts['category'] : '';
-	$type        = isset( $atts['type']     ) ? $atts['type']     : 'month';
+	// Defaults
+	$size     = isset( $atts['size']     ) ? $atts['size']     : 'large';
+	$category = isset( $atts['category'] ) ? $atts['category'] : null;
+	$type     = isset( $atts['type']     ) ? $atts['type']     : 'month';
+	$month    = isset( $atts['month']    ) ? $atts['month']    : null;
+	$year     = isset( $atts['year']     ) ? $atts['year']     : null;
+	$sow      = isset( $atts['sow']      ) ? $atts['sow']      : null;
+
+	// Get valid types
 	$valid_types = sc_get_valid_calendar_types();
 
+	// Fallback to "month" if invalid
 	if ( ! in_array( $type, $valid_types, true ) ) {
 		$type = 'month';
 	}
 
-	return '<div id="sc_calendar_wrap">' . sc_get_events_calendar( $size, $category, $type ) . '</div>';
+	// Get the calendar HTML
+	$calendar = sc_get_events_calendar( $size, $category, $type, $year, $month, $sow );
+
+	// Wrap it in a div (@todo remove ID)
+	return '<div id="sc_calendar_wrap">' . $calendar . '</div>';
 }
 
 /**
@@ -64,8 +79,9 @@ function sc_events_calendar_shortcode( $atts, $content = null ) {
  *
  * @return string
  */
-function sc_events_list_shortcode( $atts, $content = null ) {
+function sc_events_list_shortcode( $atts = array(), $content = null ) {
 
+	// Parse
 	$atts = shortcode_atts( array(
 		'display'         => 'upcoming',
 		'order'           => '',
@@ -74,7 +90,7 @@ function sc_events_list_shortcode( $atts, $content = null ) {
 		'show_date'       => null,
 		'show_time'       => null,
 		'show_categories' => null,
-		'show_link'       =>  null,
+		'show_link'       => null,
 	), $atts );
 
 	// Escape all values

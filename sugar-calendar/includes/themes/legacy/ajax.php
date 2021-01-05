@@ -39,9 +39,12 @@ function sc_load_calendar_via_ajax() {
 	$size     = ! empty( $_POST[ 'sc_calendar_size' ] ) && ( 'small' === sanitize_key( $_POST[ 'sc_calendar_size' ] ) )
 		? 'small'
 		: 'large';
+	$sow      = isset( $_POST[ 'sow' ] )
+		? sanitize_text_field( $_POST[ 'sow' ] )
+		: null;
 
 	// Output the calendar
-	echo sc_get_events_calendar( $size, $category, $type );
+	echo sc_get_events_calendar( $size, $category, $type, null, null, $sow );
 
 	// Done!
 	die();

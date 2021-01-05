@@ -19,15 +19,16 @@ defined( 'ABSPATH' ) || exit;
  * @param string $type
  * @param mixed  $year_override
  * @param mixed  $month_override
+ * @param mixed  $start_of_week
  *
  * @return string
  */
-function sc_get_events_calendar( $size = 'large', $category = null, $type = 'month', $year_override = null, $month_override = null ) {
+function sc_get_events_calendar( $size = 'large', $category = null, $type = 'month', $year_override = null, $month_override = null, $start_of_week = null ) {
 
 	// Default display time
 	$display_time = sugar_calendar_get_request_time();
 
-	// Check for posted display time, year, or month
+	// Check for posted display time, year, month, or start-of-week
 	if ( ! empty( $_POST['sc_nonce'] ) && wp_verify_nonce( $_POST['sc_nonce'], 'sc_calendar_nonce' ) ) {
 
 		// Trust the new display_time value
@@ -39,6 +40,11 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 		if ( ! empty( $_POST['sc_year'] ) && ! empty( $_POST['sc_month'] ) ) {
 			$month_override = sanitize_text_field( $_POST['sc_month'] );
 			$year_override  = sanitize_text_field( $_POST['sc_year'] );
+		}
+
+		// Override start-of-week
+		if ( isset( $_POST['sow'] ) ) { // zero is allowed
+			$start_of_week = sanitize_text_field( $_POST['sow'] );
 		}
 	}
 
@@ -155,6 +161,7 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 				<input type="hidden" name="action" value="sc_load_calendar">
 				<input type="hidden" name="category" value="<?php echo is_null( $category ) ? 0 : esc_attr( $category ); ?>">
 				<input type="hidden" name="type" value="<?php echo esc_attr( $type ); ?>">
+				<input type="hidden" name="sow" value="<?php echo esc_attr( $start_of_week ); ?>">
 				<input type="hidden" name="sc_nonce" value="<?php echo wp_create_nonce( 'sc_calendar_nonce' ); ?>">
 
 				<?php if ( 'small' === $size ) : ?>
@@ -168,17 +175,17 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 					echo esc_html( $months[ $display_month ] . ' ' . $display_year );
 				?></h2>
 
-				<?php sc_get_next_prev( $display_time, $size, $category, $type );
+				<?php sc_get_next_prev( $display_time, $size, $category, $type, $start_of_week );
 			endif; ?>
 
 		</div><!--end #sc_events_calendar_head-->
 
 		<div id="sc_calendar">
-			<?php echo call_user_func( $calendar_func, $display_time, $size, $category ); ?>
+			<?php echo call_user_func( $calendar_func, $display_time, $size, $category, $start_of_week ); ?>
 		</div>
 
 		<?php if ( 'small' === $size ) :
-			sc_get_next_prev( $display_time, $size, $category, $type );
+			sc_get_next_prev( $display_time, $size, $category, $type, $start_of_week );
 		endif; ?>
 
 	</div><!-- end #sc_events_calendar -->
@@ -259,8 +266,9 @@ function sc_calendar_next_prev( $display_month, $display_year, $size = 'large', 
  * @param string $size
  * @param null $category
  * @param string $type
+ * @param mixed $start_of_week
  */
-function sc_get_next_prev( $display_time, $size = 'large', $category = null, $type = 'month' ) {
+function sc_get_next_prev( $display_time, $size = 'large', $category = null, $type = 'month', $start_of_week = null ) {
 
 	$tax = sugar_calendar_get_calendar_taxonomy_id();
 
@@ -295,7 +303,7 @@ function sc_get_next_prev( $display_time, $size = 'large', $category = null, $ty
 	<div id="sc_event_nav_wrap">
 		<form id="sc_event_nav_prev" class="sc_events_form" method="POST" action="#sc_events_calendar_<?php echo uniqid(); ?>">
 			<input type="submit" class="sc_calendar_submit" name="sc_prev" value="<?php _e('Previous', 'sugar-calendar'); ?>">
-			<input name="sc_nonce" type="hidden" value="<?php echo wp_create_nonce('sc_calendar_nonce'); ?>">
+			<input type="hidden" name="sc_nonce" value="<?php echo wp_create_nonce('sc_calendar_nonce'); ?>">
 			<input type="hidden" name="display_time" value="<?php echo esc_attr( $prev_display_time ); ?>">
 			<input type="hidden" name="type" value="<?php echo esc_attr( $prev_display_time ); ?>">
 			<input type="hidden" name="action" value="sc_load_calendar">
@@ -304,10 +312,11 @@ function sc_get_next_prev( $display_time, $size = 'large', $category = null, $ty
 				<input type="hidden" name="sc_calendar_size" value="small">
 			<?php endif; ?>
 			<input type="hidden" name="type" value="<?php echo esc_attr( $type ); ?>">
+			<input type="hidden" name="sow" value="<?php echo esc_attr( $start_of_week ); ?>">
 		</form>
 		<form id="sc_event_nav_next" class="sc_events_form" method="POST" action="#sc_events_calendar_<?php echo uniqid(); ?>">
 			<input type="submit" class="sc_calendar_submit" name="sc_next" value="<?php _e('Next', 'sugar-calendar'); ?>">
-			<input name="sc_nonce" type="hidden" value="<?php echo wp_create_nonce('sc_calendar_nonce') ?>">
+			<input type="hidden" name="sc_nonce" value="<?php echo wp_create_nonce('sc_calendar_nonce') ?>">
 			<input type="hidden" name="display_time" value="<?php echo esc_attr( $next_display_time ); ?>">
 			<input type="hidden" name="action" value="sc_load_calendar">
 			<input type="hidden" name="<?php echo esc_attr( $tax ); ?>" value="<?php echo is_null( $category ) ? 0 : esc_attr( $category ); ?>">
@@ -315,6 +324,7 @@ function sc_get_next_prev( $display_time, $size = 'large', $category = null, $ty
 				<input type="hidden" name="sc_calendar_size" value="small">
 			<?php endif; ?>
 			<input type="hidden" name="type" value="<?php echo esc_attr( $type ); ?>">
+			<input type="hidden" name="sow" value="<?php echo esc_attr( $start_of_week ); ?>">
 		</form>
 	</div>
 

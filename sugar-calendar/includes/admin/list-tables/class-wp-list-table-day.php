@@ -66,13 +66,35 @@ class Day extends Base_List_Table {
 	 */
 	public function get_columns() {
 
+		// Set initial time
+		$time     = $this->grid_start;
+
 		// Lowercase day, for column key
-		$day = strtolower( gmdate( 'l', $this->grid_start ) );
+		$day      = strtolower( gmdate( 'l', $time ) );
+
+		// Day text
+		$day_text = gmdate( 'l, F j, Y', $time );
+
+		// Arguments
+		$args = array(
+			'mode' => 'week',
+			'cy'   => gmdate( 'Y', $time ),
+			'cm'   => gmdate( 'm', $time ),
+			'cd'   => gmdate( 'd', $time )
+		);
+
+		// Calculate link to day view
+		$link_to_week = add_query_arg( $args, $this->get_persistent_url() );
+
+		// Link text
+		$string = esc_html_x( 'Week %s', 'Week number', 'sugar-calendar' );
+		$week   = gmdate( 'W', $this->today );
+		$text   = sprintf( $string, $week );
 
 		// Return Week & Day
 		return array(
-			'hour' => sprintf( esc_html_x( 'Wk. %s', 'Week number', 'sugar-calendar' ), gmdate( 'W', $this->today ) ),
-			$day   => gmdate( 'l, F j, Y', $this->grid_start ),
+			'hour' => '<a href="' . esc_url( $link_to_week ) . '">' . esc_html( $text ) . '</a>',
+			$day   => '<span>' . esc_html( $day_text ) . '</span>',
 		);
 	}
 
@@ -174,7 +196,9 @@ class Day extends Base_List_Table {
 	protected function get_all_day_row() {
 
 		// Set the day
-		$day = gmdate( 'd', $this->grid_start );
+		$day   = gmdate( 'd', $this->grid_start );
+		$month = gmdate( 'm', $this->grid_start );
+		$year  = gmdate( 'Y', $this->grid_start );
 
 		// Start an output buffer
 		ob_start(); ?>
@@ -184,13 +208,20 @@ class Day extends Base_List_Table {
 				<?php esc_html_e( 'All-day', 'sugar-calendar' ); ?>
 			</th><?php
 
-			// Set the current cell
-			$this->set_current_cell( array(
-				'start' => gmmktime( 0,  0,  0,  $this->month, $day, $this->year ),
-				'end'   => gmmktime( 23, 59, 59, $this->month, $day, $this->year ),
+			// Set the boundaries
+			$start = gmmktime( 0,  0,  0,  $month, $day, $year );
+			$end   = gmmktime( 23, 59, 59, $month, $day, $year );
+
+			// Arguments
+			$args  = array(
+				'start' => $start,
+				'end'   => $end,
 				'type'  => 'all_day',
 				'index' => 0
-			) );
+			);
+
+			// Set the current cell
+			$this->set_current_cell( $args );
 
 			?><td><?php echo $this->get_day_row_cell(); ?></td>
 		</tr>
@@ -209,7 +240,9 @@ class Day extends Base_List_Table {
 	protected function get_multi_day_row() {
 
 		// Set the day
-		$day = gmdate( 'd', $this->grid_start );
+		$day   = gmdate( 'd', $this->grid_start );
+		$month = gmdate( 'm', $this->grid_start );
+		$year  = gmdate( 'Y', $this->grid_start );
 
 		// Start an output buffer
 		ob_start(); ?>
@@ -219,13 +252,20 @@ class Day extends Base_List_Table {
 				<?php esc_html_e( 'Multi-day', 'sugar-calendar' ); ?>
 			</th><?php
 
-			// Set the current cell
-			$this->set_current_cell( array(
-				'start' => gmmktime( 0,  0,  0,  $this->month, $day, $this->year ),
-				'end'   => gmmktime( 23, 59, 59, $this->month, $day, $this->year ),
+			// Set the boundaries
+			$start = gmmktime( 0,  0,  0,  $month, $day, $year );
+			$end   = gmmktime( 23, 59, 59, $month, $day, $year );
+
+			// Arguments
+			$args  = array(
+				'start' => $start,
+				'end'   => $end,
 				'type'  => 'multi_day',
 				'index' => 0
-			) );
+			);
+
+			// Set the current cell
+			$this->set_current_cell( $args );
 
 			?><td><?php echo $this->get_day_row_cell(); ?></td>
 		</tr>
@@ -264,10 +304,10 @@ class Day extends Base_List_Table {
 	protected function get_row_start() {
 
 		// Get the start time
-		$start = $this->get_current_cell( 'start' );
+		$start = $this->get_current_cell( 'start_dto' );
 
 		// Hour for row
-		$hour = gmdate( 'H', $start );
+		$hour  = $this->get_current_cell( 'start_hour' );
 
 		// No row classes
 		$classes = array(
@@ -290,7 +330,7 @@ class Day extends Base_List_Table {
 
 		<tr class="<?php echo implode( ' ', $classes ); ?>">
 			<th class="column-hour<?php echo $this->get_hour_class(); ?>">
-				<?php echo gmdate( $format, $start ); ?>
+				<?php echo $start->format( $format ); ?>
 			</th>
 
 		<?php
@@ -340,6 +380,91 @@ class Day extends Base_List_Table {
 	}
 
 	/**
+	 * Set the items for all of the cells
+	 *
+	 * @since 2.1.3
+	 */
+	protected function set_cells() {
+
+		// All Day, Multi Day cells
+		for ( $i = 0; $i <= $this->day_count - 1; $i++ ) {
+
+			// Setup the row and offset
+			$offset = ceil( DAY_IN_SECONDS * $i );
+			$dt     = $this->grid_start + $offset;
+
+			// Calc the day/month/year
+			$day    = gmdate( 'd', $dt );
+			$month  = gmdate( 'm', $dt );
+			$year   = gmdate( 'Y', $dt );
+
+			// Set the boundaries
+			$start  = gmmktime( 0,  0,  0,  $month, $day, $year );
+			$end    = gmmktime( 23, 59, 59, $month, $day, $year );
+
+			// Arguments
+			$args   = array(
+				'start' => $start,
+				'end'   => $end,
+				'type'  => 'all_day',
+				'index' => $i
+			);
+
+			// Setup all-daycell boundaries
+			$this->set_cell_boundaries( $args );
+
+			// Setup all-day cell items
+			$this->set_cell_items();
+
+			// Set type to multi-day
+			$args['type'] = 'multi_day';
+
+			// Setup multi-day cell boundaries
+			$this->set_cell_boundaries( $args );
+
+			// Setup multi-day cell items
+			$this->set_cell_items();
+
+			// Bump the day
+			++$day;
+		}
+
+		// Loop through hours in day
+		for ( $i = 0; $i <= ( $this->day_count * 24 ) - 1; $i++ ) {
+
+			// Setup the row and offset
+			$row   = floor( $i / $this->day_count );
+
+			// Set the boundaries
+			$start = gmmktime( $row, 0,  0,  $this->month, $this->day, $this->year );
+			$end   = gmmktime( $row, 59, 59, $this->month, $this->day, $this->year );
+
+			// Arguments
+			$args  = array(
+				'start'  => $start,
+				'end'    => $end,
+				'row'    => $row,
+				'index'  => $i,
+				'offset' => 0
+			);
+
+			// Setup cell boundaries
+			$this->set_cell_boundaries( $args );
+
+			// Setup cell items
+			$this->set_cell_items();
+
+			// Close row
+			if ( $this->end_row() ) {
+				echo $this->get_row_end();
+			}
+		}
+
+		// Cleanup
+		$this->current_cell = array();
+	}
+
+	/**
 	 * Display a calendar by mode & range
 	 *
 	 * @since 2.0.0
@@ -356,16 +481,23 @@ class Day extends Base_List_Table {
 		for ( $i = 0; $i <= ( $this->day_count * 24 ) - 1; $i++ ) {
 
 			// Setup the row
-			$row = floor( $i / $this->day_count );
+			$row   = floor( $i / $this->day_count );
 
-			// Setup cell boundaries
-			$this->set_current_cell( array(
-				'start'  => gmmktime( $row, 0,  0,  $this->month, $this->day, $this->year ),
-				'end'    => gmmktime( $row, 59, 59, $this->month, $this->day, $this->year ),
+			// Set the boundaries
+			$start = gmmktime( $row, 0,  0,  $this->month, $this->day, $this->year );
+			$end   = gmmktime( $row, 59, 59, $this->month, $this->day, $this->year );
+
+			// Arrguments
+			$args  = array(
+				'start'  => $start,
+				'end'    => $end,
 				'row'    => $row,
 				'index'  => $i,
 				'offset' => 0
-			) );
+			);
+
+			// Setup cell boundaries
+			$this->set_current_cell( $args );
 
 			// New row
 			if ( $this->start_row() ) {

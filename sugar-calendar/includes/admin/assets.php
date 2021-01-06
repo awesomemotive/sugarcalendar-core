@@ -161,5 +161,6 @@ function localize() {
 		'start_of_week' => sugar_calendar_get_user_preference( 'sc_start_of_week' ),
 		'date_format'   => sugar_calendar_get_user_preference( 'sc_date_format' ),
 		'time_format'   => sugar_calendar_get_user_preference( 'sc_time_format' ),
+		'timezone'      => sugar_calendar_get_user_preference( 'sc_timezone' )
 	) );
 }

@@ -13,6 +13,8 @@ class TimeZones extends \WP_UnitTestCase {
 	 */
 	public function setUp() {
 
+		// Ensure no "floating" time
+		update_option( 'sc_timezone', 'UTC' );
 	}
 
 	/**
@@ -20,12 +22,18 @@ class TimeZones extends \WP_UnitTestCase {
 	 */
 	public function tearDown() {
 
+		// Reset back to "floating" time
+		delete_option( 'sc_timezone' );
 	}
 
 	/**
 	 * @group settings
 	 */
 	public function test_default_is_null() {
+
+		// Remove time zone setting
+		delete_option( 'sc_timezone' );
+
 		$tz = sugar_calendar_get_timezone();
 
 		$this->assertSame( null, $tz );

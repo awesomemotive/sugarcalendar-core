@@ -48,11 +48,10 @@ function sugar_calendar_is_timezone_floating() {
 	$retval = true;
 
 	// Get the time zone and type
-	$tz     = sugar_calendar_get_timezone();
-	$tztype = sugar_calendar_get_timezone_type();
+	$tz = sugar_calendar_get_timezone();
 
 	// Maybe not floating
-	if ( ( 'off' !== $tztype ) || ! empty( $tz ) ) {
+	if ( ! empty( $tz ) ) {
 		$retval = false;
 	}
 
@@ -510,7 +509,12 @@ function sugar_calendar_get_timezone_object( $timezone = '' ) {
 		return $timezone;
 	}
 
-	// Bail if time zone is floating
+	// Bail if time zone param is floating
+	if ( 'floating' === strtolower( $timezone ) ) {
+		return false;
+	}
+
+	// Bail if time zone environment is floating
 	if ( sugar_calendar_is_timezone_floating() ) {
 		return false;
 	}

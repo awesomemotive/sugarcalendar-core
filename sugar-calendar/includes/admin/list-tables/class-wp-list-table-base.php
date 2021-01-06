@@ -261,6 +261,15 @@ class Base_List_Table extends \WP_List_Table {
 	);
 
 	/**
+	 * The properties for all of the cells
+	 *
+	 * @since 2.1.3
+	 *
+	 * @var array
+	 */
+	protected $cells = array();
+
+	/**
 	 * Array of queried items, filtered, usually by status
 	 *
 	 * @since 2.1.2
@@ -1381,27 +1390,10 @@ class Base_List_Table extends \WP_List_Table {
 		// Default return value
 		$retval = '';
 
-		// Bail if no items
-		if ( empty( $this->filtered_items ) ) {
-			return $retval;
-		}
-
 		// Default items array
-		$items = array();
+		$items = $this->get_current_cell( 'items', array() );
 
-		// Loop through items
-		foreach ( $this->filtered_items as $item ) {
-
-			// Skip if event is not for cell
-			if ( ! $this->is_item_for_cell( $item ) ) {
-				continue;
-			}
-
-			// Add item to return value
-			array_push( $items, $item );
-		}
-
-		// Bail if no items fit
+		// Bail if no items
 		if ( empty( $items ) ) {
 			return $retval;
 		}
@@ -1586,13 +1578,76 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Set the items for the current cell
+	 *
+	 * @since 2.1.3
+	 */
+	protected function set_cell_items() {
+
+		// Loop through items
+		foreach ( $this->filtered_items as $item ) {
+
+			// Skip if event is not for cell
+			if ( ! $this->is_item_for_cell( $item ) ) {
+				continue;
+			}
+
+			// Add item to return value
+			array_push( $this->current_cell['items'], $item );
+		}
+
+		// Add the current cell to the cells array
+		$this->cells[] = $this->get_current_cell();
+	}
+
+	/**
+	 * Set the items for all of the cells
+	 *
+	 * @since 2.1.3
+	 */
+	protected function set_cells() {
+
+		// Get maximum, offset, and row
+		$maximum = ceil( ( $this->grid_end - $this->grid_start ) / DAY_IN_SECONDS );
+		$offset  = $this->get_day_offset( $this->grid_start );
+		$row     = 0;
+
+		// Loop through days of the month
+		for ( $i = 0; $i < ( $maximum + $offset ); $i++ ) {
+
+			// Setup the day
+			$day = ( $i - $offset ) + 1;
+
+			// Setup cell boundaries
+			$this->set_cell_boundaries( array(
+				'start'  => gmmktime( 0,  0,  0,  $this->month, $day, $this->year ),
+				'end'    => gmmktime( 23, 59, 59, $this->month, $day, $this->year ),
+				'row'    => $row,
+				'index'  => $i,
+				'offset' => $offset
+			) );
+
+			// Setup cell items
+			$this->set_cell_items();
+
+			// Maybe end the row?
+			if ( $this->end_row() ) {
+				++$row;
+			}
+		}
+
+		// Cleanup
+		$this->current_cell = array();
+	}
+
+	/**
 	 * Set the current cell properties
 	 *
-	 * @since 2.0.0
+	 * @since 2.1.3
 	 *
 	 * @param array $args
 	 */
-	protected function set_current_cell( $args = array() ) {
+	protected function set_cell_boundaries( $args = array() ) {
 
 		// Parse arguments
 		$r = wp_parse_args( $args, array(
@@ -1600,7 +1655,8 @@ class Base_List_Table extends \WP_List_Table {
 			'offset' => null,
 			'start'  => null,
 			'end'    => null,
-			'type'   => 'normal'
+			'type'   => 'normal',
+			'items'  => array()
 		) );
 
 		// Get the time zone
@@ -1636,6 +1692,24 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Set the current cell
 		$this->current_cell = $r;
+	}
+
+	/**
+	 * Set the current cell using the $cells index
+	 *
+	 * @since 2.1.3
+	 *
+	 * @param array $args
+	 */
+	protected function set_current_cell( $args = array() ) {
+
+		// Get all matching cells
+		$cells = wp_list_filter( $this->cells, $args );
+
+		// Pick the first matching cell
+		$this->current_cell = ! empty( $cells )
+			? reset( $cells )
+			: array();
 	}
 
 	/**
@@ -2638,6 +2712,9 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Set filtered items
 		$this->set_filtered_items();
+
+		// Set cells
+		$this->set_cells();
 	}
 
 	/**
@@ -3324,6 +3401,7 @@ class Base_List_Table extends \WP_List_Table {
 	private function tools() {
 
 		// Time zone
+		$tztype   = sugar_calendar_get_timezone_type();
 		$floating = sugar_calendar_is_timezone_floating();
 		$timezone = sugar_calendar_format_timezone( $this->timezone );
 
@@ -3337,7 +3415,8 @@ class Base_List_Table extends \WP_List_Table {
 			// Before action
 			do_action( 'sugar_calendar_admin_before_tools', $this );
 
-			if ( false === $floating ) : ?>
+			// Output time zone if not floating or support is enabled
+			if ( ( false === $floating ) || ( 'off' !== $tztype ) ) : ?>
 
 				<span class="sc-timezone"><?php echo esc_html( $timezone ); ?></span>
 

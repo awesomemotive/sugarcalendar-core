@@ -1,12 +1,12 @@
 {
-    "name": "sugarcalendar/core",
+  "name": "sugarcalendar/core",
 	"type": "wordpress-plugin",
     "description": "Sugar Calendar Plugin for WordPress",
     "keywords": ["wordpress", "sugarcalendar", "calendar", "events"],
     "homepage": "https://sugarcalendar.com",
 	"license": "GPL-2.0+",
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=5.6.20",
         "composer/installers": "~1.0"
     },
     "require-dev": {

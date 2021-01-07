@@ -1,6 +1,6 @@
 # [Sugar Calendar](https://sugarcalendar.com) #
 
-[![Build Status](https://travis-ci.org/sugarcalendar/core.svg?branch=master)](https://travis-ci.org/sugarcalendar/core)
+[![Build status](https://badge.buildkite.com/80a91dff42e83fa09a0b68ed75b93c26920d619d46694d01c0.svg)](https://buildkite.com/sandhills-development-llc/sugar-calendar)
 
 Sugar Calendar is a commercial WordPress plugin by [Sandhills Development](https://sandhillsdevelopment.com). It comes in two flavors:
 

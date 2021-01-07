@@ -1,4 +1,4 @@
-# Sugar Calendar Unit Tests [![Build status](https://badge.buildkite.com/b3d05fe8f3def8497826170480aa3db69ebd7898c66c97881e.svg)](https://buildkite.com/sandhills-development-llc/affiliatewp)
+# Sugar Calendar Unit Tests [![Build status](https://badge.buildkite.com/80a91dff42e83fa09a0b68ed75b93c26920d619d46694d01c0.svg)](https://buildkite.com/sandhills-development-llc/sugar-calendar)
 
 
 This folder contains all the tests for Sugar Calendar.

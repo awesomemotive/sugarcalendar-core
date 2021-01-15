@@ -42,7 +42,7 @@ class Month extends Base_List_Table {
 		$view_start = "{$this->year}-{$this->month}-01 00:00:00";
 
 		// Month boundaries
-		$this->grid_start = mysql2date( 'U', $view_start );
+		$this->grid_start = strtotime( $view_start );
 		$this->grid_end   = strtotime( '+1 month -1 second', $this->grid_start );
 
 		// View end

@@ -71,6 +71,11 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 	// Recalculate display time for $calendar_func below
 	$display_time = gmmktime( 0, 0, 0, $display_month, $display_day, $display_year );
 
+	// Start-of-week can be set via function parameter
+	$start_of_week = ! is_null( $start_of_week )
+		? sanitize_text_field( $start_of_week )
+		: sc_get_week_start_day();
+
 	$months = array(
 		1  => sc_month_num_to_name(1),
 		2  => sc_month_num_to_name(2),
@@ -85,8 +90,6 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 		11 => sc_month_num_to_name(11),
 		12 => sc_month_num_to_name(12)
 	);
-
-	$tax = sugar_calendar_get_calendar_taxonomy_id();
 
 	// Arguments for category dropdown
 	$args = apply_filters( 'sc_calendar_dropdown_categories_args', array(

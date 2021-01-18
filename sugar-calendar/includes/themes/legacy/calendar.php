@@ -76,19 +76,20 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 		? sanitize_text_field( $start_of_week )
 		: sc_get_week_start_day();
 
+	// Months
 	$months = array(
-		1  => sc_month_num_to_name(1),
-		2  => sc_month_num_to_name(2),
-		3  => sc_month_num_to_name(3),
-		4  => sc_month_num_to_name(4),
-		5  => sc_month_num_to_name(5),
-		6  => sc_month_num_to_name(6),
-		7  => sc_month_num_to_name(7),
-		8  => sc_month_num_to_name(8),
-		9  => sc_month_num_to_name(9),
-		10 => sc_month_num_to_name(10),
-		11 => sc_month_num_to_name(11),
-		12 => sc_month_num_to_name(12)
+		1  => $GLOBALS['wp_locale']->get_month( 1  ),
+		2  => $GLOBALS['wp_locale']->get_month( 2  ),
+		3  => $GLOBALS['wp_locale']->get_month( 3  ),
+		4  => $GLOBALS['wp_locale']->get_month( 4  ),
+		5  => $GLOBALS['wp_locale']->get_month( 5  ),
+		6  => $GLOBALS['wp_locale']->get_month( 6  ),
+		7  => $GLOBALS['wp_locale']->get_month( 7  ),
+		8  => $GLOBALS['wp_locale']->get_month( 8  ),
+		9  => $GLOBALS['wp_locale']->get_month( 9  ),
+		10 => $GLOBALS['wp_locale']->get_month( 10 ),
+		11 => $GLOBALS['wp_locale']->get_month( 11 ),
+		12 => $GLOBALS['wp_locale']->get_month( 12 )
 	);
 
 	// Arguments for category dropdown

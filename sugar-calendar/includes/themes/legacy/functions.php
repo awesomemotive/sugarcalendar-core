@@ -834,20 +834,16 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 }
 
 /**
- * Month number To Name
+ * Month number to name
  *
- * Takes a month number and returns the
- * three letter name of it.
+ * Takes a month number and returns the three letter name of it.
  *
  * @access      public
  * @since       1.0.0
  * @return      string
  */
-function sc_month_num_to_name( $n ) {
-	$timestamp = gmmktime( 0, 0, 0, $n, 1, 2005 );
-
-	// Uses WordPress locale
-	return sugar_calendar_format_date_i18n( 'F', $timestamp );
+function sc_month_num_to_name( $n = 1 ) {
+	return $GLOBALS['wp_locale']->get_month( $n );
 }
 
 /**

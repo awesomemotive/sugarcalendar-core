@@ -11,7 +11,7 @@
  * Domain Path:       /sugar-calendar/includes/languages/
  * Requires PHP:      5.6.20
  * Requires at least: 5.1
- * Version:           2.1.5
+ * Version:           2.1.6
  */
 
 // Exit if accessed directly

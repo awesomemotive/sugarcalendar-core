@@ -9,7 +9,7 @@ Tags:              simple calendar, event calendar, event management, event list
 Requires PHP:      5.6.20
 Requires at least: 5.1
 Tested up to:      5.6
-Stable tag:        2.1.3
+Stable tag:        2.1.5
 
 You can easily manage events with this lightweight calendar. No complicated configuration. Simple to use. Sweeeet!
 
@@ -30,11 +30,11 @@ Most event calendar plugins are either way too simple, or overly complex and blo
 
 **Simple event management** - Forget about complicated, cumbersome interfaces and do more with less. Our beautiful admin calendar interface will delight admins and clients on your website’s back-end.
 
-**Event categories** - Assign events to specific categories. Then display calendars for just those specific categories or display a master calendar with all categories.
+**Unique Calendars** - Assign individual events to a single, specific Calendar. Filter events by Calendar inside of widgets and shortcodes. Extend Calendars even further with Pro add-ons!
 
 **Start and end times** - All events can be assigned a starting and end time. Both start and end dates are optional, supporting all-day or specific-duration events.
 
-**Customize date and time format** - Display dates and times however you want, you can select from all the most common formats, or cutomize it to your exact liking.
+**Customize date and time format** - Display dates and times however you want, you can select from all the most common formats, or customize it to your exact liking.
 
 **Translation ready** - Sugar Calendar (Lite) is fully localized and ready for your language. It has been translated into eight languages and is ready for more!
 

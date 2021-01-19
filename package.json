@@ -1,6 +1,6 @@
 {
 	"name": "sugar-calendar",
-	"version": "2.1.3",
+	"version": "2.1.5",
 	"description": "A calendar with a sweet disposition.",
 	"private": true,
 	"license": "GPL-2.0-or-later",
@@ -52,11 +52,12 @@
 		"grunt-wp-readme-to-markdown": "^1.0.0",
 		"load-grunt-tasks": "^3.5.2",
 		"makepot": "^0.3.0",
-		"uglify-es": "^3.3.9",
-		"uglifyjs-webpack-plugin": "^2.2.0",
-		"webpack": "^4.44.2",
-		"webpack-cli": "^3.3.12"
-	},
+		"uglify-es": "3.3.9",
+		"uglifyjs-webpack-plugin": "2.1.2",
+		"webpack": "4.29.6",
+		"webpack-cli": "^3.3.12",
+		"grunt-cli": "^1.3.2"
+  },
 	"scripts": {
 		"build": "cross-env NODE_ENV=production webpack",
 		"dev": "cross-env NODE_ENV=default webpack --watch",

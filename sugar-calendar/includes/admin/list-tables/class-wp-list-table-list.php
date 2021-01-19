@@ -89,7 +89,12 @@ class Basic extends Base_List_Table {
 		 * First, we need to remove the Recurring arguments that may exist in
 		 * Standard Recurring, included in non-Lite versions.
 		 */
-		remove_filter( 'sugar_calendar_get_recurring_date_query_args', 'Sugar_Calendar\\Standard\\Recurring\\query_args', 10, 4 );
+		$removed = remove_filter( 'sugar_calendar_get_recurring_date_query_args', 'Sugar_Calendar\\Standard\\Recurring\\query_args', 10, 4 );
+
+		// Bail if not removed
+		if ( empty( $removed ) ) {
+			return;
+		}
 
 		/**
 		 * Last, we need to add a new filter for Recurring arguments so that
@@ -203,9 +208,13 @@ class Basic extends Base_List_Table {
 			'title'    => esc_html_x( 'Title',    'Noun', 'sugar-calendar' ),
 			'start'    => esc_html_x( 'Start',    'Noun', 'sugar-calendar' ),
 			'end'      => esc_html_x( 'End',      'Noun', 'sugar-calendar' ),
-			'duration' => esc_html_x( 'Duration', 'Noun', 'sugar-calendar' ),
-			'repeat'   => esc_html_x( 'Repeats',  'Noun', 'sugar-calendar' )
+			'duration' => esc_html_x( 'Duration', 'Noun', 'sugar-calendar' )
 		);
+
+		// Repeat column
+		if ( has_filter( 'sugar_calendar_get_recurring_date_query_args' ) ) {
+			$columns['repeat'] = esc_html_x( 'Repeats',  'Noun', 'sugar-calendar' );
+		}
 
 		// Return columns
 		return $columns;
@@ -222,10 +231,7 @@ class Basic extends Base_List_Table {
 		return array(
 			'title'  => array( 'title', true ),
 			'start'  => array( 'start', true ),
-			'end'    => array( 'end',   true ),
-
-			// May want to remove when more complex recurrences exist
-			'repeat' => array( 'recurrence', true )
+			'end'    => array( 'end',   true )
 		);
 	}
 

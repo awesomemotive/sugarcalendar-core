@@ -34,7 +34,7 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 
 	// Boundaries
 	$view_start  = "{$year}-{$month}-01 00:00:00";
-	$month_start = mysql2date( 'U', $view_start );
+	$month_start = strtotime( $view_start );
 	$month_end   = strtotime( '+1 month -1 second', $month_start );
 	$view_end    = gmdate( 'Y-m-d H:i:s', $month_end );
 	$number      = sc_get_number_of_events();
@@ -834,20 +834,16 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 }
 
 /**
- * Month number To Name
+ * Month number to name
  *
- * Takes a month number and returns the
- * three letter name of it.
+ * Takes a month number and returns the three letter name of it.
  *
  * @access      public
  * @since       1.0.0
  * @return      string
  */
-function sc_month_num_to_name( $n ) {
-	$timestamp = gmmktime( 0, 0, 0, $n, 1, 2005 );
-
-	// Uses WordPress locale
-	return sugar_calendar_format_date_i18n( 'F', $timestamp );
+function sc_month_num_to_name( $n = 1 ) {
+	return $GLOBALS['wp_locale']->get_month( $n );
 }
 
 /**

@@ -418,8 +418,8 @@ class Base_List_Table extends \WP_List_Table {
 		$end_time   = strtotime( $end   );
 
 		// Set view boundaries
-		$this->view_start    = min( $start, $end );
-		$this->view_end      = max( $start, $end );
+		$this->view_start    = ( $end_time > $start_time ) ? $start : $end;
+		$this->view_end      = ( $end_time < $start_time ) ? $start : $end;
 		$this->view_duration = ( $end_time - $start_time );
 
 		// Set view time zone

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.1.5\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2021-01-18 23:26:46+00:00\n"
+"POT-Creation-Date: 2021-01-19 00:07:20+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -342,7 +342,7 @@ msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:213
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:364
-#: sugar-calendar/includes/themes/legacy/calendar.php:138
+#: sugar-calendar/includes/themes/legacy/calendar.php:139
 msgid "Month"
 msgstr ""
 
@@ -389,7 +389,7 @@ msgid "<code>28</code> through <code>31</code>"
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:261
-#: sugar-calendar/includes/themes/legacy/calendar.php:149
+#: sugar-calendar/includes/themes/legacy/calendar.php:150
 msgid "Year"
 msgstr ""
 
@@ -971,7 +971,7 @@ msgstr ""
 #: sugar-calendar/includes/admin/menu.php:34
 #: sugar-calendar/includes/admin/menu.php:35
 #: sugar-calendar/includes/post/taxonomies.php:39
-#: sugar-calendar/includes/themes/legacy/calendar.php:160
+#: sugar-calendar/includes/themes/legacy/calendar.php:161
 msgid "Calendar"
 msgstr ""
 
@@ -1403,7 +1403,7 @@ msgid "Popular Calendars"
 msgstr ""
 
 #: sugar-calendar/includes/post/taxonomies.php:42
-#: sugar-calendar/includes/themes/legacy/calendar.php:98
+#: sugar-calendar/includes/themes/legacy/calendar.php:99
 #: sugar-calendar/includes/themes/legacy/widgets.php:377
 msgid "All Calendars"
 msgstr ""
@@ -1449,7 +1449,7 @@ msgid "Choose from the most used calendars"
 msgstr ""
 
 #: sugar-calendar/includes/post/taxonomies.php:53
-#: sugar-calendar/includes/themes/legacy/calendar.php:102
+#: sugar-calendar/includes/themes/legacy/calendar.php:103
 msgid "No Calendars"
 msgstr ""
 
@@ -1561,15 +1561,15 @@ msgstr ""
 msgid "Event scheduled."
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/calendar.php:163
+#: sugar-calendar/includes/themes/legacy/calendar.php:164
 msgid "Go"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/calendar.php:308
+#: sugar-calendar/includes/themes/legacy/calendar.php:309
 msgid "Previous"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/calendar.php:321
+#: sugar-calendar/includes/themes/legacy/calendar.php:322
 msgid "Next"
 msgstr ""
 
@@ -1895,12 +1895,12 @@ msgctxt "event"
 msgid "Add New"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/calendar.php:238
+#: sugar-calendar/includes/themes/legacy/calendar.php:239
 msgctxt "Previous month"
 msgid "Previous"
 msgstr ""
 
-#: sugar-calendar/includes/themes/legacy/calendar.php:250
+#: sugar-calendar/includes/themes/legacy/calendar.php:251
 msgctxt "Next month"
 msgid "Next"
 msgstr ""

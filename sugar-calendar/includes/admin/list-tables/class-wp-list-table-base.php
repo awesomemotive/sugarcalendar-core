@@ -279,11 +279,46 @@ class Base_List_Table extends \WP_List_Table {
 	protected $filtered_items = array();
 
 	/**
+	 * Array of item counts, from queried items that fit into this view
+	 *
+	 * @since 2.1.6
+	 *
+	 * @var array
+	 */
+	protected $item_counts = array(
+		'total' => 0
+	);
+
+	/**
 	 * The main constructor method
 	 *
 	 * @since 2.0.0
 	 */
 	public function __construct( $args = array() ) {
+
+		// Initialize this class
+		$r = $this->init( $args );
+
+		// Pass arguments into parent
+		parent::__construct( $r );
+	}
+
+	/** Init ******************************************************************/
+
+	/**
+	 * Initialize this class
+	 *
+	 * @since 2.1.6
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	protected function init( $args = array() ) {
+
+		// Override the list table if one was passed in
+		if ( ! empty( $args['list_table'] ) ) {
+			$this->set_list_table( $args['list_table'] );
+		}
 
 		// Ready the pointer content
 		add_action( 'admin_print_footer_scripts', array( $this, 'admin_pointers_footer' ) );
@@ -302,11 +337,9 @@ class Base_List_Table extends \WP_List_Table {
 			'plural'   => esc_html__( 'Events', 'sugar-calendar' )
 		) );
 
-		// Pass arguments into parent
-		parent::__construct( $r );
+		// Return arguments
+		return $r;
 	}
-
-	/** Init ******************************************************************/
 
 	/**
 	 * Force the order and orderby, so default view is correct
@@ -440,7 +473,7 @@ class Base_List_Table extends \WP_List_Table {
 		if ( empty( $this->query->items ) ) {
 			$this->filtered_items = array();
 
-		// No filter
+		// No filter ("All" for view)
 		} elseif ( empty( $filter ) ) {
 			$this->filtered_items = $this->query->items;
 
@@ -449,6 +482,105 @@ class Base_List_Table extends \WP_List_Table {
 			$this->filtered_items = wp_list_filter( $this->query->items, $filter );
 		}
 	}
+
+	/**
+	 * Set the item counts for the current view
+	 *
+	 * @since 2.1.6
+	 */
+	protected function set_item_counts() {
+
+		// Reset
+		$this->item_counts = array(
+			'total' => 0
+		);
+
+		// Bail if no queried items or no cells
+		if ( empty( $this->query->items ) || empty( $this->cells ) ) {
+			return;
+		}
+
+		// Default counts
+		$counts = array();
+
+		// Get all items from all cells
+		$all_cell_items = wp_list_pluck( $this->cells, 'all_items' );
+
+		// Bail if no cell items
+		if ( empty( $all_cell_items ) ) {
+			return;
+		}
+
+		// Loop through cell items and flatten
+		foreach ( $all_cell_items as $cell_items ) {
+
+			// Skip if no items in cell
+			if ( empty( $cell_items ) ) {
+				continue;
+			}
+
+			// Remove empty
+			$counts = array_merge( $counts, $cell_items );
+		}
+
+		// Unique items
+		$all_items = array_unique( $counts, SORT_REGULAR );
+
+		// Set total to count of all items
+		$this->item_counts['total'] = count( $all_items );
+
+		// Pluck all queried statuses
+		$statuses  = wp_list_pluck( $all_items, 'status' );
+
+		// Get unique statuses only
+		$statuses  = array_unique( $statuses );
+
+		// Loop through statuses
+		if ( ! empty( $statuses ) ) {
+			foreach ( $statuses as $status ) {
+
+				// Get items of this status
+				$status_items = wp_filter_object_list(
+					$all_items,
+					array(
+						'status' => $status
+					)
+				);
+
+				// Add count to return value
+				$this->item_counts[ $status ] = count( $status_items );
+			}
+		}
+	}
+
+	/**
+	 * Import object variables from another object.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param object $item
+	 */
+    protected function set_list_table( $item = false ) {
+		global $wp_list_table;
+
+		// Bail if no object passed
+		if ( empty( $item ) ) {
+			return;
+		}
+
+		// Set the old list table
+		$this->old_list_table = $item;
+
+		// Loop through object vars and set the key/value
+        foreach ( get_object_vars( $item ) as $key => $value ) {
+			if ( ! isset( $this->{$key} ) ) {
+				$this->{$key} = $value;
+			}
+        }
+
+		// Set the global list table to this class
+		$wp_list_table = $this;
+    }
 
 	/** Getters ***************************************************************/
 
@@ -515,7 +647,7 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Return filter by status
 		return array(
-			'status' => $this->get_status()
+			'status' => $status
 		);
 	}
 
@@ -524,49 +656,12 @@ class Base_List_Table extends \WP_List_Table {
 	 * grouped by status.
 	 *
 	 * @since 2.0.0
+	 * @since 2.1.6 $item_counts is populated by set_item_counts()
 	 *
 	 * @return array
 	 */
 	protected function get_item_counts() {
-
-		// Default return value
-		$retval = array(
-			'total' => 0
-		);
-
-		// Default statuses
-		$statuses = array();
-
-		// Items to count
-		if ( ! empty( $this->query->items ) ) {
-
-			// Pluck all queried statuses
-			$statuses = wp_list_pluck( $this->query->items, 'status' );
-
-			// Get unique statuses only
-			$statuses = array_unique( $statuses );
-
-			// Set total to count of all items
-			$retval['total'] = count( $this->query->items );
-
-			// Loop through statuses
-			foreach ( $statuses as $status ) {
-
-				// Get items of this status
-				$items = wp_filter_object_list(
-					$this->query->items,
-					array(
-						'status' => $status
-					)
-				);
-
-				// Add count to return value
-				$retval[ $status ] = count( $items );
-			}
-		}
-
-		// Filter & return
-		return apply_filters( 'sugar_calendar_list_table_get_item_counts', $retval, $statuses );
+		return $this->item_counts;
 	}
 
 	/**
@@ -1147,7 +1242,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return string
+	 * @return array
 	 */
 	protected function get_views() {
 
@@ -1165,7 +1260,7 @@ class Base_List_Table extends \WP_List_Table {
 		$event_statuses   = get_post_stati( array( 'show_in_admin_all_list' => false ) );
 
 		// "All" link class
-		$class = ( 'all' === $this->get_status() )
+		$all_class = ( 'all' === $this->get_status() )
 			? 'current'
 			: '';
 
@@ -1181,9 +1276,12 @@ class Base_List_Table extends \WP_List_Table {
 			number_format_i18n( $event_counts['total'] )
 		);
 
+		// "All" link URL
+		$all_url = remove_query_arg( 'status', $base_url );
+
 		// Setup status links
 		$status_links = array(
-			'all' => '<a href="' . esc_url( remove_query_arg( 'status', $base_url ) ) . '" class="' . $class . '">' . $all_inner_html . '</a>'
+			'all' => '<a href="' . esc_url( $all_url ) . '" class="' . esc_attr( $all_class ) . '">' . $all_inner_html . '</a>'
 		);
 
 		// Other links
@@ -1218,10 +1316,11 @@ class Base_List_Table extends \WP_List_Table {
 				$status_url  = add_query_arg( array( 'status' => $status_name ), $base_url );
 
 				// Add link to array
-				$status_links[ $status_name ] = '<a href="' . esc_url( $status_url ) . '" class="' . $class . '">' . $status_html . '</a>';
+				$status_links[ $status_name ] = '<a href="' . esc_url( $status_url ) . '" class="' . esc_attr( $class ) . '">' . $status_html . '</a>';
 			}
 		}
 
+		// Return array of HTML anchors
 		return $status_links;
 	}
 
@@ -1585,15 +1684,20 @@ class Base_List_Table extends \WP_List_Table {
 	protected function set_cell_items() {
 
 		// Loop through items
-		foreach ( $this->filtered_items as $item ) {
+		foreach ( $this->query->items as $item ) {
 
 			// Skip if event is not for cell
 			if ( ! $this->is_item_for_cell( $item ) ) {
 				continue;
 			}
 
-			// Add item to return value
-			array_push( $this->current_cell['items'], $item );
+			// Filtered items
+			if ( in_array( $item, $this->filtered_items, true ) ) {
+				array_push( $this->current_cell['items'], $item );
+			}
+
+			// All items
+			array_push( $this->current_cell['all_items'], $item );
 		}
 
 		// Add the current cell to the cells array
@@ -1651,12 +1755,13 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Parse arguments
 		$r = wp_parse_args( $args, array(
-			'index'  => null,
-			'offset' => null,
-			'start'  => null,
-			'end'    => null,
-			'type'   => 'normal',
-			'items'  => array()
+			'index'     => null,
+			'offset'    => null,
+			'start'     => null,
+			'end'       => null,
+			'type'      => 'normal',
+			'items'     => array(),
+			'all_items' => array()
 		) );
 
 		// Get the time zone
@@ -2132,7 +2237,7 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Special case for password protected events
 		if ( ! empty( $event->post_password ) ) {
-			$pointer_text['details_title'] = '<strong>' . esc_html__( 'Details', 'sugar-calendar' ) . '</strong>';
+			$pointer_text['details_title'] = '<strong>' . esc_html__( 'Details',            'sugar-calendar' ) . '</strong>';
 			$pointer_text['details']       = '<span>'   . esc_html__( 'Password protected', 'sugar-calendar' ) . '</span>';
 
 		// Post is not protected
@@ -2503,6 +2608,7 @@ class Base_List_Table extends \WP_List_Table {
 	protected function current_user_can_delete( $event = false ) {
 		return $this->user_can_delete( get_current_user_id(), $event );
 	}
+
 	/**
 	 * Can a user ID delete an event?
 	 *
@@ -2715,6 +2821,9 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Set cells
 		$this->set_cells();
+
+		// Set item counts
+		$this->set_item_counts();
 	}
 
 	/**

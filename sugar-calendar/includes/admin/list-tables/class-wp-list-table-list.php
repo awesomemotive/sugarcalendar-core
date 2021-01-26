@@ -56,11 +56,6 @@ class Basic extends Base_List_Table {
 		// Set the view
 		$this->set_view( $view_start, $view_end );
 
-		// Override the list table if one was passed in
-		if ( ! empty( $args['list_table'] ) ) {
-			$this->set_list_table( $args['list_table'] );
-		}
-
 		// Filter the Date_Query arguments for this List Table
 		$this->filter_date_query_arguments();
 	}
@@ -167,32 +162,54 @@ class Basic extends Base_List_Table {
 	}
 
 	/**
-	 * Import object variables from another object.
+	 * Prevent base class from setting cells
 	 *
-	 * @since 2.0.0
-	 *
-	 * @param object $item
+	 * @since 2.1.6
 	 */
-    private function set_list_table( $item = false ) {
+	protected function set_cells() {
 
-		// Bail if no object passed
-		if ( empty( $item ) ) {
-			return;
-		}
+	}
 
-		// Set the old list table
-		$this->old_list_table = $item;
+	/**
+	 * Set item counts for the List mode list-table.
+	 *
+	 * @since 2.1.6
+	 */
+	protected function set_item_counts() {
 
-		// Loop through object vars and set the key/value
-        foreach ( get_object_vars( $item ) as $key => $value ) {
-			if ( ! isset( $this->{$key} ) ) {
-				$this->{$key} = $value;
+		// Default return value
+		$this->item_counts = array(
+			'total' => 0
+		);
+
+		// Items to count
+		if ( ! empty( $this->query->items ) ) {
+
+			// Pluck all queried statuses
+			$statuses = wp_list_pluck( $this->query->items, 'status' );
+
+			// Get unique statuses only
+			$statuses = array_unique( $statuses );
+
+			// Set total to count of all items
+			$this->item_counts['total'] = count( $this->query->items );
+
+			// Loop through statuses
+			foreach ( $statuses as $status ) {
+
+				// Get items of this status
+				$items = wp_filter_object_list(
+					$this->query->items,
+					array(
+						'status' => $status
+					)
+				);
+
+				// Add count to return value
+				$this->item_counts[ $status ] = count( $items );
 			}
-        }
-
-		// Set the global list table to this class
-		$GLOBALS['wp_list_table'] = $this;
-    }
+		}
+	}
 
 	/**
 	 * Mock function for custom list table columns.

@@ -3414,11 +3414,25 @@ class Base_List_Table extends \WP_List_Table {
 		// Base URLs
 		$today = $this->get_today_url();
 
+		// Today's small & large timestamps
+		$ts    = $this->today;
+		$tl    = $this->today;
+
+		// Adjust small for month
+		if ( strstr( $r['small'], 'month' ) ) {
+			$ts = strtotime( gmdate( 'Y-m-01', $ts ) );
+		}
+
+		// Adjust large for month
+		if ( strstr( $r['large'], 'month' ) ) {
+			$tl = strtotime( gmdate( 'Y-m-01', $tl ) );
+		}
+
 		// Calculate previous & next weeks & months
-		$prev_small = strtotime( "-{$r['small']}", $this->today );
-		$next_small = strtotime( "+{$r['small']}", $this->today );
-		$prev_large = strtotime( "-{$r['large']}", $this->today );
-		$next_large = strtotime( "+{$r['large']}", $this->today );
+		$prev_small = strtotime( "-{$r['small']}", $ts );
+		$next_small = strtotime( "+{$r['small']}", $ts );
+		$prev_large = strtotime( "-{$r['large']}", $tl );
+		$next_large = strtotime( "+{$r['large']}", $tl );
 
 		// Week
 		$prev_small_d = gmdate( 'j', $prev_small );

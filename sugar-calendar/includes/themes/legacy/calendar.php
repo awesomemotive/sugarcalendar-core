@@ -65,8 +65,10 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 		? absint( $month_override )
 		: gmdate( 'n', $display_time );
 
-	// Day is always derived from time (for week & 4day views)
-	$display_day = gmdate( 'j', $display_time );
+	// Day is either 1 (for month) or derived from time (for week & 4day views)
+	$display_day = ( 'month' !== $type )
+		? gmdate( 'j', $display_time )
+		: 1;
 
 	// Recalculate display time for $calendar_func below
 	$display_time = gmmktime( 0, 0, 0, $display_month, $display_day, $display_year );
@@ -300,8 +302,9 @@ function sc_get_next_prev( $display_time, $size = 'large', $category = null, $ty
 			break;
 
 		default:
-			$next_display_time = strtotime( '+1 month', $display_time );
-			$prev_display_time = strtotime( '-1 month', $display_time );
+			$first_day         = strtotime( gmdate( 'Y-m-01', $display_time ) );
+			$next_display_time = strtotime( '+1 month', $first_day );
+			$prev_display_time = strtotime( '-1 month', $first_day );
 	} ?>
 
 	<div id="sc_event_nav_wrap">

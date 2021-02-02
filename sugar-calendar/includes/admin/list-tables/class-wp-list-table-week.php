@@ -229,9 +229,11 @@ class Week extends Base_List_Table {
 		ob_start(); ?>
 
 		<tr class="all-day">
-			<th class="column-hour<?php echo $this->get_hour_class(); ?>">
-				<?php esc_html_e( 'All-day', 'sugar-calendar' ); ?>
-			</th><?php
+			<th class="column-hour<?php echo $this->get_hour_class(); ?>"><?php
+
+				esc_html_e( 'All-day', 'sugar-calendar' );
+
+			?></th><?php
 
 			// Loop through days
 			for ( $i = 0; $i <= $this->day_count - 1; $i++ ) {
@@ -262,8 +264,8 @@ class Week extends Base_List_Table {
 
 				?><td><?php echo $this->get_day_row_cell(); ?></td><?php
 			}
-			?>
-		</tr>
+
+		?></tr>
 
 		<?php
 
@@ -282,9 +284,11 @@ class Week extends Base_List_Table {
 		ob_start(); ?>
 
 		<tr class="multi-day">
-			<th class="column-hour<?php echo $this->get_hour_class(); ?>">
-				<?php esc_html_e( 'Multi-day', 'sugar-calendar' ); ?>
-			</th><?php
+			<th class="column-hour<?php echo $this->get_hour_class(); ?>"><?php
+
+				esc_html_e( 'Multi-day', 'sugar-calendar' );
+
+			?></th><?php
 
 			// Loop through days
 			for ( $i = 0; $i <= $this->day_count - 1; $i++ ) {
@@ -315,8 +319,8 @@ class Week extends Base_List_Table {
 
 				?><td><?php echo $this->get_day_row_cell(); ?></td><?php
 			}
-			?>
-		</tr>
+
+		?></tr>
 
 		<?php
 

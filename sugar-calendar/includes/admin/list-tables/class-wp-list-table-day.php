@@ -44,8 +44,8 @@ class Day extends Base_List_Table {
 		$this->day_count = 1;
 
 		// Setup the week ranges
-		$this->grid_start = strtotime( 'midnight',            $this->today );
-		$this->grid_end   = strtotime( 'tomorrow  -1 second', $this->grid_start );
+		$this->grid_start = strtotime( 'midnight',           $this->today );
+		$this->grid_end   = strtotime( 'tomorrow -1 second', $this->grid_start );
 
 		// Setup the day ranges
 		$view_start = gmdate( 'Y-m-d H:i:s', $this->grid_start );
@@ -204,9 +204,11 @@ class Day extends Base_List_Table {
 		ob_start(); ?>
 
 		<tr class="all-day">
-			<th class="column-hour<?php echo $this->get_hour_class(); ?>">
-				<?php esc_html_e( 'All-day', 'sugar-calendar' ); ?>
-			</th><?php
+			<th class="column-hour<?php echo $this->get_hour_class(); ?>"><?php
+
+				esc_html_e( 'All-day', 'sugar-calendar' );
+
+			?></th><?php
 
 			// Set the boundaries
 			$start = gmmktime( 0,  0,  0,  $month, $day, $year );
@@ -248,9 +250,11 @@ class Day extends Base_List_Table {
 		ob_start(); ?>
 
 		<tr class="multi-day">
-			<th class="column-hour<?php echo $this->get_hour_class(); ?>">
-				<?php esc_html_e( 'Multi-day', 'sugar-calendar' ); ?>
-			</th><?php
+			<th class="column-hour<?php echo $this->get_hour_class(); ?>"><?php
+
+				esc_html_e( 'Multi-day', 'sugar-calendar' );
+
+			?></th><?php
 
 			// Set the boundaries
 			$start = gmmktime( 0,  0,  0,  $month, $day, $year );

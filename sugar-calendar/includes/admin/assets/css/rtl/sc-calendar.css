@@ -319,7 +319,7 @@ table.calendar a.post-password-required:before {
 	margin-bottom: 20px;
 }
 
-.wp-pointer-actions {
+.wp-pointer.sugar-calendar .wp-pointer-actions {
 	border-top: 1px solid #ddd;
 	background-color: #f4f4f4;
 	padding: 12px 10px 14px;
@@ -327,54 +327,45 @@ table.calendar a.post-password-required:before {
 	min-height: 19px;
 }
 
-.wp-pointer-actions .action {
+.wp-pointer.sugar-calendar .wp-pointer-actions .action {
 	position: relative;
-	margin-right: 20px;
-	margin-left: 10px;
+	margin: 0;
+	padding: 0 5px;
 }
 
-.wp-pointer-actions .action a {
+.wp-pointer.sugar-calendar .wp-pointer-actions .action:first-child {
+	margin-right: 10px;
+	padding-right: 0;
+}
+
+.wp-pointer.sugar-calendar .wp-pointer-actions .action:not(:last-child) {
+	border-left: 1px solid #dcdcde;
+}
+
+.wp-pointer.sugar-calendar .wp-pointer-actions .action a {
 	text-decoration: none;
 }
 
-.wp-pointer-actions .action a:before {
-	background: none;
-	color: #72777c;
-	display: block !important;
-	font: normal 16px/1 dashicons;
-	speak: none;
-	text-align: center;
-	-webkit-font-smoothing: antialiased !important;
-	width: 10px;
-	height: 100%;
-	position: absolute;
-	right: -18px;
-	top: 0px;
-}
-
-.wp-pointer-actions .event-delete a {
+.wp-pointer.sugar-calendar .wp-pointer-actions .event-delete a {
 	color: #dc3232;
 }
 
-.wp-pointer-actions .event-delete a:hover,
-.wp-pointer-actions .event-delete a:active {
+.wp-pointer.sugar-calendar .wp-pointer-actions .event-delete a:hover,
+.wp-pointer.sugar-calendar .wp-pointer-actions .event-delete a:active {
 	color: #a00;
 }
 
-.wp-pointer-actions .event-edit a:before {
-	content: "\f464";
+.wp-pointer.sugar-calendar .wp-pointer-buttons a.close {
+	color: #aaa;
 }
 
-.wp-pointer-actions .event-restore a:before {
-	content: "\f171";
+.wp-pointer.sugar-calendar .wp-pointer-buttons a.close:hover,
+.wp-pointer.sugar-calendar .wp-pointer-buttons a.close:active {
+	color: #bbb;
 }
 
-.wp-pointer-actions .event-delete a:before {
-	content: "\f158";
-}
-
-.wp-pointer-actions .event-view a:before {
-	content: "\f103";
+.wp-pointer.sugar-calendar .wp-pointer-buttons a.close:before {
+	display: none !important;
 }
 
 table.calendar:not(.draft) a.status-draft,

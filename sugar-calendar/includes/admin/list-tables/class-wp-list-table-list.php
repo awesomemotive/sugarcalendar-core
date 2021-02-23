@@ -652,7 +652,15 @@ class Basic extends Base_List_Table {
 				get_edit_post_link( $post->ID ),
 				/* translators: %s: post title */
 				esc_attr( sprintf( __( 'Edit &#8220;%s&#8221;', 'sugar-calendar' ), $title ) ),
-				__( 'Edit', 'sugar-calendar' )
+				esc_html__( 'Edit', 'sugar-calendar' )
+			);
+
+			$actions['copy'] = sprintf(
+				'<a href="%s" aria-label="%s">%s</a>',
+				$this->get_event_copy_url( $item ),
+				/* translators: %s: post title */
+				esc_attr( sprintf( __( 'Duplicate &#8220;%s&#8221;', 'sugar-calendar' ), $title ) ),
+				esc_html__( 'Duplicate', 'sugar-calendar' )
 			);
 		}
 
@@ -663,7 +671,7 @@ class Basic extends Base_List_Table {
 					wp_nonce_url( admin_url( sprintf( $post_type_object->_edit_link . '&amp;action=untrash', $post->ID ) ), 'untrash-post_' . $post->ID ),
 					/* translators: %s: post title */
 					esc_attr( sprintf( __( 'Restore &#8220;%s&#8221; from the Trash', 'sugar-calendar' ), $title ) ),
-					__( 'Restore', 'sugar-calendar' )
+					esc_html__( 'Restore', 'sugar-calendar' )
 				);
 			} elseif ( EMPTY_TRASH_DAYS ) {
 				$actions['trash'] = sprintf(
@@ -671,7 +679,7 @@ class Basic extends Base_List_Table {
 					get_delete_post_link( $post->ID ),
 					/* translators: %s: post title */
 					esc_attr( sprintf( __( 'Move &#8220;%s&#8221; to the Trash', 'sugar-calendar' ), $title ) ),
-					_x( 'Trash', 'verb', 'sugar-calendar' )
+					esc_html_x( 'Trash', 'verb', 'sugar-calendar' )
 				);
 			}
 			if ( 'trash' === $post->post_status || ! EMPTY_TRASH_DAYS ) {
@@ -680,7 +688,7 @@ class Basic extends Base_List_Table {
 					get_delete_post_link( $post->ID, '', true ),
 					/* translators: %s: post title */
 					esc_attr( sprintf( __( 'Delete &#8220;%s&#8221; permanently', 'sugar-calendar' ), $title ) ),
-					__( 'Delete Permanently', 'sugar-calendar' )
+					esc_html__( 'Delete Permanently', 'sugar-calendar' )
 				);
 			}
 		}
@@ -694,7 +702,7 @@ class Basic extends Base_List_Table {
 						esc_url( $preview_link ),
 						/* translators: %s: post title */
 						esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;', 'sugar-calendar' ), $title ) ),
-						__( 'Preview', 'sugar-calendar' )
+						esc_html__( 'Preview', 'sugar-calendar' )
 					);
 				}
 			} elseif ( 'trash' != $post->post_status ) {
@@ -703,7 +711,7 @@ class Basic extends Base_List_Table {
 					get_permalink( $post->ID ),
 					/* translators: %s: post title */
 					esc_attr( sprintf( __( 'View &#8220;%s&#8221;', 'sugar-calendar' ), $title ) ),
-					_x( 'View', 'verb', 'sugar-calendar' )
+					esc_html_x( 'View', 'verb', 'sugar-calendar' )
 				);
 			}
 		}
@@ -714,7 +722,7 @@ class Basic extends Base_List_Table {
 				$post->ID,
 				/* translators: %s: post title */
 				esc_attr( sprintf( __( 'Export &#8220;%s&#8221; as JSON', 'sugar-calendar' ), $title ) ),
-				__( 'Export as JSON', 'sugar-calendar' )
+				esc_html__( 'Export as JSON', 'sugar-calendar' )
 			);
 		}
 

@@ -1981,9 +1981,10 @@ class Base_List_Table extends \WP_List_Table {
 		// Not trashed, so offer to Edit or View
 		} else {
 
-			// Maybe add edit link
+			// Maybe add edit & copy links
 			if ( $this->current_user_can_edit( $event ) ) {
-				$links['edit'] = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html__( 'Edit', 'sugar-calendar' ) ) . '</span>';
+				$links['edit'] = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html__( 'Edit',      'sugar-calendar' ) ) . '</span>';
+				$links['copy'] = '<span class="action event-copy">' . $this->get_event_copy_link( $event, esc_html__( 'Duplicate', 'sugar-calendar' ) ) . '</span>';
 			}
 
 			// Add view link
@@ -2008,6 +2009,20 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	protected function get_event_edit_link( $event = false, $link_text = '' ) {
 		return '<a href="' . esc_url( $this->get_event_edit_url( $event ) ) . '">'  . $link_text . '</a>';
+	}
+
+	/**
+	 * Get the link used to copy an event.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param object $event
+	 * @param string $link_text
+	 *
+	 * @return string
+	 */
+	protected function get_event_copy_link( $event = false, $link_text = '' ) {
+		return '<a href="' . esc_url( $this->get_event_copy_url( $event ) ) . '">'  . $link_text . '</a>';
 	}
 
 	/**
@@ -2064,6 +2079,41 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_event_edit_url( $event = false ) {
+
+		// Default return value
+		$retval = '';
+
+		// Type of object
+		switch ( $event->object_type ) {
+			case 'post' :
+				$retval = get_edit_post_link( $event->object_id );
+				break;
+
+			case 'user' :
+				$retval = get_edit_user_link( $event->object_id );
+				break;
+
+			case 'comment' :
+				$retval = get_edit_comment_link( $event->object_id );
+				break;
+		}
+
+		// Return the HTML
+		return $retval;
+	}
+
+	/**
+	 * Get the URL used to copy an event.
+	 *
+	 * @todo Create a relationship registration API
+	 *
+	 * @since 2.1.7
+	 *
+	 * @param object $event
+	 *
+	 * @return string
+	 */
+	protected function get_event_copy_url( $event = false ) {
 
 		// Default return value
 		$retval = '';

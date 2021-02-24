@@ -182,7 +182,7 @@ function sugar_calendar_copy_post( $original_id = 0, $data = array() ) {
 	$save = array_merge( $post, $data );
 
 	// Unset the ID column, so an update does not occur
-	unset( $post['ID'] );
+	unset( $save['ID'] );
 
 	// Insert the post into the database
 	$new_id = wp_insert_post( $save, false, false );

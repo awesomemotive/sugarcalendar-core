@@ -1975,7 +1975,7 @@ class Base_List_Table extends \WP_List_Table {
 
 			// Maybe add delete link
 			if ( $this->current_user_can_delete( $event ) ) {
-				$links['delete']  = '<span class="action event-delete">' . $this->get_event_delete_link( $event, esc_html__( 'Delete', 'sugar-calendar' ) ) . '</span>';
+				$links['delete']  = '<span class="action event-delete">' . $this->get_event_delete_link( $event, esc_html__( 'Delete Permanently', 'sugar-calendar' ) ) . '</span>';
 			}
 
 		// Not trashed, so offer to Edit or View
@@ -1985,6 +1985,11 @@ class Base_List_Table extends \WP_List_Table {
 			if ( $this->current_user_can_edit( $event ) ) {
 				$links['edit'] = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html__( 'Edit',      'sugar-calendar' ) ) . '</span>';
 				$links['copy'] = '<span class="action event-copy">' . $this->get_event_copy_link( $event, esc_html__( 'Duplicate', 'sugar-calendar' ) ) . '</span>';
+			}
+
+			// Maybe add delete link
+			if ( $this->current_user_can_delete( $event ) ) {
+				$links['delete']  = '<span class="action event-delete">' . $this->get_event_delete_link( $event, esc_html__( 'Trash', 'sugar-calendar' ) ) . '</span>';
 			}
 
 			// Add view link
@@ -2116,25 +2121,21 @@ class Base_List_Table extends \WP_List_Table {
 	protected function get_event_copy_url( $event = false ) {
 
 		// Default return value
-		$retval = '';
+		$retval = $this->get_event_edit_url( $event );
 
-		// Type of object
-		switch ( $event->object_type ) {
-			case 'post' :
-				$retval = get_edit_post_link( $event->object_id );
-				break;
+		// Arguments
+		$action = 'copy';
+		$args   = array(
+			'action'          => $action,
+			'wp_http_referer' => urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) )
+		);
 
-			case 'user' :
-				$retval = get_edit_user_link( $event->object_id );
-				break;
+		// URL
+		$url    = add_query_arg( $args, $retval );
+		$nonce  = "{$action}-{$event->object_type}_{$event->object_id}";
 
-			case 'comment' :
-				$retval = get_edit_comment_link( $event->object_id );
-				break;
-		}
-
-		// Return the HTML
-		return $retval;
+		// Return the URL
+		return wp_nonce_url( $url, $nonce );
 	}
 
 	/**
@@ -2151,25 +2152,25 @@ class Base_List_Table extends \WP_List_Table {
 	protected function get_event_delete_url( $event = false ) {
 
 		// Default return value
-		$retval = '';
+		$retval = $this->get_event_edit_url( $event );
 
-		// Type of object
-		switch ( $event->object_type ) {
-			case 'post' :
-				$retval = wp_nonce_url( add_query_arg( array( 'action' => 'delete' ), get_edit_post_link( $event->object_id ) ), 'delete-post_' . $event->object_id );
-				break;
+		// Action
+		$action = ( 'trash' !== $event->status ) && EMPTY_TRASH_DAYS
+			? 'trash'
+			: 'delete';
 
-			case 'user' :
-				$retval = get_edit_user_link( $event->object_id );
-				break;
+		// Arguments
+		$args   = array(
+			'action'          => $action,
+			'wp_http_referer' => urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) )
+		);
 
-			case 'comment' :
-				$retval = get_edit_comment_link( $event->object_id );
-				break;
-		}
+		// URL
+		$url    = add_query_arg( $args, $retval );
+		$nonce  = "{$action}-{$event->object_type}_{$event->object_id}";
 
-		// Return the HTML
-		return $retval;
+		// Return the URL
+		return wp_nonce_url( $url, $nonce );
 	}
 
 	/**
@@ -2186,25 +2187,21 @@ class Base_List_Table extends \WP_List_Table {
 	protected function get_event_restore_url( $event = false ) {
 
 		// Default return value
-		$retval = '';
+		$retval = $this->get_event_edit_url( $event );
 
-		// Type of object
-		switch ( $event->object_type ) {
-			case 'post' :
-				$retval = wp_nonce_url( add_query_arg( array( 'action' => 'untrash' ), get_edit_post_link( $event->object_id ) ), 'untrash-post_' . $event->object_id );
-				break;
+		// Arguments
+		$action = 'untrash';
+		$args   = array(
+			'action'          => $action,
+			'wp_http_referer' => urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) )
+		);
 
-			case 'user' :
-				$retval = get_edit_user_link( $event->object_id );
-				break;
+		// URL
+		$url    = add_query_arg( $args, $retval );
+		$nonce  = "{$action}-{$event->object_type}_{$event->object_id}";
 
-			case 'comment' :
-				$retval = get_edit_comment_link( $event->object_id );
-				break;
-		}
-
-		// Return the HTML
-		return $retval;
+		// Return the URL
+		return wp_nonce_url( $url, $nonce );
 	}
 
 	/**

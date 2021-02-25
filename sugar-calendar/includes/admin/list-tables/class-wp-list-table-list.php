@@ -668,7 +668,7 @@ class Basic extends Base_List_Table {
 				esc_html_x( 'Edit', 'verb', 'sugar-calendar' )
 			);
 
-			$actions['copy'] = sprintf(
+			$actions['sc_copy'] = sprintf(
 				'<a href="%s" aria-label="%s">%s</a>',
 				$this->get_event_copy_url( $item ),
 				/* translators: %s: post title */

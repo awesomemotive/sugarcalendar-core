@@ -1997,8 +1997,8 @@ class Base_List_Table extends \WP_List_Table {
 
 			// Maybe add edit & copy links
 			if ( $this->current_user_can_edit( $event ) ) {
-				$links['edit'] = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html_x( 'Edit',      'verb', 'sugar-calendar' ) ) . '</span>';
-				$links['copy'] = '<span class="action event-copy">' . $this->get_event_copy_link( $event, esc_html_x( 'Duplicate', 'verb', 'sugar-calendar' ) ) . '</span>';
+				$links['edit']    = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html_x( 'Edit',      'verb', 'sugar-calendar' ) ) . '</span>';
+				$links['sc_copy'] = '<span class="action event-copy">' . $this->get_event_copy_link( $event, esc_html_x( 'Duplicate', 'verb', 'sugar-calendar' ) ) . '</span>';
 			}
 
 			// Maybe add delete link
@@ -2138,7 +2138,7 @@ class Base_List_Table extends \WP_List_Table {
 		$retval = $this->get_event_edit_url( $event );
 
 		// Arguments
-		$action = 'copy';
+		$action = 'sc_copy';
 		$args   = array(
 			'action'          => $action,
 			'wp_http_referer' => urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) )

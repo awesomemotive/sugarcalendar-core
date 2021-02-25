@@ -1562,6 +1562,20 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Return the string for the event title.
+	 *
+	 * @since 2.1.7
+	 *
+	 * @param object $event
+	 * @return string
+	 */
+	protected function get_event_title( $event = false ) {
+		return ! empty( $event->title )
+			? apply_filters( 'the_title', $event->title )
+			: esc_html__( '(No title)', 'sugar-calendar' );
+	}
+
+	/**
 	 * Return the HTML for linking to an event.
 	 *
 	 * @since 2.0.3
@@ -1582,10 +1596,8 @@ class Base_List_Table extends \WP_List_Table {
 		// Get the edit url
 		$event_edit_url = $this->get_event_edit_url( $event );
 
-		// Handle empty titles
-		$event_title = ! empty( $event->title )
-			? apply_filters( 'the_title', $event->title )
-			: esc_html__( '(No title)', 'sugar-calendar' );
+		// Get the event title
+		$event_title = $this->get_event_title( $event );
 
 		// Filter all event attributes
 		$attributes = array(
@@ -1931,21 +1943,23 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	protected function get_pointer_title( $event = false ) {
 
-		// Handle empty titles
-		$title = ! empty( $event->title )
-			? $event->title
-			: esc_html__( '(No title)', 'sugar-calendar' );
+		// Get the event title
+		$title = $this->get_event_title( $event );
 
-		// Default return value (no edit link; text only)
+		// Default return value (text only)
 		$retval = esc_js( $title );
 
-		// If user can edit, link to "edit object" page
-		if ( $this->current_user_can_edit( $event ) ) {
-			$retval = $this->get_event_edit_link( $event, $retval );
+		// Only link if not trashed
+		if ( 'trash' !== $event->status ) {
 
-		// If user can view, link to permalink
-		} elseif ( $this->current_user_can_view( $event ) ) {
-			$retval = $this->get_event_view_link( $event, $retval );
+			// If user can edit, link to "edit object" page
+			if ( $this->current_user_can_edit( $event ) ) {
+				$retval = $this->get_event_edit_link( $event, $retval );
+
+			// If user can view, link to permalink
+			} elseif ( $this->current_user_can_view( $event ) ) {
+				$retval = $this->get_event_view_link( $event, $retval );
+			}
 		}
 
 		// Return

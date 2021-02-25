@@ -273,18 +273,31 @@ class Basic extends Base_List_Table {
 	 */
 	public function column_title( $item = null ) {
 
-		// Get the for event color
-		$color = $this->get_item_color( $item );
-
 		// Start an output buffer to make syntax easier to read
 		ob_start();
 
-		// Wrap output in a helper div
-		?><div data-color="<?php echo esc_attr( $color ); ?>">
+		// Items in trash are not editable
+		if ( 'trash' === $item->status ) {
 
-			<strong><?php echo $this->get_event_link( $item ); ?></strong>
+			?><strong class="status-trash"><?php
 
-		</div><?php
+				echo $this->get_event_title( $item );
+
+			?></strong><?php
+
+		// Items not in trash get linked
+		} else {
+
+			// Get the for event color
+			$color = $this->get_item_color( $item );
+
+			// Wrap output in a helper div
+			?><div data-color="<?php echo esc_attr( $color ); ?>"><strong><?php
+
+				echo $this->get_event_link( $item );
+
+			?></strong></div><?php
+		}
 
 		// Output the row actions
 		echo $this->row_actions(
@@ -646,13 +659,21 @@ class Basic extends Base_List_Table {
 		$actions = array();
 		$title = _draft_or_post_title();
 
-		if ( $can_edit_post && 'trash' != $post->post_status ) {
+		if ( $can_edit_post && 'trash' !== $post->post_status ) {
 			$actions['edit'] = sprintf(
 				'<a href="%s" aria-label="%s">%s</a>',
 				get_edit_post_link( $post->ID ),
 				/* translators: %s: post title */
 				esc_attr( sprintf( __( 'Edit &#8220;%s&#8221;', 'sugar-calendar' ), $title ) ),
-				__( 'Edit', 'sugar-calendar' )
+				esc_html_x( 'Edit', 'verb', 'sugar-calendar' )
+			);
+
+			$actions['sc_copy'] = sprintf(
+				'<a href="%s" aria-label="%s">%s</a>',
+				$this->get_event_copy_url( $item ),
+				/* translators: %s: post title */
+				esc_attr( sprintf( __( 'Duplicate &#8220;%s&#8221;', 'sugar-calendar' ), $title ) ),
+				esc_html_x( 'Duplicate', 'verb', 'sugar-calendar' )
 			);
 		}
 
@@ -663,7 +684,7 @@ class Basic extends Base_List_Table {
 					wp_nonce_url( admin_url( sprintf( $post_type_object->_edit_link . '&amp;action=untrash', $post->ID ) ), 'untrash-post_' . $post->ID ),
 					/* translators: %s: post title */
 					esc_attr( sprintf( __( 'Restore &#8220;%s&#8221; from the Trash', 'sugar-calendar' ), $title ) ),
-					__( 'Restore', 'sugar-calendar' )
+					esc_html__( 'Restore', 'sugar-calendar' )
 				);
 			} elseif ( EMPTY_TRASH_DAYS ) {
 				$actions['trash'] = sprintf(
@@ -671,7 +692,7 @@ class Basic extends Base_List_Table {
 					get_delete_post_link( $post->ID ),
 					/* translators: %s: post title */
 					esc_attr( sprintf( __( 'Move &#8220;%s&#8221; to the Trash', 'sugar-calendar' ), $title ) ),
-					_x( 'Trash', 'verb', 'sugar-calendar' )
+					esc_html_x( 'Trash', 'verb', 'sugar-calendar' )
 				);
 			}
 			if ( 'trash' === $post->post_status || ! EMPTY_TRASH_DAYS ) {
@@ -680,13 +701,13 @@ class Basic extends Base_List_Table {
 					get_delete_post_link( $post->ID, '', true ),
 					/* translators: %s: post title */
 					esc_attr( sprintf( __( 'Delete &#8220;%s&#8221; permanently', 'sugar-calendar' ), $title ) ),
-					__( 'Delete Permanently', 'sugar-calendar' )
+					esc_html__( 'Delete Permanently', 'sugar-calendar' )
 				);
 			}
 		}
 
 		if ( is_post_type_viewable( $post_type_object ) ) {
-			if ( in_array( $post->post_status, array( 'pending', 'draft', 'future' ) ) ) {
+			if ( in_array( $post->post_status, array( 'pending', 'draft', 'future' ), true ) ) {
 				if ( $can_edit_post ) {
 					$preview_link = get_preview_post_link( $post );
 					$actions['view'] = sprintf(
@@ -694,16 +715,16 @@ class Basic extends Base_List_Table {
 						esc_url( $preview_link ),
 						/* translators: %s: post title */
 						esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;', 'sugar-calendar' ), $title ) ),
-						__( 'Preview', 'sugar-calendar' )
+						esc_html_x( 'Preview', 'verb', 'sugar-calendar' )
 					);
 				}
-			} elseif ( 'trash' != $post->post_status ) {
+			} elseif ( 'trash' !== $post->post_status ) {
 				$actions['view'] = sprintf(
 					'<a href="%s" rel="bookmark" aria-label="%s">%s</a>',
 					get_permalink( $post->ID ),
 					/* translators: %s: post title */
 					esc_attr( sprintf( __( 'View &#8220;%s&#8221;', 'sugar-calendar' ), $title ) ),
-					_x( 'View', 'verb', 'sugar-calendar' )
+					esc_html_x( 'View', 'verb', 'sugar-calendar' )
 				);
 			}
 		}
@@ -714,7 +735,7 @@ class Basic extends Base_List_Table {
 				$post->ID,
 				/* translators: %s: post title */
 				esc_attr( sprintf( __( 'Export &#8220;%s&#8221; as JSON', 'sugar-calendar' ), $title ) ),
-				__( 'Export as JSON', 'sugar-calendar' )
+				esc_html__( 'Export as JSON', 'sugar-calendar' )
 			);
 		}
 

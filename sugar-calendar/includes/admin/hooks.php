@@ -49,6 +49,9 @@ add_filter( 'enter_title_here', __NAMESPACE__ . '\\Posts\\title', 10, 2 );
 // Admin Messages
 add_filter( 'post_updated_messages', __NAMESPACE__ . '\\Posts\\updated_messages' );
 
+// Post copy
+add_action( 'post_action_sc_copy', __NAMESPACE__ . '\\Posts\copy' );
+
 // Admin title
 add_filter( 'admin_title', 'sugar_calendar_admin_title' );
 
@@ -89,8 +92,11 @@ add_action( 'wp_ajax_sc_date_format', __NAMESPACE__ . '\\Settings\\ajax_date_for
 add_action( 'wp_ajax_sc_time_format', __NAMESPACE__ . '\\Settings\\ajax_time_format' );
 
 // Get the page ID
-$page = sugar_calendar_get_admin_page_id();
+$sc_admin_page = sugar_calendar_get_admin_page_id();
 
 // Page ID specific actions
-add_action( "load-{$page}", __NAMESPACE__ . '\\Menu\\maybe_empty_trash' );
-add_action( "load-{$page}", __NAMESPACE__ . '\\Menu\\preload_list_table' );
+add_action( "load-{$sc_admin_page}", __NAMESPACE__ . '\\Menu\\maybe_empty_trash' );
+add_action( "load-{$sc_admin_page}", __NAMESPACE__ . '\\Menu\\preload_list_table' );
+
+// Global cleanup
+unset( $sc_admin_page );

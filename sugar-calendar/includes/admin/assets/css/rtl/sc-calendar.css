@@ -217,7 +217,8 @@ table.calendar:not(.list) tbody td:hover {
 	box-shadow: inset 0 0 0 1px #ccc !important;
 }
 
-table.calendar a.sugar-calendar {
+table.calendar a.sugar-calendar,
+table.calendar.list strong.status-trash {
 	display: block;
 	-o-text-overflow: ellipsis;
 	text-overflow:    ellipsis;
@@ -227,12 +228,14 @@ table.calendar a.sugar-calendar {
 	padding: 0 5px;
 }
 
-table.calendar a.sugar-calendar {
+table.calendar a.sugar-calendar,
+table.calendar.list strong.status-trash {
 	position: relative;
 	padding: 0 20px 0 0;
 }
 
-table.calendar a.sugar-calendar:before {
+table.calendar a.sugar-calendar:before,
+table.calendar.list strong.status-trash:before {
 	font: normal 15px/18px 'dashicons';
 	display: inline-block;
 	position: absolute;
@@ -246,13 +249,15 @@ table.calendar a.sugar-calendar:before {
 	margin: 0;
 }
 
-table.calendar.list a.sugar-calendar {
+table.calendar.list a.sugar-calendar,
+table.calendar.list strong.status-trash {
 	display: inline;
 	border-radius: 3px;
 	padding: 5px 22px 5px 5px;
 }
 
-table.calendar.list a.sugar-calendar:before {
+table.calendar.list a.sugar-calendar:before,
+table.calendar.list strong.status-trash:before {
 	top: 4.5px;
 	right: 5px;
 }
@@ -296,7 +301,8 @@ table.calendar a.all-day:before {
 }
 
 .wp-pointer-content h3.status-trash:before,
-table.calendar a.status-trash:before {
+table.calendar a.status-trash:before,
+table.calendar.list strong.status-trash:before {
 	content: '\f182';
 }
 
@@ -369,7 +375,8 @@ table.calendar a.post-password-required:before {
 }
 
 table.calendar:not(.draft) a.status-draft,
-table.calendar:not(.trash) a.status-trash {
+table.calendar:not(.trash) a.status-trash,
+table.calendar:not(.trash) strong.status-trash {
 	opacity: 0.5;
 }
 

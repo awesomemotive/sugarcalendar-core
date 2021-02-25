@@ -665,7 +665,7 @@ class Basic extends Base_List_Table {
 				get_edit_post_link( $post->ID ),
 				/* translators: %s: post title */
 				esc_attr( sprintf( __( 'Edit &#8220;%s&#8221;', 'sugar-calendar' ), $title ) ),
-				esc_html__( 'Edit', 'sugar-calendar' )
+				esc_html_x( 'Edit', 'verb', 'sugar-calendar' )
 			);
 
 			$actions['copy'] = sprintf(
@@ -673,7 +673,7 @@ class Basic extends Base_List_Table {
 				$this->get_event_copy_url( $item ),
 				/* translators: %s: post title */
 				esc_attr( sprintf( __( 'Duplicate &#8220;%s&#8221;', 'sugar-calendar' ), $title ) ),
-				esc_html__( 'Duplicate', 'sugar-calendar' )
+				esc_html_x( 'Duplicate', 'verb', 'sugar-calendar' )
 			);
 		}
 
@@ -715,7 +715,7 @@ class Basic extends Base_List_Table {
 						esc_url( $preview_link ),
 						/* translators: %s: post title */
 						esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;', 'sugar-calendar' ), $title ) ),
-						esc_html__( 'Preview', 'sugar-calendar' )
+						esc_html_x( 'Preview', 'verb', 'sugar-calendar' )
 					);
 				}
 			} elseif ( 'trash' !== $post->post_status ) {

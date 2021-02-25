@@ -1997,13 +1997,13 @@ class Base_List_Table extends \WP_List_Table {
 
 			// Maybe add edit & copy links
 			if ( $this->current_user_can_edit( $event ) ) {
-				$links['edit'] = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html__( 'Edit',      'sugar-calendar' ) ) . '</span>';
-				$links['copy'] = '<span class="action event-copy">' . $this->get_event_copy_link( $event, esc_html__( 'Duplicate', 'sugar-calendar' ) ) . '</span>';
+				$links['edit'] = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html_x( 'Edit',      'verb', 'sugar-calendar' ) ) . '</span>';
+				$links['copy'] = '<span class="action event-copy">' . $this->get_event_copy_link( $event, esc_html_x( 'Duplicate', 'verb', 'sugar-calendar' ) ) . '</span>';
 			}
 
 			// Maybe add delete link
 			if ( $this->current_user_can_delete( $event ) ) {
-				$links['delete']  = '<span class="action event-delete">' . $this->get_event_delete_link( $event, esc_html__( 'Trash', 'sugar-calendar' ) ) . '</span>';
+				$links['delete']  = '<span class="action event-delete">' . $this->get_event_delete_link( $event, esc_html_x( 'Trash', 'verb', 'sugar-calendar' ) ) . '</span>';
 			}
 
 			// Add view link

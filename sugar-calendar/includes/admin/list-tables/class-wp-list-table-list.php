@@ -273,18 +273,31 @@ class Basic extends Base_List_Table {
 	 */
 	public function column_title( $item = null ) {
 
-		// Get the for event color
-		$color = $this->get_item_color( $item );
-
 		// Start an output buffer to make syntax easier to read
 		ob_start();
 
-		// Wrap output in a helper div
-		?><div data-color="<?php echo esc_attr( $color ); ?>">
+		// Items in trash are not editable
+		if ( 'trash' === $item->status ) {
 
-			<strong><?php echo $this->get_event_link( $item ); ?></strong>
+			?><strong class="status-trash"><?php
 
-		</div><?php
+				echo $this->get_event_title( $item );
+
+			?></strong><?php
+
+		// Items not in trash get linked
+		} else {
+
+			// Get the for event color
+			$color = $this->get_item_color( $item );
+
+			// Wrap output in a helper div
+			?><div data-color="<?php echo esc_attr( $color ); ?>"><strong><?php
+
+				echo $this->get_event_link( $item );
+
+			?></strong></div><?php
+		}
 
 		// Output the row actions
 		echo $this->row_actions(

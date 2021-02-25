@@ -646,7 +646,7 @@ class Basic extends Base_List_Table {
 		$actions = array();
 		$title = _draft_or_post_title();
 
-		if ( $can_edit_post && 'trash' != $post->post_status ) {
+		if ( $can_edit_post && 'trash' !== $post->post_status ) {
 			$actions['edit'] = sprintf(
 				'<a href="%s" aria-label="%s">%s</a>',
 				get_edit_post_link( $post->ID ),
@@ -694,7 +694,7 @@ class Basic extends Base_List_Table {
 		}
 
 		if ( is_post_type_viewable( $post_type_object ) ) {
-			if ( in_array( $post->post_status, array( 'pending', 'draft', 'future' ) ) ) {
+			if ( in_array( $post->post_status, array( 'pending', 'draft', 'future' ), true ) ) {
 				if ( $can_edit_post ) {
 					$preview_link = get_preview_post_link( $post );
 					$actions['view'] = sprintf(
@@ -705,7 +705,7 @@ class Basic extends Base_List_Table {
 						esc_html__( 'Preview', 'sugar-calendar' )
 					);
 				}
-			} elseif ( 'trash' != $post->post_status ) {
+			} elseif ( 'trash' !== $post->post_status ) {
 				$actions['view'] = sprintf(
 					'<a href="%s" rel="bookmark" aria-label="%s">%s</a>',
 					get_permalink( $post->ID ),

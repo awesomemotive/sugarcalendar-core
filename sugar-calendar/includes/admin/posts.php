@@ -31,6 +31,99 @@ function title( $title, \WP_Post $post ) {
 }
 
 /**
+ * Copy an Event, from within any admin area List Table row action.
+ *
+ * @since 2.1.7
+ *
+ * @param int $post_id
+ */
+function copy( $post_id = 0 ) {
+
+	// Error if no post ID
+	if ( empty( $post_id ) ) {
+		wp_die( esc_html__( 'Invalid item ID.', 'sugar-calendar' ) );
+	}
+
+	// Action ID
+	$action = 'sc_copy';
+
+	// Check the nonce
+	check_admin_referer( "{$action}-post_{$post_id}" );
+
+	// Get the Post
+	$post = get_post( $post_id );
+
+	// Error if Post does not exist
+	if ( empty( $post ) ) {
+		wp_die( esc_html__( 'The item you are trying to copy no longer exists.', 'sugar-calendar' ) );
+	}
+
+	// Check Post-Type
+	$post_type        = get_post_type( $post );
+	$post_type_object = get_post_type_object( $post_type );
+
+	// Error if Post-Type is invalid
+	if ( empty( $post_type_object ) || ! post_type_supports( $post_type, 'events' ) ) {
+		wp_die( esc_html__( 'Sorry, this item cannot be copied.', 'sugar-calendar' ) );
+	}
+
+	// Error if current user cannot edit the original post
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		wp_die( esc_html__( 'Sorry, you are not allowed to copy this item.', 'sugar-calendar' ) );
+	}
+
+	// Get the Event for the Post
+	$event = sugar_calendar_get_event_by_object( $post_id, 'post' );
+
+	// Error if missing Event data
+	if ( empty( $event ) ) {
+		wp_die( esc_html__( 'This post does not have event data.', 'sugar-calendar' ) );
+	}
+
+	// New status is always draft
+	$new_status = 'draft';
+
+	// New title always has suffix
+	$new_title  = $post->post_title . ' - ' . esc_html_x( 'Copy', 'noun', 'sugar-calendar' );
+
+	// Copy the Post
+	$new_post_id = sugar_calendar_copy_post( $post_id, array(
+		'post_title'  => $new_title,
+		'post_status' => $new_status
+	) );
+
+	// Error if Post was not copied
+	if ( empty( $new_post_id ) ) {
+		wp_die( esc_html__( 'Error copying the item.', 'sugar-calendar' ) );
+	}
+
+	// Copy the Event
+	$new_event_id = sugar_calendar_copy_event( $event->id, array(
+		'title'     => $new_title,
+		'status'    => $new_status,
+		'object_id' => $new_post_id
+	) );
+
+	// Error if Event was not copied
+	if ( empty( $new_event_id ) ) {
+		wp_die( esc_html__( 'Error copying the item.', 'sugar-calendar' ) );
+	}
+
+	// Sendback an indication that copy succeeded
+	$sendback = add_query_arg(
+		array(
+			'copied' => 1,
+			'ids'    => $post_id,
+		),
+		wp_get_referer()
+	);
+
+	// Redirect
+	wp_safe_redirect( $sendback );
+	exit;
+}
+
+/**
  * Filter the messages array and add custom messages for the built-in Post Type.
  *
  * @since 2.0.0

@@ -89,8 +89,11 @@ add_action( 'wp_ajax_sc_date_format', __NAMESPACE__ . '\\Settings\\ajax_date_for
 add_action( 'wp_ajax_sc_time_format', __NAMESPACE__ . '\\Settings\\ajax_time_format' );
 
 // Get the page ID
-$page = sugar_calendar_get_admin_page_id();
+$sc_admin_page = sugar_calendar_get_admin_page_id();
 
 // Page ID specific actions
-add_action( "load-{$page}", __NAMESPACE__ . '\\Menu\\maybe_empty_trash' );
-add_action( "load-{$page}", __NAMESPACE__ . '\\Menu\\preload_list_table' );
+add_action( "load-{$sc_admin_page}", __NAMESPACE__ . '\\Menu\\maybe_empty_trash' );
+add_action( "load-{$sc_admin_page}", __NAMESPACE__ . '\\Menu\\preload_list_table' );
+
+// Global cleanup
+unset( $sc_admin_page );

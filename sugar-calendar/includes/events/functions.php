@@ -32,6 +32,21 @@ function sugar_calendar_add_event( $data = array() ) {
 }
 
 /**
+ * Copy an event.
+ *
+ * @since 2.1.7
+ *
+ * @param int   $event_id event ID.
+ * @param array $data     event data.
+ * @return int
+ */
+function sugar_calendar_copy_event( $event_id = 0, $data = array() ) {
+	$events = new \Sugar_Calendar\Event_Query();
+
+	return $events->copy_item( $event_id, $data );
+}
+
+/**
  * Delete an event.
  *
  * @since 2.0

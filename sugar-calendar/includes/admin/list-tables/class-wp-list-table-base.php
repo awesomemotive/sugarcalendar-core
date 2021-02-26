@@ -1562,6 +1562,22 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Return the string for the event title.
+	 *
+	 * Based on _draft_or_post_title() but is filtered, and not escaped.
+	 *
+	 * @since 2.1.7
+	 *
+	 * @param object $event
+	 * @return string
+	 */
+	protected function get_event_title( $event = false ) {
+		return ! empty( $event->title )
+			? apply_filters( 'the_title', $event->title )
+			: esc_html__( '(No title)', 'sugar-calendar' );
+	}
+
+	/**
 	 * Return the HTML for linking to an event.
 	 *
 	 * @since 2.0.3
@@ -1582,10 +1598,8 @@ class Base_List_Table extends \WP_List_Table {
 		// Get the edit url
 		$event_edit_url = $this->get_event_edit_url( $event );
 
-		// Handle empty titles
-		$event_title = ! empty( $event->title )
-			? apply_filters( 'the_title', $event->title )
-			: esc_html__( '(No title)', 'sugar-calendar' );
+		// Get the event title
+		$event_title = $this->get_event_title( $event );
 
 		// Filter all event attributes
 		$attributes = array(
@@ -1607,7 +1621,7 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Prepare the link HTML
 		$html = '<a %s>%s</a>';
-		$link = sprintf( $html, $attr, $event_title );
+		$link = sprintf( $html, $attr, esc_html( $event_title ) );
 
 		// Return the event link
 		return $link;
@@ -1902,11 +1916,17 @@ class Base_List_Table extends \WP_List_Table {
 			return;
 		}
 
-		// Get all pointer contents
+		// Get pointer content HTML
+		$classes = $this->get_event_classes( $event );
+		$title   = $this->get_pointer_title( $event );
+		$text    = $this->get_pointer_text( $event );
+		$links   = $this->get_pointer_links( $event );
+
+		// Get all pointer contents (do not escape)
 		$pointer_content = array(
-			'title' => '<h3 class="' . $this->get_event_classes( $event ) . '">' . $this->get_pointer_title( $event ) . '</h3>',
-			'text'  => '<p>' . $this->get_pointer_text( $event ) . '</p>',
-			'links' => '<div class="wp-pointer-actions">' . $this->get_pointer_links( $event ) . '</div>'
+			'title' => '<h3 class="' . $classes . '">' . $title . '</h3>',
+			'text'  => '<p>' . $text . '</p>',
+			'links' => '<div class="wp-pointer-actions">' . implode( '', $links ) . '</div>'
 		);
 
 		// Filter
@@ -1931,21 +1951,23 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	protected function get_pointer_title( $event = false ) {
 
-		// Handle empty titles
-		$title = ! empty( $event->title )
-			? $event->title
-			: esc_html__( '(No title)', 'sugar-calendar' );
+		// Get the event title
+		$title = $this->get_event_title( $event );
 
-		// Default return value (no edit link; text only)
+		// Default return value (text only)
 		$retval = esc_js( $title );
 
-		// If user can edit, link to "edit object" page
-		if ( $this->current_user_can_edit( $event ) ) {
-			$retval = $this->get_event_edit_link( $event, $retval );
+		// Only link if not trashed
+		if ( 'trash' !== $event->status ) {
 
-		// If user can view, link to permalink
-		} elseif ( $this->current_user_can_view( $event ) ) {
-			$retval = $this->get_event_view_link( $event, $retval );
+			// If user can edit, link to "edit object" page
+			if ( $this->current_user_can_edit( $event ) ) {
+				$retval = $this->get_event_edit_link( $event, $retval );
+
+			// If user can view, link to permalink
+			} elseif ( $this->current_user_can_view( $event ) ) {
+				$retval = $this->get_event_view_link( $event, $retval );
+			}
 		}
 
 		// Return
@@ -1975,15 +1997,20 @@ class Base_List_Table extends \WP_List_Table {
 
 			// Maybe add delete link
 			if ( $this->current_user_can_delete( $event ) ) {
-				$links['delete']  = '<span class="action event-delete">' . $this->get_event_delete_link( $event, esc_html__( 'Delete', 'sugar-calendar' ) ) . '</span>';
+				$links['delete']  = '<span class="action event-delete">' . $this->get_event_delete_link( $event, esc_html__( 'Delete Permanently', 'sugar-calendar' ) ) . '</span>';
 			}
 
 		// Not trashed, so offer to Edit or View
 		} else {
 
-			// Maybe add edit link
+			// Maybe add edit & copy links
 			if ( $this->current_user_can_edit( $event ) ) {
-				$links['edit'] = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html__( 'Edit', 'sugar-calendar' ) ) . '</span>';
+				$links['edit']    = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html_x( 'Edit',      'verb', 'sugar-calendar' ) ) . '</span>';
+			}
+
+			// Maybe add delete link
+			if ( $this->current_user_can_delete( $event ) ) {
+				$links['delete']  = '<span class="action event-delete">' . $this->get_event_delete_link( $event, esc_html_x( 'Trash', 'verb', 'sugar-calendar' ) ) . '</span>';
 			}
 
 			// Add view link
@@ -1992,8 +2019,8 @@ class Base_List_Table extends \WP_List_Table {
 			}
 		}
 
-		// Return
-		return implode( '', $links );
+		// Filter & return
+		return (array) apply_filters( 'sugar_calendar_admin_get_pointer_links', $links, $event, $this );
 	}
 
 	/**
@@ -2006,8 +2033,22 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @return string
 	 */
-	protected function get_event_edit_link( $event = false, $link_text = '' ) {
+	public function get_event_edit_link( $event = false, $link_text = '' ) {
 		return '<a href="' . esc_url( $this->get_event_edit_url( $event ) ) . '">'  . $link_text . '</a>';
+	}
+
+	/**
+	 * Get the link used to copy an event.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param object $event
+	 * @param string $link_text
+	 *
+	 * @return string
+	 */
+	public function get_event_copy_link( $event = false, $link_text = '' ) {
+		return '<a href="' . esc_url( $this->get_event_copy_url( $event ) ) . '">'  . $link_text . '</a>';
 	}
 
 	/**
@@ -2020,7 +2061,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @return string
 	 */
-	protected function get_event_delete_link( $event = false, $link_text = '' ) {
+	public function get_event_delete_link( $event = false, $link_text = '' ) {
 		return '<a href="' . esc_url( $this->get_event_delete_url( $event ) ) . '">'  . $link_text . '</a>';
 	}
 
@@ -2034,7 +2075,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @return string
 	 */
-	protected function get_event_restore_link( $event = false, $link_text = '' ) {
+	public function get_event_restore_link( $event = false, $link_text = '' ) {
 		return '<a href="' . esc_url( $this->get_event_restore_url( $event ) ) . '">'  . $link_text . '</a>';
 	}
 
@@ -2048,7 +2089,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @return string
 	 */
-	protected function get_event_view_link( $event = false, $link_text = '' ) {
+	public function get_event_view_link( $event = false, $link_text = '' ) {
 		return '<a href="' . esc_url( $this->get_event_view_url( $event ) ) . '">'  . $link_text . '</a>';
 	}
 
@@ -2088,6 +2129,37 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Get the URL used to copy an event.
+	 *
+	 * @todo Create a relationship registration API
+	 *
+	 * @since 2.1.7
+	 *
+	 * @param object $event
+	 *
+	 * @return string
+	 */
+	protected function get_event_copy_url( $event = false ) {
+
+		// Default return value
+		$retval = $this->get_event_edit_url( $event );
+
+		// Arguments
+		$action = 'sc_copy';
+		$args   = array(
+			'action'          => $action,
+			'wp_http_referer' => urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) )
+		);
+
+		// URL
+		$url    = add_query_arg( $args, $retval );
+		$nonce  = "{$action}-{$event->object_type}_{$event->object_id}";
+
+		// Return the URL
+		return wp_nonce_url( $url, $nonce );
+	}
+
+	/**
 	 * Get the URL used to restore an event.
 	 *
 	 * @todo Create a relationship registration API
@@ -2101,25 +2173,25 @@ class Base_List_Table extends \WP_List_Table {
 	protected function get_event_delete_url( $event = false ) {
 
 		// Default return value
-		$retval = '';
+		$retval = $this->get_event_edit_url( $event );
 
-		// Type of object
-		switch ( $event->object_type ) {
-			case 'post' :
-				$retval = wp_nonce_url( add_query_arg( array( 'action' => 'delete' ), get_edit_post_link( $event->object_id ) ), 'delete-post_' . $event->object_id );
-				break;
+		// Action
+		$action = ( 'trash' !== $event->status ) && EMPTY_TRASH_DAYS
+			? 'trash'
+			: 'delete';
 
-			case 'user' :
-				$retval = get_edit_user_link( $event->object_id );
-				break;
+		// Arguments
+		$args   = array(
+			'action'          => $action,
+			'wp_http_referer' => urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) )
+		);
 
-			case 'comment' :
-				$retval = get_edit_comment_link( $event->object_id );
-				break;
-		}
+		// URL
+		$url    = add_query_arg( $args, $retval );
+		$nonce  = "{$action}-{$event->object_type}_{$event->object_id}";
 
-		// Return the HTML
-		return $retval;
+		// Return the URL
+		return wp_nonce_url( $url, $nonce );
 	}
 
 	/**
@@ -2136,25 +2208,21 @@ class Base_List_Table extends \WP_List_Table {
 	protected function get_event_restore_url( $event = false ) {
 
 		// Default return value
-		$retval = '';
+		$retval = $this->get_event_edit_url( $event );
 
-		// Type of object
-		switch ( $event->object_type ) {
-			case 'post' :
-				$retval = wp_nonce_url( add_query_arg( array( 'action' => 'untrash' ), get_edit_post_link( $event->object_id ) ), 'untrash-post_' . $event->object_id );
-				break;
+		// Arguments
+		$action = 'untrash';
+		$args   = array(
+			'action'          => $action,
+			'wp_http_referer' => urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) )
+		);
 
-			case 'user' :
-				$retval = get_edit_user_link( $event->object_id );
-				break;
+		// URL
+		$url    = add_query_arg( $args, $retval );
+		$nonce  = "{$action}-{$event->object_type}_{$event->object_id}";
 
-			case 'comment' :
-				$retval = get_edit_comment_link( $event->object_id );
-				break;
-		}
-
-		// Return the HTML
-		return $retval;
+		// Return the URL
+		return wp_nonce_url( $url, $nonce );
 	}
 
 	/**
@@ -2631,11 +2699,12 @@ class Base_List_Table extends \WP_List_Table {
 			case 'post' :
 				$type = get_post_type( $event->object_id );
 				$obj  = get_post_type_object( $type );
+				$cap  = 'do_not_allow';
 
-				// Map to `edit_post` if exists, or `do_not_allow` if not
-				$cap = ! empty( $obj )
-					? $obj->cap->delete_post
-					: 'do_not_allow';
+				// Map to delete_post if exists
+				if ( ! empty( $obj ) ) {
+					$cap = $obj->cap->delete_post;
+				}
 
 				break;
 
@@ -2665,7 +2734,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @return boolean
 	 */
-	protected function current_user_can_edit( $event = false ) {
+	public function current_user_can_edit( $event = false ) {
 		return $this->user_can_edit( get_current_user_id(), $event );
 	}
 
@@ -2691,11 +2760,12 @@ class Base_List_Table extends \WP_List_Table {
 			case 'post' :
 				$type = get_post_type( $event->object_id );
 				$obj  = get_post_type_object( $type );
+				$cap  = 'do_not_allow';
 
-				// Map to `edit_post` if exists, or `do_not_allow` if not
-				$cap = ! empty( $obj )
-					? $obj->cap->edit_post
-					: 'do_not_allow';
+				// Map to edit_post if exists
+				if ( ! empty( $obj ) ) {
+					$cap = $obj->cap->edit_post;
+				}
 
 				break;
 
@@ -2749,13 +2819,23 @@ class Base_List_Table extends \WP_List_Table {
 		// Get the cap, based on the object_type
 		switch ( $event->object_type ) {
 			case 'post' :
+				$post = get_post( $event->object_id );
 				$type = get_post_type( $event->object_id );
 				$obj  = get_post_type_object( $type );
+				$cap  = 'do_not_allow';
 
-				// Map to `view_post` if exists, or `do_not_allow` if not
-				$cap = ! empty( $obj )
-					? $obj->cap->read_post
-					: 'do_not_allow';
+				// Must be viewable by WordPress standards
+				if ( is_post_type_viewable( $obj ) ) {
+
+					// Some statuses require ability to edit
+					if ( in_array( $post->post_status, array( 'pending', 'draft', 'future' ), true ) ) {
+						$cap = 'edit_post';
+
+					// Map to view_post if exists
+					} elseif ( ! empty( $obj ) ) {
+						$cap = $obj->cap->read_post;
+					}
+				}
 
 				break;
 

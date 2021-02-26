@@ -1564,6 +1564,8 @@ class Base_List_Table extends \WP_List_Table {
 	/**
 	 * Return the string for the event title.
 	 *
+	 * Based on _draft_or_post_title() but is filtered, and not escaped.
+	 *
 	 * @since 2.1.7
 	 *
 	 * @param object $event
@@ -1619,7 +1621,7 @@ class Base_List_Table extends \WP_List_Table {
 
 		// Prepare the link HTML
 		$html = '<a %s>%s</a>';
-		$link = sprintf( $html, $attr, $event_title );
+		$link = sprintf( $html, $attr, esc_html( $event_title ) );
 
 		// Return the event link
 		return $link;
@@ -1914,11 +1916,17 @@ class Base_List_Table extends \WP_List_Table {
 			return;
 		}
 
-		// Get all pointer contents
+		// Get pointer content HTML
+		$classes = $this->get_event_classes( $event );
+		$title   = $this->get_pointer_title( $event );
+		$text    = $this->get_pointer_text( $event );
+		$links   = $this->get_pointer_links( $event );
+
+		// Get all pointer contents (do not escape)
 		$pointer_content = array(
-			'title' => '<h3 class="' . $this->get_event_classes( $event ) . '">' . $this->get_pointer_title( $event ) . '</h3>',
-			'text'  => '<p>' . $this->get_pointer_text( $event ) . '</p>',
-			'links' => '<div class="wp-pointer-actions">' . $this->get_pointer_links( $event ) . '</div>'
+			'title' => '<h3 class="' . $classes . '">' . $title . '</h3>',
+			'text'  => '<p>' . $text . '</p>',
+			'links' => '<div class="wp-pointer-actions">' . implode( '', $links ) . '</div>'
 		);
 
 		// Filter
@@ -1998,7 +2006,6 @@ class Base_List_Table extends \WP_List_Table {
 			// Maybe add edit & copy links
 			if ( $this->current_user_can_edit( $event ) ) {
 				$links['edit']    = '<span class="action event-edit">' . $this->get_event_edit_link( $event, esc_html_x( 'Edit',      'verb', 'sugar-calendar' ) ) . '</span>';
-				$links['sc_copy'] = '<span class="action event-copy">' . $this->get_event_copy_link( $event, esc_html_x( 'Duplicate', 'verb', 'sugar-calendar' ) ) . '</span>';
 			}
 
 			// Maybe add delete link
@@ -2012,8 +2019,8 @@ class Base_List_Table extends \WP_List_Table {
 			}
 		}
 
-		// Return
-		return implode( '', $links );
+		// Filter & return
+		return (array) apply_filters( 'sugar_calendar_admin_get_pointer_links', $links, $event, $this );
 	}
 
 	/**
@@ -2026,7 +2033,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @return string
 	 */
-	protected function get_event_edit_link( $event = false, $link_text = '' ) {
+	public function get_event_edit_link( $event = false, $link_text = '' ) {
 		return '<a href="' . esc_url( $this->get_event_edit_url( $event ) ) . '">'  . $link_text . '</a>';
 	}
 
@@ -2040,7 +2047,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @return string
 	 */
-	protected function get_event_copy_link( $event = false, $link_text = '' ) {
+	public function get_event_copy_link( $event = false, $link_text = '' ) {
 		return '<a href="' . esc_url( $this->get_event_copy_url( $event ) ) . '">'  . $link_text . '</a>';
 	}
 
@@ -2054,7 +2061,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @return string
 	 */
-	protected function get_event_delete_link( $event = false, $link_text = '' ) {
+	public function get_event_delete_link( $event = false, $link_text = '' ) {
 		return '<a href="' . esc_url( $this->get_event_delete_url( $event ) ) . '">'  . $link_text . '</a>';
 	}
 
@@ -2068,7 +2075,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @return string
 	 */
-	protected function get_event_restore_link( $event = false, $link_text = '' ) {
+	public function get_event_restore_link( $event = false, $link_text = '' ) {
 		return '<a href="' . esc_url( $this->get_event_restore_url( $event ) ) . '">'  . $link_text . '</a>';
 	}
 
@@ -2082,7 +2089,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @return string
 	 */
-	protected function get_event_view_link( $event = false, $link_text = '' ) {
+	public function get_event_view_link( $event = false, $link_text = '' ) {
 		return '<a href="' . esc_url( $this->get_event_view_url( $event ) ) . '">'  . $link_text . '</a>';
 	}
 
@@ -2692,11 +2699,12 @@ class Base_List_Table extends \WP_List_Table {
 			case 'post' :
 				$type = get_post_type( $event->object_id );
 				$obj  = get_post_type_object( $type );
+				$cap  = 'do_not_allow';
 
-				// Map to `edit_post` if exists, or `do_not_allow` if not
-				$cap = ! empty( $obj )
-					? $obj->cap->delete_post
-					: 'do_not_allow';
+				// Map to delete_post if exists
+				if ( ! empty( $obj ) ) {
+					$cap = $obj->cap->delete_post;
+				}
 
 				break;
 
@@ -2726,7 +2734,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @return boolean
 	 */
-	protected function current_user_can_edit( $event = false ) {
+	public function current_user_can_edit( $event = false ) {
 		return $this->user_can_edit( get_current_user_id(), $event );
 	}
 
@@ -2752,11 +2760,12 @@ class Base_List_Table extends \WP_List_Table {
 			case 'post' :
 				$type = get_post_type( $event->object_id );
 				$obj  = get_post_type_object( $type );
+				$cap  = 'do_not_allow';
 
-				// Map to `edit_post` if exists, or `do_not_allow` if not
-				$cap = ! empty( $obj )
-					? $obj->cap->edit_post
-					: 'do_not_allow';
+				// Map to edit_post if exists
+				if ( ! empty( $obj ) ) {
+					$cap = $obj->cap->edit_post;
+				}
 
 				break;
 
@@ -2810,13 +2819,23 @@ class Base_List_Table extends \WP_List_Table {
 		// Get the cap, based on the object_type
 		switch ( $event->object_type ) {
 			case 'post' :
+				$post = get_post( $event->object_id );
 				$type = get_post_type( $event->object_id );
 				$obj  = get_post_type_object( $type );
+				$cap  = 'do_not_allow';
 
-				// Map to `view_post` if exists, or `do_not_allow` if not
-				$cap = ! empty( $obj )
-					? $obj->cap->read_post
-					: 'do_not_allow';
+				// Must be viewable by WordPress standards
+				if ( is_post_type_viewable( $obj ) ) {
+
+					// Some statuses require ability to edit
+					if ( in_array( $post->post_status, array( 'pending', 'draft', 'future' ), true ) ) {
+						$cap = 'edit_post';
+
+					// Map to view_post if exists
+					} elseif ( ! empty( $obj ) ) {
+						$cap = $obj->cap->read_post;
+					}
+				}
 
 				break;
 

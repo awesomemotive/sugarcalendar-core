@@ -49,9 +49,6 @@ add_filter( 'enter_title_here', __NAMESPACE__ . '\\Posts\\title', 10, 2 );
 // Admin Messages
 add_filter( 'post_updated_messages', __NAMESPACE__ . '\\Posts\\updated_messages' );
 
-// Post copy
-add_action( 'post_action_sc_copy', __NAMESPACE__ . '\\Posts\copy' );
-
 // Admin title
 add_filter( 'admin_title', 'sugar_calendar_admin_title' );
 

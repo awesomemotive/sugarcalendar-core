@@ -2020,7 +2020,7 @@ class Base_List_Table extends \WP_List_Table {
 		}
 
 		// Filter & return
-		return (array) apply_filters( 'sugar_calendar_admin_get_pointer_links', $links, $event, $this );
+		return $this->filter_pointer_links( $links, $event );
 	}
 
 	/**
@@ -3710,6 +3710,58 @@ class Base_List_Table extends \WP_List_Table {
 
 		//
 		return str_replace( $tz_formats, '', $format );
+	}
+
+	/**
+	 * Filters pointer links according to the Event::object_type property
+	 *
+	 * This method fires WordPress hooks for third-party plugin support, and
+	 * also adds fallback support for unknown object types.
+	 *
+	 * @since 2.1.8
+	 * @param array  $links
+	 * @param object $event
+	 * @return array
+	 */
+	private function filter_pointer_links( $links = array(), $event = false ) {
+
+		// Remove any empty links
+		$links = array_filter( $links );
+
+		// Global filter that passes this class into it
+		$links = (array) apply_filters( 'sugar_calendar_admin_get_pointer_links', $links, $event, $this );
+
+		// Type of object
+		switch ( $event->object_type ) {
+			case 'post' :
+				$object = get_post( $event->object_id );
+				$type   = is_post_type_hierarchical( $object->post_type ) ? 'page' : 'post';
+				$filter = "{$type}_row_actions";
+				break;
+
+			case 'user' :
+				$object = get_userdata( $event->object_id );
+				$filter = 'user_row_actions';
+				break;
+
+			case 'comment' :
+				$object = get_comment( $event->object_id );
+				$filter = 'comment_row_actions';
+				break;
+
+			case 'sc_event' :
+				$object = $event;
+				$filter = 'sugar_calendar_admin_event_row_actions';
+				break;
+
+			default :
+				$object = $event;
+				$filter = 'sugar_calendar_admin_default_row_actions';
+				break;
+		}
+
+		// Return filtered links
+		return (array) apply_filters( $filter, $links, $object );
 	}
 }
 endif;

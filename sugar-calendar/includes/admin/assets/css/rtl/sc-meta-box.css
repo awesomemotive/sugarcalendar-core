@@ -202,63 +202,63 @@ tr.sugar-calendar-post-header th {
 
 /* Default/Unknown */
 .sc-vertical-sections .section-nav button[aria-selected="true"] {
-	border-right: 5px solid #23282d;
+	border-right: 5px solid #2271b1;
 }
 
 /* Fresh */
-.admin-color-fresh .sc-vertical-sections .section-nav button[aria-selected="true"] {
-	border-right: 5px solid #096484;
+body.admin-color-fresh .sc-vertical-sections .section-nav button[aria-selected="true"] {
+	border-right: 5px solid #2271b1;
 }
 
 /* Blue */
-.admin-color-blue .sc-vertical-sections .section-nav button[aria-selected="true"] {
-	border-right: 5px solid #096484;
+body.admin-color-blue .sc-vertical-sections .section-nav button[aria-selected="true"] {
+	border-right: 5px solid #4796b3;
 }
 
 /* Coffee */
-.admin-color-coffee .sc-vertical-sections .section-nav button[aria-selected="true"] {
-	border-right: 5px solid #096484;
+body.admin-color-coffee .sc-vertical-sections .section-nav button[aria-selected="true"] {
+	border-right: 5px solid #c7a589;
 }
 
 /* Ectoplasm */
-.admin-color-ectoplasm .sc-vertical-sections .section-nav button[aria-selected="true"] {
-	border-right: 5px solid #a3b745;
+body.admin-color-ectoplasm .sc-vertical-sections .section-nav button[aria-selected="true"] {
+	border-right: 5px solid #523f6d;
 }
 
 /* Midnight */
-.admin-color-midnight .sc-vertical-sections .section-nav button[aria-selected="true"] {
-	border-right: 5px solid #26292c;
+body.admin-color-midnight .sc-vertical-sections .section-nav button[aria-selected="true"] {
+	border-right: 5px solid #e14d43;
 }
 
 /* Modern */
-.admin-color-modern .sc-vertical-sections .section-nav button[aria-selected="true"] {
+body.admin-color-modern .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-right: 5px solid #3858e9;
 }
 
 /* Ocean */
-.admin-color-ocean .sc-vertical-sections .section-nav button[aria-selected="true"] {
-	border-right: 5px solid #627c83;
+body.admin-color-ocean .sc-vertical-sections .section-nav button[aria-selected="true"] {
+	border-right: 5px solid #9ebaa0;
 }
 
 /* Sunrise */
-.admin-color-sunrise .sc-vertical-sections .section-nav button[aria-selected="true"] {
+body.admin-color-sunrise .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-right: 5px solid #be3631;
 }
 
 /* Light */
-.admin-color-light .sc-vertical-sections .section-nav button[aria-selected="true"] {
+body.admin-color-light .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-right: 5px solid #888;
 }
 
 /* bbPress Color Schemes */
 
 /* Evergreen */
-.admin-color-evergreen .sc-vertical-sections .section-nav button[aria-selected="true"] {
+body.admin-color-evergreen .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-right: 5px solid #36533f;
 }
 
 /* Mint */
-.admin-color-mint .sc-vertical-sections .section-nav button[aria-selected="true"] {
+body.admin-color-mint .sc-vertical-sections .section-nav button[aria-selected="true"] {
 	border-right: 5px solid #4f6d59;
 }
 

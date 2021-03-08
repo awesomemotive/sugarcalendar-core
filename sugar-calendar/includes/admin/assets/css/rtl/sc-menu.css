@@ -10,20 +10,20 @@
 	margin: 13px -15px 8px -15px;
 	content: '';
 	float: right;
-	width: calc(100% + 30px);
+	width: calc(100% + 27px);
 }
 
 /* Bottom Separators */
 #adminmenu ul > li:not(:last-child) a[href^="admin.php?page=sugar-calendar"]:after,
 #adminmenu ul > li:not(:last-child) a[href^="post-new.php?post_type=sc_event"]:after
 {
-	border-bottom: 1px solid rgba(255,255,255,0.2);
+	border-bottom: 1px solid rgba(192,192,192,0.3);
 }
 
 /* Top Separator */
 #adminmenu ul > li:last-child a[href^="admin.php?page=sc-addons"]:before
 {
-	border-top: 1px solid rgba(255,255,255,0.2);
+	border-top: 1px solid rgba(192,192,192,0.3);
 }
 
 /* WordPress 5.7 fix for left-shadow on hover */

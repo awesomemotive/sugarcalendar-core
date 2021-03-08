@@ -135,7 +135,7 @@ body.sugar-calendar .view-switch .view-list:before {
 }
 
 .view-switch a.current {
-	background-color: #007cba;
+	background-color: #2271b1;
 	border-radius: 3px;
 }
 
@@ -145,7 +145,7 @@ body.sugar-calendar .view-switch .view-list:before {
 
 /* Color schemes */
 body.admin-color-fresh .view-switch a.current {
-	background-color: #007cba;
+	background-color: #2271b1;
 }
 body.admin-color-blue .view-switch a.current {
 	background-color: #096484;

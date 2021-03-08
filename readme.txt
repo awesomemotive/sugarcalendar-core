@@ -43,6 +43,7 @@ Most event calendar plugins are either way too simple, or overly complex and blo
 The full version of Sugar Calendar has several [premium license levels](https://sugarcalendar.com/pricing/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) that are just right for your use case.  You can:
 
 - Manage recurring/repeating events
+- Duplicate an event with a single click
 - Access [add-ons](https://sugarcalendar.com/free-add-ons/) for integration with [Google Maps](https://sugarcalendar.com/downloads/google-maps/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page), [Gravity Forms](https://sugarcalendar.com/downloads/gravity-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page), and [Ninja Forms](https://sugarcalendar.com/downloads/ninja-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
 - And get priority help from our globally distributed full-time support team
 

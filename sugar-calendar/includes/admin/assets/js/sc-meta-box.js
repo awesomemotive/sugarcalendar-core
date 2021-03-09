@@ -6,6 +6,7 @@ jQuery( document ).ready( function ( $ ) {
 	var dpArgs = {
 		dateFormat: 'yy-mm-dd',
 		firstDay: sc_vars.start_of_week,
+		showAnim: false,
 		beforeShow: function() {
 
 			// Swap out class to avoid CSS collisions

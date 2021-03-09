@@ -34,9 +34,8 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 
 	// Boundaries
 	$view_start  = "{$year}-{$month}-01 00:00:00";
-	$month_start = strtotime( $view_start );
-	$month_end   = strtotime( '+1 month -1 second', $month_start );
-	$view_end    = gmdate( 'Y-m-d H:i:s', $month_end );
+	$month_end   = gmdate( 't', strtotime( $view_start ) );
+	$view_end    = "{$year}-{$month}-{$month_end} 23:59:59";
 	$number      = sc_get_number_of_events();
 
 	// Default arguments

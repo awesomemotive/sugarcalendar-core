@@ -107,12 +107,12 @@ body.sugar-calendar .wrap .nav-tab-wrapper .page-title-action {
 /* bbPress Color Schemes */
 
 /* Evergreen */
-.admin-color-evergreen .sc-settings-sub-nav a.current {
-	border-bottom-color: #36533f;
+.admin-color-bbp-evergreen .sc-settings-sub-nav a.current {
+	border-bottom-color: #56b274;
 }
 
 /* Mint */
-.admin-color-mint .sc-settings-sub-nav a.current {
+.admin-color-bbp-mint .sc-settings-sub-nav a.current {
 	border-bottom-color: #4f6d59;
 }
 

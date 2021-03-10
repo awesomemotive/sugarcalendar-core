@@ -171,10 +171,10 @@ body.admin-color-sunrise .view-switch a.current {
 body.admin-color-light .view-switch a.current {
 	background-color: #04a4cc;
 }
-body.admin-color-evergreen .view-switch a.current {
+body.admin-color-bbp-evergreen .view-switch a.current {
 	background-color: #36533f;
 }
-body.admin-color-mint .view-switch a.current {
+body.admin-color-bbp-mint .view-switch a.current {
 	background-color: #4f6d59;
 }
 

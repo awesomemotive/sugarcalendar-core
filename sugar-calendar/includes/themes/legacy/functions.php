@@ -118,7 +118,7 @@ function sc_doing_events() {
 }
 
 /**
- * Retrieves recurring events
+ * Gets Events for a specific day, month, and year, from an array of Events.
  *
  * @since 2.0.0
  *
@@ -156,14 +156,145 @@ function sc_filter_events_for_day( $events = array(), $day = '01', $month = '01'
 }
 
 /**
+ * Get links to Events for use in a calendar cell.
+ *
+ * This function is in the legacy theme folder, and as such should not be
+ * used in new code anywhere else. If this kind of functionality is needed
+ * elsewhere, please consider writing a newer better function.
+ *
+ * @since 2.1.9
+ *
+ * @param array $events
+ * @param string $size
+ * @return string
+ */
+function sc_get_event_calendar_links( $events = array(), $size = 'small' ) {
+
+	// Default links array
+	$links = array();
+
+	// Loop through events
+	if ( ! empty( $events ) ) {
+		foreach ( $events as $event ) {
+
+			// Object ID
+			$id    = $event->object_id;
+
+			// Class
+			$class = sc_get_event_class( $id );
+
+			// Title & Link
+			$title = get_the_title( $id );
+			$url   = get_permalink( $id );
+
+			// Big or small links
+			$link  = ( $size === 'small' )
+				? '<a href="' . esc_url( $url ) . '" class="' . esc_attr( $class ) . '" title="' . esc_attr( strip_tags( $title ) ) . '">&bull;</a>'
+				: '<a href="' . esc_url( $url ) . '" class="' . esc_attr( $class ) . '">' . esc_html( $title ) . '</a><br/>';
+
+			// Add to links array
+			$links[] = apply_filters( 'sc_event_calendar_link', $link, $id, $size );
+		}
+	}
+
+	// Return
+	return implode( '', $links );
+}
+
+/**
+ * Get the HTML class attribute contents for a theme-side calendar cell. It
+ * exists to encapsulate a term-cache check, and code that was repeated a few
+ * times in calendar functions defined in this file.
+ *
+ * This function is in the legacy theme folder, and as such should not be
+ * used in new code anywhere else. If this kind of functionality is needed
+ * elsewhere, please consider writing a newer better function.
+ *
+ * @since 2.1.9
+ *
+ * @param array $events
+ * @param string $class
+ * @param int $day
+ * @param int $month
+ * @param int $year
+ * @return string
+ */
+function sc_get_day_class( $events = array(), $class = '', $day = 0, $month = 0, $year = 0 ) {
+
+	// Default return values
+	$classes = explode( ' ', $class );
+
+	// Day
+	if ( ! empty( $day ) ) {
+		$classes[] = 'day-' . absint( $day );
+	}
+
+	// Month
+	if ( ! empty( $month ) ) {
+		$classes[] = 'month-' . absint( $month );
+	}
+
+	// Year
+	if ( ! empty( $year ) ) {
+		$classes[] = 'year-' . absint( $year );
+	}
+
+	// Loop through Events and prefetch them
+	if ( ! empty( $events ) && is_array( $events ) ) {
+
+		// Get object IDs
+		$object_ids = wp_list_pluck( $events, 'object_id' );
+
+		// Get the taxonomy ID
+		$tax = sugar_calendar_get_calendar_taxonomy_id();
+
+		// Loop through object IDs
+		foreach ( $object_ids as $object_id ) {
+
+			// Check term cache first
+			$terms = get_object_term_cache( $object_id, $tax );
+
+			// No cache, so query for terms
+			if ( false === $terms ) {
+				$terms = wp_get_object_terms( $object_id, $tax );
+			}
+
+			// Maybe loop through terms
+			if ( ! empty( $terms ) ) {
+
+				// Add them to the classes
+				foreach ( $terms as $term ) {
+					if ( ! empty( $term->slug ) ) {
+						$classes[] = "{$tax}-{$term->slug}";
+
+						// Get calendar color
+						$color = sugar_calendar_get_calendar_color( $term->term_id );
+
+						// Maybe add color
+						if ( ! empty( $color ) ) {
+							$classes[] = "sc-color-{$color}";
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Sanitize and string'ify classes
+	$retval = implode( ' ', array_map( 'sanitize_html_class', $classes ) );
+
+	// Filter & return
+	return apply_filters( 'sc_get_day_class', $retval, $classes, $events, $class, $day, $month, $year );
+}
+
+/**
  * Get the HTML class attribute contents for an item in a theme-side calendar
  * cell. It exists to encapsulate a term-cache check, and code that was repeated
  * a few times in calendar functions defined in this file.
  *
- * This new function is in the legacy theme folder, and as such should not be
+ * This function is in the legacy theme folder, and as such should not be
  * used in new code anywhere else. If this kind of functionality is needed
- * elsewhere, please consider writing a newer better function that does not
- * accept a post ID only.
+ * elsewhere, please consider writing a newer better function.
  *
  * @since 2.0.15
  *
@@ -187,19 +318,21 @@ function sc_get_event_class( $object_id = false ) {
 		$terms = wp_get_object_terms( $object_id, $tax );
 	}
 
+	// Default classes
+	$classes = array();
+
 	// Bail if no terms
-	if ( empty( $terms ) || is_wp_error( $terms ) ) {
-		return '';
+	if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+
+		// Pluck the slugs
+		$classes = array_unique( wp_list_pluck( $terms, 'slug' ) );
 	}
 
-	// Pluck the slugs
-	$slugs  = array_unique( wp_list_pluck( $terms, 'slug' ) );
+	// Sanitize and string'ify classes
+	$retval = implode( ' ', array_map( 'sanitize_html_class', $classes ) );
 
-	// Sanitize and string'ify slugs
-	$retval = implode( ' ', array_map( 'sanitize_html_class', $slugs ) );
-
-	// Return the string
-	return $retval;
+	// Filter & return
+	return apply_filters( 'sc_get_event_class', $retval, $object_id );
 }
 
 /**
@@ -359,21 +492,10 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null, $st
 				: 'upcoming' );
 
 		// Filter events
-		$events = sc_filter_events_for_day( $all_events, $list_day, $month, $year );
-
-		// Loop through events
-		if ( ! empty( $events ) ) {
-			foreach ( $events as $event ) {
-				$class = sc_get_event_class( $event->object_id );
-				$link  = ( $size === 'small' )
-					? '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '" title="' . esc_attr( strip_tags( get_the_title( $event->object_id ) ) ) . '">&bull;</a>'
-					: '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '">' . esc_html( get_the_title( $event->object_id ) ) . '</a><br/>';
-
-				$cal_event .= apply_filters( 'sc_event_calendar_link', $link, $event->object_id, $size );
-			}
-		}
-
-		$cal_day = '<td class="calendar-day ' . $today . '" valign="top"><div class="sc_day_div">';
+		$events    = sc_filter_events_for_day( $all_events, $list_day, $month, $year );
+		$cal_event = sc_get_event_calendar_links( $events, $size );
+		$class     = sc_get_day_class( $events, "calendar-day {$today}", $list_day, $month, $year );
+		$cal_day   = '<td class="' . esc_attr( $class ) . '" valign="top"><div class="sc_day_div">';
 
 		// add in the day numbering
 		$cal_day  .= '<div class="day-number day-' . $list_day . '">' . $list_day . '</div>';
@@ -495,21 +617,10 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 				: 'upcoming' );
 
 		// Filter events
-		$events = sc_filter_events_for_day( $all_events, $display_day, $display_month, $display_year );
-
-		// Loop through events
-		if ( ! empty( $events ) ) {
-			foreach ( $events as $event ) {
-				$class = sc_get_event_class( $event->object_id );
-				$link  = ( $size === 'small' )
-					? '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '" title="' . esc_attr( strip_tags( get_the_title( $event->object_id ) ) ) . '">&bull;</a>'
-					: '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '">' . esc_html( get_the_title( $event->object_id ) ) . '</a><br/>';
-
-				$cal_event .= apply_filters( 'sc_event_calendar_link', $link, $event->object_id, $size );
-			}
-		}
-
-		$cal_day = '<td class="calendar-day ' . $today . '" valign="top"><div class="sc_day_div">';
+		$events    = sc_filter_events_for_day( $all_events, $display_day, $display_month, $display_year );
+		$cal_event = sc_get_event_calendar_links( $events, $size );
+		$class     = sc_get_day_class( $events, "calendar-day {$today}", $list_day, $display_month, $display_year );
+		$cal_day   = '<td class="' . esc_attr( $class ) . '" valign="top"><div class="sc_day_div">';
 
 		// add in the day numbering
 		$cal_day  .= '<div class="day-number day-' . $display_day . '">' . $display_day . '</div>';
@@ -594,21 +705,10 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 				: 'upcoming' );
 
 		// Filter events
-		$events = sc_filter_events_for_day( $all_events, $display_day, $display_month, $display_year );
-
-		// Loop through events
-		if ( ! empty( $events ) ) {
-			foreach ( $events as $event ) {
-				$class = sc_get_event_class( $event->object_id );
-				$link  = ( $size === 'small' )
-					? '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '" title="' . esc_attr( strip_tags( get_the_title( $event->object_id ) ) ) . '">&bull;</a>'
-					: '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '">' . esc_html( get_the_title( $event->object_id ) ) . '</a><br/>';
-
-				$cal_event .= apply_filters( 'sc_event_calendar_link', $link, $event->object_id, $size );
-			}
-		}
-
-		$cal_day = '<td class="calendar-day ' . $today . '" valign="top"><div class="sc_day_div">';
+		$events    = sc_filter_events_for_day( $all_events, $display_day, $display_month, $display_year );
+		$cal_event = sc_get_event_calendar_links( $events, $size );
+		$class     = sc_get_day_class( $events, "calendar-day {$today}", $list_day, $display_month, $display_year );
+		$cal_day   = '<td class="' . esc_attr( $class ) . '" valign="top"><div class="sc_day_div">';
 
 		// add in the day numbering
 		$cal_day  .= '<div class="day-number day-' . $display_day . '">' . $display_day . '</div>';
@@ -694,20 +794,10 @@ function sc_draw_calendar_day( $display_time, $size = 'large', $category = null,
 	$cal_event = '';
 
 	// Filter events
-	$events = sc_filter_events_for_day( $all_events, $display_day, $display_month, $display_year );
-
-	if ( ! empty( $events ) ) {
-		foreach ( $events as $event ) {
-			$class = sc_get_event_class( $event->object_id );
-			$link  = ( $size === 'small' )
-				? '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '" title="' . esc_attr( strip_tags( get_the_title( $event->object_id ) ) ) . '">&bull;</a>'
-				: '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '">' . esc_html( get_the_title( $event->object_id ) ) . '</a><br/>';
-
-			$cal_event .= apply_filters( 'sc_event_calendar_link', $link, $event->object_id, $size );
-		}
-	}
-
-	$cal_day = '<td class="calendar-day ' . $today . '" valign="top"><div class="sc_day_div">';
+	$events    = sc_filter_events_for_day( $all_events, $display_day, $display_month, $display_year );
+	$cal_event = sc_get_event_calendar_links( $events, $size );
+	$class     = sc_get_day_class( $events, "calendar-day {$today}", $display_day, $display_month, $display_year );
+	$cal_day   = '<td class="' . esc_attr( $class ) . '" valign="top"><div class="sc_day_div">';
 
 	// add in the day numbering
 	$cal_day  .= '<div class="day-number day-' . $display_day . '">' . $display_day . '</div>';
@@ -791,21 +881,10 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 				: 'upcoming' );
 
 		// Filter events
-		$events = sc_filter_events_for_day( $all_events, $display_day, $display_month, $display_year );
-
-		// Loop through events
-		if ( ! empty( $events ) ) {
-			foreach ( $events as $event ) {
-				$class = sc_get_event_class( $event->object_id );
-				$link  = ( $size === 'small' )
-					? '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '" title="' . esc_attr( strip_tags( get_the_title( $event->object_id ) ) ) . '">&bull;</a>'
-					: '<a href="' . get_permalink( $event->object_id ) . '" class="' . esc_attr( $class ) . '">' . esc_html( get_the_title( $event->object_id ) ) . '</a><br/>';
-
-				$cal_event .= apply_filters( 'sc_event_calendar_link', $link, $event->object_id, $size );
-			}
-		}
-
-		$cal_day = '<td class="calendar-day ' . $today . '" valign="top"><div class="sc_day_div">';
+		$events    = sc_filter_events_for_day( $all_events, $display_day, $display_month, $display_year );
+		$cal_event = sc_get_event_calendar_links( $events, $size );
+		$class     = sc_get_day_class( $events, "calendar-day {$today}", $display_day, $display_month, $display_year );
+		$cal_day   = '<td class="' . esc_attr( $class ) . '" valign="top"><div class="sc_day_div">';
 
 		// add in the day numbering
 		$cal_day  .= '<div class="day-number day-' . $display_day . '">' . $display_day . '</div>';

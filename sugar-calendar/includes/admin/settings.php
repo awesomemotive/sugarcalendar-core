@@ -455,10 +455,10 @@ function display_subsection() {
 	 * Filters the default day color styles
 	 */
 	$color_styles = array_unique( apply_filters( 'sc_day_color_styles', array(
-		'none'  => esc_html__( 'None',  'sugar-color' ),
-		'each'  => esc_html__( 'Each',  'sugar-color' ),
-		'first' => esc_html__( 'First', 'sugar-color' ),
-		'blend' => esc_html__( 'Blend', 'sugar-color' )
+		'none'  => esc_html__( 'None',  'sugar-calendar' ),
+		'each'  => esc_html__( 'Each',  'sugar-calendar' ),
+		'first' => esc_html__( 'First', 'sugar-calendar' ),
+		'blend' => esc_html__( 'Blend', 'sugar-calendar' )
 	) ) );
 
 	// Is custom time checked?

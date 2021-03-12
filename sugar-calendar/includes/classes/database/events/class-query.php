@@ -206,14 +206,13 @@ final class Event_Query extends Query {
 				'post_status'    => 'any',
 				'post__in'       => $post_ids,
 				'posts_per_page' => -1,
-				'no_found_rows'  => true
-			) );
+				'no_found_rows'  => true,
 
-			// Query for taxonomy terms to prime the caches
-			wp_get_object_terms(
-				$post_ids,
-				sugar_calendar_get_calendar_taxonomy_id()
-			);
+				// Also prime relative caches
+				'update_post_term_cache' => true,
+				'update_post_meta_cache' => true,
+				'lazy_load_term_meta'    => true
+			) );
 		}
 	}
 }

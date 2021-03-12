@@ -134,7 +134,7 @@ function sugar_calendar_get_contrast_score( $hex_color = '#ffffff', $black_color
 	list( $r1, $g1, $b1 ) = sugar_calendar_get_rgb_from_hex( $hex_color );
 
 	// Black RGB
-	list( $r2, $g2, $b2 ) = sugar_calendar_get_rgb_from_hex( $hex_color );
+	list( $r2, $g2, $b2 ) = sugar_calendar_get_rgb_from_hex( $black_color );
 
 	// Calc contrast ratios
 	$l1 = 0.2126 * pow( $r1 / 255, 2.2 ) +

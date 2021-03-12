@@ -28,6 +28,9 @@ function sugar_calendar_register_settings() {
 	register_setting( 'sc_main_display', 'sc_time_format', array(
 		'default' => get_option( 'time_format' )
 	) );
+	register_setting( 'sc_main_display', 'sc_day_color_style', array(
+		'default' => 'none'
+	) );
 
 	// Time Zones
 	register_setting( 'sc_main_timezones', 'sc_timezone_convert' );

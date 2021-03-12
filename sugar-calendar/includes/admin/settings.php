@@ -422,6 +422,7 @@ function display_subsection() {
 	$start_of_week  = sc_get_week_start_day();
 	$date_format    = sc_get_date_format();
 	$time_format    = sc_get_time_format();
+	$color_style    = sc_get_day_color_style();
 
 	/**
 	 * Filters the default date formats.
@@ -448,6 +449,16 @@ function display_subsection() {
 		esc_html__( 'g:i a', 'sugar-calendar' ),
 		'g:i A',
 		'H:i'
+	) ) );
+
+	/**
+	 * Filters the default day color styles
+	 */
+	$color_styles = array_unique( apply_filters( 'sc_day_color_styles', array(
+		'none'  => esc_html__( 'None',  'sugar-color' ),
+		'each'  => esc_html__( 'Each',  'sugar-color' ),
+		'first' => esc_html__( 'First', 'sugar-color' ),
+		'blend' => esc_html__( 'Blend', 'sugar-color' )
 	) ) );
 
 	// Is custom time checked?
@@ -603,6 +614,23 @@ function display_subsection() {
 							<span class='spinner'></span>
 						</p>
 					</fieldset>
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="sc_day_color_style"><?php esc_html_e( 'Calendar Day Colors', 'sugar-calendar' ); ?></label>
+				</th>
+				<td>
+					<select name="sc_day_color_style" id="sc_day_color_style" class="sc-select-chosen">
+						<?php foreach ( $color_styles as $style => $label ) : ?>
+
+							<option value="<?php echo esc_attr( $style ); ?>" <?php selected( $color_style, $style ); ?>><?php echo esc_html( $label ); ?></option>
+
+						<?php endforeach; ?>
+					</select>
+					<p class="description">
+						<?php _e( '"None" by default (No colors).<br>"Each" uses a single color for each Event.<br>"First" uses the first color found, in cronological order.<br>"Blend" will take the average of all colors.', 'sugar-calendar' ); ?>
+					</p>
 				</td>
 			</tr>
 		</tbody>

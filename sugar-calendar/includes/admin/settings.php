@@ -629,7 +629,7 @@ function display_subsection() {
 						<?php endforeach; ?>
 					</select>
 					<p class="description">
-						<?php _e( '"None" by default (No colors).<br>"Each" uses a single color for each Event.<br>"First" uses the first color found, in cronological order.<br>"Blend" will take the average of all colors.', 'sugar-calendar' ); ?>
+						<?php _e( 'The theme-side Calendar Color styling strategy.<br>"None" by default (No colors).<br>"Each" uses a single color for each Event.<br>"First" uses the first color found, in cronological order.<br>"Blend" will take the average of all colors.', 'sugar-calendar' ); ?>
 					</p>
 				</td>
 			</tr>

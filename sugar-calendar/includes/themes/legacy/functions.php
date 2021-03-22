@@ -404,18 +404,8 @@ function sc_get_event_style_attr( $object_id = false ) {
 		return '';
 	}
 
-	// Get the color contrast score so a background color can be applied
-	$score = sugar_calendar_get_contrast_score( $color );
-
-	// Contrast is OK
-	if ( $score < 5 ) {
-		$attr = 'color: ' . $color . ' !important;';
-
-	// Contrast is not OK
-	} else {
-		$ncolor = sugar_calendar_get_contrast_color( $color );
-		$attr   = 'background-color: ' . $color . '; color: ' . $ncolor . ' !important;';
-	}
+	// Always style the text (not the background) due to padding/margin issues
+	$attr = 'color: ' . $color . ' !important;';
 
 	// Return style attribute
 	return sprintf( 'style="%s"', $attr );

@@ -4,6 +4,10 @@ body.sugar-calendar #post-body-content {
 	margin-bottom: 0;
 }
 
+#ui-datepicker-div {
+	display: none;
+}
+
 .sugar-calendar-editor #wp-content-editor-tools {
 	background-color: #fff;
 	padding-top: 0;

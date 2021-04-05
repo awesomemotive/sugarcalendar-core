@@ -18,11 +18,11 @@ body.sugar-calendar #post-body-content {
 .event-time-zone {
 	display: inline-block;
 	padding: 4px 0;
+	vertical-align: middle;
 }
 .sugar_calendar_datepicker {
 	max-width: 105px;
 	height: 30px;
-	vertical-align: middle;
 }
 .sugar_calendar_datepicker:after {
 	display: inline-block;

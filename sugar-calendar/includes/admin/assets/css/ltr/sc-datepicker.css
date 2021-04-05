@@ -1,5 +1,6 @@
 /* Date Picker Default Styles */
 .sc-datepicker {
+  display: none;
   padding: 0;
   margin: 0;
   border-radius: 0;
@@ -299,5 +300,3 @@ body.wp-admin:not(.rtl) .sc-datepicker {
 body.wp-admin.rtl .sc-datepicker {
   margin-right: -1px;
 }
-
-/*# sourceMappingURL=datepicker.css.map */

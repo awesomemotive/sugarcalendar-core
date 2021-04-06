@@ -714,7 +714,15 @@ function editing_subsection() {
 				<th scope="row" valign="top">
 					<label for="<?php echo esc_attr( $name ); ?>"><?php esc_html_e( 'Default Event Calendar', 'sugar-calendar' ); ?></label>
 				</th>
-				<td><?php wp_dropdown_categories( $args ); ?></td>
+				<td><?php
+
+					// Output the dropdown select
+					wp_dropdown_categories( $args );
+
+					?><p class="description">
+						<?php esc_html_e( 'When adding a new Event, this Calendar will be preselected.', 'sugar-calendar' ); ?>
+					</p>
+				</td>
 			</tr>
 		</tbody>
 	</table>

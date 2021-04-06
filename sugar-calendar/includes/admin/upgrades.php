@@ -321,6 +321,9 @@ function do_fresh_install() {
 		'20_migration',
 		'206_migration'
 	) );
+
+	// Make sure post types & taxonomies work
+	flush_rewrite_rules( true );
 }
 
 /**

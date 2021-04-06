@@ -148,9 +148,14 @@ function sugar_calendar_register_post_types() {
 		'edit_published_posts'   => 'edit_published_events'
 	);
 
+	// Super easy slug override
+	if ( ! defined( 'SC_EVENTS_SLUG' ) ) {
+		define( 'SC_EVENTS_SLUG', 'events ');
+	}
+
 	// Rewrite
 	$rewrite = apply_filters( 'sc_event_rewrite', array(
-		'slug'       => 'events',
+		'slug'       => SC_EVENTS_SLUG,
 		'with_front' => false
 	) );
 

@@ -61,4 +61,10 @@ jQuery( document ).ready( function( $ ) {
 		}
 		$( this ).children( 'li' ).children( 'input' ).attr( 'placeholder', placeholder );
 	} );
+
+	// Clear all Calendar taxonomy radios
+	$( '#sc_event_category-clear' ).on( 'click', function( event ) {
+		$( '#sc_event_categorychecklist input' ).removeAttr( 'checked' );
+		event.preventDefault();
+	} );
 } );

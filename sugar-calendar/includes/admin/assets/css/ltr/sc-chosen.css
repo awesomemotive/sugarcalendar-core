@@ -50,7 +50,7 @@ body.js div.chosen-container {
   height: 18px;
   position: absolute;
   right: 10px;
-  top: 10px;
+  top: 6px;
   color: #c3c4c7;
   font-family: dashicons;
   font-size: 18px;
@@ -445,45 +445,50 @@ body.admin-color-sunrise .chosen-container .chosen-results li.highlighted {
 /* bbPress Color Schemes
 -------------------------------------------------------------- */
 /* Evergreen */
-body.admin-color-evergreen
+body.admin-color-bbp-evergreen
   .chosen-container-active.chosen-with-drop
   .chosen-single {
   border-color: #36533f;
   box-shadow: 0 0 0 1px #36533f;
 }
-body.admin-color-evergreen .chosen-container-active .chosen-single {
+body.admin-color-bbp-evergreen .chosen-container-active .chosen-single {
   border-color: #36533f;
   box-shadow: 0 0 0 1px #36533f;
 }
-body.admin-color-evergreen .chosen-container.chosen-dropup .chosen-drop {
+body.admin-color-bbp-evergreen .chosen-container.chosen-dropup .chosen-drop {
   border-color: #36533f;
   box-shadow: 0 -1px 0 1px #36533f;
 }
-body.admin-color-evergreen .chosen-container .chosen-drop {
+body.admin-color-bbp-evergreen .chosen-container .chosen-drop {
   border-color: #36533f;
   box-shadow: 0 1px 0 1px #36533f;
 }
-body.admin-color-evergreen .chosen-container .chosen-results li.highlighted {
+body.admin-color-bbp-evergreen
+  .chosen-container
+  .chosen-results
+  li.highlighted {
   background-color: #36533f;
 }
 /* Mint */
-body.admin-color-mint .chosen-container-active.chosen-with-drop .chosen-single {
+body.admin-color-bbp-mint
+  .chosen-container-active.chosen-with-drop
+  .chosen-single {
   border-color: #4f6d59;
   box-shadow: 0 0 0 1px #4f6d59;
 }
-body.admin-color-mint .chosen-container-active .chosen-single {
+body.admin-color-bbp-mint .chosen-container-active .chosen-single {
   border-color: #4f6d59;
   box-shadow: 0 0 0 1px #4f6d59;
 }
-body.admin-color-mint .chosen-container.chosen-dropup .chosen-drop {
+body.admin-color-bbp-mint .chosen-container.chosen-dropup .chosen-drop {
   border-color: #4f6d59;
   box-shadow: 0 -1px 0 1px #4f6d59;
 }
-body.admin-color-mint .chosen-container .chosen-drop {
+body.admin-color-bbp-mint .chosen-container .chosen-drop {
   border-color: #4f6d59;
   box-shadow: 0 1px 0 1px #4f6d59;
 }
-body.admin-color-mint .chosen-container .chosen-results li.highlighted {
+body.admin-color-bbp-mint .chosen-container .chosen-results li.highlighted {
   background-color: #4f6d59;
 }
 /* Even More Color Schemes
@@ -894,5 +899,3 @@ body.admin-color-shenandoah .chosen-container .chosen-results li.highlighted {
     line-height: 16px;
   }
 }
-
-/*# sourceMappingURL=wp-chosen.css.map */

@@ -77,9 +77,11 @@ class Walker_Category_Radio extends \Walker_Category_Checklist {
 				}
 			</style>
 			<label class="selectit">
-				<input value="<?php echo esc_attr( $category->term_id ); ?>" type="radio" name="<?php echo $name; ?>[]" id="in-<?php echo $item_id; ?>" <?php echo $checked; ?> <?php echo $disabled; ?> />
-				<?php echo esc_html( $text ); ?>
-			</label>
+				<input value="<?php echo esc_attr( $category->term_id ); ?>" type="radio" name="<?php echo $name; ?>[]" id="in-<?php echo $item_id; ?>" <?php echo $checked; ?> <?php echo $disabled; ?> /><?php
+
+				echo esc_html( $text );
+
+			?></label>
 
 		<?php
 

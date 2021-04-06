@@ -30,3 +30,7 @@ add_action( 'deleted_post',           'sugar_calendar_delete_post_events' );
 // Taxonomy query
 add_filter( 'sc_events_query_clauses', 'sugar_calendar_join_by_taxonomy_term',      10, 2 );
 add_action( 'sc_parse_events_query',   'sugar_calendar_pre_get_events_by_taxonomy', 10    );
+
+// Default Calendar
+add_filter( 'pre_option_default_sc_event_category',      'sugar_calendar_pre_get_default_calendar_option', 10, 3 );
+add_filter( 'pre_option_default_term_sc_event_category', 'sugar_calendar_pre_get_default_calendar_option', 10, 3 );

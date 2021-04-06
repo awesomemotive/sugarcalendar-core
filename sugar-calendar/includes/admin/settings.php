@@ -651,7 +651,22 @@ function editing_subsection() {
 	$fields = Editor\custom_fields();
 
 	// Get the registered editors
-	$editors = Editor\registered(); ?>
+	$editors = Editor\registered();
+
+	// Get the taxonomy & args
+	$tax     = get_taxonomy( sugar_calendar_get_calendar_taxonomy_id() );
+	$current = sugar_calendar_get_default_calendar();
+	$name    = sugar_calendar_get_default_calendar_option_name();
+	$args    = array(
+		'taxonomy'         => $tax->name,
+		'hierarchical'     => $tax->hierarchical,
+		'selected'         => $current,
+		'name'             => $name,
+		'hide_empty'       => false,
+		'orderby'          => 'name',
+		'class'            => 'sc-select-chosen',
+		'show_option_none' => esc_html__( '&mdash; No Default &mdash;', 'sugar-calendar' )
+	); ?>
 
 	<table class="form-table">
 		<tbody>
@@ -693,6 +708,13 @@ function editing_subsection() {
 						<?php _e( 'Allow developers to extend post types that support <code>events</code>.', 'sugar-calendar' ); ?>
 					</p>
 				</td>
+			</tr>
+
+			<tr valign="top">
+				<th scope="row" valign="top">
+					<label for="<?php echo esc_attr( $name ); ?>"><?php esc_html_e( 'Default Event Calendar', 'sugar-calendar' ); ?></label>
+				</th>
+				<td><?php wp_dropdown_categories( $args ); ?></td>
 			</tr>
 		</tbody>
 	</table>

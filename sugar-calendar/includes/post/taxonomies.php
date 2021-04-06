@@ -89,6 +89,21 @@ function sugar_calendar_register_calendar_taxonomy() {
 		'meta_box_cb'           => 'Sugar_Calendar\\Admin\\Editor\\Meta\\calendars'
 	);
 
+	// Default Calendar
+	$default = sugar_calendar_get_default_calendar();
+
+	// Default exists
+	if ( ! empty( $default ) ) {
+
+		// Get term (does not use taxonomy, because it's not registered yet!)
+		$term = get_term( $default );
+
+		// Term exists
+		if ( ! empty( $term->name ) ) {
+			$args['default_term'] = array( 'name' => $term->name );
+		}
+	}
+
 	// Register
 	register_taxonomy(
 		$tax,
@@ -235,4 +250,56 @@ function sugar_calendar_get_event_color( $object_id = 0, $object_type = 'post' )
 	return ! empty( $color )
 		? $color
 		: 'none';
+}
+
+/**
+ * Return the name of the option used to store the default Event Calendar.
+ *
+ * @since 2.1.9
+ *
+ * @return string
+ */
+function sugar_calendar_get_default_calendar_option_name() {
+	return 'sc_default_calendar';
+}
+
+/**
+ * Return the value of the default Event Calendar.
+ *
+ * @since 2.1.9
+ *
+ * @return string
+ */
+function sugar_calendar_get_default_calendar() {
+
+	// Get the option
+	$name   = sugar_calendar_get_default_calendar_option_name();
+	$retval = get_option( $name );
+
+	// Return
+	return $retval;
+}
+
+/**
+ * Filter the default WordPress option names, and use our custom one instead.
+ *
+ * @since 2.1.9
+ *
+ * @param string $value
+ * @param string $option
+
+ * @return string
+ */
+function sugar_calendar_pre_get_default_calendar_option( $value = false, $option = '', $default = '' ) {
+
+	// Bail if not filtering the correct option
+	if ( ! in_array( $option, array( 'default_sc_event_category', 'default_term_sc_event_category' ), true ) ) {
+		return $value;
+	}
+
+	// Get the correct ption
+	$value = sugar_calendar_get_default_calendar();
+
+	// Return the filtered option
+	return $value;
 }

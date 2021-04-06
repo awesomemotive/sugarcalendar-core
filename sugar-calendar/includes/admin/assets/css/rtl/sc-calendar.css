@@ -50,6 +50,57 @@ body.sugar-calendar.js div.sugar-calendar-wrap div.event-time-zone div.sc-select
 	min-width: 222px;
 }
 
+/* Calendars Taxonomy */
+
+#sc_event_categorydiv .inside {
+	padding-bottom: 0;
+}
+
+#sc_event_category-adder {
+	margin: 0 -12px;
+}
+
+#sc_event_category-add-toggle {
+	font-weight: normal;
+	font-size: 13px;
+	text-decoration: none;
+	margin: 0 13px -1px 0;
+	padding: 5px 10px;
+	border: 1px solid #c3c4c7;
+	border-bottom: 1px solid #f6f7f7;
+	background: #f6f7f7;
+	z-index: 2;
+	border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+}
+
+#sc_event_category-adder.wp-hidden-children #sc_event_category-add-toggle {
+	border-bottom: 1px solid #c3c4c7;
+}
+
+#sc_event_category-add {
+	background: #f6f7f7;
+	border-top: 1px solid #c3c4c7;
+	padding: 13px 13px 13px 13px;
+	margin: 0;
+	z-index: 1;
+}
+
+#sc_event_category-clear {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#sc_event_category-all {
+	position: relative;
+	margin: 10px 0;
+}
+
+#sc_event_categorychecklist {
+	margin: 0;
+}
+
 @media only screen and ( max-width: 782px ) {
 
 	.event-time input,

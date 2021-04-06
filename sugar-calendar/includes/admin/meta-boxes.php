@@ -747,6 +747,7 @@ function add_color_to_save( $event = array() ) {
  *
  * @since 2.0.0
  *
+ * @param WP_Post $post
  * @param array   $box {
  *     Categories meta box arguments.
  *
@@ -760,33 +761,69 @@ function add_color_to_save( $event = array() ) {
  *     }
  * }
  */
-function calendars( $post, $box ) {
-	$defaults = array( 'taxonomy' => 'category' );
+function calendars( $post = null, $box = array() ) {
 
+	// Fallback
 	$args = ( ! isset( $box['args'] ) || ! is_array( $box['args'] ) )
 		? array()
 		: $box['args'];
 
-	$r        = wp_parse_args( $args, $defaults );
-	$tax_name = esc_attr( $r['taxonomy'] );
-	$taxonomy = get_taxonomy( $r['taxonomy'] ); ?>
+	// Parse arguments
+	$r = wp_parse_args( $args, array(
+		'taxonomy' => 'category'
+	) );
+
+	// Taxonomy vars
+	$taxonomy = get_taxonomy( $r['taxonomy'] );
+	$tax_name = esc_attr( $taxonomy->name );
+	$default  = sugar_calendar_get_default_calendar();
+
+	// Dropdown arguments
+	$parent_dropdown_args = apply_filters( 'post_edit_category_parent_dropdown_args', array(
+		'taxonomy'         => $taxonomy->name,
+		'hide_empty'       => 0,
+		'name'             => 'new' . $taxonomy->name . '_parent',
+		'orderby'          => 'name',
+		'hierarchical'     => $taxonomy->hierarchical,
+		'show_option_none' => '&mdash; ' . $taxonomy->labels->parent_item . ' &mdash;',
+	) );
+
+	// Selected terms
+	$selected = wp_get_object_terms( $post->id, $taxonomy, array_merge( $args, array(
+		'fields' => 'ids'
+	) ) );
+
+	// Use default
+	if ( empty( $selected ) && ! empty( $default ) ) {
+		$selected = array( $default );
+	}
+
+	// Checklist arguments
+	$checklist_args = array(
+		'taxonomy'      => $taxonomy->name,
+		'selected_cats' => $selected
+	); ?>
 
 	<div id="taxonomy-<?php echo $tax_name; ?>" class="categorydiv">
 
 		<div id="<?php echo $tax_name; ?>-all">
 			<?php
 
-			$name = ( $tax_name === 'category' )
+			$name = ( 'category' === $taxonomy->name )
 				? 'post_category'
-				: 'tax_input[' . $tax_name . ']';
+				: 'tax_input[' . $taxonomy->name . ']';
 
 			// Allows for an empty term set to be sent. 0 is an invalid Term ID
 			// and will be ignored by empty() checks.
 			echo "<input type='hidden' name='{$name}[]' value='0' />"; ?>
 
 			<ul id="<?php echo $tax_name; ?>checklist" data-wp-lists="list:<?php echo $tax_name; ?>" class="categorychecklist form-no-clear">
-				<?php wp_terms_checklist( $post->ID, array( 'taxonomy' => $tax_name ) ); ?>
+				<?php wp_terms_checklist( $post->ID, $checklist_args ); ?>
 			</ul>
+
+			<a id="<?php echo $tax_name; ?>-clear" href="#<?php echo $tax_name; ?>-clear" class="hide-if-no-js button taxonomy-clear">
+				<?php esc_html_e( 'Clear', 'sugar-calendar' ); ?>
+			</a>
 		</div>
 
 		<?php if ( current_user_can( $taxonomy->cap->edit_terms ) ) : ?>
@@ -803,45 +840,11 @@ function calendars( $post, $box ) {
 						<?php echo $taxonomy->labels->parent_item_colon; ?>
 					</label>
 
-					<?php
-					/**
-					 * Filters the arguments for the taxonomy parent dropdown on the Post Edit page.
-					 *
-					 * @since 4.4.0
-					 *
-					 * @param array $parent_dropdown_args {
-					 *     Optional. Array of arguments to generate parent dropdown.
-					 *
-					 *     @type string   $taxonomy         Name of the taxonomy to retrieve.
-					 *     @type bool     $hide_if_empty    True to skip generating markup if no
-					 *                                      categories are found. Default 0.
-					 *     @type string   $name             Value for the 'name' attribute
-					 *                                      of the select element.
-					 *                                      Default "new{$tax_name}_parent".
-					 *     @type string   $orderby          Which column to use for ordering
-					 *                                      terms. Default 'name'.
-					 *     @type bool|int $hierarchical     Whether to traverse the taxonomy
-					 *                                      hierarchy. Default 1.
-					 *     @type string   $show_option_none Text to display for the "none" option.
-					 *                                      Default "&mdash; {$parent} &mdash;",
-					 *                                      where `$parent` is 'parent_item'
-					 *                                      taxonomy label.
-					 * }
-					 */
-					$parent_dropdown_args = apply_filters( 'post_edit_category_parent_dropdown_args', array(
-						'taxonomy'         => $tax_name,
-						'hide_empty'       => 0,
-						'name'             => 'new' . $tax_name . '_parent',
-						'orderby'          => 'name',
-						'hierarchical'     => 1,
-						'show_option_none' => '&mdash; ' . $taxonomy->labels->parent_item . ' &mdash;',
-					) );
-
-					wp_dropdown_categories( $parent_dropdown_args ); ?>
+					<?php wp_dropdown_categories( $parent_dropdown_args ); ?>
 
 					<input type="button" id="<?php echo $tax_name; ?>-add-submit" data-wp-lists="add:<?php echo $tax_name; ?>checklist:<?php echo $tax_name; ?>-add" class="button category-add-submit" value="<?php echo esc_attr( $taxonomy->labels->add_new_item ); ?>" />
 
-					<?php wp_nonce_field( 'add-' . $tax_name, '_ajax_nonce-add-' . $tax_name, false ); ?>
+					<?php wp_nonce_field( 'add-' . $taxonomy->name, '_ajax_nonce-add-' . $taxonomy->name, false ); ?>
 
 					<span id="<?php echo $tax_name; ?>-ajax-response"></span>
 				</p>

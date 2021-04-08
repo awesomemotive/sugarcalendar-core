@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.1.10\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2021-04-08 19:30:09+00:00\n"
+"POT-Creation-Date: 2021-04-08 20:28:35+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -232,7 +232,7 @@ msgstr ""
 #: sugar-calendar/includes/admin/help.php:574
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2429
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-list.php:468
-#: sugar-calendar/includes/admin/meta-boxes.php:1045
+#: sugar-calendar/includes/admin/meta-boxes.php:1036
 #: sugar-calendar/includes/post/functions.php:132
 msgid "All Day"
 msgstr ""
@@ -503,7 +503,7 @@ msgid "Milliseconds"
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:387
-#: sugar-calendar/includes/admin/meta-boxes.php:1188
+#: sugar-calendar/includes/admin/meta-boxes.php:1179
 #: sugar-calendar/includes/admin/screen-options.php:240
 #: sugar-calendar/includes/classes/terms/class-term-timezones.php:79
 #: sugar-calendar/includes/classes/terms/class-term-timezones.php:137
@@ -760,7 +760,7 @@ msgstr ""
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2448
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2455
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2479
-#: sugar-calendar/includes/admin/meta-boxes.php:1058
+#: sugar-calendar/includes/admin/meta-boxes.php:1049
 msgid "Start"
 msgstr ""
 
@@ -771,13 +771,13 @@ msgstr ""
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2450
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2457
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2498
-#: sugar-calendar/includes/admin/meta-boxes.php:1121
+#: sugar-calendar/includes/admin/meta-boxes.php:1112
 msgid "End"
 msgstr ""
 
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2574
 #: sugar-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:86
-#: sugar-calendar/includes/admin/meta-boxes.php:1241
+#: sugar-calendar/includes/admin/meta-boxes.php:1232
 msgid "Location"
 msgstr ""
 
@@ -873,7 +873,7 @@ msgstr ""
 
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-day.php:209
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-week.php:234
-#: sugar-calendar/includes/admin/meta-boxes.php:1051
+#: sugar-calendar/includes/admin/meta-boxes.php:1042
 #: sugar-calendar/includes/themes/legacy/event-display.php:145
 #: sugar-calendar/includes/themes/legacy/events-list.php:144
 msgid "All-day"
@@ -944,26 +944,26 @@ msgstr ""
 msgid "Event Options"
 msgstr ""
 
-#: sugar-calendar/includes/admin/meta-boxes.php:834
+#: sugar-calendar/includes/admin/meta-boxes.php:825
 msgid "Clear"
 msgstr ""
 
-#: sugar-calendar/includes/admin/meta-boxes.php:1067
-#: sugar-calendar/includes/admin/meta-boxes.php:1130
+#: sugar-calendar/includes/admin/meta-boxes.php:1058
+#: sugar-calendar/includes/admin/meta-boxes.php:1121
 msgid "at"
 msgstr ""
 
-#: sugar-calendar/includes/admin/meta-boxes.php:1094
-#: sugar-calendar/includes/admin/meta-boxes.php:1157
+#: sugar-calendar/includes/admin/meta-boxes.php:1085
+#: sugar-calendar/includes/admin/meta-boxes.php:1148
 msgid "AM"
 msgstr ""
 
-#: sugar-calendar/includes/admin/meta-boxes.php:1095
-#: sugar-calendar/includes/admin/meta-boxes.php:1158
+#: sugar-calendar/includes/admin/meta-boxes.php:1086
+#: sugar-calendar/includes/admin/meta-boxes.php:1149
 msgid "PM"
 msgstr ""
 
-#: sugar-calendar/includes/admin/meta-boxes.php:1246
+#: sugar-calendar/includes/admin/meta-boxes.php:1237
 msgid "(Optional)"
 msgstr ""
 

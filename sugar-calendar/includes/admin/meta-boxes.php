@@ -788,10 +788,24 @@ function calendars( $post = null, $box = array() ) {
 		'show_option_none' => '&mdash; ' . $taxonomy->labels->parent_item . ' &mdash;',
 	) );
 
-	// Selected terms
-	$selected = wp_get_object_terms( $post->id, $taxonomy, array_merge( $args, array(
-		'fields' => 'ids'
-	) ) );
+	// Check term cache first
+	$selected = get_object_term_cache( $post->ID, $taxonomy->name );
+
+	// Pluck IDs from cache
+	if ( false !== $selected ) {
+		$selected = wp_list_pluck( $selected, 'term_id' );
+
+	// No cache, so query for selected
+	} else {
+
+		// Args
+		$tax_args = array_merge( $r, array(
+			'fields' => 'ids'
+		) ) ;
+
+		// Query
+		$selected = wp_get_object_terms( $post->ID, $taxonomy->name, $tax_args );
+	}
 
 	// Use default
 	if ( empty( $selected ) && ! empty( $default ) ) {
@@ -801,7 +815,8 @@ function calendars( $post = null, $box = array() ) {
 	// Checklist arguments
 	$checklist_args = array(
 		'taxonomy'      => $taxonomy->name,
-		'selected_cats' => $selected
+		'selected_cats' => $selected,
+		'checked_ontop' => false
 	); ?>
 
 	<div id="taxonomy-<?php echo $tax_name; ?>" class="categorydiv">

@@ -150,7 +150,7 @@ function sugar_calendar_register_post_types() {
 
 	// Super easy slug override
 	if ( ! defined( 'SC_EVENTS_SLUG' ) ) {
-		define( 'SC_EVENTS_SLUG', 'events ');
+		define( 'SC_EVENTS_SLUG', 'events' );
 	}
 
 	// Rewrite

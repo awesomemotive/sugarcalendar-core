@@ -10,7 +10,7 @@
  * Text Domain:       sugar-calendar
  * Domain Path:       /sugar-calendar/includes/languages/
  * Requires PHP:      5.6.20
- * Requires at least: 5.1
+ * Requires at least: 5.2
  * Version:           2.1.10
  */
 
@@ -67,7 +67,7 @@ final class Sugar_Calendar_Requirements_Check {
 
 		// WordPress
 		'wp' => array(
-			'minimum' => '5.1.0',
+			'minimum' => '5.2.0',
 			'name'    => 'WordPress',
 			'exists'  => true,
 			'current' => false,

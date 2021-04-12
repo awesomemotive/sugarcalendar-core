@@ -18,12 +18,16 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * This class_exists() check avoids fatal errors when this plugin is activated
- * in more than one way, and should not be removed.
+ * This class_exists() check avoids a fatal error when this plugin is activated
+ * in more than one way and should not be removed.
  */
 if ( ! class_exists( 'Sugar_Calendar\\Requirements_Check' ) ) {
-	require_once dirname( __FILE__ ) . '/sugar-calendar/requirements-check.php';
+
+	// Include the Requirements file
+	include_once dirname( __FILE__ ) . '/sugar-calendar/requirements-check.php';
 
 	// Invoke the checker
-	new Sugar_Calendar\Requirements_Check( __FILE__ );
+	if ( class_exists( 'Sugar_Calendar\\Requirements_Check' ) ) {
+		new Sugar_Calendar\Requirements_Check( __FILE__ );
+	}
 }

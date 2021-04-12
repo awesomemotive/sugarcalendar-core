@@ -1,5 +1,6 @@
 /* Date Picker Default Styles */
 .sc-datepicker {
+  display: none;
   padding: 0;
   margin: 0;
   border-radius: 0;

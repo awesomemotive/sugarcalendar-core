@@ -206,7 +206,12 @@ final class Event_Query extends Query {
 				'post_status'    => 'any',
 				'post__in'       => $post_ids,
 				'posts_per_page' => -1,
-				'no_found_rows'  => true
+				'no_found_rows'  => true,
+
+				// Also prime relative caches
+				'update_post_term_cache' => true,
+				'update_post_meta_cache' => true,
+				'lazy_load_term_meta'    => true
 			) );
 		}
 	}

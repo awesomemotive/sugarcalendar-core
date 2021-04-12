@@ -28,6 +28,9 @@ function sugar_calendar_register_settings() {
 	register_setting( 'sc_main_display', 'sc_time_format', array(
 		'default' => get_option( 'time_format' )
 	) );
+	register_setting( 'sc_main_display', 'sc_day_color_style', array(
+		'default' => 'none'
+	) );
 
 	// Time Zones
 	register_setting( 'sc_main_timezones', 'sc_timezone_convert' );
@@ -39,6 +42,7 @@ function sugar_calendar_register_settings() {
 	// Editor
 	register_setting( 'sc_main_editing', 'sc_editor_type' );
 	register_setting( 'sc_main_editing', 'sc_custom_fields' );
+	register_setting( 'sc_main_editing', sugar_calendar_get_default_calendar_option_name() );
 
 	do_action( 'sugar_calendar_register_settings' );
 }

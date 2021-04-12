@@ -35,7 +35,7 @@ function register() {
 	/** Scripts ***************************************************************/
 
 	// Chosen
-	wp_register_script( 'sugar_calendar_vendor_chosen',    "{$url}js/chosen.js",      $deps,    $ver, false );
+	wp_register_script( 'sugar_calendar_vendor_chosen',    "{$url}js/chosen.js",     $deps,    $ver, false );
 
 	// Admin
 	wp_register_script( 'sugar_calendar_admin_general',   "{$url}js/sc-admin.js",    $chosen,  $ver, false );

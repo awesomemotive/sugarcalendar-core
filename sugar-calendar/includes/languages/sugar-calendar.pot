@@ -1927,23 +1927,23 @@ msgstr ""
 msgid "DESC"
 msgstr ""
 
-#: sugar-calendar-lite.php:193
+#: sugar-calendar/requirements-check.php:202
 msgid "This plugin is not fully active."
 msgstr ""
 
-#: sugar-calendar-lite.php:203
+#: sugar-calendar/requirements-check.php:212
 msgid "Requires %s (%s), but (%s) is installed."
 msgstr ""
 
-#: sugar-calendar-lite.php:213
+#: sugar-calendar/requirements-check.php:222
 msgid "Requires %s (%s), but it appears to be missing."
 msgstr ""
 
-#: sugar-calendar-lite.php:223
+#: sugar-calendar/requirements-check.php:232
 msgid "Requirements"
 msgstr ""
 
-#: sugar-calendar-lite.php:233
+#: sugar-calendar/requirements-check.php:242
 msgid "Sugar Calendar Requirements"
 msgstr ""
 

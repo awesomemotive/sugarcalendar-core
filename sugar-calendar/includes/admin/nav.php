@@ -17,16 +17,17 @@ defined( 'ABSPATH' ) || exit;
 function display() {
 	global $taxnow;
 
+	// Get the post type & labels
+	$post_type = sugar_calendar_get_event_post_type_id();
+	$name      = sugar_calendar_get_post_type_label( $post_type, 'name', esc_html__( 'Events', 'sugar-calendar' ) );
+
 	// Initial tab array
 	$tabs = array(
 		'sugar-calendar' => array(
-			'name' => esc_html__( 'Events', 'sugar-calendar' ),
+			'name' => $name,
 			'url'  => sugar_calendar_get_admin_url()
 		)
 	);
-
-	// Get the post type
-	$post_type = sugar_calendar_get_event_post_type_id();
 
 	// Get the taxonomies
 	$taxonomies = sugar_calendar_get_object_taxonomies(
@@ -215,7 +216,7 @@ function add_new() {
 		$name = get_taxonomy( get_current_screen()->taxonomy )->labels->singular_name;
 		$url  = '#tag-name';
 	} else {
-		$name = $post_type_object->labels->singular_name;
+		$name = sugar_calendar_get_post_type_label( $post_type, 'singular_name' );
 		$url  = $url  = add_query_arg( array( 'post_type' => $post_type ), admin_url( 'post-new.php' ) );
 	}
 

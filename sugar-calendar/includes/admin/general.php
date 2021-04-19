@@ -225,11 +225,11 @@ function sugar_calendar_admin_title( $admin_title = '', $title = '' ) {
 	}
 
 	// Event title page text
-	$ugh   = '&#8212; WordPress';
-	$pre   = esc_html__( 'Events', 'sugar-calendar' );
-	$ugh   = __( 'All Posts', 'sugar-calendar' );
+	$pt    = sugar_calendar_get_admin_post_type();
+	$pre   = sugar_calendar_get_post_type_label( $pt, 'name', esc_html__( 'Events', 'sugar-calendar' ) );
+	$ugh   = __( 'Posts', 'sugar-calendar' );
 	$page  = get_admin_page_parent();
-	$event = 'edit.php?post_type=' . sugar_calendar_get_event_post_type_id();
+	$event = 'edit.php?post_type=' . $pt;
 
 	// Conditions
 	$is_page = ( $event !== $page );

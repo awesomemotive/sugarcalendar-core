@@ -16,6 +16,10 @@ defined( 'ABSPATH' ) || exit;
  */
 function register_page() {
 
+	// Get the main post type object
+	$post_type = sugar_calendar_get_event_post_type_id();
+	$pt_object = get_post_type_object( $post_type );
+
 	// Add an invisible upgrades page
 	add_submenu_page(
 		null,
@@ -26,13 +30,17 @@ function register_page() {
 		'Sugar_Calendar\\Admin\\Upgrades\\page'
 	);
 
+	// Labels
+	$menu_name = sugar_calendar_get_post_type_label( $post_type, 'menu_name', esc_html__( 'Calendar', 'sugar-calendar' ) );
+	$add_new   = sugar_calendar_get_post_type_label( $post_type, 'add_new',   esc_html__( 'Add New',  'sugar-calendar' ) );
+
 	// Default hooks array
 	$hooks = array();
 
-	// Main plugin page
+	// Main "Calendar" plugin page
 	$hooks[] = add_menu_page(
-		esc_html__( 'Calendar', 'sugar-calendar' ),
-		esc_html__( 'Calendar', 'sugar-calendar' ),
+		$menu_name,
+		$menu_name,
 		'read_calendar',
 		'sugar-calendar',
 		'Sugar_Calendar\\Admin\\Menu\\calendar_page',
@@ -40,15 +48,11 @@ function register_page() {
 		2
 	);
 
-	// Get the main post type object
-	$post_type = sugar_calendar_get_event_post_type_id();
-	$pt_object = get_post_type_object( $post_type );
-
 	// "Add New" page
 	$hooks[] = add_submenu_page(
 		'sugar-calendar',
-		esc_html__( 'Add New', 'sugar-calendar' ),
-		esc_html__( 'Add New', 'sugar-calendar' ),
+		$add_new,
+		$add_new,
 		$pt_object->cap->create_posts,
 		'post-new.php?post_type=' . $post_type,
 		false
@@ -163,11 +167,6 @@ function get_list_table() {
  */
 function calendar_page() {
 
-	// Setup necessary vars for the Search Box
-	$post_type        = sugar_calendar_get_admin_post_type();
-	$post_type_object = get_post_type_object( $post_type );
-	$search_label     = $post_type_object->labels->search_items;
-
 	// Get the list table
 	$list_table = get_list_table();
 
@@ -178,7 +177,7 @@ function calendar_page() {
 	$list_table->set_help_tabs(); ?>
 
 	<div class="wrap">
-		<h1 class="wp-heading-inline"><?php esc_html_e( 'Events', 'sugar-calendar' ); ?></h1>
+		<?php $list_table->page_heading(); ?>
 
 		<?php \Sugar_Calendar\Admin\Nav\display(); ?>
 
@@ -189,8 +188,6 @@ function calendar_page() {
 			<?php $list_table->views(); ?>
 
 			<form id="posts-filter" method="get">
-
-				<?php $list_table->search_box( $search_label, $post_type ); ?>
 
 				<input type="hidden" name="page" value="sugar-calendar" />
 

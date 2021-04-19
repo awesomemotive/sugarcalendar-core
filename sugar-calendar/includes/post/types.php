@@ -69,6 +69,7 @@ function sugar_calendar_register_post_types() {
 		'view_item'                => esc_html__( 'View Event', 'sugar-calendar' ),
 		'view_items'               => esc_html__( 'View Events', 'sugar-calendar' ),
 		'search_items'             => esc_html__( 'Search Events', 'sugar-calendar' ),
+		'search_items_ellipsis'    => esc_attr__( 'Search events...', 'sugar-calendar' ),
 		'not_found'                => esc_html__( 'No events found.', 'sugar-calendar' ),
 		'not_found_in_trash'       => esc_html__( 'No events found in trash.', 'sugar-calendar' ),
 		'parent_item_colon'        => esc_html__( 'Parent Event:', 'sugar-calendar' ),
@@ -197,4 +198,44 @@ function sugar_calendar_register_post_types() {
 		sugar_calendar_get_event_post_type_id(),
 		$args
 	);
+}
+
+/**
+ * Return a label from a WP_Post_Type->labels object, given a post-type string
+ * and the name of the label.
+ *
+ * Use this function to help eliminate some repetition, particularly around how
+ * to fallback if no label exists for that type.
+ *
+ * The fallback is generally used for custom strings in specific areas of the
+ * user interface where "Calendar" and "Events" are contextually accurate but
+ * could be confusing when being filtered by third-party plugins.
+ *
+ * @since 2.2.0
+ *
+ * @param string $post_type The name of the post type
+ * @param string $label     The name of the label
+ * @param string $fallback  The string to fallback on if no label exists
+ *
+ * @return string|object String if single label. Object if all labels.
+ */
+function sugar_calendar_get_post_type_label( $post_type = '', $label = '', $fallback = '' ) {
+
+	// Fallback to Events post type
+	if ( empty( $post_type ) ) {
+		$post_type = sugar_calendar_get_event_post_type_id();
+	}
+
+	// Get the object
+	$pto = get_post_type_object( $post_type );
+
+	// Return all labels
+	if ( empty( $label ) ) {
+		return $pto->labels;
+	}
+
+	// Return a single label, or fallback
+	return ! empty( $pto->labels->{$label} )
+		? $pto->labels->{$label}
+		: $fallback;
 }

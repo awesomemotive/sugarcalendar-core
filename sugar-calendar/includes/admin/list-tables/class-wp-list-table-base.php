@@ -331,10 +331,13 @@ class Base_List_Table extends \WP_List_Table {
 		$this->init_max();
 		$this->init_modes();
 
+		// Get post type
+		$pt = sugar_calendar_get_admin_post_type();
+
 		// Setup arguments
 		$r = wp_parse_args( $args, array(
-			'singular' => esc_html__( 'Event',  'sugar-calendar' ),
-			'plural'   => esc_html__( 'Events', 'sugar-calendar' )
+			'plural'   => sugar_calendar_get_post_type_label( $pt, 'name',          esc_html__( 'Events', 'sugar-calendar' ) ),
+			'singular' => sugar_calendar_get_post_type_label( $pt, 'singular_name', esc_html__( 'Event',  'sugar-calendar' ) )
 		) );
 
 		// Return arguments
@@ -2907,6 +2910,19 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Output the page heading
+	 *
+	 * @since 2.2.0
+	 */
+	public function page_heading() {
+		?><h1 class="wp-heading-inline"><?php
+
+			echo sugar_calendar_get_post_type_label( '', 'menu_name', esc_html__( 'Events', 'sugar-calendar' ));
+
+		?></h1><?php
+	}
+
+	/**
 	 * Event filter to match the styling of the Media Filter
 	 *
 	 * This methods outputs the HTML used to switch modes, search events, filter
@@ -2915,19 +2931,29 @@ class Base_List_Table extends \WP_List_Table {
 	 * @since 2.0.0
 	 */
 	public function event_filter() {
+
+		// Labels
+		$pt    = sugar_calendar_get_admin_post_type();
+		$label = sugar_calendar_get_post_type_label( $pt, 'search_items',          esc_attr__( 'Search Events.',   'sugar-calendar' ) );
+		$place = sugar_calendar_get_post_type_label( $pt, 'search_items_ellipsis', esc_attr__( 'Search events...', 'sugar-calendar' ) );
+
 		?>
 
 		<form id="events-filter" method="get">
 			<div class="wp-filter">
-				<div class="filter-items">
-					<?php echo $this->mode_picker(); ?>
+				<div class="filter-items"><?php
 
-					<?php echo $this->extra_tablenav( 'bar' ); ?>
-				</div>
+					// Picker
+					echo $this->mode_picker();
+
+					// Top bar tablenav
+					echo $this->extra_tablenav( 'bar' );
+
+				?></div>
 
 				<div class="search-form">
-					<label for="event-search-input" class="screen-reader-text"><?php esc_html_e( 'Search Events', 'sugar-calendar' ); ?></label>
-					<input type="search" placeholder="<?php esc_attr_e( 'Search events...', 'sugar-calendar' ) ?>" id="event-search-input" class="search" name="s" value="<?php _admin_search_query(); ?>">
+					<label for="event-search-input" class="screen-reader-text"><?php echo esc_html( $label ); ?></label>
+					<input type="search" placeholder="<?php echo esc_attr( $place ); ?>" id="event-search-input" class="search" name="s" value="<?php _admin_search_query(); ?>">
 				</div>
 
 				<input type="hidden" name="object_type" value="<?php echo esc_attr( $this->get_object_type() ); ?>" />

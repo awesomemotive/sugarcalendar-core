@@ -50,7 +50,7 @@ add_filter( 'enter_title_here', __NAMESPACE__ . '\\Posts\\title', 10, 2 );
 add_filter( 'post_updated_messages', __NAMESPACE__ . '\\Posts\\updated_messages' );
 
 // Admin title
-add_filter( 'admin_title', 'sugar_calendar_admin_title' );
+add_filter( 'admin_title', 'sugar_calendar_admin_title', 10, 2 );
 
 // Admin Menu
 add_action( 'admin_head', __NAMESPACE__ . '\\Menu\\fix_menu_highlight', 9999 );

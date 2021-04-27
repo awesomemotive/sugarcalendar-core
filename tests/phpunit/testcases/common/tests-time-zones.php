@@ -96,23 +96,45 @@ class TimeZones extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * At 2020-11-23 00:00:00, Chicago to New York to UTC is 6 hours.
+	 * At 2020-11-23 00:00:00, Chicago to New York to South Georgia is 3 hours.
 	 *
 	 * @group get_timezone_diff_multi
 	 */
 	public function test_get_timezone_diff_multi() {
 
 		$args = array(
-			'datetime'  => sugar_calendar_get_request_time( 'mysql' ),
+			'datetime'  => '2020-11-23 00:00:00',
 			'timezones' => array(
 				'America/Chicago',
 				'America/New_York',
-				'UTC',
+				'Atlantic/South_Georgia',
 			)
 		);
 
 		$offset = sugar_calendar_get_timezone_diff_multi( $args );
-		$same   = -6 * HOUR_IN_SECONDS;
+		$same   = -3 * HOUR_IN_SECONDS;
+
+		$this->assertSame( $same, $offset );
+	}
+
+	/**
+	 * At 2020-11-23 00:00:00, Chicago to New York to Auckland is 17 hours.
+	 *
+	 * @group get_timezone_diff_multi
+	 */
+	public function test_get_timezone_diff_multi_positive_offset_on_right() {
+
+		$args = array(
+			'datetime'  => '2020-11-23 00:00:00',
+			'timezones' => array(
+				'America/Chicago',
+				'America/New_York',
+				'Pacific/Auckland',
+			)
+		);
+
+		$offset = sugar_calendar_get_timezone_diff_multi( $args );
+		$same   = -17 * HOUR_IN_SECONDS;
 
 		$this->assertSame( $same, $offset );
 	}
@@ -125,7 +147,7 @@ class TimeZones extends \WP_UnitTestCase {
 	public function test_get_timezone_diff_multi_hours() {
 
 		$args = array(
-			'datetime'  => sugar_calendar_get_request_time( 'mysql' ),
+			'datetime'  => '2020-11-23 00:00:00',
 			'format'    => 'hours',
 			'direction' => 'left',
 			'timezones' => array(

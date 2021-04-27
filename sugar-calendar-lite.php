@@ -57,7 +57,7 @@ final class Sugar_Calendar_Requirements_Check {
 
 		// PHP
 		'php' => array(
-			'minimum' => '5.6.20',
+			'minimum' => '5.6.0',
 			'name'    => 'PHP',
 			'exists'  => true,
 			'current' => false,

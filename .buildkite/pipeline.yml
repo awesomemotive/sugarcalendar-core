@@ -46,21 +46,6 @@ steps:
   - env:
       TEST_INPLACE: "0"
       TEST_PHP_VERSION: "7.0"
-      TEST_WP_VERSION: 5.1.6
-      WP_MULTISITE: "0"
-    label: 'PHP: 7.0 | WP: 5.1.6 | Multisite: No'
-    plugins:
-      - docker-compose#v3.7.0:
-          config: docker-compose-phpunit.yml
-          env:
-            - WP_MULTISITE
-            - TEST_INPLACE
-          propagate-uid-gid: true
-          pull-retries: 3
-          run: wordpress
-  - env:
-      TEST_INPLACE: "0"
-      TEST_PHP_VERSION: "7.0"
       TEST_WP_VERSION: 5.2.7
       WP_MULTISITE: "0"
     label: 'PHP: 7.0 | WP: 5.2.7 | Multisite: No'
@@ -121,9 +106,9 @@ steps:
   - env:
       TEST_INPLACE: "0"
       TEST_PHP_VERSION: "7.0"
-      TEST_WP_VERSION: latest
+      TEST_WP_VERSION: 5.6.3
       WP_MULTISITE: "0"
-    label: 'PHP: 7.0 | WP: latest | Multisite: No'
+    label: 'PHP: 7.0 | WP: 5.6.3 | Multisite: No'
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -135,10 +120,10 @@ steps:
           run: wordpress
   - env:
       TEST_INPLACE: "0"
-      TEST_PHP_VERSION: "7.1"
-      TEST_WP_VERSION: 5.1.6
+      TEST_PHP_VERSION: "7.0"
+      TEST_WP_VERSION: latest
       WP_MULTISITE: "0"
-    label: 'PHP: 7.1 | WP: 5.1.6 | Multisite: No'
+    label: 'PHP: 7.0 | WP: latest | Multisite: No'
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -211,9 +196,9 @@ steps:
   - env:
       TEST_INPLACE: "0"
       TEST_PHP_VERSION: "7.1"
-      TEST_WP_VERSION: latest
+      TEST_WP_VERSION: 5.6.3
       WP_MULTISITE: "0"
-    label: 'PHP: 7.1 | WP: latest | Multisite: No'
+    label: 'PHP: 7.1 | WP: 5.6.3 | Multisite: No'
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -225,10 +210,10 @@ steps:
           run: wordpress
   - env:
       TEST_INPLACE: "0"
-      TEST_PHP_VERSION: "7.2"
-      TEST_WP_VERSION: 5.1.6
+      TEST_PHP_VERSION: "7.1"
+      TEST_WP_VERSION: latest
       WP_MULTISITE: "0"
-    label: 'PHP: 7.2 | WP: 5.1.6 | Multisite: No'
+    label: 'PHP: 7.1 | WP: latest | Multisite: No'
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -301,9 +286,9 @@ steps:
   - env:
       TEST_INPLACE: "0"
       TEST_PHP_VERSION: "7.2"
-      TEST_WP_VERSION: latest
+      TEST_WP_VERSION: 5.6.3
       WP_MULTISITE: "0"
-    label: 'PHP: 7.2 | WP: latest | Multisite: No'
+    label: 'PHP: 7.2 | WP: 5.6.3 | Multisite: No'
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -315,10 +300,10 @@ steps:
           run: wordpress
   - env:
       TEST_INPLACE: "0"
-      TEST_PHP_VERSION: "7.3"
-      TEST_WP_VERSION: 5.1.6
+      TEST_PHP_VERSION: "7.2"
+      TEST_WP_VERSION: latest
       WP_MULTISITE: "0"
-    label: 'PHP: 7.3 | WP: 5.1.6 | Multisite: No'
+    label: 'PHP: 7.2 | WP: latest | Multisite: No'
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -391,6 +376,21 @@ steps:
   - env:
       TEST_INPLACE: "0"
       TEST_PHP_VERSION: "7.3"
+      TEST_WP_VERSION: 5.6.3
+      WP_MULTISITE: "0"
+    label: 'PHP: 7.3 | WP: 5.6.3 | Multisite: No'
+    plugins:
+      - docker-compose#v3.7.0:
+          config: docker-compose-phpunit.yml
+          env:
+            - WP_MULTISITE
+            - TEST_INPLACE
+          propagate-uid-gid: true
+          pull-retries: 3
+          run: wordpress
+  - env:
+      TEST_INPLACE: "0"
+      TEST_PHP_VERSION: "7.3"
       TEST_WP_VERSION: latest
       WP_MULTISITE: "0"
     label: 'PHP: 7.3 | WP: latest | Multisite: No'
@@ -439,6 +439,21 @@ steps:
       TEST_WP_VERSION: 5.5.3
       WP_MULTISITE: "0"
     label: 'PHP: 7.4 | WP: 5.5.3 | Multisite: No'
+    plugins:
+      - docker-compose#v3.7.0:
+          config: docker-compose-phpunit.yml
+          env:
+            - WP_MULTISITE
+            - TEST_INPLACE
+          propagate-uid-gid: true
+          pull-retries: 3
+          run: wordpress
+  - env:
+      TEST_INPLACE: "0"
+      TEST_PHP_VERSION: "7.4"
+      TEST_WP_VERSION: 5.6.3
+      WP_MULTISITE: "0"
+    label: 'PHP: 7.4 | WP: 5.6.3 | Multisite: No'
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml

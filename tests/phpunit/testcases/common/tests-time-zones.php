@@ -103,7 +103,7 @@ class TimeZones extends \WP_UnitTestCase {
 	public function test_get_timezone_diff_multi() {
 
 		$args = array(
-			'datetime'  => sugar_calendar_get_request_time( 'mysql' ),
+			'datetime'  => '2020-11-23 00:00:00',
 			'timezones' => array(
 				'America/Chicago',
 				'America/New_York',
@@ -118,14 +118,14 @@ class TimeZones extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * At 2020-11-23 00:00:00, Chicago to New York to Auckalnd is 17 hours.
+	 * At 2020-11-23 00:00:00, Chicago to New York to Auckland is 17 hours.
 	 *
 	 * @group get_timezone_diff_multi
 	 */
 	public function test_get_timezone_diff_multi_positive_offset_on_right() {
 
 		$args = array(
-			'datetime'  => sugar_calendar_get_request_time( 'mysql' ),
+			'datetime'  => '2020-11-23 00:00:00',
 			'timezones' => array(
 				'America/Chicago',
 				'America/New_York',
@@ -147,7 +147,7 @@ class TimeZones extends \WP_UnitTestCase {
 	public function test_get_timezone_diff_multi_hours() {
 
 		$args = array(
-			'datetime'  => sugar_calendar_get_request_time( 'mysql' ),
+			'datetime'  => '2020-11-23 00:00:00',
 			'format'    => 'hours',
 			'direction' => 'left',
 			'timezones' => array(

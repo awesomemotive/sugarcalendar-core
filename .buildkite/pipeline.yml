@@ -4,11 +4,15 @@ steps:
     command: "docker pull public.ecr.aws/q7y6e9n2/unit-test-images/php:7.0"
     retry:
       automatic: true
+    agents:
+      queue: "sc"
 
   - label: "Pull PHP 7.1"
     command: "docker pull public.ecr.aws/q7y6e9n2/unit-test-images/php:7.1"
     retry:
       automatic: true
+    agents:
+      queue: "sc"
 
   - wait
 
@@ -16,11 +20,15 @@ steps:
     command: "docker pull public.ecr.aws/q7y6e9n2/unit-test-images/php:7.2"
     retry:
       automatic: true
+    agents:
+      queue: "sc"
 
   - label: "Pull PHP 7.3"
     command: "docker pull public.ecr.aws/q7y6e9n2/unit-test-images/php:7.3"
     retry:
       automatic: true
+    agents:
+      queue: "sc"
 
   - wait
 
@@ -28,11 +36,15 @@ steps:
     command: "docker pull public.ecr.aws/q7y6e9n2/unit-test-images/php:7.4"
     retry:
       automatic: true
+    agents:
+      queue: "sc"
 
   - label: "Pull MariaDB"
     command: "docker pull mariadb:10.2"
     retry:
       automatic: true
+    agents:
+      queue: "sc"
 
   - wait
 
@@ -42,6 +54,8 @@ steps:
       TEST_WP_VERSION: 5.2.7
       WP_MULTISITE: "0"
     label: 'PHP: 7.0 | WP: 5.2.7 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -57,6 +71,8 @@ steps:
       TEST_WP_VERSION: 5.3.4
       WP_MULTISITE: "0"
     label: 'PHP: 7.0 | WP: 5.3.4 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -72,6 +88,8 @@ steps:
       TEST_WP_VERSION: 5.4.2
       WP_MULTISITE: "0"
     label: 'PHP: 7.0 | WP: 5.4.2 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -87,6 +105,8 @@ steps:
       TEST_WP_VERSION: 5.5.3
       WP_MULTISITE: "0"
     label: 'PHP: 7.0 | WP: 5.5.3 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -102,6 +122,8 @@ steps:
       TEST_WP_VERSION: 5.6.3
       WP_MULTISITE: "0"
     label: 'PHP: 7.0 | WP: 5.6.3 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -117,6 +139,8 @@ steps:
       TEST_WP_VERSION: latest
       WP_MULTISITE: "0"
     label: 'PHP: 7.0 | WP: latest | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -132,6 +156,8 @@ steps:
       TEST_WP_VERSION: 5.2.7
       WP_MULTISITE: "0"
     label: 'PHP: 7.1 | WP: 5.2.7 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -147,6 +173,8 @@ steps:
       TEST_WP_VERSION: 5.3.4
       WP_MULTISITE: "0"
     label: 'PHP: 7.1 | WP: 5.3.4 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -162,6 +190,8 @@ steps:
       TEST_WP_VERSION: 5.4.2
       WP_MULTISITE: "0"
     label: 'PHP: 7.1 | WP: 5.4.2 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -177,6 +207,8 @@ steps:
       TEST_WP_VERSION: 5.5.3
       WP_MULTISITE: "0"
     label: 'PHP: 7.1 | WP: 5.5.3 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -192,6 +224,8 @@ steps:
       TEST_WP_VERSION: 5.6.3
       WP_MULTISITE: "0"
     label: 'PHP: 7.1 | WP: 5.6.3 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -207,6 +241,8 @@ steps:
       TEST_WP_VERSION: latest
       WP_MULTISITE: "0"
     label: 'PHP: 7.1 | WP: latest | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -222,6 +258,8 @@ steps:
       TEST_WP_VERSION: 5.2.7
       WP_MULTISITE: "0"
     label: 'PHP: 7.2 | WP: 5.2.7 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -237,6 +275,8 @@ steps:
       TEST_WP_VERSION: 5.3.4
       WP_MULTISITE: "0"
     label: 'PHP: 7.2 | WP: 5.3.4 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -252,6 +292,8 @@ steps:
       TEST_WP_VERSION: 5.4.2
       WP_MULTISITE: "0"
     label: 'PHP: 7.2 | WP: 5.4.2 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -267,6 +309,8 @@ steps:
       TEST_WP_VERSION: 5.5.3
       WP_MULTISITE: "0"
     label: 'PHP: 7.2 | WP: 5.5.3 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -282,6 +326,8 @@ steps:
       TEST_WP_VERSION: 5.6.3
       WP_MULTISITE: "0"
     label: 'PHP: 7.2 | WP: 5.6.3 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -297,6 +343,8 @@ steps:
       TEST_WP_VERSION: latest
       WP_MULTISITE: "0"
     label: 'PHP: 7.2 | WP: latest | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -312,6 +360,8 @@ steps:
       TEST_WP_VERSION: 5.2.7
       WP_MULTISITE: "0"
     label: 'PHP: 7.3 | WP: 5.2.7 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -327,6 +377,8 @@ steps:
       TEST_WP_VERSION: 5.3.4
       WP_MULTISITE: "0"
     label: 'PHP: 7.3 | WP: 5.3.4 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -342,6 +394,8 @@ steps:
       TEST_WP_VERSION: 5.4.2
       WP_MULTISITE: "0"
     label: 'PHP: 7.3 | WP: 5.4.2 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -357,6 +411,8 @@ steps:
       TEST_WP_VERSION: 5.5.3
       WP_MULTISITE: "0"
     label: 'PHP: 7.3 | WP: 5.5.3 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -372,6 +428,8 @@ steps:
       TEST_WP_VERSION: 5.6.3
       WP_MULTISITE: "0"
     label: 'PHP: 7.3 | WP: 5.6.3 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -387,6 +445,8 @@ steps:
       TEST_WP_VERSION: latest
       WP_MULTISITE: "0"
     label: 'PHP: 7.3 | WP: latest | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -402,6 +462,8 @@ steps:
       TEST_WP_VERSION: 5.3.4
       WP_MULTISITE: "0"
     label: 'PHP: 7.4 | WP: 5.3.4 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -417,6 +479,8 @@ steps:
       TEST_WP_VERSION: 5.4.2
       WP_MULTISITE: "0"
     label: 'PHP: 7.4 | WP: 5.4.2 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -432,6 +496,8 @@ steps:
       TEST_WP_VERSION: 5.5.3
       WP_MULTISITE: "0"
     label: 'PHP: 7.4 | WP: 5.5.3 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -447,6 +513,8 @@ steps:
       TEST_WP_VERSION: 5.6.3
       WP_MULTISITE: "0"
     label: 'PHP: 7.4 | WP: 5.6.3 | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml
@@ -462,6 +530,8 @@ steps:
       TEST_WP_VERSION: latest
       WP_MULTISITE: "0"
     label: 'PHP: 7.4 | WP: latest | Multisite: No'
+    agents:
+      queue: "sc"
     plugins:
       - docker-compose#v3.7.0:
           config: docker-compose-phpunit.yml

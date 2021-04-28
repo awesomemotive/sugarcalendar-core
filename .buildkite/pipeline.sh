@@ -9,9 +9,17 @@ echo "steps:"
 phpVersions=('7.0' '7.1' '7.2' '7.3' '7.4')
 wpVersions=('5.2.7' '5.3.4' '5.4.2' '5.5.3' '5.6.3' 'latest')
 
+# Exclude combinations with <php version>-<wp version>
+exclusions=('7.4-5.2.7')
+
 # add a new command step to run the tests in each test directory
 for phpVersion in ${phpVersions[@]}; do
   for wpVersion in ${wpVersions[@]}; do
+
+    if [[ " ${exclusions[@]} " =~ " ${phpVersion}-${wpVersion} " ]]; then
+      continue
+    fi
+    
     echo "  - env:"
     echo "      TEST_INPLACE: \"0\""
     echo "      TEST_PHP_VERSION: \""$phpVersion"\""

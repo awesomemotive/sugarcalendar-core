@@ -483,7 +483,7 @@ function add_settings_tabs() {
 			'<li>' . esc_html__( 'Days can be represented as numbers or words.',             'sugar-calendar' ) . '</li>' .
 			'<li>' . esc_html__( 'Week number is useful in month view calendars.',           'sugar-calendar' ) . '</li>' .
 			'<li>' . esc_html__( 'Months can be represented as numbers or words.',           'sugar-calendar' ) . '</li>' .
-			'<li>' . esc_html__( 'Years can be 2 or 4 digtes, and more.',                    'sugar-calendar' ) . '</li></ul>'
+			'<li>' . esc_html__( 'Years can be 2 or 4 digits, and more.',                    'sugar-calendar' ) . '</li></ul>'
 	) );
 
 	// Day & Week

@@ -55,7 +55,8 @@ function register_page() {
 		$add_new,
 		$pt_object->cap->create_posts,
 		'post-new.php?post_type=' . $post_type,
-		false
+		false,
+		1
 	);
 
 	// Highlight helper

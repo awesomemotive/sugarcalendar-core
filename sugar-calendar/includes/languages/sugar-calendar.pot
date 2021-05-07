@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.2.0\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2021-05-05 01:41:46+00:00\n"
+"POT-Creation-Date: 2021-05-07 00:12:06+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -666,8 +666,8 @@ msgid "&mdash; Full"
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:553
-#: sugar-calendar/includes/admin/settings.php:169
-#: sugar-calendar/includes/admin/settings.php:756
+#: sugar-calendar/includes/admin/settings.php:170
+#: sugar-calendar/includes/admin/settings.php:757
 #: sugar-calendar/includes/classes/terms/class-term-timezones.php:80
 msgid "Time Zones"
 msgstr ""
@@ -689,7 +689,7 @@ msgid "\"Multi\" means Event Start & End can be different."
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:560
-#: sugar-calendar/includes/admin/settings.php:774
+#: sugar-calendar/includes/admin/settings.php:775
 msgid "Default Time Zone"
 msgstr ""
 
@@ -710,7 +710,7 @@ msgid "\"Floating\" means \"no time zone\" or relative to the user."
 msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:565
-#: sugar-calendar/includes/admin/settings.php:788
+#: sugar-calendar/includes/admin/settings.php:789
 msgid "Visitor Conversion"
 msgstr ""
 
@@ -848,8 +848,8 @@ msgid "Previous year"
 msgstr ""
 
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3582
-#: sugar-calendar/includes/admin/settings.php:548
-#: sugar-calendar/includes/admin/settings.php:605
+#: sugar-calendar/includes/admin/settings.php:549
+#: sugar-calendar/includes/admin/settings.php:606
 msgid "Options"
 msgstr ""
 
@@ -966,7 +966,7 @@ msgid "(Optional)"
 msgstr ""
 
 #: sugar-calendar/includes/admin/nav.php:95
-#: sugar-calendar/includes/admin/settings.php:216
+#: sugar-calendar/includes/admin/settings.php:217
 msgid "General"
 msgstr ""
 
@@ -1018,66 +1018,66 @@ msgid "Event draft updated."
 msgstr ""
 
 #: sugar-calendar/includes/admin/screen-options.php:99
-#: sugar-calendar/includes/admin/settings.php:433
+#: sugar-calendar/includes/admin/settings.php:434
 msgid "F j, Y"
 msgstr ""
 
 #: sugar-calendar/includes/admin/screen-options.php:115
-#: sugar-calendar/includes/admin/settings.php:449
+#: sugar-calendar/includes/admin/settings.php:450
 msgid "g:i a"
 msgstr ""
 
 #: sugar-calendar/includes/admin/screen-options.php:131
-#: sugar-calendar/includes/admin/settings.php:476
+#: sugar-calendar/includes/admin/settings.php:477
 msgid "Maximum Events"
 msgstr ""
 
 #: sugar-calendar/includes/admin/screen-options.php:140
-#: sugar-calendar/includes/admin/settings.php:488
+#: sugar-calendar/includes/admin/settings.php:489
 msgid "Start of Week"
 msgstr ""
 
 #: sugar-calendar/includes/admin/screen-options.php:153
-#: sugar-calendar/includes/admin/settings.php:501
+#: sugar-calendar/includes/admin/settings.php:502
 msgid "Select the first day of the week"
 msgstr ""
 
 #: sugar-calendar/includes/admin/screen-options.php:160
-#: sugar-calendar/includes/admin/settings.php:508
-#: sugar-calendar/includes/admin/settings.php:513
+#: sugar-calendar/includes/admin/settings.php:509
+#: sugar-calendar/includes/admin/settings.php:514
 msgid "Date Format"
 msgstr ""
 
 #: sugar-calendar/includes/admin/screen-options.php:187
 #: sugar-calendar/includes/admin/screen-options.php:226
-#: sugar-calendar/includes/admin/settings.php:540
-#: sugar-calendar/includes/admin/settings.php:597
+#: sugar-calendar/includes/admin/settings.php:541
+#: sugar-calendar/includes/admin/settings.php:598
 msgid "Custom:"
 msgstr ""
 
 #: sugar-calendar/includes/admin/screen-options.php:188
-#: sugar-calendar/includes/admin/settings.php:541
+#: sugar-calendar/includes/admin/settings.php:542
 msgid "enter a custom date format in the following field"
 msgstr ""
 
 #: sugar-calendar/includes/admin/screen-options.php:192
-#: sugar-calendar/includes/admin/settings.php:545
+#: sugar-calendar/includes/admin/settings.php:546
 msgid "Custom date format:"
 msgstr ""
 
 #: sugar-calendar/includes/admin/screen-options.php:199
-#: sugar-calendar/includes/admin/settings.php:565
-#: sugar-calendar/includes/admin/settings.php:570
+#: sugar-calendar/includes/admin/settings.php:566
+#: sugar-calendar/includes/admin/settings.php:571
 msgid "Time Format"
 msgstr ""
 
 #: sugar-calendar/includes/admin/screen-options.php:227
-#: sugar-calendar/includes/admin/settings.php:598
+#: sugar-calendar/includes/admin/settings.php:599
 msgid "enter a custom time format in the following field"
 msgstr ""
 
 #: sugar-calendar/includes/admin/screen-options.php:231
-#: sugar-calendar/includes/admin/settings.php:602
+#: sugar-calendar/includes/admin/settings.php:603
 msgid "Custom time format:"
 msgstr ""
 
@@ -1097,55 +1097,55 @@ msgstr ""
 
 #: sugar-calendar/includes/admin/settings.php:22
 #: sugar-calendar/includes/admin/settings.php:23
-#: sugar-calendar/includes/admin/settings.php:114
-#: sugar-calendar/includes/admin/settings.php:372
+#: sugar-calendar/includes/admin/settings.php:115
+#: sugar-calendar/includes/admin/settings.php:373
 msgid "Settings"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:157
+#: sugar-calendar/includes/admin/settings.php:158
 msgid "Display"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:163
+#: sugar-calendar/includes/admin/settings.php:164
 msgid "Editing"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:366
+#: sugar-calendar/includes/admin/settings.php:367
 msgid "Settings updated."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:458
+#: sugar-calendar/includes/admin/settings.php:459
 msgid "None"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:459
+#: sugar-calendar/includes/admin/settings.php:460
 msgid "Each"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:460
+#: sugar-calendar/includes/admin/settings.php:461
 msgid "First"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:461
+#: sugar-calendar/includes/admin/settings.php:462
 msgid "Blend"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:481
+#: sugar-calendar/includes/admin/settings.php:482
 msgid ""
 "Number of events to include in any theme-side calendar. Default "
 "<code>30</code>. Use <code>0</code> for no limit."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:555
-#: sugar-calendar/includes/admin/settings.php:612
+#: sugar-calendar/includes/admin/settings.php:556
+#: sugar-calendar/includes/admin/settings.php:613
 msgid "Looks Like:"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:621
+#: sugar-calendar/includes/admin/settings.php:622
 msgid "Calendar Day Colors"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:632
+#: sugar-calendar/includes/admin/settings.php:633
 msgid ""
 "The theme-side Calendar Color styling strategy.<br>\"None\" by default (no "
 "colors).<br>\"Each\" uses a single color for each Event link.<br>\"First\" "
@@ -1153,51 +1153,51 @@ msgid ""
 "average of all colors for the background."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:668
+#: sugar-calendar/includes/admin/settings.php:669
 msgid "&mdash; No Default &mdash;"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:675
+#: sugar-calendar/includes/admin/settings.php:676
 msgid "Editor Type"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:693
+#: sugar-calendar/includes/admin/settings.php:694
 msgid "The interface to use when adding or editing Events."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:700
+#: sugar-calendar/includes/admin/settings.php:701
 msgid "Custom Fields"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:705
+#: sugar-calendar/includes/admin/settings.php:706
 msgid "Enable Custom Fields"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:708
+#: sugar-calendar/includes/admin/settings.php:709
 msgid "Allow developers to extend post types that support <code>events</code>."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:715
+#: sugar-calendar/includes/admin/settings.php:716
 msgid "Default Event Calendar"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:723
+#: sugar-calendar/includes/admin/settings.php:724
 msgid "When adding a new Event, this Calendar will be preselected."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:747
+#: sugar-calendar/includes/admin/settings.php:748
 msgid "Off"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:748
+#: sugar-calendar/includes/admin/settings.php:749
 msgid "Single"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:749
+#: sugar-calendar/includes/admin/settings.php:750
 msgid "Multi"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:767
+#: sugar-calendar/includes/admin/settings.php:768
 msgid ""
 "\"Off\" by default (Existing time zone data still appears).<br>\"Single\" "
 "allows Events to have one time zone.<br>\"Multi\" allows Events to have "
@@ -1205,41 +1205,41 @@ msgid ""
 "time zones for Calendars."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:781
+#: sugar-calendar/includes/admin/settings.php:782
 msgid ""
 "When time zones are enabled, new Events will default to this.<br>If you are "
 "unsure, leave empty or pick the time zone you are in."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:793
+#: sugar-calendar/includes/admin/settings.php:794
 msgid "Enable Conversion"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:796
+#: sugar-calendar/includes/admin/settings.php:797
 msgid ""
 "Attempts to update theme-side Event times according to visitor web browser "
 "location.<br>Depends on client-side browser support. May not work for all "
 "visitors."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:916
+#: sugar-calendar/includes/admin/settings.php:917
 msgid ""
 "Save 25% on all Sugar Calendar purchases <strong>this week</strong>, "
 "including renewals and upgrades!"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:920
+#: sugar-calendar/includes/admin/settings.php:921
 msgid "Use code at checkout:"
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:922
+#: sugar-calendar/includes/admin/settings.php:923
 msgid ""
 "Sale ends 23:59 PM December 6th CST. Save 25% on <a "
 "href=\"https://sandhillsdev.com/projects/\" target=\"_blank\">our other "
 "plugins</a>."
 msgstr ""
 
-#: sugar-calendar/includes/admin/settings.php:926
+#: sugar-calendar/includes/admin/settings.php:927
 msgid "Upgrade Now!"
 msgstr ""
 

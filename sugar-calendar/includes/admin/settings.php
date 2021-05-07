@@ -23,7 +23,8 @@ function menu() {
 		append_submenu_bubble( esc_html__( 'Settings', 'sugar-calendar' ) ),
 		'manage_options',
 		'sc-settings',
-		'Sugar_Calendar\\Admin\\Settings\\page'
+		'Sugar_Calendar\\Admin\\Settings\\page',
+		99
 	);
 }
 

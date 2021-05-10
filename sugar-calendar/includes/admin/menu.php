@@ -31,13 +31,14 @@ function register_page() {
 	);
 
 	// Labels
-	$menu_name = sugar_calendar_get_post_type_label( $post_type, 'menu_name', esc_html__( 'Calendar', 'sugar-calendar' ) );
-	$add_new   = sugar_calendar_get_post_type_label( $post_type, 'add_new',   esc_html__( 'Add New',  'sugar-calendar' ) );
+	$menu_name    = sugar_calendar_get_post_type_label( $post_type, 'menu_name',    esc_html__( 'Calendar', 'sugar-calendar' ) );
+	$submenu_name = sugar_calendar_get_post_type_label( $post_type, 'submenu_name', esc_html__( 'Calendar', 'sugar-calendar' ) );
+	$add_new      = sugar_calendar_get_post_type_label( $post_type, 'add_new',      esc_html__( 'Add New',  'sugar-calendar' ) );
 
 	// Default hooks array
 	$hooks = array();
 
-	// Main "Calendar" plugin page
+	// Main "Calendar" plugin menu page
 	$hooks[] = add_menu_page(
 		$menu_name,
 		$menu_name,
@@ -46,6 +47,17 @@ function register_page() {
 		'Sugar_Calendar\\Admin\\Menu\\calendar_page',
 		'dashicons-calendar-alt',
 		2
+	);
+
+	// "Calendar" (or "All Events") submenu page
+	$hooks[] = add_submenu_page(
+		'sugar-calendar',
+		$submenu_name,
+		$submenu_name,
+		'read_calendar',
+		'sugar-calendar',
+		'Sugar_Calendar\\Admin\\Menu\\calendar_page',
+		0
 	);
 
 	// "Add New" page
@@ -58,6 +70,14 @@ function register_page() {
 		false,
 		1
 	);
+
+	// Remove duplicates & empties
+	$hooks = array_unique( array_filter( $hooks ) );
+
+	// Bail if no hooks
+	if ( empty( $hooks ) ) {
+		return;
+	}
 
 	// Highlight helper
 	foreach ( $hooks as $hook ) {

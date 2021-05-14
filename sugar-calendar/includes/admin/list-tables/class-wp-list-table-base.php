@@ -2440,8 +2440,8 @@ class Base_List_Table extends \WP_List_Table {
 			if ( $event->is_multi( 'day' ) ) {
 
 				// Start & end
-				$start = $this->get_event_date( $event->start, $event->start_tz );
-				$end   = $this->get_event_date( $event->end,   $event->end_tz   );
+				$start = sugar_calendar_format_date_i18n( $this->date_format, $event->start, $event->start_tz );
+				$end   = sugar_calendar_format_date_i18n( $this->date_format, $event->end,   $event->end_tz   );
 
 				// Yearly
 				if ( 'yearly' === $event->recurrence ) {

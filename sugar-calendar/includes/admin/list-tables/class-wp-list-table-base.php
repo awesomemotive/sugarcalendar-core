@@ -2408,23 +2408,23 @@ class Base_List_Table extends \WP_List_Table {
 				// Yearly
 				if ( 'yearly' === $event->recurrence ) {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = esc_html( $start ) . '</span>';
+					$pointer_dates['start']       = '<span>'   . esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = esc_html( $end ) . '</span>';
+					$pointer_dates['end']         = '<span>'   . esc_html( $end ) . '</span>';
 
 				// Monthly
 				} elseif ( 'monthly' === $event->recurrence ) {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = esc_html( $start ) . '</span>';
+					$pointer_dates['start']       = '<span>'   . esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = esc_html( $end ) . '</span>';
+					$pointer_dates['end']         = '<span>'   . esc_html( $end ) . '</span>';
 
 				// No recurrence
 				} else {
 					$pointer_dates['start_title'] = '<strong>' . esc_html__( 'Start', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['start']       = esc_html( $start ) . '</span>';
+					$pointer_dates['start']       = '<span>'   . esc_html( $start ) . '</span>';
 					$pointer_dates['end_title']   = '<strong>' . esc_html__( 'End', 'sugar-calendar' ) . '</strong>';
-					$pointer_dates['end']         = esc_html( $end ) . '</span>';
+					$pointer_dates['end']         = '<span>'   . esc_html( $end ) . '</span>';
 				}
 
 			// Single all-day

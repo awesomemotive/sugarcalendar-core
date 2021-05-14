@@ -1872,7 +1872,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_event_date( $datetime = '', $timezone = '' ) {
-		return sugar_calendar_format_date_i18n( $this->date_format, $datetime, $timezone, $this->timezone );
+		return sugar_calendar_format_date_i18n( $this->date_format, $datetime, $timezone );
 	}
 
 	/**
@@ -1886,7 +1886,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_event_time( $datetime = '', $timezone = '' ) {
-		return sugar_calendar_format_date_i18n( $this->time_format, $datetime, $timezone, $this->timezone );
+		return sugar_calendar_format_date_i18n( $this->time_format, $datetime, $timezone );
 	}
 
 	/**

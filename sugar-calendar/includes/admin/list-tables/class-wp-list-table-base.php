@@ -1872,7 +1872,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_event_date( $datetime = '', $timezone = '' ) {
-		return sugar_calendar_format_date_i18n( $this->date_format, $datetime, $timezone );
+		return sugar_calendar_format_date_i18n( $this->date_format, $datetime, $timezone, $this->timezone );
 	}
 
 	/**
@@ -1886,7 +1886,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	protected function get_event_time( $datetime = '', $timezone = '' ) {
-		return sugar_calendar_format_date_i18n( $this->time_format, $datetime, $timezone );
+		return sugar_calendar_format_date_i18n( $this->time_format, $datetime, $timezone, $this->timezone );
 	}
 
 	/**
@@ -2395,12 +2395,12 @@ class Base_List_Table extends \WP_List_Table {
 			$etz = $stz;
 		}
 
-		// Start & end
-		$start = $this->get_event_date( $event->start, $event->start_tz );
-		$end   = $this->get_event_date( $event->end,   $event->end_tz   );
-
 		// All day, single-day event
 		if ( $event->is_all_day() ) {
+
+			// Start & end
+			$start = sugar_calendar_format_date_i18n( $this->date_format, $event->start, $event->start_tz );
+			$end   = sugar_calendar_format_date_i18n( $this->date_format, $event->end,   $event->end_tz   );
 
 			// Multi-day
 			if ( $event->is_multi( 'day' ) ) {
@@ -2438,6 +2438,10 @@ class Base_List_Table extends \WP_List_Table {
 
 			// Multi-day
 			if ( $event->is_multi( 'day' ) ) {
+
+				// Start & end
+				$start = $this->get_event_date( $event->start, $event->start_tz );
+				$end   = $this->get_event_date( $event->end,   $event->end_tz   );
 
 				// Yearly
 				if ( 'yearly' === $event->recurrence ) {

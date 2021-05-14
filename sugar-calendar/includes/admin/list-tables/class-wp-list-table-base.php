@@ -2467,7 +2467,7 @@ class Base_List_Table extends \WP_List_Table {
 				// Date & Time
 				if ( ! $event->is_empty_date( $event->start ) ) {
 					$time  = $this->get_event_time( $event->start, $event->start_tz );
-					$day   = sugar_calendar_format_date_i18n( 'w', $event->start, $event->start_tz, $this->timezone );
+					$day   = sugar_calendar_format_date_i18n( 'w', $event->start, $event->start_tz );
 					$start = esc_html( sprintf(
 						esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ),
 						$time,
@@ -2486,7 +2486,7 @@ class Base_List_Table extends \WP_List_Table {
 				// Date & Time
 				if ( ! $event->is_empty_date( $event->end ) && ( $event->start !== $event->end ) ) {
 					$time = $this->get_event_time( $event->end, $event->end_tz );
-					$day  = sugar_calendar_format_date_i18n( 'w', $event->end, $event->end_tz, $this->timezone );
+					$day  = sugar_calendar_format_date_i18n( 'w', $event->end, $event->end_tz );
 					$end  = esc_html( sprintf(
 						esc_html_x( '%s on %s', '20:00 on Friday', 'sugar-calendar' ),
 						$time,

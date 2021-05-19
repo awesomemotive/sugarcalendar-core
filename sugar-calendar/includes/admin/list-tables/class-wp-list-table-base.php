@@ -900,6 +900,41 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Get the day-of-week ordinal
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int $day Day of month
+	 *
+	 * @return string
+	 */
+	protected function get_dow_ordinal( $day = 1 ) {
+
+		// Default return value
+		$retval = '';
+
+		// Possible day ordinals (no more than 5 per month)
+		$ordinals = array(
+			1 => 'first',
+			2 => 'second',
+			3 => 'third',
+			4 => 'fourth',
+			5 => 'fifth'
+		);
+
+		// Get the ordinal of the day
+		$dow_ordinal = (int) ceil( $day / 7 );
+
+		// Maybe set the return value
+		if ( ! empty( $ordinals[ $dow_ordinal ] ) ) {
+			$retval = $ordinals[ $dow_ordinal ];
+		}
+
+		// Return
+		return $retval;
+	}
+
+	/**
 	 * Get the offset for a given day, based on the start-of-week setting
 	 *
 	 * @since 2.0.0
@@ -1375,12 +1410,12 @@ class Base_List_Table extends \WP_List_Table {
 	protected function set_queried_item( $cell = 1, $type = 'items', $item_id = 0, $data = array() ) {
 
 		// Prevent debug notices if type is not set
-		if ( ! isset( $this->{$type}[ $cell ] ) ) {
-			$this->{$type}[ $cell ] = array();
+		if ( ! isset( $this->cells[ $cell ][ $type ] ) ) {
+			$this->cells[ $cell ][ $type ] = array();
 		}
 
 		// Set the queried item
-		$this->{$type}[ $cell ][ $item_id ] = $data;
+		$this->cells[ $cell ][ $type ][ $item_id ] = $data;
 	}
 
 	/**
@@ -1393,47 +1428,9 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	protected function get_queried_items( $cell = 1, $type = 'items' ) {
-		return ! empty( $this->{$type} ) && isset( $this->{$type}[ $cell ] )
-			? $this->{$type}[ $cell ]
+		return ! empty( $this->cells[ $cell ] ) && isset( $this->cells[ $cell ][ $type ] )
+			? $this->cells[ $cell ][ $type ]
 			: array();
-	}
-
-	/**
-	 * Take a datetime string, and modify it based on an array of values.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @param string $datetime
-	 * @param array  $args
-	 *
-	 * @return string
-	 */
-	protected function modify_datetime( $datetime = '', $args = array() ) {
-
-		// Maybe make datetime into timestamp
-		$timestamp = ! is_int( $datetime )
-			? strtotime( $datetime )
-			: $datetime;
-
-		// Parse arguments
-		$r = wp_parse_args( $args, array(
-			'Y' => gmdate( 'Y', $timestamp ),
-			'm' => gmdate( 'm', $timestamp ),
-			'd' => gmdate( 'd', $timestamp ),
-			'H' => gmdate( 'H', $timestamp ),
-			'i' => gmdate( 'i', $timestamp ),
-			's' => gmdate( 's', $timestamp )
-		) );
-
-		// Return merged
-		return gmdate( 'Y-m-d H:i:s', gmmktime(
-			$r['H'],
-			$r['i'],
-			$r['s'],
-			$r['m'],
-			$r['d'],
-			$r['Y']
-		) );
 	}
 
 	/**
@@ -3216,18 +3213,45 @@ class Base_List_Table extends \WP_List_Table {
 	}
 
 	/**
-	 * Is the current calendar view today
+	 * Is a year/month/day today
 	 *
 	 * @since 2.0.0
 	 *
+	 * @param int $year
+	 * @param int $month
+	 * @param int $day
+	 *
 	 * @return boolean
 	 */
-	protected function is_today( $month, $day, $year ) {
+	protected function is_today( $year, $month, $day ) {
+		$_year  = (bool) ( $year  == gmdate( 'Y', $this->now ) );
 		$_month = (bool) ( $month == gmdate( 'n', $this->now ) );
 		$_day   = (bool) ( $day   == gmdate( 'j', $this->now ) );
-		$_year  = (bool) ( $year  == gmdate( 'Y', $this->now ) );
 
-		return (bool) ( true === $_month && true === $_day && true === $_year );
+		return (bool) ( true === $_year && true === $_month && true === $_day );
+	}
+
+	/**
+	 * Is a year/month/day the last of its day-of-week
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param int $year
+	 * @param int $month
+	 * @param int $day
+	 *
+	 * @return boolean
+	 */
+	protected function is_dow_last( $year, $month, $day ) {
+
+		// Get number of days in this month
+		$days = (int) gmdate( 't', strtotime( "{$year}-{$month}-{$day}" ) );
+
+		// Is
+		$retval = ( $day > ( $days - 7 ) );
+
+		// Return
+		return $retval;
 	}
 
 	/**
@@ -3278,10 +3302,27 @@ class Base_List_Table extends \WP_List_Table {
 			? 'not-empty'
 			: '';
 
-		// Today?
-		$is_today = $this->is_today( $this->month, $day, $this->year )
-			? 'today'
-			: '';
+		// Day specific classes
+		$is_today = '';
+		$dow_last = '';
+		$dow_ordinal = '';
+
+		// Day
+		if ( ! empty( $day ) ) {
+
+			// Today
+			$is_today = $this->is_today( $this->year, $this->month, $day )
+				? 'today'
+				: '';
+
+			// Day-of-week last
+			$dow_last = $this->is_dow_last( $this->year, $this->month, $day )
+				? 'last'
+				: '';
+
+			// Day-of-week ordinal
+			$dow_ordinal = $this->get_dow_ordinal( $day );
+		}
 
 		// Hidden?
 		$hidden = in_array( $day_key, $this->get_hidden_columns(), true )
@@ -3292,6 +3333,8 @@ class Base_List_Table extends \WP_List_Table {
 		$classes = array_filter( array(
 			$is_today,
 			$hidden,
+			$dow_ordinal,
+			$dow_last,
 			$day_key,
 			$day_column,
 			$has_events,

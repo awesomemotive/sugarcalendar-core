@@ -1191,7 +1191,7 @@ function sc_get_event_date( $event_id = 0, $formatted = true ) {
 		$dt       = $event->end_date( 'Y-m-d' );
 
 		// Output
-		$end_html = '<span class="sc-date-start-end-sep"> - </span><span class="sc-date-end"><time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '">' . esc_html( $end_date ) . '</time></span>';
+		$end_html = '<span class="sc-date-start-end-sep"> &ndash; </span><span class="sc-date-end"><time datetime="' . esc_attr( $dt ) . '" data-timezone="' . esc_attr( $tz ) . '">' . esc_html( $end_date ) . '</time></span>';
 		$retval   = $start_html . $end_html;
 
 	// Just the start

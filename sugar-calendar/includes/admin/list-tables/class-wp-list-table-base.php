@@ -3321,7 +3321,7 @@ class Base_List_Table extends \WP_List_Table {
 				: '';
 
 			// Day-of-week ordinal
-			$dow_ordinal = $this->get_dow_ordinal( $day );
+			$dow_ordinal = 'dow-' . $this->get_dow_ordinal( $day );
 		}
 
 		// Hidden?

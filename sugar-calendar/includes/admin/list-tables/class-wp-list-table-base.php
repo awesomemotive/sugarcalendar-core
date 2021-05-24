@@ -194,7 +194,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $show_week_column = false;
 
@@ -1439,7 +1439,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @since 2.0.0
 	 *
 	 * @param object $item
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function skip_item_in_cell( $item = false ) {
 		return empty( $item );
@@ -1452,7 +1452,7 @@ class Base_List_Table extends \WP_List_Table {
 	 * @since 2.1.2 Prefers Event::intersects() over Event::overlaps()
 	 *
 	 * @param object $item
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function is_item_for_cell( $item = false ) {
 
@@ -1669,7 +1669,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function start_row() {
 		$i = (int) $this->get_current_cell( 'index' );
@@ -1682,7 +1682,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function end_row() {
 		$i = (int) $this->get_current_cell( 'index' );
@@ -2675,7 +2675,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @param object $event
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function current_user_can_delete( $event = false ) {
 		return $this->user_can_delete( get_current_user_id(), $event );
@@ -2689,7 +2689,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.21
 	 *
-	 * @return boolean Default false. True if user can delete event.
+	 * @return bool Default false. True if user can delete event.
 	 */
 	protected function user_can_delete( $user_id = 0, $event = false ) {
 
@@ -2736,7 +2736,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @param object $event
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function current_user_can_edit( $event = false ) {
 		return $this->user_can_edit( get_current_user_id(), $event );
@@ -2750,7 +2750,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean Default false. True if user can edit event.
+	 * @return bool Default false. True if user can edit event.
 	 */
 	protected function user_can_edit( $user_id = 0, $event = false ) {
 
@@ -2797,7 +2797,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @param object $event
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function current_user_can_view( $event = false ) {
 		return $this->user_can_view( get_current_user_id(), $event );
@@ -2811,7 +2811,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean Default false. True if user can view event.
+	 * @return bool Default false. True if user can view event.
 	 */
 	protected function user_can_view( $user_id = 0, $event = false ) {
 
@@ -3101,7 +3101,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function has_items() {
 		return true;
@@ -3221,14 +3221,36 @@ class Base_List_Table extends \WP_List_Table {
 	 * @param int $month
 	 * @param int $day
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
-	protected function is_today( $year, $month, $day ) {
+	protected function is_today( $year = 0, $month = 0, $day = 0 ) {
 		$_year  = (bool) ( $year  == gmdate( 'Y', $this->now ) );
 		$_month = (bool) ( $month == gmdate( 'n', $this->now ) );
 		$_day   = (bool) ( $day   == gmdate( 'j', $this->now ) );
 
 		return (bool) ( true === $_year && true === $_month && true === $_day );
+	}
+
+	/**
+	 * Is a year/month/day a weekend?
+	 *
+	 * @since 2.2.0
+	 * @param int $year
+	 * @param int $month
+	 * @param int $day
+	 *
+	 * @return bool
+	 */
+	protected function is_weekend( $year = 0, $month = 0, $day = 0 ) {
+
+		// Get the day
+		$j = (int) gmdate( 'w', strtotime( "{$year}-{$month}-{$day}" ) );
+
+		/// Is Sunday or Saturday
+		$retval = in_array( $j, array( 0, 6 ), true );
+
+		// Return
+		return $retval;
 	}
 
 	/**
@@ -3240,14 +3262,14 @@ class Base_List_Table extends \WP_List_Table {
 	 * @param int $month
 	 * @param int $day
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
-	protected function is_dow_last( $year, $month, $day ) {
+	protected function is_dow_last( $year = 0, $month = 0, $day = 0 ) {
 
 		// Get number of days in this month
 		$days = (int) gmdate( 't', strtotime( "{$year}-{$month}-{$day}" ) );
 
-		// Is
+		// Is day-of-week
 		$retval = ( $day > ( $days - 7 ) );
 
 		// Return
@@ -3303,12 +3325,18 @@ class Base_List_Table extends \WP_List_Table {
 			: '';
 
 		// Day specific classes
+		$weekend  = '';
 		$is_today = '';
 		$dow_last = '';
 		$dow_ordinal = '';
 
 		// Day
 		if ( ! empty( $day ) ) {
+
+			// Weekend
+			$weekend = $this->is_weekend( $this->year, $this->month, $day )
+				? 'weekend'
+				: 'weekday';
 
 			// Today
 			$is_today = $this->is_today( $this->year, $this->month, $day )
@@ -3336,6 +3364,7 @@ class Base_List_Table extends \WP_List_Table {
 			$dow_ordinal,
 			$dow_last,
 			$day_key,
+			$weekend,
 			$day_column,
 			$has_events,
 			$count_number,

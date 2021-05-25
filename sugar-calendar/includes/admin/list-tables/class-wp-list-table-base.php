@@ -1573,7 +1573,7 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	protected function get_event_title( $event = false ) {
 		return ! empty( $event->title )
-			? apply_filters( 'the_title', $event->title )
+			? apply_filters( 'the_title', $event->title, $event->object_id )
 			: esc_html__( '(No title)', 'sugar-calendar' );
 	}
 

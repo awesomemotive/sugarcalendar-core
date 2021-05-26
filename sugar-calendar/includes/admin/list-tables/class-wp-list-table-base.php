@@ -1428,9 +1428,14 @@ class Base_List_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	protected function get_queried_items( $cell = 1, $type = 'items' ) {
-		return ! empty( $this->cells[ $cell ] ) && isset( $this->cells[ $cell ][ $type ] )
-			? $this->cells[ $cell ][ $type ]
-			: array();
+
+		// Bail if no cells or queried items
+		if ( empty( $this->cells ) || empty( $this->cells[ $cell ] ) || empty( $this->cells[ $cell ][ $type ] ) ) {
+			return array();
+		}
+
+		// Return queried items
+		return $this->cells[ $cell ][ $type ];
 	}
 
 	/**

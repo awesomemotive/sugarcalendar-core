@@ -1472,11 +1472,8 @@ class Base_List_Table extends \WP_List_Table {
 		// End boundary
 		$end    = $this->get_current_cell( 'end_dto' );
 
-		// Get the mode
-		$mode   = $this->get_mode();
-
 		// Get intersects
-		$retval = $item->intersects( $start, $end, $mode );
+		$retval = $item->intersects( $start, $end );
 
 		// Return if event belongs in cell
 		return $retval;

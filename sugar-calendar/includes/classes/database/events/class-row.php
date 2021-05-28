@@ -289,7 +289,7 @@ final class Event extends Row {
 		$end_dto   = sugar_calendar_get_datetime_object( $end,   $timezone );
 
 		// Call intersects
-		$retval = $this->intersects( $start_dto, $end_dto, $mode );
+		$retval = $this->intersects( $start_dto, $end_dto );
 
 		// Filter and return
 		return (bool) apply_filters( 'sugar_calendar_event_overlaps', $retval, $this, $start, $end, $mode, $timezone );
@@ -302,11 +302,10 @@ final class Event extends Row {
 	 *
 	 * @param DateTime $start Start boundary
 	 * @param DateTime $end   End boundary
-	 * @param string   $mode  day|week|month|year
 	 *
 	 * @return bool
 	 */
-	public function intersects( $start = '', $end = '', $mode = 'month' ) {
+	public function intersects( $start = '', $end = '' ) {
 
 		// Default return value
 		$retval = false;
@@ -317,8 +316,8 @@ final class Event extends Row {
 		}
 
 		// Default to "floating" time zone
-		$start_tz = $start->getTimezone();
-		$end_tz   = $end->getTimezone();
+		$og_start_tz = $start_tz = $start->getTimezone();
+		$og_end_tz   = $end_tz   = $end->getTimezone();
 
 		// All day checks simply match the boundaries
 		if ( ! $this->is_all_day() && ! sugar_calendar_is_timezone_floating() ) {
@@ -335,8 +334,8 @@ final class Event extends Row {
 		}
 
 		// Turn datetimes to timestamps for easier comparisons
-		$start_dto = sugar_calendar_get_datetime_object( $this->start, $start_tz, $start->getTimezone() );
-		$end_dto   = sugar_calendar_get_datetime_object( $this->end,   $end_tz,   $end->getTimezone()   );
+		$start_dto = sugar_calendar_get_datetime_object( $this->start, $start_tz, $og_start_tz );
+		$end_dto   = sugar_calendar_get_datetime_object( $this->end,   $end_tz,   $og_end_tz   );
 
 		// Boundary fits inside current cell
 		if ( ( $end_dto <= $end ) && ( $start_dto >= $start ) ) {
@@ -348,7 +347,7 @@ final class Event extends Row {
 		}
 
 		// Filter and return
-		return (bool) apply_filters( 'sugar_calendar_event_intersects', $retval, $this, $start, $end, $mode );
+		return (bool) apply_filters( 'sugar_calendar_event_intersects', $retval, $this, $start, $end );
 	}
 
 	/**

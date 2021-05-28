@@ -88,11 +88,8 @@ function sc_is_event_for_day( $event, $day = '01', $month = '01', $year = '1970'
 	$start    = sugar_calendar_get_datetime_object( $start_ts, $timezone );
 	$end      = sugar_calendar_get_datetime_object( $end_ts,   $timezone );
 
-	// All front-end modes are currently months
-	$mode     = 'month';
-
 	// Return
-	return $event->intersects( $start, $end, $mode );
+	return $event->intersects( $start, $end );
 }
 
 /**

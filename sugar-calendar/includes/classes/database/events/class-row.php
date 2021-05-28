@@ -205,7 +205,7 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function is_all_day() {
 
@@ -227,21 +227,22 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean
+	 * @param string $format
+	 * @return bool
 	 */
-	public function is_multi( $format = 'd' ) {
+	public function is_multi( $format = 'j' ) {
 
 		// Helpers for not remembering date() formatting
 		switch ( $format ) {
 
 			// Hour
 			case 'hour' :
-				$format = 'H';
+				$format = 'G';
 				break;
 
 			// Day
 			case 'day' :
-				$format = 'd';
+				$format = 'j';
 				break;
 
 			// Week
@@ -251,7 +252,7 @@ final class Event extends Row {
 
 			// Month
 			case 'month' :
-				$format = 'm';
+				$format = 'n';
 				break;
 
 			// Year
@@ -357,7 +358,7 @@ final class Event extends Row {
 	 *
 	 * @param string $datetime
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function is_empty_date( $datetime = '' ) {
 

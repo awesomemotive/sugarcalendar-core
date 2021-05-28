@@ -545,7 +545,7 @@ function sugar_calendar_get_timezone_object( $timezone = '' ) {
  *
  * @since 2.1.0
  * @param string $timezone Default ''. Olson time zone ID.
- * @return boolean
+ * @return bool
  */
 function sugar_calendar_is_manual_timezone_offset( $timezone = '' ) {
 

@@ -75,10 +75,10 @@ function settings( $settings = array() ) {
  *
  * @since 2.0.0
  *
- * @param boolean $expand
- * @param string  $post_type
+ * @param bool   $expand
+ * @param string $post_type
  *
- * @return boolean
+ * @return bool
  */
 function expand( $expand = true, $post_type = '' ) {
 

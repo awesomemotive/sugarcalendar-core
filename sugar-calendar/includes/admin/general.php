@@ -43,7 +43,7 @@ function sugar_calendar_admin_get_primary_page() {
  *
  * @since 2.0.0
  *
- * @return boolean
+ * @return bool
  */
 function sugar_calendar_is_admin() {
 
@@ -73,7 +73,7 @@ function sugar_calendar_is_admin() {
  *
  * @since 2.0.2
  *
- * @return boolean
+ * @return bool
  */
 function sugar_calendar_admin_is_events_page() {
 	$screen = get_current_screen();
@@ -99,7 +99,7 @@ function sugar_calendar_admin_is_events_page() {
  *
  * @since 2.1.0
  *
- * @return boolean
+ * @return bool
  */
 function sugar_calendar_admin_is_taxonomy_page() {
 	$screen = get_current_screen();

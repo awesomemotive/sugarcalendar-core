@@ -530,7 +530,7 @@ class ToArray {
 	 *
 	 * @since 1.0.0
 	 * @param array $file_array
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function check_file_format( $file_array = array() ) {
 		return ! stristr( $file_array[ 0 ], 'BEGIN:VCALENDAR' )
@@ -1385,7 +1385,7 @@ class ToArray {
 	 * @since 1.0.0
 	 * @param string $uri
 	 * @param string $contents
-	 * @return boolean
+	 * @return bool
 	 */
 	private function set_file_cache( $uri = '', $contents = '' ) {
 

@@ -25,7 +25,7 @@ class DateTime extends \DateTime {
 	 * @param string $time
 	 * @param DateTimeZone $tzo
 	 *
-	 * @return boolean|static
+	 * @return bool|static
 	 */
     public static function createFromFormat( $format = '', $time = '', $tzo = null ) {
 
@@ -100,7 +100,7 @@ class DateTime extends \DateTime {
 	 * @param int $month
 	 * @param int $day
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	private function get_dow_ordinal_from_end_of_month() {
 

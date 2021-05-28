@@ -266,7 +266,7 @@ final class Back_Compat {
 	 * @param mixed   $override
 	 * @param int     $post_id
 	 * @param string  $meta_key
-	 * @param boolean $single
+	 * @param bool    $single
 	 *
 	 * @return mixed
 	 */
@@ -464,7 +464,7 @@ final class Back_Compat {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	private function skip() {
 
@@ -494,7 +494,7 @@ final class Back_Compat {
 	 *
 	 * @since 2.0.8
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	private function doing_upgrade() {
 		return ! empty( $GLOBALS['sc_upgrade_meta_skip'] );
@@ -505,7 +505,7 @@ final class Back_Compat {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	private function is_back_compat_key() {
 		return isset( $this->back_compat_keys[ $this->meta_key ] );
@@ -528,7 +528,7 @@ final class Back_Compat {
 	 * @since 2.0.0
 	 *
 	 * @param string $date
-	 * @return boolean
+	 * @return bool
 	 */
 	private function is_datetime_empty( $date = '' ) {
 

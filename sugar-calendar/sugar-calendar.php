@@ -173,7 +173,7 @@ final class Plugin {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean True if instantiated. False if not.
+	 * @return bool True if instantiated. False if not.
 	 */
 	private static function is_instantiated() {
 

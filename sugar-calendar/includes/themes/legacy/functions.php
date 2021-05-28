@@ -73,7 +73,7 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
  * @param string $month
  * @param string $year
  *
- * @return boolean
+ * @return bool
  */
 function sc_is_event_for_day( $event, $day = '01', $month = '01', $year = '1970' ) {
 
@@ -97,7 +97,7 @@ function sc_is_event_for_day( $event, $day = '01', $month = '01', $year = '1970'
  *
  * @since 2.0.19
  *
- * @return boolean
+ * @return bool
  */
 function sc_doing_events() {
 
@@ -1068,7 +1068,7 @@ function sc_is_calendar_page() {
  * Determines whether a widget is in use
  *
  * @since 2.0.0
- * @return boolean
+ * @return bool
  */
 function sc_using_widget() {
 

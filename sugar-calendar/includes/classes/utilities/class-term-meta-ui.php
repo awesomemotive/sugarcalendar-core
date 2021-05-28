@@ -226,7 +226,7 @@ class UI {
 	 * @param  string  $cap
 	 * @param  array   $caps
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function auth_callback( $allowed = false, $meta_key = '', $post_id = 0, $user_id = 0, $cap = '', $caps = array() ) {
 

@@ -2402,7 +2402,7 @@ class Base_List_Table extends \WP_List_Table {
 			$end   = sugar_calendar_format_date_i18n( $this->date_format, $event->end,   $event->end_tz   );
 
 			// Multi-day
-			if ( $event->is_multi( 'day' ) ) {
+			if ( $event->is_multi( 'j' ) ) {
 
 				// Yearly
 				if ( 'yearly' === $event->recurrence ) {
@@ -2436,7 +2436,7 @@ class Base_List_Table extends \WP_List_Table {
 		} else {
 
 			// Multi-day
-			if ( $event->is_multi( 'day' ) ) {
+			if ( $event->is_multi( 'j' ) ) {
 
 				// Start & end
 				$start = sugar_calendar_format_date_i18n( $this->date_format, $event->start, $event->start_tz );

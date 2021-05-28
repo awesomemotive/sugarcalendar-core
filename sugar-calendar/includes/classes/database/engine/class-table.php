@@ -285,11 +285,15 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Install a database table by creating the table and setting the version.
+	 * Install a database table
+	 *
+	 * Creates the table and sets the version information if successful.
 	 *
 	 * @since 1.0.0
 	 */
 	public function install() {
+
+		// Try to create the table
 		$created = $this->create();
 
 		// Set the DB version if create was successful
@@ -299,15 +303,20 @@ abstract class Table extends Base {
 	}
 
 	/**
-	 * Destroy a database table by dropping the table and deleting the version.
+	 * Uninstall a database table
+	 *
+	 * Drops the table and deletes the version information if successful and/or
+	 * the table does not exist anymore.
 	 *
 	 * @since 1.0.0
 	 */
 	public function uninstall() {
+
+		// Try to drop the table
 		$dropped = $this->drop();
 
-		// Delete the DB version if drop was successful
-		if ( true === $dropped ) {
+		// Delete the DB version if drop was successful or table does not exist
+		if ( ( true === $dropped ) || ! $this->exists() ) {
 			$this->delete_db_version();
 		}
 	}
@@ -339,6 +348,33 @@ abstract class Table extends Base {
 
 		// Does the table exist?
 		return $this->is_success( $result );
+	}
+
+	/**
+	 * Get columns from table.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return array
+	 */
+	public function columns() {
+
+		// Get the database interface
+		$db = $this->get_db();
+
+		// Bail if no database interface is available
+		if ( empty( $db ) ) {
+			return false;
+		}
+
+		// Query statement
+		$query  = "SHOW FULL COLUMNS FROM {$this->table_name}";
+		$result = $db->get_results( $query );
+
+		// Return the results
+		return $this->is_success( $result )
+			? $result
+			: false;
 	}
 
 	/**
@@ -434,11 +470,11 @@ abstract class Table extends Base {
 		}
 
 		// Query statement
-		$query   = "DELETE FROM {$this->table_name}";
-		$deleted = $db->query( $query );
+		$query  = "DELETE FROM {$this->table_name}";
+		$result = $db->query( $query );
 
-		// Did the table get emptied?
-		return $deleted;
+		// Return the results
+		return $result;
 	}
 
 	/**
@@ -535,11 +571,11 @@ abstract class Table extends Base {
 		}
 
 		// Query statement
-		$query = "SELECT COUNT(*) FROM {$this->table_name}";
-		$count = $db->get_var( $query );
+		$query  = "SELECT COUNT(*) FROM {$this->table_name}";
+		$result = $db->get_var( $query );
 
 		// Query success/fail
-		return intval( $count );
+		return intval( $result );
 	}
 
 	/**

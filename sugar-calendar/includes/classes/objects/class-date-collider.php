@@ -10,13 +10,14 @@ namespace Sugar_Calendar;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class trait
+ * Class trait used to identify if two DateTimes intersect with two other
+ * DateTimes.
  *
  * @since 2.2.0
  */
 trait DateCollider {
 
-	/** Boundaries ************************************************************/
+	/** Boundary **************************************************************/
 
 	/**
 	 * Start boundary
@@ -33,6 +34,8 @@ trait DateCollider {
 	 * @var DateTime
 	 */
 	public $boundary_end = null;
+
+	/** Event *****************************************************************/
 
 	/**
 	 * Event start
@@ -89,17 +92,21 @@ trait DateCollider {
 	 */
 	public $patterns = array(
 
-		// Yearly recurring checks Month, Day, and Hour
-		'yearly'  => array( 'n', 'j', 'G' ),
+		// Standard patterns
+		'standard' => array(
 
-		// Monthly recurring checks Day and Hour
-		'monthly' => array( 'j', 'G' ),
+			// Yearly recurring checks Month, Day, and Hour
+			'yearly'  => array( 'n', 'j', 'G' ),
 
-		// Weekly recurring checks Day-of-week (0 index) and Hour
-		'weekly'  => array( 'N', 'G' ),
+			// Monthly recurring checks Day and Hour
+			'monthly' => array( 'j', 'G' ),
 
-		// Daily recurring checks Hour
-		'daily'   => array( 'G' )
+			// Weekly recurring checks Day-of-week (0 index) and Hour
+			'weekly'  => array( 'N', 'G' ),
+
+			// Daily recurring checks Hour
+			'daily'   => array( 'G' )
+		)
 	);
 
 	/**
@@ -124,7 +131,15 @@ trait DateCollider {
 	public $matches = array();
 
 	/**
-	 * Name currently being matched
+	 * Type of pattern to match
+	 *
+	 * @since 2.2.0
+	 * @var string
+	 */
+	public $match_type = '';
+
+	/**
+	 * Name of pattern currently being matched
 	 *
 	 * @since 2.2.0
 	 * @var string
@@ -194,16 +209,20 @@ trait DateCollider {
 			return;
 		}
 
-		// Loop through matches
-		foreach ( $this->patterns as $name => $formats ) {
+		// Loop through patterns
+		foreach ( $this->patterns as $type => $types ) {
 
-			// Skip if not the correct recurrence
-			if ( $name !== $this->event->recurrence ) {
-				continue;
+			// Loop through types
+			foreach ( $types as $name => $formats ) {
+
+				// Skip if not the right kind of recurrence
+				if ( $name !== $this->event->recurrence ) {
+					continue;
+				}
+
+				// Try
+				$this->try( $type, $name, $formats );
 			}
-
-			// Match
-			$this->try( $name, $formats );
 		}
 	}
 
@@ -211,12 +230,14 @@ trait DateCollider {
 	 * Try to match patterns to boundaries
 	 *
 	 * @since 2.2.0
+	 * @param string $type
 	 * @param string $name
-	 * @param array $pattern
+	 * @param array  $pattern
 	 */
-	private function try( $name = '', $pattern = array() ) {
+	private function try( $type = '', $name = '', $pattern = array() ) {
 
-		// Set match name & pattern
+		// Set match type, name, and pattern
+		$this->match_type    = $type;
 		$this->match_name    = $name;
 		$this->match_pattern = $pattern;
 

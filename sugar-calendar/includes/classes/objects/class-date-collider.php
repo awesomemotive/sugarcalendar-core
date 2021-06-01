@@ -95,16 +95,16 @@ trait DateCollider {
 		// Standard patterns
 		'standard' => array(
 
-			// Yearly recurring checks Month, Day, and Hour
+			// Yearly recurring pattern: Month, Day, and Hour
 			'yearly'  => array( 'n', 'j', 'G' ),
 
-			// Monthly recurring checks Day and Hour
+			// Monthly recurring pattern: Day and Hour
 			'monthly' => array( 'j', 'G' ),
 
-			// Weekly recurring checks Day-of-week (0 index) and Hour
+			// Weekly recurring pattern: Day-of-week (0 index) and Hour
 			'weekly'  => array( 'N', 'G' ),
 
-			// Daily recurring checks Hour
+			// Daily recurring pattern: Hour
 			'daily'   => array( 'G' )
 		)
 	);
@@ -213,7 +213,7 @@ trait DateCollider {
 		foreach ( $this->patterns as $type => $types ) {
 
 			// Loop through types
-			foreach ( $types as $name => $formats ) {
+			foreach ( $types as $name => $pattern ) {
 
 				// Skip if not the right kind of recurrence
 				if ( $name !== $this->event->recurrence ) {
@@ -221,7 +221,7 @@ trait DateCollider {
 				}
 
 				// Try
-				$this->try( $type, $name, $formats );
+				$this->try( $type, $name, $pattern );
 			}
 		}
 	}
@@ -281,7 +281,7 @@ trait DateCollider {
 			$this->match_format = $format;
 
 			// Prepare values to match
-			$this->prepare();
+			$this->prepare_values();
 
 			// Initialize
 			if ( ! isset( $retval['simple'] ) ) {
@@ -313,20 +313,20 @@ trait DateCollider {
 	 *
 	 * @since 2.2.0
 	 */
-	private function prepare() {
+	private function prepare_values() {
 		$this->match_values = array(
 
 			// Event start
-			'es' =>    $this->event_start->format( $this->match_format ),
+			'es' => $this->event_start->format( $this->match_format ),
 
 			// Event end
-			'ee' =>      $this->event_end->format( $this->match_format ),
+			'ee' => $this->event_end->format( $this->match_format ),
 
 			// Boundary start
 			'bs' => $this->boundary_start->format( $this->match_format ),
 
 			// Boundary end
-			'be' =>   $this->boundary_end->format( $this->match_format )
+			'be' => $this->boundary_end->format( $this->match_format )
 		);
 	}
 
@@ -339,10 +339,10 @@ trait DateCollider {
 	 */
 	private function match_simple( $match = array() ) {
 
-		// Ends after boundary start
+		// Event end format is after boundary start
 		$match[ "{$this->match_format}_ends" ]   = ( $this->match_values['ee'] >= $this->match_values['bs'] );
 
-		// Starts before boundary end
+		// Event start format is before boundary end
 		$match[ "{$this->match_format}_starts" ] = ( $this->match_values['es'] <= $this->match_values['be'] );
 
 		// Return
@@ -360,13 +360,13 @@ trait DateCollider {
 		// Defaults
 		$do = array();
 
-		// Multi format, where start is lower number than end
+		// Multi format, where Event start format is after Event end format
 		$do['inverted'] = ( $this->match_values['es'] > $this->match_values['ee'] );
 
-		// Only certain complex formats are used
-		$do['in_formats'] = in_array( $this->match_format, $this->complex_formats, true );
+		// Only certain formats are complex
+		$do['matches']  = in_array( $this->match_format, $this->complex_formats, true );
 
-		// Must all be true
+		// All conditions must be truthy
 		$retval = ! in_array( false, $do, true );
 
 		// Return
@@ -384,36 +384,44 @@ trait DateCollider {
 	 */
 	private function match_complex( $match = array() ) {
 
-		// Initialize
+		// Before, Start & End
 		if ( ! isset( $match['bse'] ) ) {
 			$match['bse'] = array();
 		}
 
-		// Add these matches
+		// Before, Event start format less than or equal to Boundary start format
 		$match['bse'][ "{$this->match_format}_starts" ] = ( $this->match_values['es'] <= $this->match_values['bs'] );
+
+		// Before, Event end format less than or equal to Boundary end format
 		$match['bse'][ "{$this->match_format}_ends" ]   = ( $this->match_values['ee'] <= $this->match_values['be'] );
 
-		// Initialize
+		// After End & Start
 		if ( ! isset( $match['aes'] ) ) {
 			$match['aes'] = array();
 		}
 
-		// Add these matches
+		// After, Event start format greater than or equal to Boundary end format
 		$match['aes'][ "{$this->match_format}_starts" ] = ( $this->match_values['es'] >= $this->match_values['be'] );
+
+		// After, Event end format greater than or equal to Boundary start format
 		$match['aes'][ "{$this->match_format}_ends" ]   = ( $this->match_values['ee'] >= $this->match_values['bs'] );
 
-		// Get the previous format
+		// Previous, if exists
 		$prev_format = isset( $this->match_pattern[ $this->match_index - 1 ] )
 			? $this->match_pattern[ $this->match_index - 1 ]
 			: '';
 
-		// Skip if empty
+		// Previous, Start & End equals
 		if ( ! empty( $prev_format ) ) {
+
+			// Before, Event start previous format equals Boundary start previous format
 			$match['bse'][ "{$prev_format}_equals" ] = ( $this->event_start->format( $prev_format ) === $this->boundary_start->format( $prev_format ) );
+
+			// After, Event end previous format equals Boundary end previous format
 			$match['aes'][ "{$prev_format}_equals" ] = (   $this->event_end->format( $prev_format ) ===   $this->boundary_end->format( $prev_format ) );
 		}
 
-		// Return matches
+		// Return all matches
 		return $match;
 	}
 
@@ -463,7 +471,7 @@ trait DateCollider {
 
 		// Turn datetimes to timestamps for easier comparisons
 		$recur_end  = ! $this->event->is_empty_date( $this->event->recurrence_end )
-			? sugar_calendar_get_datetime_object( $this->event->recurrence_end, $this->event->end_tz )
+			? self::get_datetime( $this->event->recurrence_end, $this->event->end_tz )
 			: false;
 
 		// Bail if recurring ended after cell start (inclusive of last cell)
@@ -472,6 +480,36 @@ trait DateCollider {
 		}
 
 		return false;
+	}
+
+	/** Abstractions **********************************************************/
+
+	/**
+	 * Get a date time object.
+	 *
+	 * Accepts multiple time zones. The first one is used when the DateTime object
+	 * is created, the second one is used to apply an offset relative to the first.
+	 *
+	 * @since 2.2.0
+	 * @param mixed  $timestamp Accepts any string compatible with strtotime()
+	 * @param string $timezone1 Default null. Olson time zone ID. Used as base for
+	 *                          DateTime object.
+	 * @param string $timezone2 Default null. Olson time zone ID. Used to apply
+	 *                          offset based on $timezone1.
+	 * @return object
+	 */
+	public static function get_datetime( $timestamp = 0, $timezone1 = null, $timezone2 = null ) {
+		return sugar_calendar_get_datetime_object( $timestamp, $timezone1, $timezone2 );
+	}
+
+	/**
+	 * Is the current time zone preference floating?
+	 *
+	 * @since 2.2.0
+	 * @return bool
+	 */
+	public static function is_timezone_floating() {
+		return sugar_calendar_is_timezone_floating();
 	}
 
 	/** Setters ***************************************************************/
@@ -487,8 +525,8 @@ trait DateCollider {
 		$og_start_tz = $start_tz = $this->boundary_start->getTimezone();
 		$og_end_tz   = $end_tz   = $this->boundary_end->getTimezone();
 
-		// All day checks simply match the boundaries
-		if ( ! $this->event->is_all_day() && ! sugar_calendar_is_timezone_floating() ) {
+		// All day Events require Event time zones to match boundaries
+		if ( ! $this->event->is_all_day() && ! self::is_timezone_floating() ) {
 
 			// Maybe use start time zone
 			if ( ! empty( $this->event->start_tz ) ) {
@@ -502,8 +540,8 @@ trait DateCollider {
 		}
 
 		// Turn datetimes to timestamps for easier comparisons
-		$this->event_start = sugar_calendar_get_datetime_object( $this->event->start, $start_tz, $og_start_tz );
-		$this->event_end   = sugar_calendar_get_datetime_object( $this->event->end,   $end_tz,   $og_end_tz   );
+		$this->event_start = $this->get_datetime( $this->event->start, $start_tz, $og_start_tz );
+		$this->event_end   = $this->get_datetime( $this->event->end,   $end_tz,   $og_end_tz   );
 	}
 
 	/**

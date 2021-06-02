@@ -35,24 +35,6 @@ trait DateCollider {
 	 */
 	public $boundary_end = null;
 
-	/** Event *****************************************************************/
-
-	/**
-	 * Event start
-	 *
-	 * @since 2.2.0
-	 * @var DateTime
-	 */
-	public $event_start = null;
-
-	/**
-	 * Event end
-	 *
-	 * @since 2.2.0
-	 * @var DateTime
-	 */
-	public $event_end = null;
-
 	/** Sources ***************************************************************/
 
 	/**
@@ -201,11 +183,8 @@ trait DateCollider {
 			return;
 		}
 
-		// Set Event DateTimes
-		$this->set_event_datetimes();
-
 		// Bail if Event starts after boundary ends
-		if ( $this->event_start > $this->boundary_end ) {
+		if ( $this->event->start_dto > $this->boundary_end ) {
 			return;
 		}
 
@@ -317,10 +296,10 @@ trait DateCollider {
 		$this->match_values = array(
 
 			// Event start
-			'es' => $this->event_start->format( $this->match_format ),
+			'es' => $this->event->start_dto->format( $this->match_format ),
 
 			// Event end
-			'ee' => $this->event_end->format( $this->match_format ),
+			'ee' => $this->event->end_dto->format( $this->match_format ),
 
 			// Boundary start
 			'bs' => $this->boundary_start->format( $this->match_format ),
@@ -415,10 +394,10 @@ trait DateCollider {
 		if ( ! empty( $prev_format ) ) {
 
 			// Before, Event start previous format equals Boundary start previous format
-			$match['bse'][ "{$prev_format}_equals" ] = ( $this->event_start->format( $prev_format ) === $this->boundary_start->format( $prev_format ) );
+			$match['bse'][ "{$prev_format}_equals" ] = ( $this->event->start_dto->format( $prev_format ) === $this->boundary_start->format( $prev_format ) );
 
 			// After, Event end previous format equals Boundary end previous format
-			$match['aes'][ "{$prev_format}_equals" ] = (   $this->event_end->format( $prev_format ) ===   $this->boundary_end->format( $prev_format ) );
+			$match['aes'][ "{$prev_format}_equals" ] = (   $this->event->end_dto->format( $prev_format ) ===   $this->boundary_end->format( $prev_format ) );
 		}
 
 		// Return all matches
@@ -469,80 +448,21 @@ trait DateCollider {
 	 */
 	private function recurrence_end_date_passed() {
 
-		// Turn datetimes to timestamps for easier comparisons
-		$recur_end  = ! $this->event->is_empty_date( $this->event->recurrence_end )
-			? self::get_datetime( $this->event->recurrence_end, $this->event->end_tz )
-			: false;
+		// Bail if no Recurrence End DateTime
+		if ( empty( $this->event->recurrence_end_dto ) ) {
+			return false;
+		}
 
-		// Bail if recurring ended after cell start (inclusive of last cell)
-		if ( ! empty( $recur_end ) && ( $this->event_start > $recur_end ) ) {
+		// Bail if Recurring Ended after Boundary Start (inclusive)
+		if ( $this->event->start_dto > $this->event->recurrence_end_dto ) {
 			return true;
 		}
 
+		// Return false by default
 		return false;
 	}
 
-	/** Abstractions **********************************************************/
-
-	/**
-	 * Get a date time object.
-	 *
-	 * Accepts multiple time zones. The first one is used when the DateTime object
-	 * is created, the second one is used to apply an offset relative to the first.
-	 *
-	 * @since 2.2.0
-	 * @param mixed  $timestamp Accepts any string compatible with strtotime()
-	 * @param string $timezone1 Default null. Olson time zone ID. Used as base for
-	 *                          DateTime object.
-	 * @param string $timezone2 Default null. Olson time zone ID. Used to apply
-	 *                          offset based on $timezone1.
-	 * @return object
-	 */
-	public static function get_datetime( $timestamp = 0, $timezone1 = null, $timezone2 = null ) {
-		return sugar_calendar_get_datetime_object( $timestamp, $timezone1, $timezone2 );
-	}
-
-	/**
-	 * Is the current time zone preference floating?
-	 *
-	 * @since 2.2.0
-	 * @return bool
-	 */
-	public static function is_timezone_floating() {
-		return sugar_calendar_is_timezone_floating();
-	}
-
 	/** Setters ***************************************************************/
-
-	/**
-	 * Set the Start & End Event DateTime objects
-	 *
-	 * @since 2.2.0
-	 */
-	private function set_event_datetimes() {
-
-		// Default to "floating" time zone
-		$og_start_tz = $start_tz = $this->boundary_start->getTimezone();
-		$og_end_tz   = $end_tz   = $this->boundary_end->getTimezone();
-
-		// All day Events require Event time zones to match boundaries
-		if ( ! $this->event->is_all_day() && ! self::is_timezone_floating() ) {
-
-			// Maybe use start time zone
-			if ( ! empty( $this->event->start_tz ) ) {
-				$start_tz = $this->event->start_tz;
-			}
-
-			// Maybe use end time zone
-			if ( ! empty( $this->event->end_tz ) ) {
-				$end_tz = $this->event->end_tz;
-			}
-		}
-
-		// Turn datetimes to timestamps for easier comparisons
-		$this->event_start = $this->get_datetime( $this->event->start, $start_tz, $og_start_tz );
-		$this->event_end   = $this->get_datetime( $this->event->end,   $end_tz,   $og_end_tz   );
-	}
 
 	/**
 	 * Set the intersect

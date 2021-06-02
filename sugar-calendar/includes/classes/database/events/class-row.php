@@ -204,6 +204,9 @@ final class Event extends Row {
 		/**
 		 * Filter the entire Event on construct
 		 *
+		 * This filter is handy when you need to automatically hoist parameters
+		 * onto an Event object whenever it is created.
+		 *
 		 * @since 2.2.0
 		 */
 		apply_filters_ref_array( 'sugar_calendar_event_construct', array( &$this ) );

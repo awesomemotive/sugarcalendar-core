@@ -200,6 +200,13 @@ final class Event extends Row {
 
 		// Set all of the DateTime objects
 		$this->set_datetime_objects();
+
+		/**
+		 * Filter the entire Event on construct
+		 *
+		 * @since 2.2.0
+		 */
+		apply_filters_ref_array( 'sugar_calendar_event_construct', array( &$this ) );
 	}
 
 	/**

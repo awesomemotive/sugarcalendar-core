@@ -470,7 +470,7 @@ trait DateCollider {
 	 * @since 2.2.0
 	 * @param string $method
 	 */
-	private function set_intersect( $method = '' ) {
+	protected function set_intersect( $method = '' ) {
 		$this->intersects  = true;
 		$this->intersector = $method;
 	}

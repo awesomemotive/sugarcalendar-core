@@ -209,7 +209,7 @@ function adjust_hour_for_meridiem( $hour = 0, $meridiem = 'am' ) {
  * @param int    $object_id
  * @param object $object
  *
- * @return boolean
+ * @return bool
  */
 function can_save_meta_box( $object_id = 0, $object = null ) {
 

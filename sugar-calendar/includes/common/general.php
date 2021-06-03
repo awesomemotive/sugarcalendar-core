@@ -37,7 +37,7 @@ function sugar_calendar_get_updater() {
  *
  * @since 2.0.18
  *
- * @return boolean
+ * @return bool
  */
 function sugar_calendar_doing_script_debug() {
 	return Sugar_Calendar\Common\Assets\doing_debug();

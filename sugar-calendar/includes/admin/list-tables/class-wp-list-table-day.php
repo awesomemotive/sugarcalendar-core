@@ -131,7 +131,7 @@ class Day extends Base_List_Table {
 	 *
 	 * @param object $item
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function skip_item_in_cell( $item = false ) {
 
@@ -153,21 +153,21 @@ class Day extends Base_List_Table {
 
 			// Only allow multi-day events in multi-day cells
 			case 'multi_day' :
-				if ( $item->is_all_day() || ! $item->is_multi( 'day' ) ) {
+				if ( $item->is_all_day() || ! $item->is_multi( 'j' ) ) {
 					$retval = true;
 				}
 				break;
 
 			// Prevent all-day and multi-day in regular cells
 			default :
-				if ( $item->is_all_day() || $item->is_multi( 'day' ) ) {
+				if ( $item->is_all_day() || $item->is_multi( 'j' ) ) {
 					$retval = true;
 				}
 				break;
 		}
 
 		// Return if skipping
-		return (boolean) $retval;
+		return (bool) $retval;
 	}
 
 	/**

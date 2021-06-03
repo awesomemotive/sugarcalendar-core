@@ -90,7 +90,7 @@ final class Events_Table extends Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean True if upgrade was successful, false otherwise.
+	 * @return bool True if upgrade was successful, false otherwise.
 	 */
 	protected function __201901090003() {
 
@@ -113,7 +113,7 @@ final class Events_Table extends Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean True if upgrade was successful, false otherwise.
+	 * @return bool True if upgrade was successful, false otherwise.
 	 */
 	protected function __201901220001() {
 
@@ -136,7 +136,7 @@ final class Events_Table extends Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean True if upgrade was successful, false otherwise.
+	 * @return bool True if upgrade was successful, false otherwise.
 	 */
 	protected function __201902040004() {
 
@@ -167,7 +167,7 @@ final class Events_Table extends Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean True if upgrade was successful, false otherwise.
+	 * @return bool True if upgrade was successful, false otherwise.
 	 */
 	protected function __201902040005() {
 

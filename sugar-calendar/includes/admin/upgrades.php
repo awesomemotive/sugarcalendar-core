@@ -189,7 +189,7 @@ function process() {
  * @since  2.0.0
  * @param  string $new_upgrade The action to add to the completed upgrades array
  *
- * @return boolean             If the function was successfully added
+ * @return bool                If the function was successfully added
  */
 function upgrade_complete( $new_upgrade = '' ) {
 
@@ -220,7 +220,7 @@ function upgrade_complete( $new_upgrade = '' ) {
  * @since  2.0.0
  * @param  string $upgrade_action The upgrade action to check completion for
  *
- * @return boolean                If the action has been added to the completed actions array
+ * @return bool                   If the action has been added to the completed actions array
  */
 function did_upgrade( $upgrade_action = '' ) {
 
@@ -295,7 +295,7 @@ function doing_upgrade() {
  *
  * @since 2.0.8
  *
- * @return boolean
+ * @return bool
  */
 function verify_nonce() {
 	return ! empty( $_REQUEST['_wpnonce'] )

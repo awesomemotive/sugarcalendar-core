@@ -73,7 +73,7 @@ function sc_load_front_end_scripts() {
  * @global object $post
  * @param string $content
  *
- * @return boolean
+ * @return bool
  */
 function sc_content_has_shortcodes( $content = '' ) {
 

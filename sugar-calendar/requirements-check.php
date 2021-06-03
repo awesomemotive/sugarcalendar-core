@@ -433,7 +433,7 @@ final class Requirements_Check {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function met() {
 

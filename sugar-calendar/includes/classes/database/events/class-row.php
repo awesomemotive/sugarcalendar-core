@@ -93,6 +93,14 @@ final class Event extends Row {
 	public $start_tz = '';
 
 	/**
+	 * The start date & time as a DateTime object
+	 *
+	 * @since 2.2.0
+	 * @var DateTime
+	 */
+	public $start_dto = null;
+
+	/**
 	 * The end date & time for the event.
 	 *
 	 * @since 2.0.0
@@ -100,6 +108,14 @@ final class Event extends Row {
 	 * @var string Date in MySQL's datetime format.
 	 */
 	public $end = '0000-00-00 00:00:00';
+
+	/**
+	 * The end date & time as a DateTime object
+	 *
+	 * @since 2.2.0
+	 * @var DateTime
+	 */
+	public $end_dto = null;
 
 	/**
 	 * The time zone for the end date & time.
@@ -166,6 +182,37 @@ final class Event extends Row {
 	public $recurrence_end_tz = '';
 
 	/**
+	 * The recurrence end date & time as a DateTime object
+	 *
+	 * @since 2.2.0
+	 * @var DateTime
+	 */
+	public $recurrence_end_dto = null;
+
+	/**
+	 * Construct
+	 * @since 2.2.0
+	 *
+	 * @param mixed Null by default, or Array/Object
+	 */
+	public function __construct( $item = null ) {
+		parent::__construct( $item );
+
+		// Set all of the DateTime objects
+		$this->set_datetime_objects();
+
+		/**
+		 * Filter the entire Event on construct
+		 *
+		 * This filter is handy when you need to automatically hoist parameters
+		 * onto an Event object whenever it is created.
+		 *
+		 * @since 2.2.0
+		 */
+		apply_filters_ref_array( 'sugar_calendar_event_construct', array( &$this ) );
+	}
+
+	/**
 	 * Issetter.
 	 *
 	 * @since 2.0.3
@@ -205,7 +252,7 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function is_all_day() {
 
@@ -227,21 +274,22 @@ final class Event extends Row {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return boolean
+	 * @param string $format
+	 * @return bool
 	 */
-	public function is_multi( $format = 'd' ) {
+	public function is_multi( $format = 'j' ) {
 
 		// Helpers for not remembering date() formatting
 		switch ( $format ) {
 
 			// Hour
 			case 'hour' :
-				$format = 'H';
+				$format = 'G';
 				break;
 
 			// Day
 			case 'day' :
-				$format = 'd';
+				$format = 'j';
 				break;
 
 			// Week
@@ -251,7 +299,7 @@ final class Event extends Row {
 
 			// Month
 			case 'month' :
-				$format = 'm';
+				$format = 'n';
 				break;
 
 			// Year
@@ -289,24 +337,23 @@ final class Event extends Row {
 		$end_dto   = sugar_calendar_get_datetime_object( $end,   $timezone );
 
 		// Call intersects
-		$retval = $this->intersects( $start_dto, $end_dto, $mode );
+		$retval = $this->intersects( $start_dto, $end_dto );
 
 		// Filter and return
 		return (bool) apply_filters( 'sugar_calendar_event_overlaps', $retval, $this, $start, $end, $mode, $timezone );
 	}
 
 	/**
-	 * Does an event overlap a specific start & end time?
+	 * Does an Event intersect some Start & End DateTime boundaries?
 	 *
 	 * @since 2.1.2
 	 *
-	 * @param DateTime $start Start boundary
-	 * @param DateTime $end   End boundary
-	 * @param string   $mode  day|week|month|year
+	 * @param DateTime $start Start boundary, with desired time zone
+	 * @param DateTime $end   End boundary, with desired time zone
 	 *
-	 * @return bool
+	 * @return bool True if intersects, False if not
 	 */
-	public function intersects( $start = '', $end = '', $mode = 'month' ) {
+	public function intersects( $start = '', $end = '' ) {
 
 		// Default return value
 		$retval = false;
@@ -316,27 +363,19 @@ final class Event extends Row {
 			return $retval;
 		}
 
-		// Default to "floating" time zone
+		// Default to time zones for boundaries (to "float")
 		$start_tz = $start->getTimezone();
 		$end_tz   = $end->getTimezone();
 
-		// All day checks simply match the boundaries
-		if ( ! $this->is_all_day() && ! sugar_calendar_is_timezone_floating() ) {
+		// Maybe adjust start time zone (loose comparison)
+		$start_dto = ( $start_tz != $this->start_dto->getTimezone() )
+			? sugar_calendar_set_datetime_timezone( $this->start_dto, $start_tz )
+			: $this->start_dto;
 
-			// Maybe use start time zone
-			if ( ! empty( $this->start_tz ) ) {
-				$start_tz = $this->start_tz;
-			}
-
-			// Maybe use end time zone
-			if ( ! empty( $this->end_tz ) ) {
-				$end_tz = $this->end_tz;
-			}
-		}
-
-		// Turn datetimes to timestamps for easier comparisons
-		$start_dto = sugar_calendar_get_datetime_object( $this->start, $start_tz, $start->getTimezone() );
-		$end_dto   = sugar_calendar_get_datetime_object( $this->end,   $end_tz,   $end->getTimezone()   );
+		// Maybe adjust end time zone (loose comparison)
+		$end_dto   = ( $end_tz != $this->end_dto->getTimezone() )
+			? sugar_calendar_set_datetime_timezone( $this->end_dto, $end_tz )
+			: $this->end_dto;
 
 		// Boundary fits inside current cell
 		if ( ( $end_dto <= $end ) && ( $start_dto >= $start ) ) {
@@ -348,7 +387,7 @@ final class Event extends Row {
 		}
 
 		// Filter and return
-		return (bool) apply_filters( 'sugar_calendar_event_intersects', $retval, $this, $start, $end, $mode );
+		return (bool) apply_filters( 'sugar_calendar_event_intersects', $retval, $this, $start, $end );
 	}
 
 	/**
@@ -358,7 +397,7 @@ final class Event extends Row {
 	 *
 	 * @param string $datetime
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function is_empty_date( $datetime = '' ) {
 
@@ -428,5 +467,50 @@ final class Event extends Row {
 	 */
 	public static function format_date( $format = 'Y-m-d H:i:s', $timestamp = null, $timezone1 = null, $timezone2 = null, $locale = null ) {
 		return sugar_calendar_format_date_i18n( $format, $timestamp, $timezone1, $timezone2, $locale );
+	}
+
+	/**
+	 * Set the DateTime objects
+	 *
+	 * @since 2.2.0
+	 */
+	private function set_datetime_objects() {
+
+		// Default time zones
+		$start_tz = $end_tz = $recurrence_end_tz = sugar_calendar_get_timezone();
+
+		// All day checks simply match the boundaries
+		if ( ! $this->is_all_day() && ! sugar_calendar_is_timezone_floating() ) {
+
+			// Maybe use start time zone
+			if ( ! empty( $this->start_tz ) ) {
+				$start_tz = $this->start_tz;
+			}
+
+			// Maybe use end time zone
+			if ( ! empty( $this->end_tz ) ) {
+				$end_tz = $this->end_tz;
+			}
+
+			// Maybe use recurrence end time zone
+			if ( ! empty( $this->recurrence_end_tz ) ) {
+				$end_tz = $this->recurrence_end_tz;
+			}
+		}
+
+		// Start
+		if ( ! $this->is_empty_date( $this->start ) ) {
+			$this->start_dto = sugar_calendar_get_datetime_object( $this->start, $start_tz );
+		}
+
+		// End
+		if ( ! $this->is_empty_date( $this->end ) ) {
+			$this->end_dto = sugar_calendar_get_datetime_object( $this->end, $end_tz );
+		}
+
+		// Recurrence end
+		if ( ! $this->is_empty_date( $this->recurrence_end ) ) {
+			$this->recurrence_end_dto = sugar_calendar_get_datetime_object( $this->recurrence_end, $recurrence_end_tz );
+		}
 	}
 }

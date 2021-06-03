@@ -30,7 +30,7 @@
 		"chosen-js": "^1.8.7"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.14.0",
+		"@babel/core": "^7.14.3",
 		"@wordpress/babel-preset-default": "^4.20.0",
 		"@wordpress/browserslist-config": "^2.7.0",
 		"@wordpress/eslint-plugin": "^2.4.0",
@@ -38,9 +38,9 @@
 		"copy-webpack-plugin": "^6.4.1",
 		"cross-env": "^5.2.1",
 		"eslint": "^5.16.0",
-		"grunt": "^1.4.0",
+		"grunt": "^1.4.1",
 		"grunt-checktextdomain": "^1.0.1",
-		"grunt-cli": "^1.4.2",
+		"grunt-cli": "^1.4.3",
 		"grunt-contrib-clean": "^1.1.0",
 		"grunt-contrib-compress": "^1.6.0",
 		"grunt-contrib-copy": "^1.0.0",

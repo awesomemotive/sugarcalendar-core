@@ -459,8 +459,8 @@ function sugar_calendar_get_datetime_object( $timestamp = null, $timezone1 = nul
 
 	// Get DateTime object and use it to format
 	$retval = ( $tzo instanceof DateTimeZone )
-		? date_create( $time, $tzo )
-		: date_create( $time );
+		? new Sugar_Calendar\DateTime( $time, $tzo )
+		: new Sugar_Calendar\DateTime( $time );
 
 	// Maybe set the timezone to a new one
 	if ( ! empty( $timezone2 ) && ( $timezone2 !== $timezone1 ) ) {
@@ -533,7 +533,7 @@ function sugar_calendar_get_timezone_object( $timezone = '' ) {
 
 	// Create a time zone object
 	$retval = ! empty( $timezone )
-		? timezone_open( $timezone )
+		? new \DateTimeZone( $timezone )
 		: false;
 
 	// Return the time zone object
@@ -545,7 +545,7 @@ function sugar_calendar_get_timezone_object( $timezone = '' ) {
  *
  * @since 2.1.0
  * @param string $timezone Default ''. Olson time zone ID.
- * @return boolean
+ * @return bool
  */
 function sugar_calendar_is_manual_timezone_offset( $timezone = '' ) {
 
@@ -925,7 +925,7 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 		}
 
 		// Build the value
-		$value       = join( '/', $value );
+		$value       = implode( '/', $value );
 		$structure[] = '<option ' . selected( $value, $selected_zone, false ) . 'value="' . esc_attr( $value ) . '">' . esc_html( $display ) . '</option>';
 
 		// Close continent <optgroup>
@@ -968,5 +968,5 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 	$structure[] = '</select>';
 
 	// Output the HTML
-	echo join( "\n", $structure );
+	echo implode( "\n", $structure );
 }

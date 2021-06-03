@@ -3211,7 +3211,7 @@ class Base_List_Table extends \WP_List_Table {
 		$classes = array_unique( get_post_class( $classes, $event->object_id ) );
 
 		// Join & return
-		return trim( join( ' ', $classes ) );
+		return trim( implode( ' ', $classes ) );
 	}
 
 	/**

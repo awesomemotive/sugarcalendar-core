@@ -45,6 +45,40 @@ trait DateCollider {
 	 */
 	public $event = null;
 
+	/**
+	 * Event start
+	 *
+	 * @since 2.2.0
+	 * @var DateTime
+	 */
+	public $event_start = null;
+
+	/**
+	 * Event start
+	 *
+	 * @since 2.2.0
+	 * @var DateTime
+	 */
+	public $event_end = null;
+
+	/** Recurrence ************************************************************/
+
+	/**
+	 * Type of recurrence
+	 *
+	 * @since 2.2.0
+	 * @var string
+	 */
+	public $recur_freq = null;
+
+	/**
+	 * Recurrence end
+	 *
+	 * @since 2.2.0
+	 * @var DateTime
+	 */
+	public $recur_until = null;
+
 	/** Results ***************************************************************/
 
 	/**
@@ -163,28 +197,70 @@ trait DateCollider {
 	/** Methods ***************************************************************/
 
 	/**
+	 * Parse the arguments to check collisions for
+	 *
+	 * @since 2.2.0
+	 * @param array $args
+	 */
+	private function parse_args( $args = array() ) {
+
+		// Parse arguments
+		$r = array_merge( array(
+
+			// Original Event
+			'event'            => null,
+
+			// Event Start & End
+			'event_start'      => null,
+			'event_end'        => null,
+
+			// Recurrence
+			'recur_freq'       => null,
+			'recur_until'      => null,
+			'recur_count'      => null,
+			'recur_interval'   => null,
+			'recur_bysecond'   => null,
+			'recur_byminute'   => null,
+			'recur_byhour'     => null,
+			'recur_byday'      => null,
+			'recur_bymonthday' => null,
+			'recur_byyearday'  => null,
+			'recur_byweekno'   => null,
+			'recur_bymonth'    => null,
+			'recur_bysetpos'   => null,
+			'recur_wkst'       => null,
+
+			// Boundaries
+			'boundary_start'   => null,
+			'boundary_end'     => null,
+
+		), $args );
+
+		// Set variables
+		foreach ( $r as $key => $value ) {
+			$this->{$key} = $value;
+		}
+	}
+
+	/**
 	 * Perform all checks
 	 *
 	 * @since 2.2.0
 	 *
-	 * @param Event    $event
-	 * @param DateTime $boundary_start
-	 * @param DateTime $boundary_end
+	 * @param array $args
 	 */
-	private function check( $event = false, $boundary_start = false, $boundary_end = false ) {
+	private function check( $args = array() ) {
 
-		// Set object vars
-		$this->event          = $event;
-		$this->boundary_start = $boundary_start;
-		$this->boundary_end   = $boundary_end;
+		// Parse the arguments
+		$this->parse_args( $args );
 
 		// Recurrence is over
-		if ( $this->recurrence_end_date_passed() ) {
+		if ( $this->recurrence_passed() ) {
 			return;
 		}
 
 		// Bail if Event starts after boundary ends
-		if ( $this->event->start_dto > $this->boundary_end ) {
+		if ( $this->boundary_too_soon() ) {
 			return;
 		}
 
@@ -195,7 +271,7 @@ trait DateCollider {
 			foreach ( $types as $name => $pattern ) {
 
 				// Skip if not the right kind of recurrence
-				if ( $name !== $this->event->recurrence ) {
+				if ( $name !== $this->recur_freq ) {
 					continue;
 				}
 
@@ -296,10 +372,10 @@ trait DateCollider {
 		$this->match_values = array(
 
 			// Event start
-			'es' => $this->event->start_dto->format( $this->match_format ),
+			'es' => $this->event_start->format( $this->match_format ),
 
 			// Event end
-			'ee' => $this->event->end_dto->format( $this->match_format ),
+			'ee' => $this->event_end->format( $this->match_format ),
 
 			// Boundary start
 			'bs' => $this->boundary_start->format( $this->match_format ),
@@ -394,10 +470,10 @@ trait DateCollider {
 		if ( ! empty( $prev_format ) ) {
 
 			// Before, Event start previous format equals Boundary start previous format
-			$match['bse'][ "{$prev_format}_equals" ] = ( $this->event->start_dto->format( $prev_format ) === $this->boundary_start->format( $prev_format ) );
+			$match['bse'][ "{$prev_format}_equals" ] = ( $this->event_start->format( $prev_format ) === $this->boundary_start->format( $prev_format ) );
 
 			// After, Event end previous format equals Boundary end previous format
-			$match['aes'][ "{$prev_format}_equals" ] = (   $this->event->end_dto->format( $prev_format ) ===   $this->boundary_end->format( $prev_format ) );
+			$match['aes'][ "{$prev_format}_equals" ] = (   $this->event_end->format( $prev_format ) ===   $this->boundary_end->format( $prev_format ) );
 		}
 
 		// Return all matches
@@ -438,23 +514,35 @@ trait DateCollider {
 		}
 	}
 
-	/** Recurrence ************************************************************/
+	/** Boundary **************************************************************/
 
 	/**
-	 * Check if recurrence end date has already passed
+	 * Check if a Boundary ends before an Event starts
 	 *
 	 * @since 2.2.0
 	 * @return bool
 	 */
-	private function recurrence_end_date_passed() {
+	private function boundary_too_soon() {
+		return ( $this->boundary_end < $this->event_start );
+	}
+
+	/** Recurrence ************************************************************/
+
+	/**
+	 * Check if recurrence has already passed
+	 *
+	 * @since 2.2.0
+	 * @return bool
+	 */
+	private function recurrence_passed() {
 
 		// Bail if no Recurrence End DateTime
-		if ( empty( $this->event->recurrence_end_dto ) ) {
+		if ( empty( $this->recur_until ) ) {
 			return false;
 		}
 
 		// Bail if Recurring Ended after Boundary Start (inclusive)
-		if ( $this->event->start_dto > $this->event->recurrence_end_dto ) {
+		if ( $this->event_start > $this->recur_until ) {
 			return true;
 		}
 

@@ -925,7 +925,7 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 		}
 
 		// Build the value
-		$value       = join( '/', $value );
+		$value       = implode( '/', $value );
 		$structure[] = '<option ' . selected( $value, $selected_zone, false ) . 'value="' . esc_attr( $value ) . '">' . esc_html( $display ) . '</option>';
 
 		// Close continent <optgroup>
@@ -968,5 +968,5 @@ function sugar_calendar_timezone_dropdown( $args = array() ) {
 	$structure[] = '</select>';
 
 	// Output the HTML
-	echo join( "\n", $structure );
+	echo implode( "\n", $structure );
 }

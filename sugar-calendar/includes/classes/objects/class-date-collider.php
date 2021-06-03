@@ -38,14 +38,6 @@ trait DateCollider {
 	/** Sources ***************************************************************/
 
 	/**
-	 * Event
-	 *
-	 * @since 2.2.0
-	 * @var Sugar_Calendar\Event
-	 */
-	public $event = null;
-
-	/**
 	 * Event start
 	 *
 	 * @since 2.2.0
@@ -207,8 +199,9 @@ trait DateCollider {
 		// Parse arguments
 		$r = array_merge( array(
 
-			// Original Event
-			'event'            => null,
+			// Boundaries
+			'boundary_start'   => null,
+			'boundary_end'     => null,
 
 			// Event Start & End
 			'event_start'      => null,
@@ -230,10 +223,6 @@ trait DateCollider {
 			'recur_bysetpos'   => null,
 			'recur_wkst'       => null,
 
-			// Boundaries
-			'boundary_start'   => null,
-			'boundary_end'     => null,
-
 		), $args );
 
 		// Set variables
@@ -249,7 +238,7 @@ trait DateCollider {
 	 *
 	 * @param array $args
 	 */
-	private function check( $args = array() ) {
+	protected function check( $args = array() ) {
 
 		// Parse the arguments
 		$this->parse_args( $args );

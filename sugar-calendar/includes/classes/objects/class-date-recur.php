@@ -177,7 +177,7 @@ class Recur {
 	 * @since 1.0.0
 	 * @var int
 	 */
-	public $safety_break = 1000;
+	public $max = 1000;
 
 	/** Methods ***************************************************************/
 
@@ -708,14 +708,14 @@ class Recur {
 		}
 
 		// Default break to 0
-		$safety_break = 0;
+		$safety = 0;
 
 		// Start the open loop
 		do {
 			$this->iteration++;
 
-			// Stop after X number of failed iterations
-			if ( ++$safety_break > $this->safety_break ) {
+			// Break after X number of failed iterations
+			if ( ++$safety > $this->max ) {
 				break;
 			}
 

@@ -4,7 +4,7 @@
  *
  * @package Plugins/Site/Events/DateCollider
  */
-namespace Sugar_Calendar;
+namespace Sugar_Calendar\Utilities;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;

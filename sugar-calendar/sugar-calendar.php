@@ -318,10 +318,11 @@ final class Plugin {
 
 		// Events Helpers
 		require_once SC_PLUGIN_DIR . 'includes/classes/objects/class-wp-event-schema.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/objects/class-date-collider.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/objects/class-date-recur.php';
 		require_once SC_PLUGIN_DIR . 'includes/classes/objects/class-sc-datetime.php';
 
 		// Utilities
+		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/class-date-collider.php';
 		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/class-term-meta-ui.php';
 		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/ical-to-array.php';
 

@@ -215,6 +215,9 @@ class Recur {
 			return false;
 		}
 
+		// Reset the error flag
+		$this->error = false;
+
 		// Lowercase argument keys
 		$args = $this->lc_keys( $args );
 

@@ -223,6 +223,11 @@ class Recur {
 			? $args[ 'tzid' ]
 			: date_default_timezone_get();
 
+		// Maximum number of iterations
+		$this->max = ! empty( $args[ 'max' ] )
+			? abs( $args[ 'max' ] )
+			: 1000;
+
 		// Get time zone object
 		try {
 			$this->timezone = new \DateTimeZone( $timezone );

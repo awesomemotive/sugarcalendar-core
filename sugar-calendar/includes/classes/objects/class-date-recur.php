@@ -490,7 +490,7 @@ class Recur {
 					$this->byhour = explode( ',', $value );
 
 					foreach ( $this->byhour as $hour ) {
-						if ( ! is_numeric( $hour ) || ( abs( $hour ) < 0 ) || ( abs( $hour ) > 23 ) ) {
+						if ( ! is_numeric( $hour ) || ( $hour < 0 ) || ( $hour > 23 ) ) {
 							$this->error = true;
 						}
 					}
@@ -505,7 +505,7 @@ class Recur {
 					$this->{$key} = explode( ',', $value );
 
 					foreach ( $this->{$key} as $value ) {
-						if ( ! is_numeric( $value ) || ( abs( $value ) < 0 ) || ( abs( $value ) > 59 ) ) {
+						if ( ! is_numeric( $value ) || ( $value < 0 ) || ( $value > 59 ) ) {
 							$this->error = true;
 						}
 					}

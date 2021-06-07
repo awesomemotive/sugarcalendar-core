@@ -17,14 +17,45 @@ defined( 'ABSPATH' ) || exit;
  */
 class Recur {
 
+	/** Settings **************************************************************/
+
+	/**
+	 * True if error in properties found
+	 *
+	 * @var bool
+	 */
+	public $error = false;
+
+	/**
+	 * Return format
+	 *
+	 * @var mixed
+	 */
+	public $format = 'Y-m-d H:i:s';
+
+	/**
+	 * Skip expanding of dates not in range to save time
+	 *
+	 * @var bool
+	 */
+	public $skip_sequence = false;
+
+	/**
+	 * Avoid infinite loops by breaking at this number.
+	 *
+	 * @since 1.0.0
+	 * @var int
+	 */
+	public $max = 1000;
+
 	/** VEVENT parameters *****************************************************/
 
+	protected $tzid;
 	protected $dtstart;
 	protected $dtend;
 	protected $rdate = array();
 	protected $exdate = array();
 	protected $duration;
-	protected $tzid;
 
 	/** RRULE parameters ******************************************************/
 
@@ -148,37 +179,6 @@ class Recur {
 	 */
 	protected $cached_details = array();
 
-	/** Settings **************************************************************/
-
-	/**
-	 * True if error in properties found
-	 *
-	 * @var bool
-	 */
-	public $error = false;
-
-	/**
-	 * Return format
-	 *
-	 * @var mixed
-	 */
-	public $format = 'Y-m-d H:i:s';
-
-	/**
-	 * Skip expanding of dates not in range to save time
-	 *
-	 * @var bool
-	 */
-	public $skip_not_in_range = false;
-
-	/**
-	 * Avoid infinite loops by breaking at this number.
-	 *
-	 * @since 1.0.0
-	 * @var int
-	 */
-	public $max = 1000;
-
 	/** Methods ***************************************************************/
 
 	/**
@@ -221,19 +221,14 @@ class Recur {
 		// Lowercase argument keys
 		$args = $this->lc_keys( $args );
 
-		// Default time zone
-		$timezone = ! empty( $args[ 'tzid' ] )
-			? $args[ 'tzid' ]
+		// Time zone is required early
+		$this->tzid = ! empty( $args[ 'tzid' ] ) && is_string( $args[ 'tzid' ] )
+			? trim( $args[ 'tzid' ] )
 			: date_default_timezone_get();
-
-		// Maximum number of iterations
-		$this->max = ! empty( $args[ 'max' ] )
-			? abs( $args[ 'max' ] )
-			: 1000;
 
 		// Get time zone object
 		try {
-			$this->timezone = new \DateTimeZone( $timezone );
+			$this->timezone = new \DateTimeZone( $this->tzid );
 
 		// Bail on error
 		} catch ( \Exception $e ) {
@@ -283,6 +278,26 @@ class Recur {
 
 			// Validate specific args
 			switch ( $key ) {
+
+				// DateTime::format() compatible string to return
+				case 'format' :
+
+					// Format to return
+					if ( ! empty( $args[ 'format' ] ) && is_string( $args[ 'format' ] ) ) {
+						$this->format = trim( $args[ 'format' ] );
+					}
+
+					break;
+
+				// Prevent infinite loops
+				case 'max' :
+
+					// Maximum number of iterations
+					if ( ! empty( $args[ 'max' ] ) && is_numeric( $args[ 'max' ] ) ) {
+						$this->max = abs( $args[ 'max' ] );
+					}
+
+					break;
 
 				// DATETIME || DATE values
 				case 'dtstart' :
@@ -543,7 +558,7 @@ class Recur {
 
 		// Disable skipping
 		if ( ! is_null( $this->count ) || is_null( $this->after ) ) {
-			$this->skip_not_in_range = false;
+			$this->skip_sequence = false;
 		}
 
 		// End exists
@@ -738,7 +753,7 @@ class Recur {
 			}
 
 			// Bail if current date not in range
-			if ( ! empty( $this->skip_not_in_range ) && $this->not_in_range() ) {
+			if ( ! empty( $this->skip_sequence ) && $this->not_in_range() ) {
 				continue;
 			}
 
@@ -748,7 +763,7 @@ class Recur {
 			// No EXPANSIONS, apply LIMITATIONS only
 			if ( empty( $this->expansion_count ) ) {
 
-				// Restricted by exdate: next interval
+				// Skip if restricted by exdate
 				if ( ! empty( $this->exdate ) && in_array( $this->current_date, $this->exdate, true ) ) {
 					continue;
 				}
@@ -756,7 +771,7 @@ class Recur {
 				// Loop through limitations
 				foreach ( $this->limitations as $limitation ) {
 
-					// Restricted by rule: next interval
+					// Skip if restricted by rule
 					if ( ! empty( $this->{$limitation} ) && ! $this->{'limit_' . $limitation}( $this->current_date ) ) {
 						continue 2;
 					}
@@ -780,7 +795,7 @@ class Recur {
 							}
 						}
 
-						// No expansions done: continue with next set
+						// No expansions done - continue to next set
 						if ( empty( $result_dates ) ) {
 							continue 2;
 						}
@@ -807,7 +822,7 @@ class Recur {
 					// LIMITATIONS
 					foreach ( $this->limitations as $limitation ) {
 
-						// Restricted by rule: continue with next date
+						// Restricted by rule - continue to next date
 						if ( ! empty( $this->{$limitation} ) && ! $this->{'limit_' . $limitation}( $date ) ) {
 							continue 2;
 						}
@@ -946,7 +961,7 @@ class Recur {
 			$duration      =& $this->duration;
 			$duration_time =& $this->duration_time;
 
-		// No values left: next interval
+		// Proceed to next interval when no values left
 		} else {
 			return $this->next();
 		}
@@ -981,10 +996,12 @@ class Recur {
 			$retval[ 'dtend' ] = $this->date( $this->format, $start + $duration_time );
 		}
 
+		// The original value of the "DTSTART" property of the recurrence instance
 		$retval[ 'recurrence-id' ] = gmdate( 'Ymd\THis\Z', $start );
 
-		if ( empty( $this->skip_not_in_range ) && ( $this->current_count > 0 ) ) {
-			$retval[ 'x-recurrence' ] = $this->current_count;
+		// The numeric sequence of this instance
+		if ( empty( $this->skip_sequence ) && ( $this->current_count > 0 ) ) {
+			$retval[ 'sequence' ] = $this->current_count;
 		}
 
 		// Remove used rdate from cache
@@ -992,8 +1009,10 @@ class Recur {
 			unset( $this->cached_rdates[ $key ] );
 		}
 
+		// Bump the count
 		$this->current_count++;
 
+		// Return
 		return $retval;
 	}
 
@@ -1011,7 +1030,7 @@ class Recur {
 
 			case 'MONTHLY' :
 
-				// Default: take day part from dtstart
+				// Default - take day part from dtstart
 				if ( $d <= 28 ) {
 					$this->current_date = $this->mktime( $H, $i, $s, $m + $this->interval, $d, $Y );
 
@@ -1068,7 +1087,7 @@ class Recur {
 			return false;
 		}
 
-		// No expansions: check current date only
+		// Bail if no expansions - check current date only
 		if ( empty( $this->expansion_count ) && ( $this->current_date > $this->before ) ) {
 			return true;
 		}
@@ -1167,7 +1186,7 @@ class Recur {
 			return false;
 		}
 
-		// No expansions: check current date only
+		// Bail if no expansions - check current date only
 		if ( empty( $this->expansion_count ) && ( $this->current_date < $this->after ) ) {
 			return true;
 		}
@@ -1295,7 +1314,7 @@ class Recur {
 			? 29
 			: 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 );
 
-		// Day part is defined by rule: shifting allowed
+		// Shifting allowed if day part is defined by rule
 		if ( ! empty( $this->byweekno ) || ! empty( $this->byyearday ) || ! empty( $this->bymonthday ) || ! empty( $this->byday ) ) {
 			$shift = true;
 		}
@@ -1353,7 +1372,7 @@ class Recur {
 			$year[ $Y - 1 ] = $this->get_year_details( $Y - 1 );
 		}
 
-		// Day part NOT defined by rule: take weekday from dtstart
+		// Take weekday from dtstart if day part NOT defined by rule
 		if ( empty( $this->byyearday ) && empty( $this->bymonthday ) && empty( $this->byday ) ) {
 			$days    = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
 			$weekday = $days[ $this->date( 'w', $this->dtstart ) ];
@@ -1367,7 +1386,7 @@ class Recur {
 			// Create one date for each WEEK
 			foreach ( $this->byweekno as $week ) {
 
-				// Week number out of range: skip week
+				// Skip week if week number out of range
 				if ( abs( $week ) > $year_details[ 'number_of_weeks' ] ) {
 					continue;
 				}
@@ -1376,15 +1395,16 @@ class Recur {
 					$week = $year_details[ 'number_of_weeks' ] + $week + 1;
 				}
 
-				// Weekday is specified by dtstart: test weekday only
+				// Check weekday, only if weekday is specified by dtstart
 				if ( isset( $pos_weekday ) ) {
 					$test_date = $this->mktime( $H, $i, $s, 1, 1 + $year_details[ 'week_offset' ] + $pos_weekday + ( $week - 1 ) * 7, $Y );
 
-					// Date out of range: skip week
+					// Skip week if date out of range
 					if ( $test_date < $start ) {
 						continue;
 					}
 
+					// Skip week if date out of range
 					if ( $test_date > $end ) {
 						continue;
 					}
@@ -1395,7 +1415,7 @@ class Recur {
 
 					do {
 
-						// Out of range: skip week
+						// Skip week if position out of range
 						if ( $pos > 6 ) {
 							continue 2;
 						}
@@ -1466,11 +1486,12 @@ class Recur {
 
 			$date = $this->mktime( $H, $i, $s, 1, $day, $Y );
 
-			// Out of range: skip day
+			// Skip day if date out of range
 			if ( $date < $start ) {
 				continue;
 			}
 
+			// Skip day if date out of range
 			if ( $date > $end ) {
 				continue;
 			}
@@ -1535,7 +1556,7 @@ class Recur {
 			// Create one date for each MONTHDAY
 			foreach ( $this->bymonthday as $day ) {
 
-				// Out of range: skip day
+				// Skip day if day out of range
 				if ( abs( $day ) > $month_details[ 'number_of_days' ] ) {
 					continue;
 				}
@@ -1546,11 +1567,12 @@ class Recur {
 
 				$date = $this->mktime( $H, $i, $s, $m, $day, $Y );
 
-				// Out of range: skip day
+				// Skip day if day out of range
 				if ( $date < $start ) {
 					continue;
 				}
 
+				// Skip day if day out of range
 				if ( $date > $end ) {
 					continue;
 				}
@@ -1592,7 +1614,7 @@ class Recur {
 			// Apply BYDAY
 			foreach ( $this->byday as $option ) {
 
-				// Position & WEEKLY is invalid: skip day
+				// Skip day if position & WEEKLY is invalid
 				if ( ! empty( $option[ 'pos' ] ) ) {
 					continue;
 				}
@@ -1601,11 +1623,12 @@ class Recur {
 				$pos  = array_search( $option[ 'weekday' ], $this->wkst_seq, true );
 				$date = $this->mktime( $H, $i, $s, $m, $d + $pos, $Y );
 
-				// Out of range: skip day
+				// Skip day if start out of range
 				if ( isset( $start ) && ( $date < $start ) ) {
 					continue;
 				}
 
+				// Skip day if end out of range
 				if ( isset( $end ) && ( $date > $end ) ) {
 					continue;
 				}
@@ -1640,17 +1663,18 @@ class Recur {
 					$pos += 7;
 				}
 
+				// Skip if not all day
 				if ( empty( $all_days ) ) {
 					continue;
 				}
 
-				// No position - merge all days
+				// No position - merge all days and skip
 				if ( empty( $option[ 'pos' ] ) ) {
 					$dates = array_merge( $dates, $all_days );
 					continue;
 				}
 
-				// Position out of range
+				// Skip if position out of range
 				if ( abs( $option[ 'pos' ] ) > count( $all_days ) ) {
 					continue;
 				}
@@ -1689,17 +1713,18 @@ class Recur {
 					$pos += 7;
 				}
 
+				// Skip if not all day
 				if ( empty( $all_days ) ) {
 					continue;
 				}
 
-				// No position - merge all days
+				// No position - merge all days and skip
 				if ( empty( $option[ 'pos' ] ) ) {
 					$dates = array_merge( $dates, $all_days );
 					continue;
 				}
 
-				// Position out of range
+				// Skip if position out of range
 				if ( abs( $option[ 'pos' ] ) > count( $all_days ) ) {
 					continue;
 				}
@@ -1826,7 +1851,7 @@ class Recur {
 			return true;
 		}
 
-		// Previous applied BYMONTH: check position relative to month
+		// Previous applied BYMONTH - check position relative to this month
 		if ( ! empty( $this->bymonth ) ) {
 			$try = ceil( $j / 7 );
 

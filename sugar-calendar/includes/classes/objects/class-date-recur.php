@@ -20,6 +20,13 @@ class Recur {
 	/** Settings **************************************************************/
 
 	/**
+	 * The original array of arguments
+	 *
+	 * @var array
+	 */
+	public $args = array();
+
+	/**
 	 * True if error in properties found
 	 *
 	 * @var bool
@@ -34,11 +41,11 @@ class Recur {
 	public $format = 'Y-m-d H:i:s';
 
 	/**
-	 * Skip expanding of dates not in range to save time
+	 * Sequence occurrences even when not in range
 	 *
 	 * @var bool
 	 */
-	public $skip_sequence = false;
+	public $sequence = true;
 
 	/**
 	 * Avoid infinite loops by breaking at this number.
@@ -215,6 +222,9 @@ class Recur {
 			return false;
 		}
 
+		// Set the original arguments
+		$this->args = $args;
+
 		// Reset the error flag
 		$this->error = false;
 
@@ -272,7 +282,7 @@ class Recur {
 		foreach ( $args as $key => $value ) {
 
 			// Skip empty string values
-			if ( '' === (string) $value ) {
+			if ( empty( $value ) && is_string( $value ) ) {
 				continue;
 			}
 
@@ -295,6 +305,16 @@ class Recur {
 					// Maximum number of iterations
 					if ( ! empty( $args[ 'max' ] ) && is_numeric( $args[ 'max' ] ) ) {
 						$this->max = abs( $args[ 'max' ] );
+					}
+
+					break;
+
+				// Whether or not to include sequences
+				case 'sequence' :
+
+					// Return sequence numbers?
+					if ( isset( $args[ 'sequence' ] ) ) {
+						$this->sequence = (bool) $args[ 'sequence' ];
 					}
 
 					break;
@@ -558,7 +578,7 @@ class Recur {
 
 		// Disable skipping
 		if ( ! is_null( $this->count ) || is_null( $this->after ) ) {
-			$this->skip_sequence = false;
+			$this->sequence = true;
 		}
 
 		// End exists
@@ -753,7 +773,7 @@ class Recur {
 			}
 
 			// Bail if current date not in range
-			if ( ! empty( $this->skip_sequence ) && $this->not_in_range() ) {
+			if ( empty( $this->sequence ) && $this->not_in_range() ) {
 				continue;
 			}
 
@@ -1000,7 +1020,7 @@ class Recur {
 		$retval[ 'recurrence-id' ] = gmdate( 'Ymd\THis\Z', $start );
 
 		// The numeric sequence of this instance
-		if ( empty( $this->skip_sequence ) && ( $this->current_count > 0 ) ) {
+		if ( ! empty( $this->sequence ) && ( $this->current_count > 0 ) ) {
 			$retval[ 'sequence' ] = $this->current_count;
 		}
 

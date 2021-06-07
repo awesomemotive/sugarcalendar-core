@@ -1,6 +1,6 @@
 <?php
 /**
- * Recurrence
+ * Recurrence Utility
  *
  * @package Plugins/Site/Events/DateCollider
  */
@@ -10,7 +10,10 @@ namespace Sugar_Calendar\Utilities;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class for generating recurring Event sequences from a
+ * Class for generating recurring Event sequences from a set of VEVENT and RRULE
+ * parameters from the iCalendar RFC 5545 specification.
+ *
+ * See: https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
  */
 class Recur {
 
@@ -232,16 +235,21 @@ class Recur {
 		}
 
 		// Parse RRULE if present
-		if ( ! empty( $args[ 'rrule' ] ) ) {
+		if ( ! empty( $args[ 'rrule' ] ) && strstr( $args[ 'rrule' ], '=' ) ) {
 
-			// Explode by separator
-			$rules = explode( ';', $args[ 'rrule' ] );
+			// Explode by separator, trimming off trailing
+			$rules = explode( ';', rtrim( $args[ 'rrule' ], ';' ) );
 
 			// Successfully exploded
 			if ( ! empty( $rules ) ) {
 
 				// Loop through parts
 				foreach ( $rules as $part ) {
+
+					// Skip if invalid
+					if ( ! strstr( $part, '=' ) ) {
+						continue;
+					}
 
 					// Explode by equals
 					list( $rule, $value ) = explode( '=', $part );
@@ -406,19 +414,19 @@ class Recur {
 
 					break;
 
-				// BYMONTH
+				// BYMONTH (1-12)
 				case 'bymonth' :
 					$this->bymonth = explode( ',', $value );
 
 					foreach ( $this->bymonth as $month ) {
-						if ( ! is_numeric( $month ) || ( $month < 1 ) || ( $month > 12 ) ) {
+						if ( ! is_numeric( $month ) || ( abs( $month ) < 1 ) || ( abs( $month ) > 12 ) ) {
 							$this->error = true;
 						}
 					}
 
 					break;
 
-				// BYWEEKNO
+				// BYWEEKNO (1-53)
 				case 'byweekno' :
 					$this->byweekno = explode( ',', $value );
 
@@ -430,10 +438,10 @@ class Recur {
 
 					break;
 
-				// BYYEARDAY
+				// BYYEARDAY (1-366)
 				case 'byyearday' :
 
-				// BYSETPOS
+				// BYSETPOS (1-366)
 				case 'bysetpos' :
 					$this->{$key} = explode( ',', $value );
 
@@ -445,7 +453,7 @@ class Recur {
 
 					break;
 
-				// BYMONTHDAY
+				// BYMONTHDAY (1-31)
 				case 'bymonthday' :
 					$this->bymonthday = explode( ',', $value );
 
@@ -470,34 +478,34 @@ class Recur {
 							'pos'     => $pos
 						);
 
-						if ( ! in_array( $weekday, $valid ) || ( $pos !== '' && ( ! is_numeric( $pos ) || ( $pos === 0 ) ) ) ) {
+						if ( ! in_array( $weekday, $valid, true ) || ( ( $pos !== '' ) && ( ! is_numeric( $pos ) || ( $pos === 0 ) ) ) ) {
 							$this->error = true;
 						}
 					}
 
 					break;
 
-				// BYHOUR
+				// BYHOUR (0-23)
 				case 'byhour' :
 					$this->byhour = explode( ',', $value );
 
 					foreach ( $this->byhour as $hour ) {
-						if ( ! is_numeric( $hour ) || ( $hour < 0 ) || ( $hour > 23 ) ) {
+						if ( ! is_numeric( $hour ) || ( abs( $hour ) < 0 ) || ( abs( $hour ) > 23 ) ) {
 							$this->error = true;
 						}
 					}
 
 					break;
 
-				// BYMINUTE
+				// BYMINUTE (0-59)
 				case 'byminute' :
 
-				// BYSECOND
+				// BYSECOND (0-59)
 				case 'bysecond' :
 					$this->{$key} = explode( ',', $value );
 
 					foreach ( $this->{$key} as $value ) {
-						if ( ! is_numeric( $value ) || ( $value < 0 ) || ( $value > 59 ) ) {
+						if ( ! is_numeric( $value ) || ( abs( $value ) < 0 ) || ( abs( $value ) > 59 ) ) {
 							$this->error = true;
 						}
 					}
@@ -541,7 +549,7 @@ class Recur {
 			 * events starting and ending on midnight are handled as all-day.
 			 */
 			if ( array( '00', '00', '00' ) === $this->explode( 'H-i-s', '-', $this->dtstart ) && array( '00', '00', '00' ) === $this->explode( 'H-i-s', '-', $this->dtend ) ) {
-				$number_of_days = round( ($this->dtend - $this->dtstart) / 86400 );
+				$number_of_days = round( ( $this->dtend - $this->dtstart ) / 86400 );
 				$this->duration = new \DateInterval( 'P' . $number_of_days . 'D' );
 				$this->dtend    = null;
 
@@ -957,7 +965,7 @@ class Recur {
 			$retval[ 'dtend' ] = $this->datetime->format( $this->format );
 
 		// Calculate dtend from rdate end
-		} elseif ( ! is_null( $end ) ) {
+		} elseif ( ! empty( $end ) ) {
 			$retval[ 'dtend' ] = $this->date( $this->format, $end );
 
 		// Calculate dtend from duration time
@@ -1757,7 +1765,7 @@ class Recur {
 	/** Limits ****************************************************************/
 
 	protected function limit_bymonth( $timestamp ) {
-		if ( in_array( $this->date( 'n', $timestamp ), $this->bymonth ) ) {
+		if ( in_array( $this->date( 'n', $timestamp ), $this->bymonth, true ) ) {
 			return true;
 		}
 
@@ -1767,13 +1775,13 @@ class Recur {
 	protected function limit_byyearday( $timestamp ) {
 		list( $z, $L ) = $this->explode( 'z-L', '-', $timestamp );
 
-		if ( in_array( $z + 1, $this->byyearday ) ) {
+		if ( in_array( $z + 1, $this->byyearday, true ) ) {
 			return true;
 		}
 
 		$number_of_days = $this->year_days( $L );
 
-		if ( in_array( $z - $number_of_days, $this->byyearday ) ) {
+		if ( in_array( $z - $number_of_days, $this->byyearday, true ) ) {
 			return true;
 		}
 
@@ -1783,11 +1791,11 @@ class Recur {
 	protected function limit_bymonthday( $timestamp ) {
 		list( $j, $t ) = $this->explode( 'j-t', '-', $timestamp );
 
-		if ( in_array( $j, $this->bymonthday ) ) {
+		if ( in_array( $j, $this->bymonthday, true ) ) {
 			return true;
 		}
 
-		if ( in_array( $j - $t - 1, $this->bymonthday ) ) {
+		if ( in_array( $j - $t - 1, $this->bymonthday, true ) ) {
 			return true;
 		}
 
@@ -1812,11 +1820,15 @@ class Recur {
 
 		// Previous applied BYMONTH: check position relative to month
 		if ( ! empty( $this->bymonth ) ) {
-			if ( in_array( ceil( $j / 7 ) . $days[ $w ], $byday ) ) {
+			$try = ceil( $j / 7 );
+
+			if ( in_array( $try . $days[ $w ], $byday ) ) {
 				return true;
 			}
 
-			if ( in_array( ( ceil( ( $t - $j + 1 ) / 7 ) * -1 ) . $days[ $w ], $byday ) ) {
+			$try = ceil( ( $t - $j + 1 ) / 7 ) * -1;
+
+			if ( in_array( $try . $days[ $w ], $byday ) ) {
 				return true;
 			}
 
@@ -1824,11 +1836,15 @@ class Recur {
 		} else {
 			$number_of_days = $this->year_days( $L );
 
-			if ( in_array( ceil( ( $z + 1 ) / 7 ) . $days[ $w ], $byday ) ) {
+			$try = ceil( ( $z + 1 ) / 7 );
+
+			if ( in_array( $try . $days[ $w ], $byday ) ) {
 				return true;
 			}
 
-			if ( in_array( ( ceil( ( $number_of_days - $z ) / 7 ) * -1 ) . $days[ $w ], $byday ) ) {
+			$try = ceil( ( $number_of_days - $z ) / 7 ) * -1;
+
+			if ( in_array( $try . $days[ $w ], $byday ) ) {
 				return true;
 			}
 		}
@@ -1882,10 +1898,14 @@ class Recur {
 		$start     = $this->mktime( 0,  0,  0,  1, 1 + $year_details[ 'week_offset' ] + $week_diff * 7,     $year );
 		$end       = $this->mktime( 23, 59, 59, 1, 1 + $year_details[ 'week_offset' ] + $week_diff * 7 + 6, $year );
 
-		return $this->cached_details[ 'week' ][ $year ][ $day ] = array(
+		// Setup the return value
+		$retval = $this->cached_details[ 'week' ][ $year ][ $day ] = array(
 			'start' => $start,
 			'end'   => $end
 		);
+
+		// Return
+		return $retval;
 	}
 
 	protected function get_month_details( $month, $year ) {
@@ -1909,12 +1929,16 @@ class Recur {
 			$start_seq[] = array_shift( $start_seq );
 		}
 
-		return $this->cached_details[ 'month' ][ $year ][ $month ] = array(
+		// Setup the return value
+		$retval = $this->cached_details[ 'month' ][ $year ][ $month ] = array(
 			'start'          => $start,
 			'end'            => $end,
 			'start_seq'      => $start_seq,
 			'number_of_days' => $number_of_days
 		);
+
+		// Return
+		return $retval;
 	}
 
 	protected function get_year_details( $year ) {

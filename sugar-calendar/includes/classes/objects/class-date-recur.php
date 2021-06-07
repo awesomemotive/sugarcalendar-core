@@ -55,6 +55,22 @@ class Recur {
 	 */
 	public $max = 1000;
 
+	/** Boundaries ************************************************************/
+
+	/**
+	 * Start of range to compute dates in
+	 *
+	 * @var string
+	 */
+	protected $after;
+
+	/**
+	 * End of range to compute dates in
+	 *
+	 * @var string
+	 */
+	protected $before;
+
 	/** VEVENT parameters *****************************************************/
 
 	protected $tzid;
@@ -62,7 +78,6 @@ class Recur {
 	protected $dtend;
 	protected $rdate = array();
 	protected $exdate = array();
-	protected $duration;
 
 	/** RRULE parameters ******************************************************/
 
@@ -82,22 +97,6 @@ class Recur {
 	protected $wkst = 'MO';
 	protected $wkst_seq = array( 'MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU' );
 
-	/** Boundaries ************************************************************/
-
-	/**
-	 * Start of range to compute dates in
-	 *
-	 * @var string
-	 */
-	protected $after;
-
-	/**
-	 * End of range to compute dates in
-	 *
-	 * @var string
-	 */
-	protected $before;
-
 	/** Stashes ***************************************************************/
 
 	/**
@@ -113,6 +112,13 @@ class Recur {
 	 * @var DateTime
 	 */
 	protected $datetime;
+
+	/**
+	 * DateInterval object
+	 *
+	 * @var DateInterval
+	 */
+	protected $duration;
 
 	/**
 	 * Duration in seconds

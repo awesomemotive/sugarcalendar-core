@@ -464,3 +464,26 @@ function sugar_calendar_time_dropdown( $args = array() ) {
 function sugar_calendar_get_minimum_event_duration() {
 	return apply_filters( 'sugar_calendar_get_minimum_event_duration', '' );
 }
+
+/**
+ * Convert a PHP numerical day number to an iCalendar two-letter one.
+ *
+ * @since 2.2.0
+ *
+ * @param int $day
+ * @return string
+ */
+function sugar_calendar_daynum_to_ical( $day = 0 ) {
+
+	// Default return value
+	$retval = 'SU';
+
+	// Day within boundaries
+	if ( ( $day >= 0 ) && ( $day <= 6 ) ) {
+		$allowed = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
+		$retval  = $allowed[ $day ];
+	}
+
+	// Return
+	return $retval;
+}

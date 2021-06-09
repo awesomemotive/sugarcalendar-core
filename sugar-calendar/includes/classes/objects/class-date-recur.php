@@ -1943,10 +1943,19 @@ class Recur {
 
 	/** Details ***************************************************************/
 
-	protected function get_week_details( $day, $year ) {
+	/**
+	 * Get some details for a specific week, given a day and year
+	 *
+	 * These details are internally cached to avoid rework
+	 *
+	 * @param int $day
+	 * @param int $year
+	 * @return array
+	 */
+	protected function get_week_details( $day = 0, $year = 0 ) {
 
-		// Return cached values
-		if ( $this->cached_details[ 'week' ][ $year ][ $day ] )	{
+		// Return if already cached
+		if ( ! empty( $this->cached_details[ 'week' ][ $year ][ $day ] ) ) {
 			return $this->cached_details[ 'week' ][ $year ][ $day ];
 		}
 
@@ -1967,10 +1976,19 @@ class Recur {
 		return $retval;
 	}
 
-	protected function get_month_details( $month, $year ) {
+	/**
+	 * Get some details for a specific month, given a month and year
+	 *
+	 * These details are internally cached to avoid rework
+	 *
+	 * @param int $month
+	 * @param int $year
+	 * @return array
+	 */
+	protected function get_month_details( $month = 0, $year = 0 ) {
 
-		// Return cached values
-		if ( $this->cached_details[ 'month' ][ $year ][ $month ] ) {
+		// Return if already cached
+		if ( ! empty( $this->cached_details[ 'month' ][ $year ][ $month ] ) ) {
 			return $this->cached_details[ 'month' ][ $year ][ $month ];
 		}
 
@@ -2000,10 +2018,19 @@ class Recur {
 		return $retval;
 	}
 
-	protected function get_year_details( $year ) {
+	/**
+	 * Get some details for a specific year, given year
+	 *
+	 * These details are internally cached to avoid rework
+	 *
+	 * @param int $month
+	 * @param int $year
+	 * @return array
+	 */
+	protected function get_year_details( $year = 0 ) {
 
-		// Return cached values
-		if ( $this->cached_details[ 'year' ][ $year ] ) {
+		// Return if already cached
+		if ( ! empty( $this->cached_details[ 'year' ][ $year ] ) ) {
 			return $this->cached_details[ 'year' ][ $year ];
 		}
 

@@ -237,6 +237,11 @@ function sugar_calendar_get_event_sequence( $event_id = 0, $after = null, $befor
 		// Default return value
 		$retval = array();
 
+		// Get time zone name
+		$tzid = is_object( $timezone )
+			? $timezone->getName()
+			: $timezone;
+
 		// Default arguments
 		$args = array(
 
@@ -245,7 +250,7 @@ function sugar_calendar_get_event_sequence( $event_id = 0, $after = null, $befor
 			'before'     => $before->format( 'Ymd\THis' ),
 
 			// Environment
-			'tzid'       => $timezone,
+			'tzid'       => $tzid,
 			'wkst'       => $start_of_week,
 
 			// Event

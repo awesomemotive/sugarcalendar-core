@@ -584,7 +584,7 @@ class Recur {
 	protected function validate_args() {
 
 		// Synchronize until / before
-		if ( ! is_null ( $this->until ) && ( is_null( $this->before ) || ( $this->before > $this->until ) ) ) {
+		if ( ! is_null( $this->until ) && ( is_null( $this->before ) || ( $this->before > $this->until ) ) ) {
 			$this->before = $this->until;
 		}
 
@@ -1585,7 +1585,7 @@ class Recur {
 		$month[ $m ] = $this->get_month_details( $m, $Y );
 
 		// Results are limited to current year
-		$start = $this->mktime( 0, 0, 0, 1, 1, $Y );
+		$start = $this->mktime( 0,  0,  0,  1,  1,  $Y );
 		$end   = $this->mktime( 23, 59, 59, 12, 31, $Y );
 
 		// Previous applied BYMONTH limits the result
@@ -2237,8 +2237,8 @@ class Recur {
 
 		// Try to set the date and time
 		try {
-			$this->datetime->setDate( $year, $mon, $day );
 			$this->datetime->setTime( $hour, $min, $sec );
+			$this->datetime->setDate( $year, $mon, $day );
 
 		// Bail if failure
 		} catch ( \Exception $e ) {

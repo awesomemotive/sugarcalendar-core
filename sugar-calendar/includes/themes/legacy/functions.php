@@ -58,8 +58,44 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 	// Query for events
 	$events = sugar_calendar_get_events( $args );
 
+	// Get event sequences
+	$retval = sc_get_event_sequences_for_calendar( $events, $view_start, $view_end );
+
 	// Return the events
-	return $events;
+	return $retval;
+}
+
+/**
+ * Given an array of Event objects, get a combined array of recurring sequences.
+ *
+ * @since 2.2.0
+ *
+ * @param array  $events
+ * @param string $after
+ * @param string $before
+ *
+ * @return array
+ */
+function sc_get_event_sequences_for_calendar( $events = array(), $after = null, $before = null ) {
+
+	// Bail if anything is missing
+	if ( empty( $events ) || empty( $before ) || empty( $after ) ) {
+		return $events;
+	}
+
+	// Environment
+	$timezone = sugar_calendar_get_timezone_object( sc_get_timezone() );
+	$sow      = sugar_calendar_daynum_to_ical( sc_get_week_start_day() );
+
+	// Range
+	$after    = sugar_calendar_get_datetime_object( $after,  $timezone );
+	$before   = sugar_calendar_get_datetime_object( $before, $timezone );
+
+	// Get all of the items
+	$retval   = sugar_calendar_get_event_sequences( $events, $after, $before, $timezone, $sow );
+
+	// Return the events
+	return $retval;
 }
 
 /**

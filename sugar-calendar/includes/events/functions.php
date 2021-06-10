@@ -352,8 +352,8 @@ function sugar_calendar_get_event_sequences( $events = array(), $after = null, $
 		$retval = array_merge( $retval, $sequences );
 	}
 
-	// Return
-	return apply_filters( __FUNCTION__, $retval );
+	// Filter & return
+	return apply_filters( 'sugar_calendar_get_event_sequences', $retval, $events, $after, $before, $timezone, $start_of_week );
 }
 
 /**

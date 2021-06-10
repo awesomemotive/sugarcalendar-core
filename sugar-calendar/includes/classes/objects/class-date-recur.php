@@ -73,6 +73,7 @@ class Recur {
 
 	/** VEVENT parameters *****************************************************/
 
+	protected $id;
 	protected $tzid;
 	protected $dtstart;
 	protected $dtend;
@@ -236,6 +237,11 @@ class Recur {
 
 		// Lowercase argument keys
 		$args = $this->lc_keys( $args );
+
+		// ID is required early
+		$this->id = ! empty( $args['id'] )
+			? $args['id']
+			: null;
 
 		// Time zone is required early
 		$this->tzid = ! empty( $args[ 'tzid' ] ) && is_string( $args[ 'tzid' ] )

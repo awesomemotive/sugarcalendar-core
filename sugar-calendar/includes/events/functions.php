@@ -245,6 +245,9 @@ function sugar_calendar_get_event_sequence( $event_id = 0, $after = null, $befor
 		// Default arguments
 		$args = array(
 
+			// Identification
+			'id'         => $event->id,
+
 			// Range
 			'after'      => $after->format( 'Ymd\THis' ),
 			'before'     => $before->format( 'Ymd\THis' ),

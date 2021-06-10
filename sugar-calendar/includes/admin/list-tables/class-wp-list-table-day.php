@@ -311,7 +311,7 @@ class Day extends Base_List_Table {
 		$start = $this->get_current_cell( 'start_dto' );
 
 		// Hour for row
-		$hour  = $this->get_current_cell( 'start_hour' );
+		$hour  = $start->format( 'H' );
 
 		// No row classes
 		$classes = array(

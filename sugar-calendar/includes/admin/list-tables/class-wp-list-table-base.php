@@ -270,6 +270,17 @@ class Base_List_Table extends \WP_List_Table {
 	protected $cells = array();
 
 	/**
+	 * Array of all items to loop through
+	 *
+	 * May include clones, for items that recur
+	 *
+	 * @since 2.2.0
+	 *
+	 * @var array
+	 */
+	protected $all_items = array();
+
+	/**
 	 * Array of queried items, filtered, usually by status
 	 *
 	 * @since 2.1.2
@@ -277,6 +288,15 @@ class Base_List_Table extends \WP_List_Table {
 	 * @var array
 	 */
 	protected $filtered_items = array();
+
+	/**
+	 * Array of queried item IDs, filtered, usually by status
+	 *
+	 * @since 2.2.0
+	 *
+	 * @var array
+	 */
+	protected $filtered_ids = array();
 
 	/**
 	 * Array of item counts, from queried items that fit into this view
@@ -484,6 +504,42 @@ class Base_List_Table extends \WP_List_Table {
 		} else {
 			$this->filtered_items = wp_list_filter( $this->query->items, $filter );
 		}
+
+		// Set the filtered IDs
+		$this->filtered_ids = wp_list_pluck( $this->filtered_items, 'id' );
+	}
+
+	/**
+	 * Set all of the items to loop through
+	 *
+	 * @since 2.2.0
+	 */
+	protected function set_all_items() {
+
+		// No items, so skip some processing
+		if ( empty( $this->query->items ) ) {
+			$this->all_items = array();
+
+		// Get sequences in this range from queried items
+		} else {
+
+			// Range
+			$after         = new \DateTime( $this->view_start, $this->view_timezone );
+			$before        = new \DateTime( $this->view_end,   $this->view_timezone );
+
+			// Environment
+			$timezone      = $this->view_timezone; // Already an Object
+			$start_of_week = sugar_calendar_daynum_to_ical( $this->start_of_week );
+
+			// Get all of the items
+			$this->all_items = sugar_calendar_get_event_sequences(
+				$this->query->items,
+				$after,
+				$before,
+				$timezone,
+				$start_of_week
+			);
+		}
 	}
 
 	/**
@@ -507,15 +563,15 @@ class Base_List_Table extends \WP_List_Table {
 		$counts = array();
 
 		// Get all items from all cells
-		$all_cell_items = wp_list_pluck( $this->cells, 'all_items' );
+		$countable_items = wp_list_pluck( $this->cells, 'countable' );
 
 		// Bail if no cell items
-		if ( empty( $all_cell_items ) ) {
+		if ( empty( $countable_items ) ) {
 			return;
 		}
 
 		// Loop through cell items and flatten
-		foreach ( $all_cell_items as $cell_items ) {
+		foreach ( $countable_items as $cell_items ) {
 
 			// Skip if no items in cell
 			if ( empty( $cell_items ) ) {
@@ -526,8 +582,18 @@ class Base_List_Table extends \WP_List_Table {
 			$counts = array_merge( $counts, $cell_items );
 		}
 
+		// Default all items
+		$countables = array();
+
+		// Reduce counts down to countables by ID
+		foreach ( $counts as $countable ) {
+			if ( ! isset( $countables[ $countable->id ] ) ) {
+				$countables[ $countable->id ] = $countable;
+			}
+		}
+
 		// Unique items
-		$all_items = array_unique( $counts, SORT_REGULAR );
+		$all_items = array_unique( $countables, SORT_REGULAR );
 
 		// Set total to count of all items
 		$this->item_counts['total'] = count( $all_items );
@@ -1699,25 +1765,25 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	protected function set_cell_items() {
 
-		// Loop through items
-		foreach ( $this->query->items as $item ) {
+		// Loop through all items
+		foreach ( $this->all_items as $item ) {
 
 			// Skip if event is not for cell
 			if ( ! $this->is_item_for_cell( $item ) ) {
 				continue;
 			}
 
-			// Filtered items
-			if ( in_array( $item, $this->filtered_items, true ) ) {
+			// Filtered items only
+			if ( in_array( $item->id, $this->filtered_ids, true ) ) {
 				array_push( $this->current_cell['items'], $item );
 			}
 
-			// All items
-			array_push( $this->current_cell['all_items'], $item );
+			// Count all items (reduced later)
+			array_push( $this->current_cell['countable'], $item );
 		}
 
 		// Add the current cell to the cells array
-		$this->cells[] = $this->get_current_cell();
+		$this->cells[] = $this->current_cell;
 	}
 
 	/**
@@ -1777,38 +1843,20 @@ class Base_List_Table extends \WP_List_Table {
 			'end'       => null,
 			'type'      => 'normal',
 			'items'     => array(),
-			'all_items' => array()
+			'countable' => array()
 		) );
 
 		// Get the time zone
 		$timezone = $this->get_timezone();
 
-		// Add date parts for start
+		// Add DateTime object for start
 		if ( ! empty( $r['start'] ) ) {
-			$r['start_dto']     = sugar_calendar_get_datetime_object( $r['start'], $timezone );
-			$r['start_year']    = $r['start_dto']->format( 'Y' );
-			$r['start_month']   = $r['start_dto']->format( 'm' );
-			$r['start_day']     = $r['start_dto']->format( 'd' );
-			$r['start_dow']     = $r['start_dto']->format( 'w' );
-			$r['start_doy']     = $r['start_dto']->format( 'z' );
-			$r['start_woy']     = $r['start_dto']->format( 'W' );
-			$r['start_hour']    = $r['start_dto']->format( 'H' );
-			$r['start_minutes'] = $r['start_dto']->format( 'i' );
-			$r['start_seconds'] = $r['start_dto']->format( 's' );
+			$r['start_dto'] = sugar_calendar_get_datetime_object( $r['start'], $timezone );
 		}
 
-		// Add date parts for end
+		// Add DateTime object for end
 		if ( ! empty( $r['end'] ) ) {
-			$r['end_dto']       = sugar_calendar_get_datetime_object( $r['end'], $timezone );
-			$r['end_year']      = $r['end_dto']->format( 'Y' );
-			$r['end_month']     = $r['end_dto']->format( 'm' );
-			$r['end_day']       = $r['end_dto']->format( 'd' );
-			$r['end_dow']       = $r['end_dto']->format( 'w' );
-			$r['end_doy']       = $r['end_dto']->format( 'z' );
-			$r['end_woy']       = $r['end_dto']->format( 'W' );
-			$r['end_hour']      = $r['end_dto']->format( 'H' );
-			$r['end_minutes']   = $r['end_dto']->format( 'i' );
-			$r['end_seconds']   = $r['end_dto']->format( 's' );
+			$r['end_dto']   = sugar_calendar_get_datetime_object( $r['end'],   $timezone );
 		}
 
 		// Set the current cell
@@ -2905,6 +2953,9 @@ class Base_List_Table extends \WP_List_Table {
 		// Set filtered items
 		$this->set_filtered_items();
 
+		// Set all items
+		$this->set_all_items();
+
 		// Set cells
 		$this->set_cells();
 
@@ -3144,35 +3195,6 @@ class Base_List_Table extends \WP_List_Table {
 			? 'has-color'
 			: '';
 
-		// Item position
-		$positions = $this->get_queried_items( $cell, 'positions' );
-		if ( ! empty( $positions[ $event->id ] ) ) {
-
-			// Setup the position array
-			$position  = array_map( 'intval', $positions[ $event->id ] );
-			$classes[] = 'position-' . $position['current'];
-
-			// Days
-			$classes[] = ( $position['total'] > 0 )
-				? 'multi-cell'
-				: 'single-cell';
-
-			// Start
-			if ( 0 === $position['current'] ) {
-				$classes[] = 'start';
-			}
-
-			// End
-			if ( $position['current'] === $position['total'] ) {
-				$classes[] = 'end';
-			}
-
-			// In-between
-			if ( ! empty( $position['current'] ) && ( $position['current'] !== $position['total'] ) ) {
-				$classes[] = 'middle';
-			}
-		}
-
 		// Get taxonomies
 		$taxos = sugar_calendar_get_object_taxonomies(
 			$this->get_primary_post_type()
@@ -3290,8 +3312,11 @@ class Base_List_Table extends \WP_List_Table {
 		// Get the grid positions
 		$cell = $this->get_current_cell( 'index' );
 
+		// Get the start
+		$start = $this->get_current_cell( 'start_dto' );
+
 		// Day
-		$day = $this->get_current_cell( 'start_day' );
+		$day = $start->format( 'd' );
 		if ( 0 > $day ) {
 			$day = 0;
 		}

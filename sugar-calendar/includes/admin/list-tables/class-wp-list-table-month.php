@@ -122,13 +122,16 @@ class Month extends Base_List_Table {
 	 */
 	protected function get_row_start() {
 
+		// Get the start
+		$start = $this->get_current_cell( 'start_dto' );
+
 		// Get cells
-		$day   = $this->get_current_cell( 'start_day'   );
-		$month = $this->get_current_cell( 'start_month' );
-		$year  = $this->get_current_cell( 'start_year'  );
+		$day   = $start->format( 'd' );
+		$month = $start->format( 'm' );
+		$year  = $start->format( 'Y' );
 
 		// Week for row
-		$week  = $this->get_current_cell( 'start_woy'   );
+		$week  = $start->format( 'W' );
 
 		// Calculate link to week view
 		$link_to_day  = add_query_arg( array(
@@ -214,8 +217,11 @@ class Month extends Base_List_Table {
 	 */
 	protected function get_row_cell() {
 
+		// Get the start
+		$start = $this->get_current_cell( 'start_dto' );
+
 		// Calculate the day of the month
-		$day  = $this->get_current_cell( 'start_day' );
+		$day   = $start->format( 'd' );
 
 		// Arguments
 		$args = array(

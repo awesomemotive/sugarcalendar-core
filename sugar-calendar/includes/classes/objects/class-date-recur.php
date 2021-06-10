@@ -910,7 +910,7 @@ class Recur {
 				}
 			}
 
-			// CACHE dates
+			// Cache dates
 			$this->cached_dates = $dates;
 
 			// Get result
@@ -993,7 +993,7 @@ class Recur {
 				array_shift( $this->cached_dates );
 			}
 
-		// Get CACHED DATE
+		// Get cached date
 		} elseif ( ! is_null( $start = array_shift( $this->cached_dates ) ) ) {
 			$duration      =& $this->duration;
 			$duration_time =& $this->duration_time;

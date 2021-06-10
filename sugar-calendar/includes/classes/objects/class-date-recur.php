@@ -207,12 +207,6 @@ class Recur {
 		if ( ! $this->parse_args( $args ) ) {
 			return;
 		}
-
-		// Validate arguments
-		$this->validate_args();
-
-		// Validate class properties from arguments
-		$this->validate_properties();
 	}
 
 	/**
@@ -568,6 +562,12 @@ class Recur {
 					break;
 			}
 		}
+
+		// Validate arguments
+		$this->validate_args();
+
+		// Validate class properties from arguments
+		$this->validate_properties();
 
 		// Bail if error
 		if ( ! empty( $this->error ) ) {

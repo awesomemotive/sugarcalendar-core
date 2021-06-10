@@ -474,7 +474,7 @@ final class Event extends Row {
 	 *
 	 * @since 2.2.0
 	 */
-	private function set_datetime_objects() {
+	public function set_datetime_objects() {
 
 		// Default time zones
 		$start_tz = $end_tz = $recurrence_end_tz = sugar_calendar_get_timezone();

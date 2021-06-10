@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.2.0\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2021-06-10 03:14:16+00:00\n"
+"POT-Creation-Date: 2021-06-10 03:17:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -45,7 +45,7 @@ msgstr ""
 #: sugar-calendar/includes/admin/general.php:229
 #: sugar-calendar/includes/admin/help.php:34
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:359
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2974
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2973
 #: sugar-calendar/includes/admin/nav.php:22
 msgid "Events"
 msgstr ""
@@ -230,7 +230,7 @@ msgstr ""
 
 #: sugar-calendar/includes/admin/help.php:112
 #: sugar-calendar/includes/admin/help.php:574
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2479
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2478
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-list.php:468
 #: sugar-calendar/includes/admin/meta-boxes.php:1051
 #: sugar-calendar/includes/post/functions.php:132
@@ -731,99 +731,99 @@ msgstr ""
 msgid "List"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1645
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1644
 msgid "(No title)"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2045
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2044
 msgid "Restore"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2050
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2049
 msgid "Delete Permanently"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2358
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2368
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2357
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2367
 #: sugar-calendar/includes/admin/meta-boxes.php:112
 msgid "Details"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2359
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2358
 msgid "Password protected"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2457
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2464
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2471
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2495
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2502
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2509
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2533
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2456
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2463
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2470
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2494
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2501
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2508
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2532
 #: sugar-calendar/includes/admin/meta-boxes.php:1064
 msgid "Start"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2459
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2466
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2473
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2497
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2504
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2511
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2552
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2458
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2465
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2472
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2496
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2503
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2510
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2551
 #: sugar-calendar/includes/admin/meta-boxes.php:1127
 msgid "End"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2628
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2627
 #: sugar-calendar/includes/admin/meta-boxes/class-wp-meta-box.php:86
 #: sugar-calendar/includes/admin/meta-boxes.php:1247
 msgid "Location"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2991
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2990
 msgid "Search Events."
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2992
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2991
 #: sugar-calendar/includes/post/types.php:73
 msgid "Search events..."
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3447
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3446
 msgid "Filter by %s"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3507
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3506
 msgid "Switch to this month"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3523
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3522
 msgid "Set the day"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3538
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3537
 msgid "Set the first year"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3541
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3540
 #: sugar-calendar/includes/themes/legacy/event-display.php:221
 msgid "to"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3543
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3542
 msgid "Set the last year"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3551
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3550
 msgid "Set the year"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3578
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3577
 msgid "Empty Trash"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3615
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3614
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-day.php:115
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-list.php:553
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-month.php:320
@@ -831,23 +831,23 @@ msgstr ""
 msgid "Today"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3616
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3615
 msgid "Next month"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3617
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3616
 msgid "Next year"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3618
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3617
 msgid "Previous month"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3619
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3618
 msgid "Previous year"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3685
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3684
 #: sugar-calendar/includes/admin/settings.php:549
 #: sugar-calendar/includes/admin/settings.php:606
 msgid "Options"
@@ -1954,25 +1954,25 @@ msgstr ""
 msgid "A calendar with a sweet disposition."
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1373
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:1372
 msgctxt "List table: all statuses (excluding trash)"
 msgid "All <span class=\"count\">(%s)</span>"
 msgid_plural "All <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2058
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2057
 msgctxt "verb"
 msgid "Edit"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2063
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2062
 msgctxt "verb"
 msgid "Trash"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2068
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3574
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2067
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3573
 msgctxt "verb"
 msgid "View"
 msgstr ""
@@ -1982,19 +1982,19 @@ msgctxt "verb"
 msgid "Duplicate"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2407
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2427
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2406
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2426
 msgctxt "Time Time Zone"
 msgid "%s %s"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2523
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2542
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2522
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2541
 msgctxt "20:00 on Friday"
 msgid "%s on %s"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2564
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2563
 #: sugar-calendar/includes/admin/list-tables/class-wp-list-table-list.php:233
 msgctxt "Noun"
 msgid "Repeats"
@@ -2020,22 +2020,22 @@ msgctxt "Noun"
 msgid "Duration"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2573
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2572
 msgctxt "Weekly from December 1, 2030 until December 31, 2030"
 msgid "%s from %s until %s"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2584
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2583
 msgctxt "Weekly forever, starting May 15, 1980"
 msgid "%s starting %s"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2593
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:2592
 msgctxt "Weekly forever"
 msgid "%s"
 msgstr ""
 
-#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3495
+#: sugar-calendar/includes/admin/list-tables/class-wp-list-table-base.php:3494
 msgctxt "Verb"
 msgid "Filter"
 msgstr ""

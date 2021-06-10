@@ -523,21 +523,20 @@ class Base_List_Table extends \WP_List_Table {
 		// Get sequences in this range from queried items
 		} else {
 
-			// Range
-			$after         = new \DateTime( $this->view_start, $this->view_timezone );
-			$before        = new \DateTime( $this->view_end,   $this->view_timezone );
-
 			// Environment
-			$timezone      = $this->view_timezone; // Already an Object
-			$start_of_week = sugar_calendar_daynum_to_ical( $this->start_of_week );
+			$sow    = sugar_calendar_daynum_to_ical( $this->start_of_week );
+
+			// Range
+			$after  = sugar_calendar_get_datetime_object( $this->view_start, $this->view_timezone );
+			$before = sugar_calendar_get_datetime_object( $this->view_end,   $this->view_timezone );
 
 			// Get all of the items
 			$this->all_items = sugar_calendar_get_event_sequences(
 				$this->query->items,
 				$after,
 				$before,
-				$timezone,
-				$start_of_week
+				$this->view_timezone, // Already an object
+				$sow
 			);
 		}
 	}

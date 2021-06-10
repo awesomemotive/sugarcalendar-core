@@ -797,8 +797,11 @@ class Recur {
 				// Loop through limitations
 				foreach ( $this->limitations as $limitation ) {
 
+					// Function
+					$func = 'limit_' . $limitation;
+
 					// Skip if restricted by rule
-					if ( ! empty( $this->{$limitation} ) && ! $this->{'limit_' . $limitation}( $this->current_date ) ) {
+					if ( ! empty( $this->{$limitation} ) && ! call_user_func( array( $this, $func ), $this->current_date ) ) {
 						continue 2;
 					}
 				}
@@ -817,7 +820,12 @@ class Recur {
 						// Compute dates for each expansion in set
 						foreach ( $expansion_set as $expansion ) {
 							if ( ! empty( $this->{$expansion} ) ) {
-								$result_dates[] = $this->{'expand_' . $expansion}( $date );
+
+								// Function
+								$func = 'expand_' . $expansion;
+
+								// Add to result dates
+								$result_dates[] = call_user_func( array( $this, $func ), $date );
 							}
 						}
 
@@ -848,8 +856,11 @@ class Recur {
 					// LIMITATIONS
 					foreach ( $this->limitations as $limitation ) {
 
+						// Function
+						$func = 'limit_' . $limitation;
+
 						// Restricted by rule - continue to next date
-						if ( ! empty( $this->{$limitation} ) && ! $this->{'limit_' . $limitation}( $date ) ) {
+						if ( ! empty( $this->{$limitation} ) && ! call_user_func( array( $this, $func ), $date ) ) {
 							continue 2;
 						}
 					}
@@ -1328,7 +1339,13 @@ class Recur {
 
 	/** Expanders *************************************************************/
 
-	protected function expand_bymonth( $date ) {
+	/**
+	 * Expand BYMONTH rule
+	 *
+	 * @param int $date
+	 * @return array
+	 */
+	protected function expand_bymonth( $date = 0 ) {
 
 		// Default return value
 		$dates = array();
@@ -1372,7 +1389,13 @@ class Recur {
 		return $dates;
 	}
 
-	protected function expand_byweekno( $date ) {
+	/**
+	 * Expand BYWEEKNO rule
+	 *
+	 * @param int $date
+	 * @return array
+	 */
+	protected function expand_byweekno( $date = 0 ) {
 
 		// Default return value
 		$dates = array();
@@ -1407,6 +1430,7 @@ class Recur {
 			$pos_weekday = array_search( $weekday, $this->wkst_seq, true );
 		}
 
+		// Loop through years
 		foreach ( $year as $Y => $year_details ) {
 
 			// Create one date for each WEEK
@@ -1469,7 +1493,13 @@ class Recur {
 		return $dates;
 	}
 
-	protected function expand_byyearday( $date ) {
+	/**
+	 * Expand BYYEARDAY rule
+	 *
+	 * @param int $date
+	 * @return array
+	 */
+	protected function expand_byyearday( $date = 0 ) {
 
 		// Default return value
 		$dates = array();
@@ -1533,7 +1563,13 @@ class Recur {
 		return $dates;
 	}
 
-	protected function expand_bymonthday( $date ) {
+	/**
+	 * Expand BYMONTHDAY rule
+	 *
+	 * @param int $date
+	 * @return array
+	 */
+	protected function expand_bymonthday( $date = 0 ) {
 
 		// Default return value
 		$dates = array();
@@ -1577,6 +1613,7 @@ class Recur {
 			}
 		}
 
+		// Loop through months
 		foreach ( $month as $m => $month_details ) {
 
 			// Create one date for each MONTHDAY
@@ -1615,7 +1652,13 @@ class Recur {
 		return $dates;
 	}
 
-	protected function expand_byday( $date ) {
+	/**
+	 * Expand BYDAY rule
+	 *
+	 * @param int $date
+	 * @return array
+	 */
+	protected function expand_byday( $date = 0 ) {
 
 		// Default return value
 		$dates = array();
@@ -1771,13 +1814,20 @@ class Recur {
 		}
 	}
 
-	protected function expand_byhour( $date ) {
+	/**
+	 * Expand BYHOUR rule
+	 *
+	 * @param int $date
+	 * @return array
+	 */
+	protected function expand_byhour( $date = 0 ) {
 
 		// Default return value
 		$dates = array();
 
 		list( $Y, $m, $d, $i, $s ) = $this->explode( 'Y-m-d-i-s', '-', $date );
 
+		// Loop through hours
 		foreach ( $this->byhour as $hour ) {
 			$dates[] = $this->mktime( $hour, $i, $s, $m, $d, $Y );
 		}
@@ -1789,11 +1839,20 @@ class Recur {
 		return $dates;
 	}
 
-	protected function expand_byminute( $date ) {
+	/**
+	 * Expand BYMINUTE rule
+	 *
+	 * @param int $date
+	 * @return array
+	 */
+	protected function expand_byminute( $date = 0 ) {
+
+		// Default return value
 		$dates = array();
 
 		list( $Y, $m, $d, $H, $s ) = $this->explode( 'Y-m-d-H-s', '-', $date );
 
+		// Loop through minutes
 		foreach ( $this->byminute as $minute ) {
 			$dates[] = $this->mktime( $H, $minute, $s, $m, $d, $Y );
 		}
@@ -1805,11 +1864,20 @@ class Recur {
 		return $dates;
 	}
 
-	protected function expand_bysecond( $date ) {
+	/**
+	 * Expand BYSECOND rule
+	 *
+	 * @param int $date
+	 * @return array
+	 */
+	protected function expand_bysecond( $date = 0 ) {
+
+		// Default return value
 		$dates = array();
 
 		list( $Y, $m, $d, $H, $i ) = $this->explode( 'Y-m-d-H-i', '-', $date );
 
+		// Loop through seconds
 		foreach ( $this->bysecond as $second ) {
 			$dates[] = $this->mktime( $H, $i, $second, $m, $d, $Y );
 		}
@@ -1823,15 +1891,29 @@ class Recur {
 
 	/** Limits ****************************************************************/
 
-	protected function limit_bymonth( $timestamp ) {
-		if ( in_array( $this->date( 'n', $timestamp ), $this->bymonth, true ) ) {
-			return true;
-		}
+	/**
+	 * Limit BYMONTH rule
+	 *
+	 * @param int $timestamp
+	 * @return bool
+	 */
+	protected function limit_bymonth( $timestamp = 0 ) {
 
-		return false;
+		// Get vars
+		$needle   = (int) $this->date( 'n', $timestamp );
+		$haystack = array_map( 'intval', $this->bymonth );
+
+		// Check
+		return in_array( $needle, $haystack, true );
 	}
 
-	protected function limit_byyearday( $timestamp ) {
+	/**
+	 * Limit BYYEARDAY rule
+	 *
+	 * @param int $timestamp
+	 * @return bool
+	 */
+	protected function limit_byyearday( $timestamp = 0 ) {
 		list( $z, $L ) = $this->explode( 'z-L', '-', $timestamp );
 
 		if ( in_array( $z + 1, $this->byyearday, true ) ) {
@@ -1847,7 +1929,13 @@ class Recur {
 		return false;
 	}
 
-	protected function limit_bymonthday( $timestamp ) {
+	/**
+	 * Limit BYMONTHDAY rule
+	 *
+	 * @param int $timestamp
+	 * @return bool
+	 */
+	protected function limit_bymonthday( $timestamp = 0 ) {
 		list( $j, $t ) = $this->explode( 'j-t', '-', $timestamp );
 
 		if ( in_array( $j, $this->bymonthday, true ) ) {
@@ -1861,7 +1949,13 @@ class Recur {
 		return false;
 	}
 
-	protected function limit_byday( $timestamp ) {
+	/**
+	 * Limit BYDAY rule
+	 *
+	 * @param int $timestamp
+	 * @return bool
+	 */
+	protected function limit_byday( $timestamp = 0 ) {
 
 		// Recombine position & weekday
 		foreach ( $this->byday as $option )	{
@@ -1911,22 +2005,44 @@ class Recur {
 		return false;
 	}
 
-	protected function limit_byhour( $timestamp ) {
-		if ( in_array( $this->date( 'G', $timestamp ), $this->byhour ) ) {
-			return true;
-		}
+	/**
+	 * Limit BYHOUR rule
+	 *
+	 * @param int $timestamp
+	 * @return bool
+	 */
+	protected function limit_byhour( $timestamp = 0 ) {
 
-		return false;
+		// Get vars
+		$needle   = (int) $this->date( 'G', $timestamp );
+		$haystack = array_map( 'intval', $this->byhour );
+
+		// Check
+		return in_array( $needle, $haystack, true );
 	}
 
-	protected function limit_byminute( $timestamp ) {
-		if ( in_array( (int) $this->date( 'i', $timestamp ), $this->byminute ) ) {
-			return true;
-		}
+	/**
+	 * Limit BYMINUTE rule
+	 *
+	 * @param int $timestamp
+	 * @return bool
+	 */
+	protected function limit_byminute( $timestamp = 0 ) {
 
-		return false;
+		// Get vars
+		$needle   = (int) $this->date( 'i', $timestamp );
+		$haystack = array_map( 'intval', $this->byminute );
+
+		// Check
+		return in_array( $needle, $haystack, true );
 	}
 
+	/**
+	 * Limit BYSETPOS rule
+	 *
+	 * @param int $timestamp
+	 * @return bool
+	 */
 	protected function limit_bysetpos( & $limited_dates = array() ) {
 		$num = count( $limited_dates );
 

@@ -205,6 +205,158 @@ function sugar_calendar_get_events( $args = array() ) {
 }
 
 /**
+ * Given a single Event ID, get an array of Event objects in a recurring sequence.
+ *
+ * @since 2.2.0
+ *
+ * @param int          $event_id
+ * @param DateTime     $after
+ * @param DateTime     $before
+ * @param DateTimeZone $timezone
+ * @param string       $start_of_week
+ *
+ * @return array
+ */
+function sugar_calendar_get_event_sequence( $event_id = 0, $after = null, $before = null, $timezone = '', $start_of_week = '' ) {
+
+	// Get the event
+	$event = sugar_calendar_get_event( $event_id );
+
+	// Bail if Event was not found
+	if ( empty( $event ) ) {
+		return array();
+	}
+
+	// Event is not recurring, just return the single Event
+	if ( empty( $event->recurrence ) ) {
+		$retval = array( $event );
+
+	// Event is recurring, so compute the sequence
+	} else {
+
+		// Default return value
+		$retval = array();
+
+		// Default arguments
+		$args = array(
+
+			// Range
+			'after'      => $after->format( 'Ymd\THis' ),
+			'before'     => $before->format( 'Ymd\THis' ),
+
+			// Environment
+			'tzid'       => $timezone,
+			'wkst'       => $start_of_week,
+
+			// Event
+			'dtstart'    => $event->start_dto->format( 'Ymd\THis' ),
+			'dtend'      => $event->end_dto->format( 'Ymd\THis' ),
+			'freq'       => $event->recurrence,
+			'interval'   => $event->recurrence_interval
+		);
+
+		// Ending by date
+		if ( ! empty( $event->recurrence_end_dto ) ) {
+			$args['until'] = $event->recurrence_end_dto->format( 'Ymd\THis\Z' );
+
+		// Ending by count
+		} elseif ( ! empty( $event->recurrence_count ) ) {
+			$args['count'] = $event->recurrence_count;
+		}
+
+		// Filter arguments
+		$args = apply_filters( 'sugar_calendar_get_event_sequence_args', $args, $event, $after, $before, $timezone, $start_of_week );
+
+		// Initialize a Recur object
+		$recur = new \Sugar_Calendar\Utilities\Recur( $args );
+
+		// Initialize counter
+		$n = 1;
+
+		// Clone Events into sequences
+		while ( $date = $recur->next() ) {
+
+			// Clone the original Event to a new object
+			$new_event = ( $n > 1 )
+				? clone $event
+				: $event;
+
+			// Set the start & end
+			$new_event->start = $date['dtstart'];
+			$new_event->end   = $date['dtend'];
+
+			// Set the recurrence ID
+			$new_event->reccurence_id = $date['recurrence-id'];
+
+			// Set the sequence
+			$new_event->sequence = ! empty( $date['sequence'] )
+				? abs( $date['sequence'] )
+				: 0;
+
+			// Reset all DateTime objects
+			$new_event->set_datetime_objects();
+
+			// Add new event to return values
+			$retval[] = $new_event;
+
+			// Bump the counter
+			$n++;
+
+			// Avoid infinite loops (500 is arbitrary; maybe change later)
+			if ( $n >= 500 ) {
+				break;
+			}
+		}
+	}
+
+	// Filter & return
+	return apply_filters( 'sugar_calendar_get_event_sequence', $retval, $event_id, $after, $before, $timezone );
+}
+
+/**
+ * Given an array of Events, get a combined array of recurring sequences.
+ *
+ * @since 2.2.0
+ *
+ * @param int          $events
+ * @param DateTime     $after
+ * @param DateTime     $before
+ * @param DateTimeZone $timezone
+ * @param string       $start_of_week
+ *
+ * @return array
+ */
+function sugar_calendar_get_event_sequences( $events = array(), $after = null, $before = null, $timezone = '', $start_of_week = '' ) {
+
+	// Default return value
+	$retval = array();
+
+	// Bail if boundaries are missing
+	if ( empty( $events ) || empty( $after ) || empty( $before ) ) {
+		return array();
+	}
+
+	// Get all sequences
+	foreach ( $events as $event ) {
+
+		// Get sequences
+		$sequences = sugar_calendar_get_event_sequence(
+			$event->id,
+			$after,
+			$before,
+			$timezone,
+			$start_of_week
+		);
+
+		// Merge arrays
+		$retval = array_merge( $retval, $sequences );
+	}
+
+	// Return
+	return apply_filters( __FUNCTION__, $retval );
+}
+
+/**
  * Count events.
  *
  * @since 2.0

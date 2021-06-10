@@ -459,8 +459,8 @@ function sugar_calendar_get_datetime_object( $timestamp = null, $timezone1 = nul
 
 	// Get DateTime object and use it to format
 	$retval = ( $tzo instanceof DateTimeZone )
-		? new Sugar_Calendar\DateTime( $time, $tzo )
-		: new Sugar_Calendar\DateTime( $time );
+		? new \DateTime( $time, $tzo )
+		: new \DateTime( $time );
 
 	// Maybe set the timezone to a new one
 	if ( ! empty( $timezone2 ) && ( $timezone2 !== $timezone1 ) ) {

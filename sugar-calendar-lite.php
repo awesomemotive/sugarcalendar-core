@@ -10,7 +10,7 @@
  * Text Domain:       sugar-calendar
  * Domain Path:       /sugar-calendar/includes/languages/
  * Requires PHP:      5.6.20
- * Requires at least: 5.2
+ * Requires at least: 5.5
  * Version:           2.2.0
  */
 

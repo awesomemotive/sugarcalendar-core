@@ -9,6 +9,8 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+use Sugar_Calendar\Common\Editor as Editor;
+
 /**
  * Return the taxonomy ID for the primary calendar taxonomy.
  *
@@ -102,6 +104,14 @@ function sugar_calendar_register_calendar_taxonomy() {
 		if ( ! empty( $term->name ) ) {
 			$args['default_term'] = array( 'name' => $term->name );
 		}
+	}
+
+	// Get the editor type
+	$editor = Editor\current();
+
+	// Maybe supports the block editor
+	if ( 'block' === $editor ) {
+		$args['show_in_rest'] = true;
 	}
 
 	// Register

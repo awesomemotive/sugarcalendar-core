@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.2.0\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2021-06-10 20:36:16+00:00\n"
+"POT-Creation-Date: 2021-06-15 20:18:01+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -918,7 +918,7 @@ msgstr ""
 
 #: sugar-calendar/includes/admin/menu.php:34
 #: sugar-calendar/includes/admin/menu.php:35
-#: sugar-calendar/includes/post/taxonomies.php:39
+#: sugar-calendar/includes/post/taxonomies.php:41
 #: sugar-calendar/includes/themes/legacy/calendar.php:163
 msgid "Calendar"
 msgstr ""
@@ -1381,82 +1381,82 @@ msgstr ""
 msgid "Yearly"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:38
+#: sugar-calendar/includes/post/taxonomies.php:40
 msgid "Calendars"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:40
+#: sugar-calendar/includes/post/taxonomies.php:42
 msgid "Search Calendars"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:41
+#: sugar-calendar/includes/post/taxonomies.php:43
 msgid "Popular Calendars"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:42
+#: sugar-calendar/includes/post/taxonomies.php:44
 #: sugar-calendar/includes/themes/legacy/calendar.php:101
 #: sugar-calendar/includes/themes/legacy/widgets.php:377
 msgid "All Calendars"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:43
+#: sugar-calendar/includes/post/taxonomies.php:45
 msgid "Parent Calendar"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:44
+#: sugar-calendar/includes/post/taxonomies.php:46
 msgid "Parent Calendar:"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:45
+#: sugar-calendar/includes/post/taxonomies.php:47
 msgid "Edit Calendar"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:46
+#: sugar-calendar/includes/post/taxonomies.php:48
 msgid "View Calendar"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:47
+#: sugar-calendar/includes/post/taxonomies.php:49
 msgid "Update Calendar"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:48
+#: sugar-calendar/includes/post/taxonomies.php:50
 msgid "Add New Calendar"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:49
+#: sugar-calendar/includes/post/taxonomies.php:51
 msgid "New Calendar Name"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:50
+#: sugar-calendar/includes/post/taxonomies.php:52
 msgid "Separate calendars with commas"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:51
+#: sugar-calendar/includes/post/taxonomies.php:53
 msgid "Add or remove calendars"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:52
+#: sugar-calendar/includes/post/taxonomies.php:54
 msgid "Choose from the most used calendars"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:53
+#: sugar-calendar/includes/post/taxonomies.php:55
 #: sugar-calendar/includes/themes/legacy/calendar.php:105
 msgid "No Calendars"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:54
+#: sugar-calendar/includes/post/taxonomies.php:56
 msgid "No calendars found"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:55
+#: sugar-calendar/includes/post/taxonomies.php:57
 msgid "Calendars list navigation"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:56
+#: sugar-calendar/includes/post/taxonomies.php:58
 msgid "Calendars list"
 msgstr ""
 
-#: sugar-calendar/includes/post/taxonomies.php:57
+#: sugar-calendar/includes/post/taxonomies.php:59
 msgid "&larr; Back to Calendars"
 msgstr ""
 

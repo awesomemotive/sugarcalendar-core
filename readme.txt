@@ -9,7 +9,7 @@ Tags:              simple calendar, event calendar, event management, event list
 Requires PHP:      5.6.20
 Requires at least: 5.5
 Tested up to:      5.8
-Stable tag:        2.2.0
+Stable tag:        2.2.1
 
 You can easily manage events with this lightweight calendar. No complicated configuration. Simple to use. Sweeeet!
 

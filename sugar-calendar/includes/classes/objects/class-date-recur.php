@@ -691,7 +691,9 @@ class Recur {
 				case 'byday' :
 					$valid = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
 
-					foreach ( explode( ',', $value ) as $key ) {
+					$byday = explode( ',', $value );
+
+					foreach ( $byday as $key ) {
 						$weekday = substr( $key, -2 );
 						$pos     = substr( $key, 0, -2 );
 
@@ -2462,12 +2464,12 @@ class Recur {
 	/**
 	 * DateTime and DateTimeZone aware wrapper for strtotime().
 	 *
-	 * @param int $time
+	 * @param string $datetime
 	 * @return mixed
 	 */
-	protected function strtotime( $time = '' ) {
+	protected function strtotime( $datetime = '' ) {
 		try {
-			$this->datetime = new \DateTime( $time, $this->timezone );
+			$this->datetime = new \DateTime( $datetime, $this->timezone );
 		} catch ( \Exception $e ) {
 			return false;
 		}

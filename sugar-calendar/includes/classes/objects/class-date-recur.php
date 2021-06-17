@@ -2179,7 +2179,7 @@ class Recur {
 		list( $w, $j, $z, $t, $L ) = $this->explode( 'w-j-z-t-L', '-', $timestamp );
 
 		// Check weekday without position
-		if ( in_array( $days[ $w ], $byday ) ) {
+		if ( in_array( $days[ $w ], $byday, true ) ) {
 			return true;
 		}
 
@@ -2187,13 +2187,13 @@ class Recur {
 		if ( ! empty( $this->bymonth ) ) {
 			$try = ceil( $j / 7 );
 
-			if ( in_array( $try . $days[ $w ], $byday ) ) {
+			if ( in_array( $try . $days[ $w ], $byday, true ) ) {
 				return true;
 			}
 
 			$try = ceil( ( $t - $j + 1 ) / 7 ) * -1;
 
-			if ( in_array( $try . $days[ $w ], $byday ) ) {
+			if ( in_array( $try . $days[ $w ], $byday, true ) ) {
 				return true;
 			}
 
@@ -2203,13 +2203,13 @@ class Recur {
 
 			$try = ceil( ( $z + 1 ) / 7 );
 
-			if ( in_array( $try . $days[ $w ], $byday ) ) {
+			if ( in_array( $try . $days[ $w ], $byday, true ) ) {
 				return true;
 			}
 
 			$try = ceil( ( $number_of_days - $z ) / 7 ) * -1;
 
-			if ( in_array( $try . $days[ $w ], $byday ) ) {
+			if ( in_array( $try . $days[ $w ], $byday, true ) ) {
 				return true;
 			}
 		}

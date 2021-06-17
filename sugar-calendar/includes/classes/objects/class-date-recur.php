@@ -560,11 +560,11 @@ class Recur {
 						// Loop through dates
 						foreach ( $exdate as $datestring ) {
 
-							// Create timestamps
-							$this->exdate[] = $this->strtotime( $datestring );
+							// Create timestamp
+							$this->exdate[] = $exclude = $this->strtotime( $datestring );
 
 							// Invalid
-							if ( false === $this->exdate[] ) {
+							if ( false === $exclude ) {
 								$this->error = true;
 							}
 						}

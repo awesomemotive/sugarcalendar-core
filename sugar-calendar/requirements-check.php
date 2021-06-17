@@ -264,6 +264,76 @@ final class Requirements_Check {
 			: false;
 	}
 
+	/** Helpers ***************************************************************/
+
+	/**
+	 * Helper method to re-determine if WordPress 5.5 is showing the auto-update
+	 * column in the Plugins list table.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return boolean
+	 */
+	private function showing_auto_updates() {
+
+		// Bail if auto updates do not exist
+		if ( ! function_exists( 'wp_is_auto_update_enabled_for_type' ) ) {
+			return false;
+		}
+
+		// Bail if not enabled
+		if ( ! wp_is_auto_update_enabled_for_type( 'plugin' ) ) {
+			return false;
+		}
+
+		// Bail if current user cannot update plugins
+		if ( ! current_user_can( 'update_plugins' ) ) {
+			return false;
+		}
+
+		// Bail if in network admin
+		if ( is_multisite() && ! is_blog_admin() ) {
+			return false;
+		}
+
+		// Allowed auto-update statuses
+		$allowed_statuses = array(
+			'all',
+			'active',
+			'inactive',
+			'recently_activated',
+			'upgrade',
+			'search',
+			'paused',
+			'auto-update-enabled',
+			'auto-update-disabled'
+		);
+
+		// Status
+		$status = ! empty( $_REQUEST['plugin_status'] )
+			? sanitize_key( $_REQUEST['plugin_status'] )
+			: 'all';
+
+		// Is status allowed?
+		$allowed = in_array( $status, $allowed_statuses, true );
+
+		// Return if allowed
+		return $allowed;
+	}
+
+	/**
+	 * How many columns should the description column span?
+	 *
+	 * For plugin_row_notice()
+	 *
+	 * @since 2.0.0
+	 */
+	private function description_colspan() {
+		return $this->showing_auto_updates()
+			? 2
+			: 1;
+	}
+
 	/** Agnostic Methods ******************************************************/
 
 	/**
@@ -279,7 +349,7 @@ final class Requirements_Check {
 		<td class="column-primary">
 			<?php $this->unmet_requirements_text(); ?>
 		</td>
-		<td class="column-description">
+		<td class="column-description" colspan="<?php echo absint( $this->description_colspan() ); ?>">
 			<?php $this->unmet_requirements_description(); ?>
 		</td>
 		</tr><?php

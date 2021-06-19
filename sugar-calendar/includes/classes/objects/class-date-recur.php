@@ -1042,14 +1042,17 @@ class Recur {
 
 						// Compute dates for each expansion in set
 						foreach ( $expansion_set as $expansion ) {
-							if ( ! empty( $this->{$expansion} ) ) {
 
-								// Function
-								$func = 'expand_' . $expansion;
-
-								// Add to result dates
-								$result_dates[] = call_user_func( array( $this, $func ), $date );
+							// Skip if no expansion
+							if ( empty( $this->{$expansion} ) ) {
+								continue 1;
 							}
+
+							// Function
+							$func = 'expand_' . $expansion;
+
+							// Add to result dates
+							$result_dates[] = call_user_func( array( $this, $func ), $date );
 						}
 
 						// No expansions done - continue to next set

@@ -915,21 +915,23 @@ class Recur {
 		// I can't believe this works...
 		switch ( true ) {
 
+			// Frequency cannot be empty
+			case ( empty( $this->freq ) ) :
+
+			// Timezone cannot be empty
+			case ( empty( $this->timezone ) ) :
+
 			// Start cannot be empty
 			case ( is_null( $this->dtstart ) ) :
+
+			// Duration time cannot be negative (0 is "no end")
+			case ( ! is_null( $this->duration_time ) && ( 0 > $this->duration_time ) ) :
 
 			// Duration cannot compete with End
 			case ( ! empty( $this->duration ) && ! is_null( $this->dtend ) ) :
 
 			// Count cannot compete with End Date
 			case ( ! empty( $this->count    ) && ! is_null( $this->until ) ) :
-
-			// Timezone & Frequency cannot be empty
-			case ( empty( $this->timezone ) ) :
-			case ( empty( $this->freq     ) ) :
-
-			// Duration time cannot be negative (0 is "no end")
-			case ( ! is_null( $this->duration_time ) && ( 0 > $this->duration_time ) ) :
 
 			// By week not for Yearly frequency
 			case ( ! empty( $this->byweekno   ) && ( 'YEARLY' !== $this->freq ) ) :

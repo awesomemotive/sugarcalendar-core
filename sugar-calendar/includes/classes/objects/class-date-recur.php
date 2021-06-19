@@ -928,8 +928,8 @@ class Recur {
 			case ( empty( $this->timezone ) ) :
 			case ( empty( $this->freq     ) ) :
 
-			// Duration time cannot be less than 1
-			case ( ! is_null( $this->duration_time ) && ( 0 >= $this->duration_time ) ) :
+			// Duration time cannot be negative (0 is "no end")
+			case ( ! is_null( $this->duration_time ) && ( 0 > $this->duration_time ) ) :
 
 			// By week not for Yearly frequency
 			case ( ! empty( $this->byweekno   ) && ( 'YEARLY' !== $this->freq ) ) :
@@ -1261,6 +1261,10 @@ class Recur {
 		// Calculate dtend from duration time
 		} elseif ( ! empty( $duration_time ) ) {
 			$retval[ 'dtend' ] = $this->date( $this->format, $start + $duration_time );
+
+		// Default to "no end" and use dtstart
+		} else {
+			$retval['dtend'] = $retval['dtstart'];
 		}
 
 		// The original value of the "DTSTART" property of the recurrence instance

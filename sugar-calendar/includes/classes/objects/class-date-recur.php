@@ -1119,7 +1119,7 @@ class Recur {
 				// Loop through dates
 				foreach ( $dates as $date ) {
 
-					// Check range
+					// Out of range
 					if ( ! is_null( $this->before ) && ( $date > $this->before ) ) {
 						continue;
 					}

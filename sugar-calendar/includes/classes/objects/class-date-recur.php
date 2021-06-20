@@ -372,15 +372,17 @@ class Recur {
 	/**
 	 * Constructor.
 	 *
-	 * @param type $args
-	 * @return type
+	 * @param array $args
 	 */
 	public function __construct( $args = array() ) {
 
 		// Bail if no arguments to parse
-		if ( ! $this->parse_args( $args ) ) {
+		if ( empty( $args ) ) {
 			return;
 		}
+
+		// Parse arguments
+		$this->parse_args( $args );
 	}
 
 	/**

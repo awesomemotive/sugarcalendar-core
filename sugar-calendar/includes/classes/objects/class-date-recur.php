@@ -1273,11 +1273,7 @@ class Recur {
 
 		// Calculate dtend from DURATION
 		if ( ! empty( $duration ) ) {
-			$this->datetime = new \DateTime( '@' . $start );
-			$this->datetime->setTimezone( $this->timezone );
-			$this->datetime->add( $duration );
-
-			$retval[ 'dtend' ] = $this->datetime->format( $this->format );
+			$retval[ 'dtend' ] = $this->date( $this->format, $start, $duration );
 
 		// Calculate dtend from rdate end
 		} elseif ( ! empty( $end ) ) {
@@ -2597,7 +2593,7 @@ class Recur {
 			$this->datetime->setTime( $hour, $min, $sec );
 			$this->datetime->setDate( $year, $mon, $day );
 
-		// Bail if failure
+		// Bail if error
 		} catch ( \Exception $e ) {
 			return false;
 		}
@@ -2613,13 +2609,49 @@ class Recur {
 	 * @return mixed
 	 */
 	protected function strtotime( $datetime = '' ) {
+
+		// Try to get the DateTime
 		try {
 			$this->datetime = new \DateTime( $datetime, $this->timezone );
+
+		// Bail if error
 		} catch ( \Exception $e ) {
 			return false;
 		}
 
+		// Return unix timestamp
 		return $this->datetime->format( 'U' );
+	}
+
+	/**
+	 * DateTime and DateTimeZone aware wrapper for date().
+	 *
+	 * @param string $format
+	 * @param int    $timestamp
+	 * @param mixed  $add
+	 * @return mixed
+	 */
+	protected function date( $format = '', $timestamp = 0, $add = null ) {
+
+		// Try to get the DateTime
+		try {
+			$this->datetime = new \DateTime( '@' . $timestamp );
+
+		// Bail if error
+		} catch ( \Exception $e ) {
+			return false;
+		}
+
+		// Set the time zone
+		$this->datetime->setTimezone( $this->timezone );
+
+		// Maybe add
+		if ( ! is_null( $add ) && ( $add instanceof \DateInterval ) ) {
+			$this->datetime->add( $add );
+		}
+
+		// Return, formatted
+		return $this->datetime->format( $format );
 	}
 
 	/**
@@ -2632,34 +2664,7 @@ class Recur {
 	 * @return array
 	 */
 	protected function date_explode( $format = '', $delimiter = '', $timestamp = 0 ) {
-		try {
-			$this->datetime = new \DateTime( '@' . $timestamp );
-		} catch ( \Exception $e ) {
-			return false;
-		}
-
-		$this->datetime->setTimezone( $this->timezone );
-
-		return explode( $delimiter, $this->datetime->format( $format ) );
-	}
-
-	/**
-	 * DateTime and DateTimeZone aware wrapper for date().
-	 *
-	 * @param string $format
-	 * @param int    $timestamp
-	 * @return mixed
-	 */
-	protected function date( $format = '', $timestamp = 0 ) {
-		try {
-			$this->datetime = new \DateTime( '@' . $timestamp );
-		} catch ( \Exception $e ) {
-			return false;
-		}
-
-		$this->datetime->setTimezone( $this->timezone );
-
-		return $this->datetime->format( $format );
+		return explode( $delimiter, $this->date( $format, $timestamp ) );
 	}
 
 	/** Private ***************************************************************/

@@ -800,13 +800,8 @@ class Recur {
 		// Validate class properties from arguments
 		$this->validate_properties();
 
-		// Bail if error
-		if ( ! empty( $this->error ) ) {
-			return false;
-		}
-
 		// Return
-		return true;
+		return empty( $this->error );
 	}
 
 	/**

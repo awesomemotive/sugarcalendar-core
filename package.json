@@ -1,6 +1,6 @@
 {
 	"name": "sugar-calendar",
-	"version": "2.2.0",
+	"version": "2.2.1",
 	"description": "A calendar with a sweet disposition.",
 	"private": true,
 	"license": "GPL-2.0-or-later",
@@ -30,7 +30,7 @@
 		"chosen-js": "^1.8.7"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.14.3",
+		"@babel/core": "^7.14.6",
 		"@wordpress/babel-preset-default": "^4.20.0",
 		"@wordpress/browserslist-config": "^2.7.0",
 		"@wordpress/eslint-plugin": "^2.4.0",

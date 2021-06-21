@@ -601,32 +601,31 @@ function sanitize_end( $end = '', $start = '', $all_day = false ) {
 		return $end;
 	}
 
-	// See if there a minimum duration to enforce...
-	$minimum = sugar_calendar_get_minimum_event_duration();
-
 	// Convert to integers for faster comparisons
 	$start_int = strtotime( $start );
 	$end_int   = strtotime( $end   );
 
-	// Calculate the end, based on a minimum duration (if set)
-	$end_compare = ! empty( $minimum )
-		? strtotime( '+' . $minimum, $end_int )
-		: $end_int;
-
 	// Check if the user attempted to set an end date and/or time
 	$has_end = has_end();
 
-	// Bail if event duration exceeds the minimum (great!)
-	if ( ( true === $has_end ) && ( $end_compare > $start_int ) ) {
-		return $end;
-	}
-
-	// ...or the user attempted an end date and this isn't an all-day event
+	// The user attempted an end date and this isn't an all-day event
 	if ( ( true === $has_end ) && ( false === $all_day ) ) {
 
+		// See if there a minimum duration to enforce...
+		$minimum = sugar_calendar_get_minimum_event_duration();
+
+		// Calculate a minimum end, maybe using the minimum duration
+		$end_compare = ! empty( $minimum )
+			? strtotime( '+' . $minimum, $start_int )
+			: $end_int;
+
+		// Bail if event duration exceeds the minimum (great!)
+		if ( $end_compare > $start_int ) {
+			return $end;
+
 		// If there is a minimum, the new end is the start + the minimum
-		if ( ! empty( $minimum ) ) {
-			$end_int = strtotime( '+' . $minimum, $start_int );
+		} elseif ( ! empty( $minimum ) ) {
+			$end_int = $end_compare;
 
 		// If there isn't a minimum, then the end needs to be rejected
 		} else {

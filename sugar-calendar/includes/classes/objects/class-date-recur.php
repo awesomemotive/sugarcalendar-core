@@ -20,28 +20,28 @@ class Recur {
 	/** Settings **************************************************************/
 
 	/**
-	 * The original array of arguments
+	 * The original array of arguments.
 	 *
 	 * @var array
 	 */
 	public $args = array();
 
 	/**
-	 * True if error in properties found
+	 * True if error in properties found.
 	 *
 	 * @var bool
 	 */
 	public $error = false;
 
 	/**
-	 * Return format
+	 * Return format.
 	 *
 	 * @var mixed
 	 */
 	public $format = 'Y-m-d H:i:s';
 
 	/**
-	 * Sequence occurrences even when not in range
+	 * Sequence occurrences even when not in range.
 	 *
 	 * @var bool
 	 */
@@ -58,14 +58,14 @@ class Recur {
 	/** Boundaries ************************************************************/
 
 	/**
-	 * Start of range to compute dates in
+	 * Start of range to compute dates in.
 	 *
 	 * @var string
 	 */
 	protected $after;
 
 	/**
-	 * End of range to compute dates in
+	 * End of range to compute dates in.
 	 *
 	 * @var string
 	 */
@@ -73,144 +73,320 @@ class Recur {
 
 	/** VEVENT parameters *****************************************************/
 
+	/**
+	 * The unique ID of this Event.
+	 *
+	 * @var mixed
+	 */
 	protected $id;
+
+	/**
+	 * Time Zone Identifier.
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.2.19
+	 * @var string
+	 */
 	protected $tzid;
+
+	/**
+	 * Date Time Start.
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.1
+	 * @var string
+	 */
 	protected $dtstart;
+
+	/**
+	 * Date Time End.
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.6.1
+	 * @var string
+	 */
 	protected $dtend;
-	protected $rdate = array();
+
+	/**
+	 * Exception Date Times.
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.1
+	 * @var array
+	 */
 	protected $exdate = array();
+
+	/**
+	 * Recurrence Date Times.
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5.2
+	 * @var array
+	 */
+	protected $rdate = array();
 
 	/** RRULE parameters ******************************************************/
 
+	/**
+	 * Recurrence Frequency.
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var string
+	 */
 	protected $freq;
+
+	/**
+	 * Recurrence Interval.
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var int
+	 */
 	protected $interval = 1;
+
+	/**
+	 * Recurrence Count.
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var int
+	 */
 	protected $count;
+
+	/**
+	 * Recurrence Until.
+	 *
+	 * End Date.
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var string
+	 */
 	protected $until;
+
+	/**
+	 * Recurrence by Month.
+	 *
+	 * +/- 1 to 12
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var array
+	 */
 	protected $bymonth = array();
+
+	/**
+	 * Recurrence by Week Number.
+	 *
+	 * +/- 1 to 53
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var array
+	 */
 	protected $byweekno = array();
+
+	/**
+	 * Recurrence by Year Day Number.
+	 *
+	 * +/- 1 to 366
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var array
+	 */
 	protected $byyearday = array();
+
+	/**
+	 * Recurrence by Month Day Number.
+	 *
+	 * +/- 1 to 31
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var array
+	 */
 	protected $bymonthday = array();
+
+	/**
+	 * Recurrence by Day Abbreviation.
+	 *
+	 * SU, MU, TU, WE, TH, FR, SA
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var array
+	 */
 	protected $byday = array();
+
+	/**
+	 * Recurrence by Hour.
+	 *
+	 * 0 to 23
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var array
+	 */
 	protected $byhour = array();
+
+	/**
+	 * Recurrence by Minute.
+	 *
+	 * 0 to 59
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var array
+	 */
 	protected $byminute = array();
+
+	/**
+	 * Recurrence by Second.
+	 *
+	 * 0 to 59
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var array
+	 */
 	protected $bysecond = array();
+
+	/**
+	 * Recurrence by Position.
+	 *
+	 * +/- 1 to 366
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var array
+	 */
 	protected $bysetpos = array();
+
+	/**
+	 * Recurrence Week Start.
+	 *
+	 * SU, MU, TU, WE, TH, FR, SA
+	 *
+	 * @link https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
+	 * @var string
+	 */
 	protected $wkst = 'MO';
-	protected $wkst_seq = array( 'MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU' );
 
 	/** Stashes ***************************************************************/
 
 	/**
-	 * DateTimeZone object
+	 * DateTimeZone object.
 	 *
 	 * @var DateTimeZone
 	 */
 	protected $timezone;
 
 	/**
-	 * DateTime object
+	 * DateTime object.
 	 *
 	 * @var DateTime
 	 */
 	protected $datetime;
 
 	/**
-	 * DateInterval object
+	 * DateInterval object.
 	 *
 	 * @var DateInterval
 	 */
 	protected $duration;
 
 	/**
-	 * Duration in seconds
+	 * Duration in seconds.
 	 *
 	 * @var int
 	 */
 	protected $duration_time;
 
 	/**
-	 * All expansions
+	 * All expansions.
 	 *
 	 * @var array
 	 */
 	protected $expansions = array();
 
 	/**
-	 * All limitations
+	 * All limitations.
 	 *
 	 * @var array
 	 */
 	protected $limitations = array();
 
 	/**
-	 * Number of expansions set by rule
+	 * Number of expansions set by rule.
 	 *
 	 * @var int
 	 */
 	protected $expansion_count = 0;
 
 	/**
-	 * Number of iterations
+	 * Number of iterations.
 	 *
 	 * @var int
 	 */
 	protected $iteration = 0;
 
 	/**
-	 * Number of occurrences
+	 * Number of occurrences.
 	 *
 	 * @var int
 	 */
 	protected $current_count = 0;
 
 	/**
-	 * Last computed date
+	 * Last computed date.
 	 *
 	 * @var string
 	 */
 	protected $current_date;
 
+	/**
+	 * Week sequence.
+	 *
+	 * @var array
+	 */
+	protected $wkst_seq = array( 'MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU' );
+
 	/** Caches ****************************************************************/
 
 	/**
-	 * Previously computed dates
+	 * Previously computed dates.
 	 *
 	 * @var array
 	 */
 	protected $cached_dates = array();
 
 	/**
-	 * Dates from rdate rule
+	 * Dates from rdate rule.
 	 *
 	 * @var array
 	 */
 	protected $cached_rdates = array();
 
 	/**
-	 * Cached year, month and week details
+	 * Cached year, month and week details.
 	 *
 	 * @var array
 	 */
 	protected $cached_details = array();
 
+	/** Constants *************************************************************/
+
+	/**
+	 * Constant for days of week.
+	 *
+	 * @var array
+	 */
+	protected const DAYS = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
+
 	/** Methods ***************************************************************/
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
-	 * @param type $args
-	 * @return type
+	 * @param array $args
 	 */
 	public function __construct( $args = array() ) {
 
 		// Bail if no arguments to parse
-		if ( ! $this->parse_args( $args ) ) {
+		if ( empty( $args ) ) {
 			return;
 		}
+
+		// Parse arguments
+		$this->parse_args( $args );
 	}
 
 	/**
-	 * Parse the arguments
+	 * Parse the arguments.
 	 *
 	 * @param array $args
 	 * @return bool
@@ -233,8 +409,8 @@ class Recur {
 		$args = $this->lc_keys( $args );
 
 		// ID is required early
-		$this->id = ! empty( $args['id'] )
-			? $args['id']
+		$this->id = ! empty( $args[ 'id' ] )
+			? $args[ 'id' ]
 			: null;
 
 		// Time zone is required early
@@ -256,8 +432,8 @@ class Recur {
 		// Parse RRULE if present
 		if ( ! empty( $args[ 'rrule' ] ) && strstr( $args[ 'rrule' ], '=' ) ) {
 
-			// Explode by separator, trimming off trailing
-			$rules = explode( ';', rtrim( $args[ 'rrule' ], ';' ) );
+			// Explode by semicolon
+			$rules = $this->safe_explode( ';', $args[ 'rrule' ] );
 
 			// Successfully exploded
 			if ( ! empty( $rules ) ) {
@@ -270,7 +446,7 @@ class Recur {
 						continue;
 					}
 
-					// Explode by equals
+					// Explode to get rule and value
 					list( $rule, $value ) = explode( '=', $part );
 
 					// Lowercase the key
@@ -333,7 +509,10 @@ class Recur {
 				case 'before' :
 
 					// Create timestamps
-					if ( false === ( $this->{$key} = $this->strtotime( $value ) ) ) {
+					$this->{$key} = $this->strtotime( $value );
+
+					// Invalid
+					if ( false === $this->{$key} ) {
 						$this->error = true;
 					}
 
@@ -350,17 +529,20 @@ class Recur {
 					// Loop through values
 					foreach ( $value as $entry ) {
 
-						// Explode by separator
-						$rdate = explode( ',', $entry );
+						// Explode by comma
+						$rdate = $this->safe_explode( ',', $entry );
 
 						// Loop through dates
 						foreach ( $rdate as $property ) {
 
-							// Explode by date & period
+							// Explode to get date & period
 							list( $date, $period ) = explode( '/', $property );
 
 							// Create timestamp
-							if ( false === ( $start = $this->strtotime( $date ) ) ) {
+							$start = $this->strtotime( $date );
+
+							// Invalid
+							if ( false === $start ) {
 								$this->error = true;
 							}
 
@@ -374,7 +556,10 @@ class Recur {
 									$duration = null;
 
 									// Evaluate 2nd part as datestring
-									if ( false === ( $end = $this->strtotime( $period ) ) ) {
+									$end = $this->strtotime( $period );
+
+									// Invalid
+									if ( false === $end ) {
 										$this->error = true;
 									}
 								}
@@ -402,14 +587,17 @@ class Recur {
 					// Loop through values
 					foreach ( $value as $entry ) {
 
-						// Explode by separator
-						$exdate = explode( ',', $entry );
+						// Explode by comma
+						$exdate = $this->safe_explode( ',', $entry );
 
 						// Loop through dates
 						foreach ( $exdate as $datestring ) {
 
-							// Create timestamps
-							if ( false === ( $this->exdate[] = $this->strtotime( $datestring ) ) ) {
+							// Create timestamp
+							$this->exdate[] = $exclude = $this->strtotime( $datestring );
+
+							// Invalid
+							if ( false === $exclude ) {
 								$this->error = true;
 							}
 						}
@@ -432,22 +620,28 @@ class Recur {
 				// FREQUENCY
 				case 'freq' :
 
+					// Force to uppercase
+					$this->freq = strtoupper( $value );
+
 					// Valid frequencies
 					$valid = array( 'SECONDLY', 'MINUTELY', 'HOURLY', 'DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY' );
 
 					// Invalid
-					if ( ! in_array( $this->freq = strtoupper( $value ), $valid, true ) ) {
+					if ( ! in_array( $this->freq, $valid, true ) ) {
 						$this->error = true;
 					}
 
 					break;
 
-				// NUMERIC VALUES
+				// NUMERIC VALUES (> 0)
 				case 'count' :
 				case 'interval' :
 
-					// Count and interval cannot be negative
-					if ( ! is_numeric( $this->{$key} = $value ) || ( $this->{$key} < 1 ) ) {
+					// Force to absolute integer
+					$this->{$key} = (int) $value;
+
+					// Invalid
+					if ( ! is_numeric( $this->{$key} ) || ( $this->{$key} < 1 ) ) {
 						$this->error = true;
 					}
 
@@ -455,79 +649,106 @@ class Recur {
 
 				// WKST
 				case 'wkst' :
-					$valid = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
 
-					if ( ! in_array( $this->wkst = strtoupper( $value ), $valid, true ) ) {
+					// Force to uppercase
+					$this->wkst = strtoupper( $value );
+
+					// Invalid
+					if ( ! in_array( $this->wkst, self::DAYS, true ) ) {
 						$this->error = true;
 					}
 
 					break;
 
-				// BYMONTH (1-12)
+				// BYMONTH (+/- 1 to 12)
 				case 'bymonth' :
-					$this->bymonth = explode( ',', $value );
+
+					// Explode by comma
+					$this->bymonth = $this->safe_explode( ',', $value );
 
 					foreach ( $this->bymonth as $month ) {
+
+						// Invalid
 						if ( ! is_numeric( $month ) || ( abs( $month ) < 1 ) || ( abs( $month ) > 12 ) ) {
 							$this->error = true;
+							break 1;
 						}
 					}
 
 					break;
 
-				// BYWEEKNO (1-53)
+				// BYWEEKNO (+/- 1 to 53)
 				case 'byweekno' :
-					$this->byweekno = explode( ',', $value );
+
+					// Explode by comma
+					$this->byweekno = $this->safe_explode( ',', $value );
 
 					foreach ( $this->byweekno as $week ) {
+
+						// Invalid
 						if ( ! is_numeric( $week ) || ( abs( $week ) < 1 ) || ( abs( $week ) > 53 ) ) {
 							$this->error = true;
+							break 1;
 						}
 					}
 
 					break;
 
-				// BYYEARDAY (1-366)
+				// BYYEARDAY (+/- 1 to 366)
 				case 'byyearday' :
 
-				// BYSETPOS (1-366)
+				// BYSETPOS (+/- 1 to 366)
 				case 'bysetpos' :
-					$this->{$key} = explode( ',', $value );
+
+					// Explode by comma
+					$this->{$key} = $this->safe_explode( ',', $value );
 
 					foreach ( $this->{$key} as $value ) {
+
+						// Invalid
 						if ( ! is_numeric( $value ) || ( abs( $value ) < 1 ) || ( abs( $value ) > 366 ) ) {
 							$this->error = true;
+							break 1;
 						}
 					}
 
 					break;
 
-				// BYMONTHDAY (1-31)
+				// BYMONTHDAY (+/- 1 to 31)
 				case 'bymonthday' :
-					$this->bymonthday = explode( ',', $value );
+
+					// Explode by comma
+					$this->bymonthday = $this->safe_explode( ',', $value );
 
 					foreach ( $this->bymonthday as $day ) {
+
+						// Invalid
 						if ( ! is_numeric( $day ) || ( abs( $day ) < 1 ) || ( abs( $day ) > 31 ) ) {
 							$this->error = true;
+							break 1;
 						}
 					}
 
 					break;
 
-				// BYDAY
+				// BYDAY (SU, MO, TU, WE, TH, FR, SA)
 				case 'byday' :
-					$valid = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
 
-					foreach ( explode( ',', $value ) as $key ) {
+					// Explode by comma
+					$byday = $this->safe_explode( ',', $value );
+
+					foreach ( $byday as $key ) {
 						$weekday = substr( $key, -2 );
 						$pos     = substr( $key, 0, -2 );
 
+						// Set byday
 						$this->byday[] = array(
 							'weekday' => $weekday,
 							'pos'     => $pos
 						);
 
-						if ( ! in_array( $weekday, $valid, true ) || ( ( $pos !== '' ) && ( ! is_numeric( $pos ) || ( $pos === 0 ) ) ) ) {
+						// Invalid
+						if ( ! in_array( $weekday, self::DAYS, true ) || ( ( $pos !== '' ) && ( ! is_numeric( $pos ) || ( $pos === 0 ) ) ) ) {
 							$this->error = true;
 						}
 					}
@@ -536,11 +757,16 @@ class Recur {
 
 				// BYHOUR (0-23)
 				case 'byhour' :
-					$this->byhour = explode( ',', $value );
+
+					// Explode by comma
+					$this->byhour = $this->safe_explode( ',', $value );
 
 					foreach ( $this->byhour as $hour ) {
+
+						// Invalid
 						if ( ! is_numeric( $hour ) || ( $hour < 0 ) || ( $hour > 23 ) ) {
 							$this->error = true;
+							break 1;
 						}
 					}
 
@@ -551,11 +777,16 @@ class Recur {
 
 				// BYSECOND (0-59)
 				case 'bysecond' :
-					$this->{$key} = explode( ',', $value );
+
+					// Explode by comma
+					$this->{$key} = $this->safe_explode( ',', $value );
 
 					foreach ( $this->{$key} as $value ) {
+
+						// Invalid
 						if ( ! is_numeric( $value ) || ( $value < 0 ) || ( $value > 59 ) ) {
 							$this->error = true;
+							break 1;
 						}
 					}
 
@@ -569,13 +800,8 @@ class Recur {
 		// Validate class properties from arguments
 		$this->validate_properties();
 
-		// Bail if error
-		if ( ! empty( $this->error ) ) {
-			return false;
-		}
-
 		// Return
-		return true;
+		return empty( $this->error );
 	}
 
 	/**
@@ -603,7 +829,7 @@ class Recur {
 			 * The value type of dtstart is not recognized by this script, so
 			 * events starting and ending on midnight are handled as all-day.
 			 */
-			if ( array( '00', '00', '00' ) === $this->explode( 'H-i-s', '-', $this->dtstart ) && array( '00', '00', '00' ) === $this->explode( 'H-i-s', '-', $this->dtend ) ) {
+			if ( ( array( '00', '00', '00' ) === $this->date_explode( 'H-i-s', '-', $this->dtstart ) ) && ( array( '00', '00', '00' ) === $this->date_explode( 'H-i-s', '-', $this->dtend ) ) ) {
 				$number_of_days = round( ( $this->dtend - $this->dtstart ) / 86400 );
 				$this->duration = new \DateInterval( 'P' . $number_of_days . 'D' );
 				$this->dtend    = null;
@@ -706,23 +932,31 @@ class Recur {
 		// I can't believe this works...
 		switch ( true ) {
 
-			// Start
+			// Frequency cannot be empty
+			case ( empty( $this->freq ) ) :
+
+			// Timezone cannot be empty
+			case ( empty( $this->timezone ) ) :
+
+			// Start cannot be empty
 			case ( is_null( $this->dtstart ) ) :
 
-			// Duration & count
+			// Duration time cannot be negative (0 is "no end")
+			case ( ! is_null( $this->duration_time ) && ( 0 > $this->duration_time ) ) :
+
+			// Duration cannot compete with End
 			case ( ! empty( $this->duration ) && ! is_null( $this->dtend ) ) :
+
+			// Count cannot compete with End Date
 			case ( ! empty( $this->count    ) && ! is_null( $this->until ) ) :
 
-			// Timezone & Frequency
-			case ( empty( $this->timezone ) ) :
-			case ( empty( $this->freq     ) ) :
-
-			// Duration time
-			case ( ! is_null( $this->duration_time ) && ( 0 >= $this->duration_time ) ) :
-
-			// By
+			// By week not for Yearly frequency
 			case ( ! empty( $this->byweekno   ) && ( 'YEARLY' !== $this->freq ) ) :
+
+			// By month day not for Weekly frequency
 			case ( ! empty( $this->bymonthday ) && ( 'WEEKLY' === $this->freq ) ) :
+
+			// By year day not for Daily, Weekly, or Monthly frequencies
 			case ( ! empty( $this->byyearday  ) && in_array( $this->freq, array( 'DAILY', 'WEEKLY', 'MONTHLY' ), true ) ) :
 				$this->error = true;
 		}
@@ -825,14 +1059,17 @@ class Recur {
 
 						// Compute dates for each expansion in set
 						foreach ( $expansion_set as $expansion ) {
-							if ( ! empty( $this->{$expansion} ) ) {
 
-								// Function
-								$func = 'expand_' . $expansion;
-
-								// Add to result dates
-								$result_dates[] = call_user_func( array( $this, $func ), $date );
+							// Skip if no expansion
+							if ( empty( $this->{$expansion} ) ) {
+								continue 1;
 							}
+
+							// Function
+							$func = 'expand_' . $expansion;
+
+							// Add to result dates
+							$result_dates[] = call_user_func( array( $this, $func ), $date );
 						}
 
 						// No expansions done - continue to next set
@@ -844,8 +1081,11 @@ class Recur {
 						$this->merge_set( $expanded_dates, $result_dates );
 					}
 
+					// Set dates
+					$dates = $expanded_dates;
+
 					// Skip to next interval if no dates
-					if ( ! $dates = $expanded_dates ) {
+					if ( empty( $dates ) ) {
 						continue 2;
 					}
 				}
@@ -877,7 +1117,7 @@ class Recur {
 
 				// Apply bysetpos
 				if ( ! empty( $this->bysetpos ) ) {
-					$this->limit_bysetpos( $limited_dates );
+					$limited_dates = $this->limit_bysetpos( $limited_dates );
 				}
 
 				// Apply exdate
@@ -885,8 +1125,11 @@ class Recur {
 					$limited_dates = array_diff( $limited_dates, $this->exdate );
 				}
 
+				// Set dates
+				$dates = $limited_dates;
+
 				// Skip to next interval if no dates
-				if ( ! $dates = $limited_dates ) {
+				if ( empty( $dates ) ) {
 					continue;
 				}
 
@@ -896,7 +1139,7 @@ class Recur {
 				// Loop through dates
 				foreach ( $dates as $date ) {
 
-					// Check range
+					// Out of range
 					if ( ! is_null( $this->before ) && ( $date > $this->before ) ) {
 						continue;
 					}
@@ -910,8 +1153,11 @@ class Recur {
 					$limited_dates[] = $date;
 				}
 
+				// Set dates
+				$dates = $limited_dates;
+
 				// Skip to next interval if no dates
-				if ( ! $dates = $limited_dates ) {
+				if ( empty( $dates ) ) {
 					continue;
 				}
 			}
@@ -1024,11 +1270,7 @@ class Recur {
 
 		// Calculate dtend from DURATION
 		if ( ! empty( $duration ) ) {
-			$this->datetime = new \DateTime( '@' . $start );
-			$this->datetime->setTimezone( $this->timezone );
-			$this->datetime->add( $duration );
-
-			$retval[ 'dtend' ] = $this->datetime->format( $this->format );
+			$retval[ 'dtend' ] = $this->date( $this->format, $start, $duration );
 
 		// Calculate dtend from rdate end
 		} elseif ( ! empty( $end ) ) {
@@ -1037,6 +1279,10 @@ class Recur {
 		// Calculate dtend from duration time
 		} elseif ( ! empty( $duration_time ) ) {
 			$retval[ 'dtend' ] = $this->date( $this->format, $start + $duration_time );
+
+		// Default to "no end" and use dtstart
+		} else {
+			$retval[ 'dtend' ] = $retval[ 'dtstart' ];
 		}
 
 		// The original value of the "DTSTART" property of the recurrence instance
@@ -1064,7 +1310,9 @@ class Recur {
 	 * by the interval, relative to the recurring frequency.
 	 */
 	protected function next_interval() {
-		list( $Y, $m, $d, $H, $i, $s ) = $this->explode( 'Y-m-d-H-i-s', '-', $this->current_date );
+
+		// Get date values
+		list( $Y, $m, $d, $H, $i, $s ) = $this->date_explode( 'Y-m-d-H-i-s', '-', $this->current_date );
 
 		switch ( $this->freq ) {
 			case 'YEARLY' :
@@ -1140,12 +1388,12 @@ class Recur {
 			case 'YEARLY' :
 				$year_details = $this->get_year_details( $this->date( 'Y', $this->current_date ) );
 
-				if ( ! empty( $this->byweekno ) && $year_details[ 'week_start' ] < $year_details[ 'start' ] ) {
-					$start = $year_details[ 'week_start' ];
-				} else {
-					$start = $year_details[ 'start' ];
-				}
+				// Get start
+				$start = ! empty( $this->byweekno ) && ( $year_details[ 'week_start' ] < $year_details[ 'start' ] )
+					? $year_details[ 'week_start' ]
+					: $year_details[ 'start' ];
 
+				// Bail if out of range
 				if ( $start > $this->before ) {
 					return true;
 				}
@@ -1153,10 +1401,14 @@ class Recur {
 				break;
 
 			case 'MONTHLY' :
-				list( $Y, $m ) = $this->explode( 'Y-m', '-', $this->current_date );
 
+				// Get date values
+				list( $Y, $m ) = $this->date_explode( 'Y-m', '-', $this->current_date );
+
+				// Get month details
 				$month_details = $this->get_month_details( $m, $Y );
 
+				// Bail if out of range
 				if ( $month_details[ 'start' ] > $this->before ) {
 					return true;
 				}
@@ -1164,10 +1416,14 @@ class Recur {
 				break;
 
 			case 'WEEKLY' :
-				list( $Y, $z ) = $this->explode( 'Y-z', '-', $this->current_date );
 
+				// Get date values
+				list( $Y, $z ) = $this->date_explode( 'Y-z', '-', $this->current_date );
+
+				// Get week details
 				$week_details = $this->get_week_details( $z, $Y );
 
+				// Bail if out of range
 				if ( $week_details[ 'start' ] > $this->before ) {
 					return true;
 				}
@@ -1175,10 +1431,13 @@ class Recur {
 				break;
 
 			case 'DAILY' :
-				list( $Y, $m, $d ) = $this->explode( 'Y-m-d', '-', $this->current_date );
+
+				// Get date values
+				list( $Y, $m, $d ) = $this->date_explode( 'Y-m-d', '-', $this->current_date );
 
 				$day_start = $this->mktime( 0, 0, 0, $m, $d, $Y );
 
+				// Bail if out of range
 				if ( $day_start > $this->before ) {
 					return true;
 				}
@@ -1186,10 +1445,13 @@ class Recur {
 				break;
 
 			case 'HOURLY' :
-				list( $Y, $m, $d, $H ) = $this->explode( 'Y-m-d-H', '-', $this->current_date );
+
+				// Get date values
+				list( $Y, $m, $d, $H ) = $this->date_explode( 'Y-m-d-H', '-', $this->current_date );
 
 				$hour_start = $this->mktime( $H, 0, 0, $m, $d, $Y );
 
+				// Bail if out of range
 				if ( $hour_start > $this->before ) {
 					return true;
 				}
@@ -1197,10 +1459,13 @@ class Recur {
 				break;
 
 			case 'MINUTELY' :
-				list( $Y, $m, $d, $H, $i ) = $this->explode( 'Y-m-d-H-i', '-', $this->current_date );
+
+				// Get date values
+				list( $Y, $m, $d, $H, $i ) = $this->date_explode( 'Y-m-d-H-i', '-', $this->current_date );
 
 				$minute_start = $this->mktime( $H, $i, 0, $m, $d, $Y );
 
+				// Bail if out of range
 				if ( $minute_start > $this->before ) {
 					return true;
 				}
@@ -1208,12 +1473,16 @@ class Recur {
 				break;
 
 			case 'SECONDLY' :
+
+				// Bail if out of range
 				if ( $this->current_date > $this->before ) {
 					return true;
 				}
 
 				break;
 		}
+
+		// Return
 		return false;
 	}
 
@@ -1239,12 +1508,12 @@ class Recur {
 			case 'YEARLY' :
 				$year_details = $this->get_year_details( $this->date( 'Y', $this->current_date ) );
 
-				if ( ! empty( $this->byweekno ) && ( $year_details[ 'week_end' ] > $year_details[ 'end' ] ) ) {
-					$end = $year_details[ 'week_end' ];
-				} else {
-					$end = $year_details[ 'end' ];
-				}
+				// Get end
+				$end = ! empty( $this->byweekno ) && ( $year_details[ 'week_end' ] > $year_details[ 'end' ] )
+					? $year_details[ 'week_end' ]
+					: $year_details[ 'end' ];
 
+				// Bail if not in range
 				if ( $end < $this->after ) {
 					return true;
 				}
@@ -1252,10 +1521,14 @@ class Recur {
 				break;
 
 			case 'MONTHLY' :
-				list( $Y, $m ) = $this->explode( 'Y-m', '-', $this->current_date );
 
+				// Get date values
+				list( $Y, $m ) = $this->date_explode( 'Y-m', '-', $this->current_date );
+
+				// Get month details
 				$month_details = $this->get_month_details( $m, $Y );
 
+				// Bail if not in range
 				if ( $month_details[ 'end' ] < $this->after ) {
 					return true;
 				}
@@ -1263,10 +1536,14 @@ class Recur {
 				break;
 
 			case 'WEEKLY' :
-				list( $Y, $z ) = $this->explode( 'Y-z', '-', $this->current_date );
 
+				// Get date values
+				list( $Y, $z ) = $this->date_explode( 'Y-z', '-', $this->current_date );
+
+				// Get week details
 				$week_details = $this->get_week_details( $z, $Y );
 
+				// Bail if not in range
 				if ( $week_details[ 'end' ] < $this->after ) {
 					return true;
 				}
@@ -1274,10 +1551,13 @@ class Recur {
 				break;
 
 			case 'DAILY' :
-				list( $Y, $m, $d ) = $this->explode( 'Y-m-d', '-', $this->current_date );
+
+				// Get date values
+				list( $Y, $m, $d ) = $this->date_explode( 'Y-m-d', '-', $this->current_date );
 
 				$day_end = $this->mktime( 23, 59, 59, $m, $d, $Y );
 
+				// Bail if not in range
 				if ( $day_end < $this->after ) {
 					return true;
 				}
@@ -1285,10 +1565,13 @@ class Recur {
 				break;
 
 			case 'HOURLY' :
-				list( $Y, $m, $d, $H ) = $this->explode( 'Y-m-d-H', '-', $this->current_date );
+
+				// Get date values
+				list( $Y, $m, $d, $H ) = $this->date_explode( 'Y-m-d-H', '-', $this->current_date );
 
 				$hour_end = $this->mktime( $H, 59, 59, $m, $d, $Y );
 
+				// Bail if not in range
 				if ( $hour_end < $this->after ) {
 					return true;
 				}
@@ -1296,10 +1579,13 @@ class Recur {
 				break;
 
 			case 'MINUTELY' :
-				list( $Y, $m, $d, $H, $i ) = $this->explode( 'Y-m-d-H-i', '-', $this->current_date );
+
+				// Get date values
+				list( $Y, $m, $d, $H, $i ) = $this->date_explode( 'Y-m-d-H-i', '-', $this->current_date );
 
 				$minute_end = $this->mktime( $H, $i, 59, $m, $d, $Y );
 
+				// Bail if not in range
 				if ( $minute_end < $this->after ) {
 					return true;
 				}
@@ -1307,6 +1593,8 @@ class Recur {
 				break;
 
 			case 'SECONDLY' :
+
+				// Bail if not in range
 				if ( $this->current_date < $this->after ) {
 					return true;
 				}
@@ -1314,6 +1602,7 @@ class Recur {
 				break;
 		}
 
+		// Return
 		return false;
 	}
 
@@ -1346,7 +1635,7 @@ class Recur {
 	/** Expanders *************************************************************/
 
 	/**
-	 * Expand BYMONTH rule
+	 * Expand BYMONTH rule.
 	 *
 	 * @param int $date
 	 * @return array
@@ -1356,7 +1645,8 @@ class Recur {
 		// Default return value
 		$dates = array();
 
-		list( $Y, $d, $H, $i, $s, $L ) = $this->explode( 'Y-d-H-i-s-L', '-', $date );
+		// Get date values
+		list( $Y, $d, $H, $i, $s, $L ) = $this->date_explode( 'Y-d-H-i-s-L', '-', $date );
 
 		// Last day for each month
 		$limit = array( '', 31, $L
@@ -1396,7 +1686,7 @@ class Recur {
 	}
 
 	/**
-	 * Expand BYWEEKNO rule
+	 * Expand BYWEEKNO rule.
 	 *
 	 * @param int $date
 	 * @return array
@@ -1406,7 +1696,8 @@ class Recur {
 		// Default return value
 		$dates = array();
 
-		list( $Y, $m, $H, $i, $s ) = $this->explode( 'Y-m-H-i-s', '-', $date );
+		// Get date values
+		list( $Y, $m, $H, $i, $s ) = $this->date_explode( 'Y-m-H-i-s', '-', $date );
 
 		// Results are limited to current year
 		$year[ $Y ] = $this->get_year_details( $Y );
@@ -1429,8 +1720,8 @@ class Recur {
 
 		// Take weekday from dtstart if day part NOT defined by rule
 		if ( empty( $this->byyearday ) && empty( $this->bymonthday ) && empty( $this->byday ) ) {
-			$days    = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
-			$weekday = $days[ $this->date( 'w', $this->dtstart ) ];
+			$dow     = $this->date( 'w', $this->dtstart );
+			$weekday = self::DAYS[ $dow ];
 
 			// Position of the weekday (depends on wkst)
 			$pos_weekday = array_search( $weekday, $this->wkst_seq, true );
@@ -1500,7 +1791,7 @@ class Recur {
 	}
 
 	/**
-	 * Expand BYYEARDAY rule
+	 * Expand BYYEARDAY rule.
 	 *
 	 * @param int $date
 	 * @return array
@@ -1510,8 +1801,10 @@ class Recur {
 		// Default return value
 		$dates = array();
 
-		list( $Y, $m, $z, $H, $i, $s, $L ) = $this->explode( 'Y-m-z-H-i-s-L', '-', $date );
+		// Get date values
+		list( $Y, $m, $z, $H, $i, $s, $L ) = $this->date_explode( 'Y-m-z-H-i-s-L', '-', $date );
 
+		// Get number of year days
 		$number_of_days = $this->year_days( $L );
 
 		// Results are limited to current year
@@ -1520,14 +1813,19 @@ class Recur {
 
 		// Previous applied BYMONTH limits the result
 		if ( ! empty( $this->bymonth ) ) {
+
+			// Get month details
 			$month_details = $this->get_month_details( $m, $Y );
 
+			// Get start & end
 			$start = $month_details[ 'start' ];
 			$end   = $month_details[ 'end' ];
 		}
 
 		// Previous applied BYWEEKNO limits the result
 		if ( ! empty( $this->byweekno ) ) {
+
+			// Get week details
 			$week_details = $this->get_week_details( $z, $Y );
 
 			if ( $start < $week_details[ 'start' ] ) {
@@ -1546,6 +1844,7 @@ class Recur {
 				$day = $number_of_days + $day + 1;
 			}
 
+			// Get timestamp
 			$date = $this->mktime( $H, $i, $s, 1, $day, $Y );
 
 			// Skip day if date out of range
@@ -1570,7 +1869,7 @@ class Recur {
 	}
 
 	/**
-	 * Expand BYMONTHDAY rule
+	 * Expand BYMONTHDAY rule.
 	 *
 	 * @param int $date
 	 * @return array
@@ -1580,8 +1879,10 @@ class Recur {
 		// Default return value
 		$dates = array();
 
-		list( $Y, $m, $z, $H, $i, $s ) = $this->explode( 'Y-m-z-H-i-s', '-', $date );
+		// Get date values
+		list( $Y, $m, $z, $H, $i, $s ) = $this->date_explode( 'Y-m-z-H-i-s', '-', $date );
 
+		// Get month details
 		$month[ $m ] = $this->get_month_details( $m, $Y );
 
 		// Results are limited to current year
@@ -1597,6 +1898,7 @@ class Recur {
 		// Previous applied BYWEEKNO limits the result
 		if ( ! empty( $this->byweekno ) ) {
 
+			// Get week details
 			$week_details = $this->get_week_details( $z, $Y );
 
 			if ( $start < $week_details[ 'start' ] ) {
@@ -1610,9 +1912,11 @@ class Recur {
 			// If no BYMONTH specified, consider overlapping months too
 			if ( empty( $this->bymonth ) ) {
 
+				// Get next month details
 				if ( $month[ $m ][ 'end' ] < $end ) {
 					$month[ $m + 1 ] = $this->get_month_details( $m + 1, $Y );
 
+				// Get previous month details
 				} elseif ( $month[ $m ][ 'start' ] > $start ) {
 					$month[ $m - 1 ] = $this->get_month_details( $m - 1, $Y );
 				}
@@ -1634,6 +1938,7 @@ class Recur {
 					$day = $month_details[ 'number_of_days' ] + $day + 1;
 				}
 
+				// Get timestamp
 				$date = $this->mktime( $H, $i, $s, $m, $day, $Y );
 
 				// Skip day if day out of range
@@ -1659,7 +1964,7 @@ class Recur {
 	}
 
 	/**
-	 * Expand BYDAY rule
+	 * Expand BYDAY rule.
 	 *
 	 * @param int $date
 	 * @return array
@@ -1672,19 +1977,25 @@ class Recur {
 		// Special expand for WEEKLY
 		if ( ! empty( $this->byweekno ) || ( 'WEEKLY' === $this->freq ) ) {
 
-			list( $Y, $m, $z, $H, $i, $s ) = $this->explode( 'Y-m-z-H-i-s', '-', $date );
+			// Get date values
+			list( $Y, $m, $z, $H, $i, $s ) = $this->date_explode( 'Y-m-z-H-i-s', '-', $date );
 
 			// Previous applied BYMONTH limits the result
 			if ( ! empty( $this->bymonth ) ) {
+
+				// Get month details
 				$month_details = $this->get_month_details( $m, $Y );
 
+				// Get start & end
 				$start = $month_details[ 'start' ];
 				$end   = $month_details[ 'end' ];
 			}
 
+			// Get week details
 			$week_details = $this->get_week_details( $z, $Y );
 
-			list( $Y, $m, $d ) = $this->explode( 'Y-m-d', '-', $week_details[ 'start' ] );
+			// Get date values
+			list( $Y, $m, $d ) = $this->date_explode( 'Y-m-d', '-', $week_details[ 'start' ] );
 
 			// Apply BYDAY
 			foreach ( $this->byday as $option ) {
@@ -1696,6 +2007,8 @@ class Recur {
 
 				// Position of day from week start
 				$pos  = array_search( $option[ 'weekday' ], $this->wkst_seq, true );
+
+				// Get timestamp
 				$date = $this->mktime( $H, $i, $s, $m, $d + $pos, $Y );
 
 				// Skip day if start out of range
@@ -1720,10 +2033,12 @@ class Recur {
 		}
 
 		// Special expand for MONTHLY
-		if ( 'MONTHLY' === $this->freq || $this->bymonth ) {
+		if ( ! empty( $this->bymonth ) || ( 'MONTHLY' === $this->freq ) ) {
 
-			list( $Y, $m, $H, $i, $s ) = $this->explode( 'Y-m-H-i-s', '-', $date );
+			// Get date values
+			list( $Y, $m, $H, $i, $s ) = $this->date_explode( 'Y-m-H-i-s', '-', $date );
 
+			// Get month details
 			$month_details = $this->get_month_details( $m, $Y );
 
 			// Apply BYDAY
@@ -1755,11 +2070,9 @@ class Recur {
 				}
 
 				// Merge day by position
-				if ( $option[ 'pos' ] < 0 ) {
-					$dates[] = $all_days[ count( $all_days ) + $option[ 'pos' ] ];
-				} else {
-					$dates[] = $all_days[ $option[ 'pos' ] - 1 ];
-				}
+				$dates[] = ( $option[ 'pos' ] < 0 )
+					? $all_days[ count( $all_days ) + $option[ 'pos' ] ]
+					: $all_days[ $option[ 'pos' ] - 1 ];
 			}
 
 			// Sort dates numerically
@@ -1772,8 +2085,10 @@ class Recur {
 		// Special expand for YEARLY
 		if ( 'YEARLY' === $this->freq ) {
 
-			list( $Y, $H, $i, $s ) = $this->explode( 'Y-H-i-s', '-', $date );
+			// Get date values
+			list( $Y, $H, $i, $s ) = $this->date_explode( 'Y-H-i-s', '-', $date );
 
+			// Get year details
 			$year_details = $this->get_year_details( $Y );
 
 			// Apply BYDAY
@@ -1805,11 +2120,9 @@ class Recur {
 				}
 
 				// Merge day by position
-				if ( $option[ 'pos' ] < 0 ) {
-					$dates[] = $all_days[ count( $all_days ) + $option[ 'pos' ] ];
-				} else {
-					$dates[] = $all_days[ $option[ 'pos' ] - 1 ];
-				}
+				$dates[] = ( $option[ 'pos' ] < 0 )
+					? $all_days[ count( $all_days ) + $option[ 'pos' ] ]
+					: $all_days[ $option[ 'pos' ] - 1 ];
 			}
 
 			// Sort dates numerically
@@ -1821,7 +2134,7 @@ class Recur {
 	}
 
 	/**
-	 * Expand BYHOUR rule
+	 * Expand BYHOUR rule.
 	 *
 	 * @param int $date
 	 * @return array
@@ -1831,7 +2144,8 @@ class Recur {
 		// Default return value
 		$dates = array();
 
-		list( $Y, $m, $d, $i, $s ) = $this->explode( 'Y-m-d-i-s', '-', $date );
+		// Get date values
+		list( $Y, $m, $d, $i, $s ) = $this->date_explode( 'Y-m-d-i-s', '-', $date );
 
 		// Loop through hours
 		foreach ( $this->byhour as $hour ) {
@@ -1846,7 +2160,7 @@ class Recur {
 	}
 
 	/**
-	 * Expand BYMINUTE rule
+	 * Expand BYMINUTE rule.
 	 *
 	 * @param int $date
 	 * @return array
@@ -1856,7 +2170,8 @@ class Recur {
 		// Default return value
 		$dates = array();
 
-		list( $Y, $m, $d, $H, $s ) = $this->explode( 'Y-m-d-H-s', '-', $date );
+		// Get date values
+		list( $Y, $m, $d, $H, $s ) = $this->date_explode( 'Y-m-d-H-s', '-', $date );
 
 		// Loop through minutes
 		foreach ( $this->byminute as $minute ) {
@@ -1871,7 +2186,7 @@ class Recur {
 	}
 
 	/**
-	 * Expand BYSECOND rule
+	 * Expand BYSECOND rule.
 	 *
 	 * @param int $date
 	 * @return array
@@ -1881,7 +2196,8 @@ class Recur {
 		// Default return value
 		$dates = array();
 
-		list( $Y, $m, $d, $H, $i ) = $this->explode( 'Y-m-d-H-i', '-', $date );
+		// Get date values
+		list( $Y, $m, $d, $H, $i ) = $this->date_explode( 'Y-m-d-H-i', '-', $date );
 
 		// Loop through seconds
 		foreach ( $this->bysecond as $second ) {
@@ -1898,7 +2214,7 @@ class Recur {
 	/** Limits ****************************************************************/
 
 	/**
-	 * Limit BYMONTH rule
+	 * Limit BYMONTH rule.
 	 *
 	 * @param int $timestamp
 	 * @return bool
@@ -1914,49 +2230,66 @@ class Recur {
 	}
 
 	/**
-	 * Limit BYYEARDAY rule
+	 * Limit BYYEARDAY rule.
 	 *
 	 * @param int $timestamp
 	 * @return bool
 	 */
 	protected function limit_byyearday( $timestamp = 0 ) {
-		list( $z, $L ) = $this->explode( 'z-L', '-', $timestamp );
 
-		if ( in_array( $z + 1, $this->byyearday, true ) ) {
+		// Get date values
+		list( $z, $L ) = $this->date_explode( 'z-L', '-', $timestamp );
+
+		// Cast to int
+		$haystack = array_map( 'intval', $this->byyearday );
+
+		// Return if matched
+		if ( in_array( $z + 1, $haystack, true ) ) {
 			return true;
 		}
 
+		// Get number of year days
 		$number_of_days = $this->year_days( $L );
 
-		if ( in_array( $z - $number_of_days, $this->byyearday, true ) ) {
+		// Return if matched
+		if ( in_array( $z - $number_of_days, $haystack, true ) ) {
 			return true;
 		}
 
+		// Return
 		return false;
 	}
 
 	/**
-	 * Limit BYMONTHDAY rule
+	 * Limit BYMONTHDAY rule.
 	 *
 	 * @param int $timestamp
 	 * @return bool
 	 */
 	protected function limit_bymonthday( $timestamp = 0 ) {
-		list( $j, $t ) = $this->explode( 'j-t', '-', $timestamp );
 
-		if ( in_array( $j, $this->bymonthday, true ) ) {
+		// Get date values
+		list( $j, $t ) = $this->date_explode( 'j-t', '-', $timestamp );
+
+		// Cast to int
+		$haystack = array_map( 'intval', $this->bymonthday );
+
+		// Return if matched
+		if ( in_array( $j, $haystack, true ) ) {
 			return true;
 		}
 
-		if ( in_array( $j - $t - 1, $this->bymonthday, true ) ) {
+		// Return if matched
+		if ( in_array( $j - $t - 1, $haystack, true ) ) {
 			return true;
 		}
 
+		// Return
 		return false;
 	}
 
 	/**
-	 * Limit BYDAY rule
+	 * Limit BYDAY rule.
 	 *
 	 * @param int $timestamp
 	 * @return bool
@@ -1968,12 +2301,11 @@ class Recur {
 			$byday[] = $option[ 'pos' ] . $option[ 'weekday' ];
 		}
 
-		$days = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
-
-		list( $w, $j, $z, $t, $L ) = $this->explode( 'w-j-z-t-L', '-', $timestamp );
+		// Get date values
+		list( $w, $j, $z, $t, $L ) = $this->date_explode( 'w-j-z-t-L', '-', $timestamp );
 
 		// Check weekday without position
-		if ( in_array( $days[ $w ], $byday ) ) {
+		if ( in_array( self::DAYS[ $w ], $byday, true ) ) {
 			return true;
 		}
 
@@ -1981,38 +2313,45 @@ class Recur {
 		if ( ! empty( $this->bymonth ) ) {
 			$try = ceil( $j / 7 );
 
-			if ( in_array( $try . $days[ $w ], $byday ) ) {
+			// Return if matched
+			if ( in_array( $try . self::DAYS[ $w ], $byday, true ) ) {
 				return true;
 			}
 
 			$try = ceil( ( $t - $j + 1 ) / 7 ) * -1;
 
-			if ( in_array( $try . $days[ $w ], $byday ) ) {
+			// Return if matched
+			if ( in_array( $try . self::DAYS[ $w ], $byday, true ) ) {
 				return true;
 			}
 
 		// Check position relative to year
 		} else {
+
+			// Get number of year days
 			$number_of_days = $this->year_days( $L );
 
 			$try = ceil( ( $z + 1 ) / 7 );
 
-			if ( in_array( $try . $days[ $w ], $byday ) ) {
+			// Return if matched
+			if ( in_array( $try . self::DAYS[ $w ], $byday, true ) ) {
 				return true;
 			}
 
 			$try = ceil( ( $number_of_days - $z ) / 7 ) * -1;
 
-			if ( in_array( $try . $days[ $w ], $byday ) ) {
+			// Return if matched
+			if ( in_array( $try . self::DAYS[ $w ], $byday, true ) ) {
 				return true;
 			}
 		}
 
+		// Return
 		return false;
 	}
 
 	/**
-	 * Limit BYHOUR rule
+	 * Limit BYHOUR rule.
 	 *
 	 * @param int $timestamp
 	 * @return bool
@@ -2028,7 +2367,7 @@ class Recur {
 	}
 
 	/**
-	 * Limit BYMINUTE rule
+	 * Limit BYMINUTE rule.
 	 *
 	 * @param int $timestamp
 	 * @return bool
@@ -2044,31 +2383,41 @@ class Recur {
 	}
 
 	/**
-	 * Limit BYSETPOS rule
+	 * Limit BYSETPOS rule.
 	 *
-	 * @param int $timestamp
-	 * @return bool
+	 * @param array $limited_dates
+	 * @return array
 	 */
-	protected function limit_bysetpos( & $limited_dates = array() ) {
+	protected function limit_bysetpos( $limited_dates = array() ) {
+
+		// Default return value
+		$retval = array();
+
+		// Get date count
 		$num = count( $limited_dates );
 
+		// Loop through positions
 		foreach ( $this->bysetpos as $pos ) {
+
+			// Reposition if negative...
 			if ( $pos < 0 ) {
 				$pos = $num + $pos + 1;
 			}
 
-			$result[] = $limited_dates[ $pos - 1 ];
+			// Add limited date to return value
+			$retval[] = $limited_dates[ $pos - 1 ];
 		}
 
-		$limited_dates = $result;
+		// Return
+		return $retval;
 	}
 
 	/** Details ***************************************************************/
 
 	/**
-	 * Get some details for a specific week, given a day and year
+	 * Get some details for a specific week, given a day and year.
 	 *
-	 * These details are internally cached to avoid rework
+	 * These details are internally cached to avoid rework.
 	 *
 	 * @param int $day
 	 * @param int $year
@@ -2081,12 +2430,17 @@ class Recur {
 			return $this->cached_details[ 'week' ][ $year ][ $day ];
 		}
 
+		// Get year details
 		$year_details = $this->get_year_details( $year );
 
 		// Difference to 1st week in year
-		$week_diff = floor( ( $day - $year_details[ 'week_offset' ]) / 7 );
-		$start     = $this->mktime( 0,  0,  0,  1, 1 + $year_details[ 'week_offset' ] + $week_diff * 7,     $year );
-		$end       = $this->mktime( 23, 59, 59, 1, 1 + $year_details[ 'week_offset' ] + $week_diff * 7 + 6, $year );
+		$week_diff = floor( ( $day - $year_details[ 'week_offset' ] ) / 7 );
+
+		// Get start of week
+		$start = $this->mktime( 0,  0,  0,  1, 1 + $year_details[ 'week_offset' ] + $week_diff * 7,     $year );
+
+		// Get end of week
+		$end   = $this->mktime( 23, 59, 59, 1, 1 + $year_details[ 'week_offset' ] + $week_diff * 7 + 6, $year );
 
 		// Setup the return value
 		$retval = $this->cached_details[ 'week' ][ $year ][ $day ] = array(
@@ -2099,9 +2453,9 @@ class Recur {
 	}
 
 	/**
-	 * Get some details for a specific month, given a month and year
+	 * Get some details for a specific month, given a month and year.
 	 *
-	 * These details are internally cached to avoid rework
+	 * These details are internally cached to avoid rework.
 	 *
 	 * @param int $month
 	 * @param int $year
@@ -2114,19 +2468,17 @@ class Recur {
 			return $this->cached_details[ 'month' ][ $year ][ $month ];
 		}
 
+		// Get start of month
 		$start = $this->mktime( 0, 0, 0, $month, 1, $year );
 
-		list( $number_of_days, $w ) = $this->explode( 't-w', '-', $start );
+		// Get date values
+		list( $number_of_days, $w ) = $this->date_explode( 't-w', '-', $start );
 
+		// Get end of month
 		$end = $this->mktime( 23, 59, 59, $month, $number_of_days, $year );
 
 		// Weekday order at month start / end
-		$start_seq     = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
-		$first_weekday = $start_seq[ $w ];
-
-		while ( $first_weekday !== $start_seq[ 0 ] ) {
-			$start_seq[] = array_shift( $start_seq );
-		}
+		$start_seq = $this->weekday_order( $w );
 
 		// Setup the return value
 		$retval = $this->cached_details[ 'month' ][ $year ][ $month ] = array(
@@ -2141,9 +2493,9 @@ class Recur {
 	}
 
 	/**
-	 * Get some details for a specific year, given year
+	 * Get some details for a specific year, given year.
 	 *
-	 * These details are internally cached to avoid rework
+	 * These details are internally cached to avoid rework.
 	 *
 	 * @param int $month
 	 * @param int $year
@@ -2156,42 +2508,40 @@ class Recur {
 			return $this->cached_details[ 'year' ][ $year ];
 		}
 
+		// Get start of year
 		$start = $this->mktime( 0,  0,  0,  1,  1,  $year );
+
+		// Get end of year
 		$end   = $this->mktime( 23, 59, 59, 12, 31, $year );
 
-		list( $L, $w ) = $this->explode( 'L-w', '-', $start );
+		// Get date values
+		list( $L, $w ) = $this->date_explode( 'L-w', '-', $start );
 
+		// Get number of year days
 		$number_of_days = $this->year_days( $L );
 
 		// Weekday order at year start / end
-		$start_seq     = $end_seq = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
-		$first_weekday = $start_seq[ $w ];
-		$last_weekday  = $start_seq[ $this->date( 'w', $end ) ];
+		$start_seq = $this->weekday_order( $w );
+		$end_seq   = $this->weekday_order( $this->date( 'w', $end ) );
 
-		while ( $first_weekday !== $start_seq[ 0 ] ) {
-			$start_seq[] = array_shift( $start_seq );
-		}
-
-		while ( $last_weekday !== $end_seq[ 6 ] ) {
-			$end_seq[] = array_shift( $end_seq );
-		}
+		// Get start week position
+		$start_pos = array_search( $this->wkst, $start_seq );
 
 		// Week offset (negative = 1st week begins december)
-		if ( ( $pos = array_search( $this->wkst, $start_seq ) ) < 4 ) {
-			$week_offset = $pos;
-		} else {
-			$week_offset = $pos - 7;
-		}
+		$week_offset = ( $start_pos < 4 )
+			? $start_pos
+			: $start_pos - 7;
+
+		// Get end week position
+		$end_pos = array_search( $this->wkst, $end_seq );
 
 		// Last week offset (negative = last week ends january)
-		if ( ( $pos = array_search( $this->wkst, $end_seq ) ) < 4 ) {
-			$last_week_offset = 0 - $pos;
-		} else {
-			$last_week_offset = 7 - $pos;
-		}
+		$last_week_offset = ( $end_pos < 4 )
+			? 0 - $end_pos
+			: 7 - $end_pos;
 
 		// Number of calendar weeks
-		$number_of_weeks = round( ( $number_of_days - $week_offset - $last_week_offset) / 7 );
+		$number_of_weeks = round( ( $number_of_days - $week_offset - $last_week_offset ) / 7 );
 
 		// Start of first week
 		$week_start = $this->mktime( 0, 0, 0, 1, 1 + $week_offset, $year );
@@ -2240,7 +2590,7 @@ class Recur {
 			$this->datetime->setTime( $hour, $min, $sec );
 			$this->datetime->setDate( $year, $mon, $day );
 
-		// Bail if failure
+		// Bail if error
 		} catch ( \Exception $e ) {
 			return false;
 		}
@@ -2252,17 +2602,53 @@ class Recur {
 	/**
 	 * DateTime and DateTimeZone aware wrapper for strtotime().
 	 *
-	 * @param int $time
+	 * @param string $datetime
 	 * @return mixed
 	 */
-	protected function strtotime( $time = '' ) {
+	protected function strtotime( $datetime = '' ) {
+
+		// Try to get the DateTime
 		try {
-			$this->datetime = new \DateTime( $time, $this->timezone );
+			$this->datetime = new \DateTime( $datetime, $this->timezone );
+
+		// Bail if error
 		} catch ( \Exception $e ) {
 			return false;
 		}
 
+		// Return unix timestamp
 		return $this->datetime->format( 'U' );
+	}
+
+	/**
+	 * DateTime and DateTimeZone aware wrapper for date().
+	 *
+	 * @param string $format
+	 * @param int    $timestamp
+	 * @param mixed  $add
+	 * @return mixed
+	 */
+	protected function date( $format = '', $timestamp = 0, $add = null ) {
+
+		// Try to get the DateTime
+		try {
+			$this->datetime = new \DateTime( '@' . $timestamp );
+
+		// Bail if error
+		} catch ( \Exception $e ) {
+			return false;
+		}
+
+		// Set the time zone
+		$this->datetime->setTimezone( $this->timezone );
+
+		// Maybe add
+		if ( ! is_null( $add ) && ( $add instanceof \DateInterval ) ) {
+			$this->datetime->add( $add );
+		}
+
+		// Return, formatted
+		return $this->datetime->format( $format );
 	}
 
 	/**
@@ -2274,35 +2660,8 @@ class Recur {
 	 * @param int    $timestamp
 	 * @return array
 	 */
-	protected function explode( $format = '', $delimiter = '', $timestamp = 0 ) {
-		try {
-			$this->datetime = new \DateTime( '@' . $timestamp );
-		} catch ( \Exception $e ) {
-			return false;
-		}
-
-		$this->datetime->setTimezone( $this->timezone );
-
-		return explode( $delimiter, $this->datetime->format( $format ) );
-	}
-
-	/**
-	 * DateTime and DateTimeZone aware wrapper for date().
-	 *
-	 * @param string $format
-	 * @param int    $timestamp
-	 * @return mixed
-	 */
-	protected function date( $format = '', $timestamp = 0 ) {
-		try {
-			$this->datetime = new \DateTime( '@' . $timestamp );
-		} catch ( \Exception $e ) {
-			return false;
-		}
-
-		$this->datetime->setTimezone( $this->timezone );
-
-		return $this->datetime->format( $format );
+	protected function date_explode( $format = '', $delimiter = '', $timestamp = 0 ) {
+		return explode( $delimiter, $this->date( $format, $timestamp ) );
 	}
 
 	/** Private ***************************************************************/
@@ -2332,10 +2691,44 @@ class Recur {
 
 		// Loop through and
 		foreach ( $args as $key => $value ) {
-			$retval[ strtolower( $key ) ] = $value;
+			$retval[ strtolower( $key ) ] = trim( $value );
 		}
 
 		// Return
 		return $retval;
+	}
+
+	/**
+	 * Get a week sequence.
+	 *
+	 * @param int $day_of_week
+	 * @return array
+	 */
+	private function weekday_order( $day_of_week = 0 ) {
+
+		// Get all week days
+		$week = self::DAYS;
+
+		// Day of week
+		$day  = $week[ $day_of_week ];
+
+		// Loop through days and shift them
+		while ( $day !== $week[ 0 ] ) {
+			$week[] = array_shift( $week );
+		}
+
+		// Return
+		return $week;
+	}
+
+	/**
+	 * Trims to prevent empties, and explodes.
+	 *
+	 * @param string $delimiter
+	 * @param string $string
+	 * @return array
+	 */
+	private function safe_explode( $delimiter = ',', $string = '' ) {
+		return explode( $delimiter, rtrim( $string, $delimiter ) );
 	}
 }

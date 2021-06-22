@@ -1023,7 +1023,7 @@ class Recur {
 			}
 
 			// Bail if current date not in range
-			if ( empty( $this->sequence ) && $this->not_in_range() ) {
+			if ( $this->not_in_range() ) {
 				continue;
 			}
 

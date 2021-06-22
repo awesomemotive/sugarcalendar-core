@@ -365,7 +365,7 @@ class Recur {
 	 *
 	 * @var array
 	 */
-	protected const DAYS = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
+	const DAYS = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
 
 	/** Methods ***************************************************************/
 

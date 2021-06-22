@@ -838,6 +838,10 @@ class Recur {
 			} else {
 				$this->duration_time = ( $this->dtend - $this->dtstart );
 			}
+
+		// No end
+		} else {
+			$this->duration_time = 0;
 		}
 
 		// Recur date exists
@@ -1209,9 +1213,11 @@ class Recur {
 			! in_array( $this->dtstart, $this->exdate, true )
 		) {
 
-			$start    =& $this->dtstart;
-			$end      =& $this->dtend;
-			$duration =& $this->duration;
+			// Set vars
+			$start         =& $this->dtstart;
+			$end           =& $this->dtend;
+			$duration      =& $this->duration;
+			$duration_time =& $this->duration_time;
 
 		// Get RDATE
 		} elseif (
@@ -1255,8 +1261,11 @@ class Recur {
 			return $this->next();
 		}
 
+		// End date time
+		$end_date_time = $start + $duration_time;
+
 		// Not in range
-		if ( ! is_null( $this->after ) && ( $start < $this->after ) ) {
+		if ( ! is_null( $this->after ) && ( $end_date_time < $this->after ) ) {
 			$this->current_count++;
 
 			// Done, done, onto the next one...
@@ -1278,7 +1287,7 @@ class Recur {
 
 		// Calculate dtend from duration time
 		} elseif ( ! empty( $duration_time ) ) {
-			$retval[ 'dtend' ] = $this->date( $this->format, $start + $duration_time );
+			$retval[ 'dtend' ] = $this->date( $this->format, $end_date_time );
 
 		// Default to "no end" and use dtstart
 		} else {
@@ -1498,15 +1507,18 @@ class Recur {
 			return false;
 		}
 
+		// End might be in range, so use it
+		$end_date_time = $this->current_date + $this->duration_time;
+
 		// Bail if no expansions - check current date only
-		if ( empty( $this->expansion_count ) && ( $this->current_date < $this->after ) ) {
+		if ( empty( $this->expansion_count ) && ( $end_date_time < $this->after ) ) {
 			return true;
 		}
 
 		// Check range of possible expansions
 		switch ( $this->freq ) {
 			case 'YEARLY' :
-				$year_details = $this->get_year_details( $this->date( 'Y', $this->current_date ) );
+				$year_details = $this->get_year_details( $this->date( 'Y', $end_date_time ) );
 
 				// Get end
 				$end = ! empty( $this->byweekno ) && ( $year_details[ 'week_end' ] > $year_details[ 'end' ] )
@@ -1523,7 +1535,7 @@ class Recur {
 			case 'MONTHLY' :
 
 				// Get date values
-				list( $Y, $m ) = $this->date_explode( 'Y-m', '-', $this->current_date );
+				list( $Y, $m ) = $this->date_explode( 'Y-m', '-', $end_date_time );
 
 				// Get month details
 				$month_details = $this->get_month_details( $m, $Y );
@@ -1538,7 +1550,7 @@ class Recur {
 			case 'WEEKLY' :
 
 				// Get date values
-				list( $Y, $z ) = $this->date_explode( 'Y-z', '-', $this->current_date );
+				list( $Y, $z ) = $this->date_explode( 'Y-z', '-', $end_date_time );
 
 				// Get week details
 				$week_details = $this->get_week_details( $z, $Y );
@@ -1553,7 +1565,7 @@ class Recur {
 			case 'DAILY' :
 
 				// Get date values
-				list( $Y, $m, $d ) = $this->date_explode( 'Y-m-d', '-', $this->current_date );
+				list( $Y, $m, $d ) = $this->date_explode( 'Y-m-d', '-', $end_date_time );
 
 				$day_end = $this->mktime( 23, 59, 59, $m, $d, $Y );
 
@@ -1567,7 +1579,7 @@ class Recur {
 			case 'HOURLY' :
 
 				// Get date values
-				list( $Y, $m, $d, $H ) = $this->date_explode( 'Y-m-d-H', '-', $this->current_date );
+				list( $Y, $m, $d, $H ) = $this->date_explode( 'Y-m-d-H', '-', $end_date_time );
 
 				$hour_end = $this->mktime( $H, 59, 59, $m, $d, $Y );
 
@@ -1581,7 +1593,7 @@ class Recur {
 			case 'MINUTELY' :
 
 				// Get date values
-				list( $Y, $m, $d, $H, $i ) = $this->date_explode( 'Y-m-d-H-i', '-', $this->current_date );
+				list( $Y, $m, $d, $H, $i ) = $this->date_explode( 'Y-m-d-H-i', '-', $end_date_time );
 
 				$minute_end = $this->mktime( $H, $i, 59, $m, $d, $Y );
 
@@ -1595,7 +1607,7 @@ class Recur {
 			case 'SECONDLY' :
 
 				// Bail if not in range
-				if ( $this->current_date < $this->after ) {
+				if ( $end_date_time < $this->after ) {
 					return true;
 				}
 

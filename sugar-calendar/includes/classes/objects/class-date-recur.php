@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class Recur {
 
-	/** Settings **************************************************************/
+	/** Arguments *************************************************************/
 
 	/**
 	 * The original array of arguments.
@@ -26,12 +26,7 @@ class Recur {
 	 */
 	public $args = array();
 
-	/**
-	 * True if error in properties found.
-	 *
-	 * @var bool
-	 */
-	public $error = false;
+	/** Settings **************************************************************/
 
 	/**
 	 * Return format.
@@ -357,6 +352,15 @@ class Recur {
 	 * @var array
 	 */
 	protected $cached_details = array();
+
+	/** Errors ****************************************************************/
+
+	/**
+	 * True if error found in arguments.
+	 *
+	 * @var bool
+	 */
+	public $error = false;
 
 	/** Constants *************************************************************/
 

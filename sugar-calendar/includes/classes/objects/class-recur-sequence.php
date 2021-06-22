@@ -2,9 +2,9 @@
 /**
  * Recurrence Utility
  *
- * @package Plugins/Site/Events/DateCollider
+ * @package Plugins/Site/Events/Utilities/Dates/Recur
  */
-namespace Sugar_Calendar\Utilities;
+namespace Sugar_Calendar\Utilities\Recur;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * See: https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.10
  */
-class Recur {
+class Sequence {
 
 	/** Arguments *************************************************************/
 

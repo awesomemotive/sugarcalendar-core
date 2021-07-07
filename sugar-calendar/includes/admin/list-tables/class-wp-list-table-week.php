@@ -44,7 +44,7 @@ class Week extends Base_List_Table {
 		$days       = array_values( $this->get_week_days() );
 		$first_day  = $days[ 0 ];
 		$last_day   = $days[ count( $days ) - 1 ];
-		$week_start = ( $this->start_of_week == gmdate( 'w', $this->today ) );
+		$week_start = ( $this->start_of_week === gmdate( 'w', $this->today ) );
 
 		// Reset the week
 		$where_is_thumbkin = ( true === $week_start )
@@ -85,7 +85,7 @@ class Week extends Base_List_Table {
 
 			// Link text
 			$string = esc_html_x( 'Week %s', 'Week number', 'sugar-calendar' );
-			$week   = gmdate( 'W', $this->today );
+			$week   = $this->get_week_for_timestamp( $this->today );
 			$text   = sprintf( $string, $week );
 
 			// Setup return value

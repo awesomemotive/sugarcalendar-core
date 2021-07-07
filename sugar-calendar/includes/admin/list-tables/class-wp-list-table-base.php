@@ -166,7 +166,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @var int
 	 */
-	protected $today = '';
+	protected $today = 0;
 
 	/**
 	 * The time zone for the current view
@@ -803,7 +803,7 @@ class Base_List_Table extends \WP_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return string
+	 * @return int
 	 */
 	protected function get_current_time() {
 		return sugar_calendar_get_request_time( 'timestamp', $this->timezone );
@@ -820,6 +820,19 @@ class Base_List_Table extends \WP_List_Table {
 	 */
 	protected function get_start_of_week( $start = '1' ) {
 		return (string) sugar_calendar_get_user_preference( 'sc_start_of_week', (string) $start );
+	}
+
+	/**
+	 * Get the ISO-8601 week number for a Unix timestamp
+	 *
+	 * @since 2.3.0
+	 *
+	 * @param int $timestamp
+	 *
+	 * @return string
+	 */
+	protected function get_week_for_timestamp( $timestamp = 0 ) {
+		return gmdate( 'W', strtotime( 'this thursday', (int) $timestamp ) );
 	}
 
 	/**

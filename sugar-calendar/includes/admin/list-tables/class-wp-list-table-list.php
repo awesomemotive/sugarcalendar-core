@@ -467,7 +467,7 @@ class Basic extends Base_List_Table {
 		if ( $item->is_all_day() ) {
 			$retval = esc_html__( 'All Day', 'sugar-calendar' );
 
-			// Maybe add duration if mulitple all-day days
+			// Maybe add duration if multiple all-day days
 			if ( $item->is_multi() ) {
 				$retval .= '<br>' . $this->get_human_diff_time( $item->start, $item->end );
 			}

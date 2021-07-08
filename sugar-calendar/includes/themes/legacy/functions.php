@@ -224,7 +224,7 @@ function sc_get_event_calendar_links( $events = array(), $size = 'small' ) {
 			// Big or small links
 			$link  = ( $size === 'small' )
 				? '<a href="' . esc_url( $url ) . '" class="' . esc_attr( $class ) . '" ' . $style . ' title="' . esc_attr( strip_tags( $title ) ) . '">&bull;</a>'
-				: '<a href="' . esc_url( $url ) . '" class="' . esc_attr( $class ) . '" ' . $style . '>' . esc_html( $title ) . '</a><br/>';
+				: '<a href="' . esc_url( $url ) . '" class="' . esc_attr( $class ) . '" ' . $style . '>' . esc_html( $title ) . '</a>';
 
 			// Add to links array
 			$links[] = apply_filters( 'sc_event_calendar_link', $link, $id, $size );

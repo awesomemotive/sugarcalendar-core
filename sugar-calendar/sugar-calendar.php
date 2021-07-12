@@ -319,6 +319,7 @@ final class Plugin {
 		// Events Helpers
 		require_once SC_PLUGIN_DIR . 'includes/classes/objects/class-wp-event-schema.php';
 		require_once SC_PLUGIN_DIR . 'includes/classes/objects/class-recur-sequence.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/objects/class-recur-text.php';
 
 		// Utilities
 		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/class-term-meta-ui.php';

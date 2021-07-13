@@ -8,6 +8,10 @@
 	text-indent: -9999px;
 }
 
+#sc_calendar_wrap {
+	position: relative;
+}
+
 #sc_calendar_wrap,
 #sc_calendar * {
 	-webkit-hyphens: none;
@@ -54,6 +58,8 @@
 #sc_calendar td.calendar-day {
 	background: rgba(255,255,255,0.1);
 	height: 70px;
+	padding: 0;
+	margin: 0;
 }
 
 #sc_calendar td.calendar-day-np {
@@ -141,6 +147,7 @@
 	line-height: 13px;
 	padding: 5px 10px;
 	vertical-align: initial;
+	width: auto;
 }
 
 #sc_events_calendar select,

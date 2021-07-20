@@ -19,6 +19,7 @@ defined( 'ABSPATH' ) || exit;
  * @param null $category
  * @param int $number
  * @param array $show
+ * @param string $order
  *
  * @return string
  */

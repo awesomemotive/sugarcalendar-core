@@ -19,13 +19,14 @@ defined( 'ABSPATH' ) || exit;
  * @param null $category
  * @param int $number
  * @param array $show
+ * @param string $order
  *
  * @return string
  */
 function sc_get_events_list( $display = 'upcoming', $category = null, $number = 5, $show = array(), $order = '' ) {
 
 	// Get today, to query before/after
-	$today = sugar_calendar_get_request_time( 'mysql' );
+	$now = sugar_calendar_get_request_time( 'mysql' );
 
 	// Mutate order to uppercase if not empty
 	if ( ! empty( $order ) ) {
@@ -51,7 +52,7 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 			'number'      => $number,
 			'end_query'   => array(
 				'inclusive' => true,
-				'after'     => $today
+				'after'     => $now
 			)
 		);
 
@@ -65,7 +66,7 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 			'number'      => $number,
 			'end_query'   => array(
 				'inclusive' => true,
-				'before'    => $today
+				'before'    => $now
 			)
 		);
 

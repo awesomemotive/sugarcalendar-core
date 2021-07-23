@@ -131,10 +131,10 @@ class Month extends Base_List_Table {
 		$year  = $start->format( 'Y' );
 
 		// Week for row
-		$week  = $start->format( 'W' );
+		$week  = $this->get_week_for_timestamp( $start->format( 'U' ) );
 
 		// Calculate link to week view
-		$link_to_day  = add_query_arg( array(
+		$link_to_day = add_query_arg( array(
 			'mode' => 'week',
 			'cy'   => $year,
 			'cm'   => $month,
@@ -148,7 +148,7 @@ class Month extends Base_List_Table {
 		);
 
 		// Is this the current week?
-		if ( gmdate( 'W', $this->now ) === $week ) {
+		if ( $this->get_week_for_timestamp( $this->now ) === $week ) {
 			$classes[] = 'this-week';
 		}
 

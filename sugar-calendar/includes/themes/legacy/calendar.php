@@ -134,9 +134,22 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 
 	do_action( 'sc_before_calendar' ); ?>
 
-	<div id="sc_events_calendar_<?php echo uniqid(); ?>" class="sc_events_calendar sc_<?php echo esc_attr( $size ); ?>">
-		<div id="sc_events_calendar_head" class="sc_clearfix">
-			<form id="sc_event_select" class="sc_events_form" method="POST" action="#sc_events_calendar_<?php echo uniqid(); ?>">
+	<div id="sc_events_calendar_<?php echo uniqid(); ?>" class="sc_clearfix sc_events_calendar sc_<?php echo esc_attr( $size ); ?>">
+		<div id="sc_events_calendar_head" class="sc_clearfix"><?php
+
+			// Show header if not small size
+			if ( 'small' !== $size ) :
+
+				?><h2 id="sc_calendar_title"><?php
+
+					echo esc_html( $months[ $display_month ] . ' ' . $display_year );
+
+				?></h2><?php
+
+			endif;
+
+			// Output filter form
+			?><form id="sc_event_select" class="sc_events_form" method="POST" action="#sc_events_calendar_<?php echo uniqid(); ?>">
 
 				<label for="sc_month" style="display:none"><?php esc_html_e( 'Month', 'sugar-calendar' ); ?></label>
 				<select class="sc_month" name="sc_month" id="sc_month"><?php
@@ -175,23 +188,24 @@ function sc_get_events_calendar( $size = 'large', $category = null, $type = 'mon
 				<?php endif; ?>
 			</form>
 
-			<?php if ( 'small' !== $size ) : ?>
+			<?php if ( 'small' !== $size ) :
 
-				<h2 id="sc_calendar_title"><?php
-					echo esc_html( $months[ $display_month ] . ' ' . $display_year );
-				?></h2>
+				sc_get_next_prev( $display_time, $size, $category, $type, $start_of_week );
 
-				<?php sc_get_next_prev( $display_time, $size, $category, $type, $start_of_week );
 			endif; ?>
 
 		</div><!--end #sc_events_calendar_head-->
 
-		<div id="sc_calendar">
-			<?php echo call_user_func( $calendar_func, $display_time, $size, $category, $start_of_week ); ?>
-		</div>
+		<div id="sc_calendar"><?php
+
+			echo call_user_func( $calendar_func, $display_time, $size, $category, $start_of_week );
+
+		?></div>
 
 		<?php if ( 'small' === $size ) :
+
 			sc_get_next_prev( $display_time, $size, $category, $type, $start_of_week );
+
 		endif; ?>
 
 	</div><!-- end #sc_events_calendar -->

@@ -568,20 +568,89 @@ class sc_event_filter_widget extends WP_Widget {
 			echo $before_title . $title . $after_title;
 		}
 
+		// Current
+		$current = ' class="current"';
+
+		// Filtering?
+		$display = ! empty( $_GET['event-display'] )
+			? sanitize_key( $_GET['event-display'] )
+			: false;
+
+		// Defaults
+		if ( false === $display ) {
+			$is_upcoming    = '';
+			$is_in_progress = '';
+			$is_past        = '';
+			$is_all         = $current;
+
+		// Custom
+		} else {
+
+			// Upcoming?
+			$is_upcoming = ( 'upcoming' === $display )
+				? $current
+				: '';
+
+			// In-progress?
+			$is_in_progress = ( 'in-progress' === $display )
+				? $current
+				: '';
+
+			// Past?
+			$is_past = ( 'past' === $display )
+				? $current
+				: '';
+
+			// All?
+			$is_all = empty( $is_upcoming ) && empty( $is_in_progress ) && empty( $is_past )
+				? $current
+				: '';
+		}
+
+		// Order?
+		$order = ! empty( $_GET['event-order'] )
+			? sanitize_key( $_GET['event-order'] )
+			: false;
+
+		// Defaults
+		if ( false === $order ) {
+			$is_asc  = '';
+			$is_desc = $current;
+
+		// Custom
+		} else {
+
+			// Ascending?
+			$is_asc = ( 'asc' === $order )
+				? $current
+				: '';
+
+			// Descending?
+			$is_desc = ( 'desc' === $order )
+				? $current
+				: '';
+		}
+
+		// Before
 		do_action( 'sc_before_filter_widget' );
 
+		// Filters
 		echo '<ul class="sc_events_filter">';
-		echo '<li class="sc_event_filter"><a href="' . remove_query_arg( 'event-display' ) . '">' . esc_html__( 'View all events', 'sugar-calendar' ) . '</a></li>';
-		echo '<li class="sc_event_filter"><a href="' . add_query_arg( 'event-display', 'upcoming' ) . '">' . esc_html__( 'View upcoming events', 'sugar-calendar' ) . '</a></li>';
-		echo '<li class="sc_event_filter"><a href="' . add_query_arg( 'event-display', 'past' ) . '">' . esc_html__( 'View past events', 'sugar-calendar' ) . '</a></li>';
+		echo '<li class="sc_event_filter"><a href="' . esc_url( add_query_arg( 'event-display', 'upcoming'    ) ) . '"' . $is_upcoming    . '>' . esc_html__( 'Upcoming events',    'sugar-calendar' ) . '</a></li>';
+		echo '<li class="sc_event_filter"><a href="' . esc_url( add_query_arg( 'event-display', 'in-progress' ) ) . '"' . $is_in_progress . '>' . esc_html__( 'In-progress events', 'sugar-calendar' ) . '</a></li>';
+		echo '<li class="sc_event_filter"><a href="' . esc_url( add_query_arg( 'event-display', 'past'        ) ) . '"' . $is_past        . '>' . esc_html__( 'Past events',        'sugar-calendar' ) . '</a></li>';
+		echo '<li class="sc_event_filter"><a href="' . esc_url( remove_query_arg( 'event-display' ) ) . '"' . $is_all . '>' . esc_html__( 'All events', 'sugar-calendar' ) . '</a></li>';
 		echo '<li class="sc_event_filter sc_event_order">';
+
+		// Order
 		echo '<span class="sc_event_order_label">' . esc_html__( 'Order:', 'sugar-calendar' ) . '</span>&nbsp;';
-		echo '<a href="' . add_query_arg( 'event-order', 'asc' ) . '">' . esc_html__( 'ASC', 'sugar-calendar' ) . '</a>';
+		echo '<a href="' . esc_url( add_query_arg( 'event-order', 'desc' ) ) . '"' . $is_desc . '>' . esc_html__( 'Newest first', 'sugar-calendar' ) . '</a>';
 		echo '<span class="sc_event_order_sep"> - </span>';
-		echo '<a href="' . add_query_arg( 'event-order', 'desc' ) . '">' . esc_html__( 'DESC', 'sugar-calendar' ) . '</a>';
+		echo '<a href="' . esc_url( add_query_arg( 'event-order', 'asc'  ) ) . '"' . $is_asc  . '>' . esc_html__( 'Oldest first', 'sugar-calendar' ) . '</a>';
 		echo '</li>';
 		echo '</ul>';
 
+		// After
 		do_action( 'sc_after_filter_widget' );
 
 		echo $after_widget;

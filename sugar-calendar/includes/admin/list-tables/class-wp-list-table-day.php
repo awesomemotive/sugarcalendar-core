@@ -88,7 +88,7 @@ class Day extends Base_List_Table {
 
 		// Link text
 		$string = esc_html_x( 'Week %s', 'Week number', 'sugar-calendar' );
-		$week   = gmdate( 'W', $this->today );
+		$week   = $this->get_week_for_timestamp( $this->today );
 		$text   = sprintf( $string, $week );
 
 		// Return Week & Day

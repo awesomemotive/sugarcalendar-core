@@ -42,8 +42,26 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 		$order = 'ASC';
 	}
 
+	// In-Progress
+	if ( 'in-progress' === $display ) {
+		$args = array(
+			'object_type' => 'post',
+			'status'      => 'publish',
+			'orderby'     => 'start',
+			'order'       => $order,
+			'number'      => $number,
+			'start_query'   => array(
+				'inclusive' => true,
+				'after'     => $now
+			),
+			'end_query'   => array(
+				'inclusive' => true,
+				'before'    => $now
+			)
+		);
+
 	// Upcoming
-	if ( 'upcoming' === $display ) {
+	} elseif ( 'upcoming' === $display ) {
 		$args = array(
 			'object_type' => 'post',
 			'status'      => 'publish',
@@ -135,7 +153,7 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 			echo '<span class="sc_event_date">' . $date_tag . '</span>';
 		}
 
-		if ( isset( $show['time'] ) && $show['time'] ) {
+		if ( ! empty( $show['time'] ) ) {
 			$start_time = sc_get_event_start_time( $event_id );
 			$end_time   = sc_get_event_end_time( $event_id );
 			$tf         = sc_get_time_format();

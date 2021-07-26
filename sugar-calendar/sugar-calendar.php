@@ -398,9 +398,24 @@ final class Plugin {
 		// Legacy
 		require_once SC_PLUGIN_DIR . 'includes/admin/settings.php';
 
-		// Maybe include front-end on AJAX or add/edit post page to load
-		// shortcodes, widgets, and more...
-		if ( wp_doing_ajax() || ( ! empty( $GLOBALS['pagenow'] ) && ( 'post.php' === $GLOBALS['pagenow'] ) ) ) {
+		// Maybe include front-end on AJAX, add/edit post page, or widgets, to
+		// load all shortcodes, widgets, assets, etc...
+		if (
+
+			// Admin AJAX
+			wp_doing_ajax()
+
+			||
+
+			// Specific admin pages
+			(
+				! empty( $GLOBALS['pagenow'] )
+
+				&&
+
+				in_array( $GLOBALS['pagenow'], array( 'post.php', 'widgets.php' ), true )
+			)
+		) {
 			$this->include_frontend();
 		}
 	}
@@ -417,7 +432,6 @@ final class Plugin {
 		require_once SC_PLUGIN_DIR . 'includes/themes/legacy/calendar.php';
 		require_once SC_PLUGIN_DIR . 'includes/themes/legacy/event-display.php';
 		require_once SC_PLUGIN_DIR . 'includes/themes/legacy/events-list.php';
-		require_once SC_PLUGIN_DIR . 'includes/themes/legacy/scripts.php';
 	}
 
 	/**

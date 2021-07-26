@@ -46,8 +46,16 @@ function sc_modify_events_archive( $query = false ) {
 		// Events table alias
 		$alias = 'sce';
 
-		// Get today, to query before/after
-		$today = gmdate( 'Y-m-d 00:00:00' );
+		// Get timezone
+		$timezone = sugar_calendar_get_timezone_object( sc_get_timezone() );
+
+		// Get time, to query before/after/in-progress
+		$time = ! empty( $_GET['event-time'] )
+			? absint( urldecode( $_GET['event-time'] ) )
+			: gmdate( 'Y-m-d H:i:s' );
+
+		// Get datetime
+		$datetime = sugar_calendar_get_datetime_object( $time, 'UTC', $timezone );
 
 		// Display argument
 		$display_arg = ! empty( $_GET[ 'event-display' ] )
@@ -73,11 +81,11 @@ function sc_modify_events_archive( $query = false ) {
 		$query->set( 'post_type', $post_type );
 
 		// Custom query args
-		$query->set( '_sc_alias',   $alias       );
-		$query->set( '_sc_today',   $today       );
-		$query->set( '_sc_object',  $post_type   );
-		$query->set( '_sc_order',   $order_arg   );
-		$query->set( '_sc_display', $display_arg );
+		$query->set( '_sc_datetime', $datetime    );
+		$query->set( '_sc_alias',    $alias       );
+		$query->set( '_sc_object',   $post_type   );
+		$query->set( '_sc_order',    $order_arg   );
+		$query->set( '_sc_display',  $display_arg );
 
 		// Add query filters
 		add_filter( 'posts_where',   'sc_modify_events_archive_where',   10, 2 );
@@ -103,23 +111,32 @@ function sc_modify_events_archive( $query = false ) {
  */
 function sc_modify_events_archive_where( $where = '', $query = false ) {
 
-	// Get the query args
-	$alias   = $query->get( '_sc_alias' );
-	$today   = $query->get( '_sc_today' );
-	$display = $query->get( '_sc_display' );
+	// Get the alias
+	$alias = $query->get( '_sc_alias' );
 
-	// Bail if no var
+	// Bail if no alias
 	if ( empty( $alias ) ) {
 		return $where;
 	}
 
-	// Upcoming
-	if ( 'upcoming' === $display ) {
-		$where .= " AND {$alias}.start >= '{$today}'";
+	// Get the other args
+	$datetime = $query->get( '_sc_datetime' );
+	$display  = $query->get( '_sc_display' );
 
-	// Past
+	// Get the time
+	$time     = $datetime->format( 'Y-m-d H:i:s' );
+
+	// In-Progress
+	if ( 'in-progress' === $display ) {
+		$where .= " AND ( {$alias}.start <= '{$time}' AND {$alias}.end >= '{$time}' )";
+
+	// Upcoming (includes in-progress)
+	} elseif ( 'upcoming' === $display ) {
+		$where .= " AND {$alias}.end >= '{$time}'";
+
+	// Past (excludes in-progress)
 	} elseif ( 'past' === $display ) {
-		$where .= " AND {$alias}.start <= '{$today}'";
+		$where .= " AND {$alias}.end <= '{$time}'";
 	}
 
 	// Return new where
@@ -141,14 +158,16 @@ function sc_modify_events_archive_where( $where = '', $query = false ) {
 function sc_modify_events_archive_join( $join = '', $query = false ) {
 	global $wpdb;
 
-	// Get the query args
+	// Get the alias arg
 	$alias = $query->get( '_sc_alias' );
-	$pt    = $query->get( '_sc_object' );
 
 	// Bail if no var
 	if ( empty( $alias ) ) {
 		return $join;
 	}
+
+	// Get the object type
+	$pt    = $query->get( '_sc_object' );
 
 	// Add a right join
 	$join .= " RIGHT JOIN {$wpdb->sc_events} AS {$alias} ON ({$wpdb->posts}.ID = {$alias}.object_id AND {$alias}.object_type = 'post' AND {$alias}.object_subtype = '{$pt}')";
@@ -171,14 +190,16 @@ function sc_modify_events_archive_join( $join = '', $query = false ) {
  */
 function sc_modify_events_archive_orderby( $orderby = '', $query = false ) {
 
-	// Get the query args
+	// Get the alias arg
 	$alias = $query->get( '_sc_alias' );
-	$order = $query->get( '_sc_order' );
 
 	// Bail if no var
 	if ( empty( $alias ) ) {
 		return $orderby;
 	}
+
+	// Get the order arg
+	$order   = $query->get( '_sc_order' );
 
 	// Replace orderby
 	$orderby = "{$alias}.start {$order}";

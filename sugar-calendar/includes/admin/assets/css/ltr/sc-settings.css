@@ -387,6 +387,7 @@ button.sc-license-refresh {
 	border-radius: 3px;
 }
 
+.sc-sortable-list li,
 .sc-sortable-list li label {
 	cursor: move;
 }

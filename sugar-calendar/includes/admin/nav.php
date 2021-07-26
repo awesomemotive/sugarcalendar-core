@@ -99,7 +99,7 @@ function get( $navs = array(), $selected = false ) {
 	}
 
 	// Maybe default to first nav item key
-	if ( empty( $selected ) ) {
+	if ( empty( $selected ) || empty( $navs[ $selected ] ) ) {
 		$selected = array_key_first( $navs );
 	}
 

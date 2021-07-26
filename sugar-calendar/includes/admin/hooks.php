@@ -88,6 +88,11 @@ add_action( 'load-edit.php', __NAMESPACE__ . '\\Posts\\redirect_old_post_type' )
 add_action( 'wp_ajax_sc_date_format', __NAMESPACE__ . '\\Settings\\ajax_date_format' );
 add_action( 'wp_ajax_sc_time_format', __NAMESPACE__ . '\\Settings\\ajax_time_format' );
 
+// Settings
+add_action( 'sugar_calendar_settings_page_top',      __NAMESPACE__ . '\\Settings\\save_notice' );
+add_action( 'sugar_calendar_settings_page_bottom',   __NAMESPACE__ . '\\Settings\\sidebar' );
+add_filter( 'sugar_calendar_settings_wrapper_class', __NAMESPACE__ . '\\Settings\\filter_wrapper_class' );
+
 // Get the page ID
 $sc_admin_page = sugar_calendar_get_admin_page_id();
 

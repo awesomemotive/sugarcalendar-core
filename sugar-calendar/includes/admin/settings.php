@@ -200,7 +200,7 @@ function validate_section( $section = 'main' ) {
 function registered_section( $section = 'main' ) {
 
 	// Bail if empty section
-	if ( ! empty( $section ) ) {
+	if ( empty( $section ) ) {
 		return false;
 	}
 

@@ -199,11 +199,16 @@ function validate_section( $section = 'main' ) {
  */
 function registered_section( $section = 'main' ) {
 
+	// Bail if empty section
+	if ( ! empty( $section ) ) {
+		return false;
+	}
+
 	// Get all sections
 	$sections = get_sections();
 
 	// Get return value
-	$retval   = ! empty( $section ) && ! empty( $sections[ $section ] );
+	$retval   = ! empty( $sections[ $section ] );
 
 	// Return
 	return $retval;
@@ -333,8 +338,8 @@ function get_default_subsection() {
  */
 function registered_subsection( $section = 'main', $subsection = 'main' ) {
 
-	// Bail if no parent section
-	if ( ! registered_section( $section ) ) {
+	// Bail if empty subsection or no parent section
+	if ( empty( $subsection ) || ! registered_section( $section ) ) {
 		return false;
 	}
 
@@ -342,7 +347,7 @@ function registered_subsection( $section = 'main', $subsection = 'main' ) {
 	$subs   = get_subsections( $section );
 
 	// Get return value
-	$retval = ! empty( $subsection ) && ! empty( $subs[ $subsection ] );
+	$retval = ! empty( $subs[ $subsection ] );
 
 	// Return
 	return $retval;

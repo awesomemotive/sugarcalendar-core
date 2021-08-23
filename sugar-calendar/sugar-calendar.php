@@ -316,13 +316,10 @@ final class Plugin {
 		require_once SC_PLUGIN_DIR . 'includes/classes/database/events/class-table-events.php';
 		require_once SC_PLUGIN_DIR . 'includes/classes/database/events/class-table-eventmeta.php';
 
-		// Events Helpers
-		require_once SC_PLUGIN_DIR . 'includes/classes/objects/class-wp-event-schema.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/objects/class-recur-sequence.php';
-
 		// Utilities
 		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/class-term-meta-ui.php';
 		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/ical-to-array.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/ical-rrule-sequencer.php';
 
 		// Terms
 		require_once SC_PLUGIN_DIR . 'includes/classes/terms/class-term-colors.php';

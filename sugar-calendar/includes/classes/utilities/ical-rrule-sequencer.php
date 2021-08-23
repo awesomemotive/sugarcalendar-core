@@ -1,10 +1,10 @@
 <?php
 /**
- * Recurrence Utility
+ * Recurrence RRULE Utility
  *
- * @package Plugins/Site/Events/Utilities/Dates/Recur
+ * @package iCalendar/Utilities/RRULE
  */
-namespace Sugar_Calendar\Utilities\Recur;
+namespace Sugar_Calendar\Utilities\iCalendar\Recur;
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
@@ -624,7 +624,7 @@ class Sequence {
 				// FREQUENCY
 				case 'freq' :
 
-					// Force to uppercase
+					// Convert to uppercase
 					$this->freq = strtoupper( $value );
 
 					// Valid frequencies
@@ -641,7 +641,7 @@ class Sequence {
 				case 'count' :
 				case 'interval' :
 
-					// Force to absolute integer
+					// Cast to integer
 					$this->{$key} = (int) $value;
 
 					// Invalid
@@ -654,7 +654,7 @@ class Sequence {
 				// WKST
 				case 'wkst' :
 
-					// Force to uppercase
+					// Convert to uppercase
 					$this->wkst = strtoupper( $value );
 
 					// Invalid
@@ -818,7 +818,7 @@ class Sequence {
 			$this->before = $this->until;
 		}
 
-		// Disable skipping
+		// Enable sequencing if counting / after
 		if ( ! is_null( $this->count ) || is_null( $this->after ) ) {
 			$this->sequence = true;
 		}

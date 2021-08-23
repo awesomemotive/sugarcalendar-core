@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sugar Calendar (Lite) 2.2.3\n"
 "Report-Msgid-Bugs-To: https://sugarcalendar.com\n"
-"POT-Creation-Date: 2021-07-23 15:53:18+00:00\n"
+"POT-Creation-Date: 2021-08-23 17:42:19+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1242,27 +1242,27 @@ msgstr ""
 msgid "Upgrade Now!"
 msgstr ""
 
-#: sugar-calendar/includes/admin/upgrades.php:40
+#: sugar-calendar/includes/admin/upgrades.php:41
 msgid "Sugar Calendar Upgrades"
 msgstr ""
 
-#: sugar-calendar/includes/admin/upgrades.php:44
+#: sugar-calendar/includes/admin/upgrades.php:45
 msgid ""
 "The upgrade process has begun. Please be patient. You will be redirected "
 "when it is finished."
 msgstr ""
 
-#: sugar-calendar/includes/admin/upgrades.php:47
+#: sugar-calendar/includes/admin/upgrades.php:48
 msgid "Step %d of %d..."
 msgstr ""
 
-#: sugar-calendar/includes/admin/upgrades.php:129
+#: sugar-calendar/includes/admin/upgrades.php:130
 msgid ""
 "Sugar Calendar needs to upgrade the events database. Click <a "
 "href=\"%s\">here</a> to start."
 msgstr ""
 
-#: sugar-calendar/includes/admin/upgrades.php:136
+#: sugar-calendar/includes/admin/upgrades.php:137
 msgid ""
 "Sugar Calendar needs to perform an upgrade. Click <a href=\"%s\">here</a> "
 "to start."

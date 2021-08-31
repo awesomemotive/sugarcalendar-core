@@ -4,7 +4,7 @@
  *
  * @package     Database
  * @subpackage  Table
- * @copyright   Copyright (c) 2020
+ * @copyright   Copyright (c) 2021
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.0
  */
@@ -355,7 +355,7 @@ abstract class Table extends Base {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @return array
+	 * @return mixed Array on success, False on failure
 	 */
 	public function columns() {
 

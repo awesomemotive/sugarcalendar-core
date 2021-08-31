@@ -297,24 +297,24 @@ final class Plugin {
 	private function include_lite() {
 
 		// Database Engine
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/class-base.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/class-table.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/class-query.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/class-column.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/class-row.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/class-schema.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/Base.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/Table.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/Query.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/Column.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/Row.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/Schema.php';
 
 		// Database Queries
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/queries/class-meta.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/queries/class-compare.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/queries/class-date.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/Queries/Meta.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/Queries/Compare.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/engine/Queries/Date.php';
 
 		// Events Databases
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/events/class-query.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/events/class-row.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/events/class-schema.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/events/class-table-events.php';
-		require_once SC_PLUGIN_DIR . 'includes/classes/database/events/class-table-eventmeta.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/events/Query.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/events/Row.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/events/Schema.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/events/TableEvents.php';
+		require_once SC_PLUGIN_DIR . 'includes/classes/database/events/TableEventmeta.php';
 
 		// Utilities
 		require_once SC_PLUGIN_DIR . 'includes/classes/utilities/class-term-meta-ui.php';

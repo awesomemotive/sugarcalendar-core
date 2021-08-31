@@ -197,7 +197,7 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 
 			if ( $event_categories ) {
 				$categories = wp_list_pluck( $event_categories, 'name' );
-				echo '<span class="sc_event_categories">' . implode( $categories, ', ' ) . '</span>';
+				echo '<span class="sc_event_categories">' . implode( ', ', $categories ) . '</span>';
 			}
 		}
 

@@ -375,13 +375,8 @@ function do_20_migration() {
 			$all_day = false;
 
 			// Format the start & end
-			$start = gmdate( 'Y-m-d H:i:s', $start );
-			$end   = gmdate( 'Y-m-d H:i:s', $end   );
-
-			// Sanitize start & end to prevent data entry errors
-			$start_date_time = \Sugar_Calendar\Admin\Editor\Meta\sanitize_start( $start, $end, $all_day );
-			$end_date_time   = \Sugar_Calendar\Admin\Editor\Meta\sanitize_end( $end, $start, $all_day );
-			$all_day         = \Sugar_Calendar\Admin\Editor\Meta\sanitize_all_day( $all_day, $start, $end );
+			$start_date_time = gmdate( 'Y-m-d H:i:s', $start );
+			$end_date_time   = gmdate( 'Y-m-d H:i:s', $end   );
 
 			// Recurring
 			$recur_type = get_post_meta( $post->ID, 'sc_event_recurring', true );

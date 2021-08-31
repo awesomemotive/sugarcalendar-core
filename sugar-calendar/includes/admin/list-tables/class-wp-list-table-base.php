@@ -3533,7 +3533,7 @@ class Base_List_Table extends \WP_List_Table {
 			if ( 'day' === $this->get_mode() ) : ?>
 
 				<label for="cd" class="screen-reader-text"><?php esc_html_e( 'Set the day', 'sugar-calendar' ); ?></label>
-				<input type="number" name="cd" id="cd" value="<?php echo (int) $this->day; ?>" size="2">
+				<input type="number" name="cd" id="cd" value="<?php echo (int) $this->day; ?>" size="2" step="1" min="1" max="31">
 
 			<?php
 
@@ -3548,12 +3548,12 @@ class Base_List_Table extends \WP_List_Table {
 			if ( 'list' === $this->get_mode() ) : ?>
 
 				<label for="cystart" class="screen-reader-text"><?php esc_html_e( 'Set the first year', 'sugar-calendar' ); ?></label>
-				<input type="number" name="cystart" id="cystart" value="<?php echo (int) $this->get_start_year(); ?>">
+				<input type="number" name="cystart" id="cystart" value="<?php echo (int) $this->get_start_year(); ?>" size="4" step="1" min="101" max="9999">
 
 				<span><?php esc_html_e( 'to', 'sugar-calendar' ); ?></span>
 
 				<label for="cy" class="screen-reader-text"><?php esc_html_e( 'Set the last year', 'sugar-calendar' ); ?></label>
-				<input type="number" name="cy" id="cy" value="<?php echo (int) $this->get_year(); ?>">
+				<input type="number" name="cy" id="cy" value="<?php echo (int) $this->get_year(); ?>" size="4" step="1" min="101" max="9999">
 
 			<?php
 
@@ -3561,7 +3561,7 @@ class Base_List_Table extends \WP_List_Table {
 			else : ?>
 
 				<label for="cy" class="screen-reader-text"><?php esc_html_e( 'Set the year', 'sugar-calendar' ); ?></label>
-				<input type="number" name="cy" id="cy" value="<?php echo (int) $this->year; ?>">
+				<input type="number" name="cy" id="cy" value="<?php echo (int) $this->year; ?>" size="4" step="1" min="101" max="9999">
 
 			<?php endif; ?>
 

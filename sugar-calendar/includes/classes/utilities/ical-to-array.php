@@ -1,4 +1,9 @@
 <?php
+/**
+ * iCalendar Utility
+ *
+ * @package iCalendar/Utilities
+ */
 namespace Sugar_Calendar\Utilities\iCalendar;
 
 // Exit if accessed directly
@@ -1302,14 +1307,9 @@ class ToArray {
 	 */
 	protected function ical_date_to_unix( $ical_date = '' ) {
 
-		// Maybe strip the "T" for time
-		$ical_date = str_replace( 'T', '', $ical_date );
-
-		// Maybe strip the "Z" for time zone
-		$ical_date = str_replace( 'Z', '', $ical_date );
-
-		// Maybe strip out empty spaces, because some services seem to use them?
-		$ical_date = str_replace( ' ', '', $ical_date );
+		// Maybe strip the "T" for time, "Z" for time zone, and spaces
+		$to_strip = array( 'T', 'Z', ' ' );
+		$replace  = str_replace( $to_strip, '', $ical_date );
 
 		// The pattern to break the iCalendar date apart by
 		$pattern =    '/([0-9]{4})'
@@ -1323,7 +1323,7 @@ class ToArray {
 		$date = array();
 
 		// Split the string up into an array of date & time values
-		preg_match( $pattern, $ical_date, $date );
+		preg_match( $pattern, $replace, $date );
 
 		// Bail if the date array is empty
 		if ( empty( $date ) ) {
@@ -1338,8 +1338,8 @@ class ToArray {
 		// Do not allow negative values, because we do not support backwards time
 		$date = array_map( array( $this, 'sanitize_absint' ), $date );
 
-		// Convert date array to a Unix time
-		$time = gmmktime(
+		// Convert date array to GMT Unix time
+		$retval = gmmktime(
 			$date[ 4 ],
 			$date[ 5 ],
 			$date[ 6 ],
@@ -1349,7 +1349,7 @@ class ToArray {
 		);
 
 		// Return a newly made time value with the date array chunks
-		return $time;
+		return $retval;
 	}
 
 	/** File Cache ************************************************************/

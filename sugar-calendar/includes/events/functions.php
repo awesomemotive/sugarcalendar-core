@@ -275,8 +275,8 @@ function sugar_calendar_get_event_sequence( $event_id = 0, $after = null, $befor
 		// Filter arguments
 		$args = apply_filters( 'sugar_calendar_get_event_sequence_args', $args, $event, $after, $before, $timezone, $start_of_week );
 
-		// Initialize a Recur object
-		$recur = new \Sugar_Calendar\Utilities\Recur\Sequence( $args );
+		// Initialize a Sequence object
+		$recur = new \Sugar_Calendar\Utilities\iCalendar\Recur\Sequence( $args );
 
 		// Initialize counter
 		$n = 1;

@@ -4,7 +4,7 @@
  *
  * @package     Database
  * @subpackage  Column
- * @copyright   Copyright (c) 2020
+ * @copyright   Copyright (c) 2021
  * @license     https://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0.0
  */
@@ -52,7 +52,7 @@ class Column extends Base {
 	 * See: https://dev.mysql.com/doc/en/storage-requirements.html
 	 *
 	 * @since 1.0.0
-	 * @var   string
+	 * @var   mixed
 	 */
 	public $length = false;
 
@@ -299,7 +299,7 @@ class Column extends Base {
 	 * Use in conjunction with a database index for speedy queries.
 	 *
 	 * @since 1.0.0
-	 * @var   string
+	 * @var   bool
 	 */
 	public $cache_key = false;
 
@@ -374,7 +374,7 @@ class Column extends Base {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string|array $args {
+	 * @param array|string $args {
 	 *     Optional. Array or query string of order query parameters. Default empty.
 	 *
 	 *     @type string   $name           Name of database column
@@ -433,39 +433,39 @@ class Column extends Base {
 		$r = wp_parse_args( $args, array(
 
 			// Table
-			'name'       => '',
-			'type'       => '',
-			'length'     => '',
-			'unsigned'   => false,
-			'zerofill'   => false,
-			'binary'     => false,
-			'allow_null' => false,
-			'default'    => '',
-			'extra'      => '',
-			'encoding'   => $this->get_db()->charset,
-			'collation'  => $this->get_db()->collate,
-			'comment'    => '',
+			'name'          => '',
+			'type'          => '',
+			'length'        => '',
+			'unsigned'      => false,
+			'zerofill'      => false,
+			'binary'        => false,
+			'allow_null'    => false,
+			'default'       => '',
+			'extra'         => '',
+			'encoding'      => $this->get_db()->charset,
+			'collation'     => $this->get_db()->collate,
+			'comment'       => '',
 
 			// Query
-			'pattern'    => false,
-			'searchable' => false,
-			'sortable'   => false,
-			'date_query' => false,
-			'transition' => false,
-			'in'         => true,
-			'not_in'     => true,
+			'pattern'       => false,
+			'searchable'    => false,
+			'sortable'      => false,
+			'date_query'    => false,
+			'transition'    => false,
+			'in'            => true,
+			'not_in'        => true,
 
 			// Special
-			'primary'    => false,
-			'created'    => false,
-			'modified'   => false,
-			'uuid'       => false,
+			'primary'       => false,
+			'created'       => false,
+			'modified'      => false,
+			'uuid'          => false,
 
 			// Cache
-			'cache_key'  => false,
+			'cache_key'     => false,
 
 			// Validation
-			'validate'   => '',
+			'validate'      => '',
 
 			// Capabilities
 			'caps'          => array(),
@@ -664,8 +664,8 @@ class Column extends Base {
 	 * Sanitize the default value
 	 *
 	 * @since 1.0.0
-	 * @param string $default
-	 * @return string|null
+	 * @param int|string|null $default
+	 * @return int|string|null
 	 */
 	private function sanitize_default( $default = '' ) {
 
@@ -692,10 +692,10 @@ class Column extends Base {
 	 * Sanitize the pattern
 	 *
 	 * @since 1.0.0
-	 * @param mixed $pattern
+	 * @param string $pattern
 	 * @return string
 	 */
-	private function sanitize_pattern( $pattern = false ) {
+	private function sanitize_pattern( $pattern = '%s' ) {
 
 		// Allowed patterns
 		$allowed_patterns = array( '%s', '%d', '%f' );
@@ -811,7 +811,7 @@ class Column extends Base {
 			: 1;
 
 		// Only numbers and period
-		$value = preg_replace( '/[^0-9\.]/', '', (string) $value );
+		$value = (float) preg_replace( '/[^0-9\.]/', '', (string) $value );
 
 		// Format to number of decimals, and cast as float
 		$formatted = number_format( $value, $decimals, '.', '' );

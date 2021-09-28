@@ -361,7 +361,7 @@ module.exports = function( grunt ) {
 			// Shallow clone into /standard directory
 			standard: {
 				options: {
-					repository: 'git@github.com:sugarcalendar/standard.git',
+					repository: 'git@github.com:awesomemotive/sugarcalendar-standard.git',
 					branch: 'main',
 					directory: '<%= pkg.name %>/includes/standard',
 					depth: 1

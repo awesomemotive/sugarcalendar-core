@@ -88,6 +88,10 @@
 	box-shadow: none;
 }
 
+#sc_calendar td div.sc_day_div a * {
+	cursor: pointer;
+}
+
 #sc_events_calendar_head {
 	padding: 10px;
 	background: rgba(200,200,200,0.3);

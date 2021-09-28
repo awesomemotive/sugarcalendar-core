@@ -2,7 +2,7 @@
 
 [![Build status](https://badge.buildkite.com/80a91dff42e83fa09a0b68ed75b93c26920d619d46694d01c0.svg)](https://buildkite.com/sandhills-development-llc/sugar-calendar)
 
-Sugar Calendar is a commercial WordPress plugin by [Sandhills Development](https://sandhillsdevelopment.com). It comes in two flavors:
+Sugar Calendar is a commercial WordPress plugin by [Awesome Motive, Inc.](https://awesomemotive.com). It comes in two flavors:
 
 * Lite: free forever on WordPress.org
 * Standard: includes Recurring Events and access to Pro add-ons, for purchase at [SugarCalendar.com](https://sugarcalendar.com)

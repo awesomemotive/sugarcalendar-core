@@ -1,7 +1,7 @@
 === Simple Event Management – Sugar Calendar (Lite) ===
 Contributors:      mordauk, johnjamesjacoby
-Author:            Sandhills Development, LLC
-Author URI:        https://sandhillsdev.com
+Author:            Sugar Calendar
+Author URI:        https://sugarcalendar.com
 Plugin URI:        https://sugarcalendar.com
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 License:           GNU General Public License v2 or later
@@ -95,6 +95,7 @@ If you purchase an [Ultimate or Professional license](https://sugarcalendar.com/
 - **[Frontend Event Submissions](https://sugarcalendar.com/downloads/frontend-event-submissions/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This add-on allows you to set up event submission forms that provide a way for your community members to create their own events in your calendars.
 - **[Calendar Feeds](https://sugarcalendar.com/downloads/calendar-feeds/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - Easily subscribe to Events feeds for any of your calendars in Sugar Calendar from Google Calendar, iCal, Gnome Calendar, or just about any other calendar application.
 - **[Event URLs](https://sugarcalendar.com/downloads/event-urls/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - Add a custom URL to any event created through Sugar Calendar with this add-on. This lets you redirect to events on other web sites and pages or simply open them in a new tab.
+- **[Zapier](https://sugarcalendar.com/downloads/zapier/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - Add a custom URL to any event created through Sugar Calendar with this add-on. This lets you redirect to events on other web sites and pages or simply open them in a new tab.
 
 Sugar Calendar is a verified member of the [Stripe partner program](https://stripe.com/accept-payments/sugar-calendar). This program recognizes software that meets Stripe's strict quality requirements and provides users of Sugar Calendar and Stripe with the confidence they need to trust us both with their payment integrations.
 
@@ -124,17 +125,19 @@ Sugar Calendar (Lite) is backed by top-notch technical support from our globally
 
 = Meet the team =
 
-Sugar Calendar is built by [Sandhills Development](https://sandhillsdev.com/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page). We make [popular WordPress plugins](https://sandhillsdev.com/projects/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) used by hundreds of thousands of people just like you. [Get to know us here](https://sandhillsdev.com/about/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)!
+Sugar Calendar is built and maintained by [Awesome Motive, Inc.](https://awesomemotive.com)
 
 = From our blog =
 
 Check out some of our popular posts and release announcements.
 
+- [Joining the Awesome Motive Family](https://sugarcalendar.com/sugar-calendar-is-joining-the-awesome-motive-family/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Professional add-on released: Advanced Recurring](https://sugarcalendar.com/new-pro-add-on-advanced-recurring/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Professional add-on released: Zapier](https://sugarcalendar.com/new-professional-add-on-for-zapier-launched/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
 - [Professional add-on released: Event URLs](https://sugarcalendar.com/new-professional-add-on-released-event-urls/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
 - [Professional add-on released: Event Ticketing](https://sugarcalendar.com/new-professional-add-on-released-for-event-ticketing/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [WP All Import add-on released](https://sugarcalendar.com/wp-all-import-add-on-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [Preview of the upcoming Advanced Recurring add-on](https://sugarcalendar.com/preview-of-the-upcoming-advanced-recurring-add-on/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [Calendar Feeds pro add-on released](https://sugarcalendar.com/calendar-feeds-pro-add-on-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Professional add-on released: Calendar Feeds](https://sugarcalendar.com/calendar-feeds-pro-add-on-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Free add-on released: WP All Import](https://sugarcalendar.com/wp-all-import-add-on-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
 
 **[Subscribe to our newsletter](https://sugarcalendar.com/subscribe/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** to get posts like these in your inbox as soon as they’re published.
 

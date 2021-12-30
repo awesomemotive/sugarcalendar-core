@@ -4,7 +4,7 @@ namespace JJJ\WP\Term\Meta;
 /**
  * Term Meta UI Class
  *
- * This class is base helper to be extended by add-ons that may want to
+ * This class is base helper to be extended by addons that may want to
  * provide a UI for term meta values. It hooks into several different WordPress
  * core actions & filters to add columns to list tables, add fields to forms,
  * and handle the sanitization & saving of values.

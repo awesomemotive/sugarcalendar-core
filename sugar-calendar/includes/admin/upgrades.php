@@ -411,12 +411,12 @@ function do_20_migration() {
 				/**
 				 * Add event meta keys and values below.
 				 *
-				 * - Largely from add-ons
+				 * - Largely from addons
 				 * - Empty values are not saved
 				 * - Duplicated keys will overwrite
 				 * - Repeat get_post_meta() calls are cached
 				 */
-				// From Google Maps Add-on
+				// From Google Maps Addon
 				'location'       => get_post_meta( $post->ID, 'sc_map_address', true )
 			) );
 		}

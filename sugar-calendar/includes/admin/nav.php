@@ -191,7 +191,7 @@ function selected_class( $selected = '', $nav = '' ) {
  * Maybe add the "Add New" button to the end of the navigation.
  *
  * This function is a necessary abstraction to allow this API to be reused in
- * "Settings" and by external add-ons. See "Event Ticketing" for usage details.
+ * "Settings" and by external addons. See "Event Ticketing" for usage details.
  *
  * @since 2.0.19
  */

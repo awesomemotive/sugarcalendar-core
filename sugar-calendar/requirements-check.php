@@ -134,7 +134,7 @@ final class Requirements_Check {
 		if ( class_exists( $class ) ) {
 
 			// Bootstrap to plugins_loaded before priority 10 to make sure
-			// add-ons are loaded after us.
+			// addons are loaded after us.
 			add_action( 'plugins_loaded', array( $this, 'bootstrap' ), 8 );
 
 			// Register the activation hook

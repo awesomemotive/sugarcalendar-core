@@ -44,7 +44,7 @@ The full version of Sugar Calendar has several [premium license levels](https://
 
 - Manage recurring/repeating events
 - Duplicate an event with a single click
-- Access [add-ons](https://sugarcalendar.com/free-add-ons/) for integration with [Google Maps](https://sugarcalendar.com/downloads/google-maps/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page), [Gravity Forms](https://sugarcalendar.com/downloads/gravity-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page), and [Ninja Forms](https://sugarcalendar.com/downloads/ninja-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- Access [addons](https://sugarcalendar.com/free-addons/) for integration with [Google Maps](https://sugarcalendar.com/downloads/google-maps/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page), [Gravity Forms](https://sugarcalendar.com/downloads/gravity-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page), and [Ninja Forms](https://sugarcalendar.com/downloads/ninja-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
 - And get priority help from our globally distributed full-time support team
 
 > “I love Sugar Calendar. We've used it for a number of years on our non-profit horse rescue website and it works great. I also use Sugar Calendar on our client's websites, where it also works like a charm!
@@ -83,7 +83,7 @@ Extend Sugar Calendar with these free addons. We keep the plugin lightweight by 
 
 - **[Google Maps](https://sugarcalendar.com/downloads/google-maps/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This addon to Sugar Calendar allows you to display a Google Map of the event location on the event details page.
 - **[Ninja Forms Form Embed](https://sugarcalendar.com/downloads/ninja-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This addon to Sugar Calendar allows you to add a Ninja Forms form to your event pages, so that you can easily add registration forms. If you have one of [Ninja Forms](https://ninjaforms.com/)’ payment gateway addons installed ([Stripe](http://ninjaforms.com/downloads/stripe/) or [Paypal Express](http://ninjaforms.com/downloads/paypal-express/)), you can even take payment for event registrations.
-- **[Gravity Forms Form Embed](https://sugarcalendar.com/downloads/gravity-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This addon to Sugar Calendar allows you to add a [Gravity Forms](https://gravityforms.com/) form to your event pages, so that you can easily add registration forms. If you have one of [Gravity Forms’ payment gateway addons](https://www.gravityforms.com/add-ons/) installed , you can even take payment for event registrations.
+- **[Gravity Forms Form Embed](https://sugarcalendar.com/downloads/gravity-forms-form-embed/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This addon to Sugar Calendar allows you to add a [Gravity Forms](https://gravityforms.com/) form to your event pages, so that you can easily add registration forms. If you have one of [Gravity Forms’ payment gateway addons](https://www.gravityforms.com/addons/) installed , you can even take payment for event registrations.
 - **[WP All Import](https://sugarcalendar.com/downloads/wp-all-import/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** - This addon to Sugar Calendar allows you to bulk import events into Sugar Calendar using [WP All Import](https://wordpress.org/plugins/wp-all-import/).
 
 = Pro addons =
@@ -132,12 +132,12 @@ Sugar Calendar is built and maintained by [Awesome Motive, Inc.](https://awesome
 Check out some of our popular posts and release announcements.
 
 - [Joining the Awesome Motive Family](https://sugarcalendar.com/sugar-calendar-is-joining-the-awesome-motive-family/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [Professional addon released: Advanced Recurring](https://sugarcalendar.com/new-pro-add-on-advanced-recurring/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [Professional addon released: Zapier](https://sugarcalendar.com/new-professional-add-on-for-zapier-launched/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [Professional addon released: Event URLs](https://sugarcalendar.com/new-professional-add-on-released-event-urls/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [Professional addon released: Event Ticketing](https://sugarcalendar.com/new-professional-add-on-released-for-event-ticketing/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [Professional addon released: Calendar Feeds](https://sugarcalendar.com/calendar-feeds-pro-add-on-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
-- [Free addon released: WP All Import](https://sugarcalendar.com/wp-all-import-add-on-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Professional addon released: Advanced Recurring](https://sugarcalendar.com/new-pro-addon-advanced-recurring/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Professional addon released: Zapier](https://sugarcalendar.com/new-professional-addon-for-zapier-launched/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Professional addon released: Event URLs](https://sugarcalendar.com/new-professional-addon-released-event-urls/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Professional addon released: Event Ticketing](https://sugarcalendar.com/new-professional-addon-released-for-event-ticketing/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Professional addon released: Calendar Feeds](https://sugarcalendar.com/calendar-feeds-pro-addon-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
+- [Free addon released: WP All Import](https://sugarcalendar.com/wp-all-import-addon-released/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)
 
 **[Subscribe to our newsletter](https://sugarcalendar.com/subscribe/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page)** to get posts like these in your inbox as soon as they’re published.
 
@@ -186,7 +186,7 @@ You can submit a support ticket or pre-sale question from our [support page](htt
 
 The [premium versions](https://sugarcalendar.com/pricing/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) of Sugar Calendar have recurring / repeating event features (Personal, Plus, Professional, and Ultimate).  Choose from daily, weekly, monthly, and yearly events.
 
-The Professional and Ultimate versions will include the [soon-to-be-released Advanced Recurring pro addon](https://sugarcalendar.com/preview-of-the-upcoming-advanced-recurring-add-on/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) that will offer the best recurring / repeating event capabilities available on any WordPress plugin!
+The Professional and Ultimate versions will include the [soon-to-be-released Advanced Recurring pro addon](https://sugarcalendar.com/preview-of-the-upcoming-advanced-recurring-addon/?utm_medium=referral&utm_source=website&utm_campaign=wporg-scl-plugin-page) that will offer the best recurring / repeating event capabilities available on any WordPress plugin!
 
 = Can I display Google Maps with my Events? =
 

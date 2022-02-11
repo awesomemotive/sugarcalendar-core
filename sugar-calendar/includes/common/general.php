@@ -58,7 +58,7 @@ function sugar_calendar_get_assets_version() {
  * Format a timestamp, possibly by time zone.
  *
  * To transmogrify the date format into a language-specific variant, please use
- * sugar_calendar_date_i18n() instead.
+ * sugar_calendar_format_date_i18n() instead.
  *
  * @since 2.1.0
  * @param string $format    Compatible with DateTime::format().
@@ -237,24 +237,28 @@ function sugar_calendar_get_time_tag( $args = array() ) {
 	}
 
 	// Format the time
-	$dt  = sugar_calendar_format_date( $r['format'],   $r['time'], $r['timezone'] );
+	$dt  = sugar_calendar_format_date_i18n( $r['format'], $r['time'], $r['timezone'] );
 	$dtf = sugar_calendar_format_date( $r['dtformat'], $r['time'], $r['timezone'] );
 
-	// Default attribute string
+	// Default datetime & title attributes to formatted datetime
 	$r['attr']['datetime'] = esc_attr( $dtf );
 	$r['attr']['title']    = esc_attr( $dtf );
 
 	// Default array
 	$arr = $r['attr'];
 
-	// Add data attributes
+	// Add prefixed "data-" attributes to existing unprefixed attributes
 	if ( ! empty( $r['data'] ) ) {
+
+		// Loop through data attributes
 		foreach ( $r['data'] as $key => $value ) {
-			$arr[ 'data-' . $key ] = esc_attr( $value );
+
+			// Do not escape here (to avoid double-escaping)
+			$arr[ 'data-' . $key ] = $value;
 		}
 	}
 
-	// Default attribute string
+	// Default HTML attribute string
 	$attr = '';
 
 	// Concatenate HTML tag attributes
@@ -272,5 +276,6 @@ function sugar_calendar_get_time_tag( $args = array() ) {
 	// Setup return value
 	$retval = '<time' . $attr . '>' . esc_html( $dt ) . '</time>';
 
+	// Return HTML
 	return $retval;
 }

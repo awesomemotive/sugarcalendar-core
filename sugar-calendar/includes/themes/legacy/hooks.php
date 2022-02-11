@@ -44,4 +44,8 @@ if ( wp_using_themes() || wp_doing_ajax() ) {
 	add_action( 'sc_before_event_content', 'sc_add_event_details'     );
 	add_action( 'sc_event_details',        'sc_add_date_time_details' );
 	add_action( 'sc_event_details',        'sc_add_location_details'  );
+
+	// Just-in-Time Assets
+	add_action( 'sc_before_calendar',    'sc_enqueue_assets' );
+	add_action( 'sc_before_events_list', 'sc_enqueue_assets' );
 }

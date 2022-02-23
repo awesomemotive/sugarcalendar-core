@@ -219,63 +219,59 @@ class sc_events_list_widget extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args = array(), $instance = array() ) {
-		$before_widget = ! empty( $args[ 'before_widget' ] )
-			? $args[ 'before_widget' ]
-			: '';
-		$before_title = ! empty( $args[ 'before_title' ] )
-			? $args[ 'before_title' ]
-			: '';
-		$after_title = ! empty( $args[ 'after_title' ] )
-			? $args[ 'after_title' ]
-			: '';
-		$after_widget = ! empty( $args[ 'after_widget' ] )
-			? $args[ 'after_widget' ]
-			: '';
-		$title = ! empty( $instance[ 'title' ] )
-			? $instance[ 'title' ]
-			: '';
-		$display = ! empty( $instance[ 'display' ] )
-			? $instance[ 'display' ]
-			: 'all';
-		$order = ! empty( $instance[ 'order' ] )
-			? $instance[ 'order' ]
-			: '';
-		$category = ! empty( $instance[ 'category' ] )
-			? $instance[ 'category' ]
-			: null;
-		$number = ! empty( $instance[ 'number' ] )
-			? $instance[ 'number' ]
-			: null;
-		$show_title = ! empty( $instance[ 'show_title' ] )
-			? $instance[ 'show_title' ]
-			: null;
-		$show_date = ! empty( $instance[ 'show_date' ] )
-			? $instance[ 'show_date' ]
-			: null;
-		$show_time = ! empty( $instance[ 'show_time' ] )
-			? $instance[ 'show_time' ]
-			: null;
-		$show_categories = ! empty( $instance[ 'show_categories' ] )
-			? $instance[ 'show_categories' ]
-			: null;
 
-		$title = apply_filters( 'widget_title', $title );
+		// Parse args
+		$r = wp_parse_args( $args, array(
+			'before_widget'   => '',
+			'before_title'    => '',
+			'after_title'     => '',
+			'after_widget'    => '',
+			'title'           => '',
+			'display'         => '',
+			'order'           => '',
+			'category'        => null,
+			'number'          => null,
+			'show_title'      => null,
+			'show_date'       => null,
+			'show_time'       => null,
+			'show_categories' => null,
+		) );
 
-		echo $before_widget;
+		// Filter the title
+		$r['title'] = apply_filters( 'widget_title', $r['title'] );
 
-		if ( ! empty( $title ) && ! empty( $show_title ) ) {
-			echo $before_title . $title . $after_title;
+		// Before
+		if ( ! empty( $r['before_widget'] ) ) {
+			echo $r['before_widget'];
+		}
+
+		// Showing title
+		if ( ! empty( $r['title'] ) && ! empty( $r['show_title'] ) ) {
+			echo $r['before_title'] . $r['title'] . $r['after_title'];
 		}
 
 		do_action( 'sc_before_event_list_widget' );
 
+		// Open wrapper
+		// @todo: remove element ID
 		echo '<div id="sc_list_wrap">';
-		echo sc_get_events_list( $display, $category, $number, array('date' => $show_date, 'time' => $show_time, 'categories' => $show_categories), $order );
+
+		// Output events list HTML
+		echo sc_get_events_list( $r['display'], $r['category'], $r['number'], array(
+			'date'       => $r['show_date'],
+			'time'       => $r['show_time'],
+			'categories' => $r['show_categories']
+		), $r['order'] );
+
+		// Close wrapper
 		echo '</div>';
 
 		do_action( 'sc_after_event_list_widget' );
 
-		echo $after_widget;
+		// After
+		if ( ! empty( $r['after_widget'] ) ) {
+			echo $r['after_widget'];
+		}
 	}
 
 	/**

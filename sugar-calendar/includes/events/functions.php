@@ -623,13 +623,13 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
-		'order'    => 'DESC',
-		'number'   => 5,
-		'display'  => 'upcoming',
-		'spread'   => 'P100Y',    // 100 years
-		'expires'  => 'PT900S',   //  15 minutes
-		'sow'      => sugar_calendar_get_user_preference( 'sc_start_of_week' ),
-		'timezone' => sugar_calendar_get_user_preference( 'sc_timezone' ),
+		'order'         => 'DESC',
+		'number'        => 5,
+		'display'       => 'upcoming',
+		'spread'        => 'P100Y',    // 100 years
+		'expires'       => 'PT900S',   //  15 minutes
+		'start_of_week' => sugar_calendar_get_user_preference( 'sc_start_of_week' ),
+		'timezone'      => sugar_calendar_get_user_preference( 'sc_timezone' ),
 	) );
 
 	// Get the current request time
@@ -702,7 +702,7 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 			$after,
 			$before,
 			$r['timezone'],
-			$r['sow']
+			$r['start_of_week']
 		);
 
 		// Default events list

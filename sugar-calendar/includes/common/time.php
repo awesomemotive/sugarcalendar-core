@@ -251,6 +251,42 @@ function sugar_calendar_human_diff_time( $older_date, $newer_date = false ) {
 }
 
 /**
+ * Round a timestamp to its nearest interval.
+ *
+ * By default, rounds current time to nearest 15 minute interval.
+ *
+ * @since 2.3.0
+ *
+ * @param mixed  $timestamp Optional. Default null.
+ * @param string $interval  Optional. Default 'PT900S'.
+ * @param string $timezone1 Optional. Default null.
+ * @param string $timezone2 Optional. Default null.
+ * @param string $direction Optional. Default "up".
+ *
+ * @return DateTime Default inside current 15 minute interval.
+ */
+function sugar_calendar_round_time( $timestamp = null, $interval = 'PT900S', $timezone1 = null, $timezone2 = null, $direction = 'up' ) {
+
+	// Calculate nearest expiration
+	$lifetime = new DateInterval( $interval );
+	$seconds  = $lifetime->format( '%s' );
+
+	// Get the DateTime object
+	$dt = sugar_calendar_get_datetime_object( $timestamp, $timezone1, $timezone2 );
+
+	// Maths the timestamp to the nearest interval
+	$retval = $dt->setTimestamp( $seconds * (int) ceil( $dt->getTimestamp() / $seconds ) );
+
+	// Add interval if rounding up
+	if ( 'down' === $direction ) {
+		$retval->sub( $lifetime );
+	}
+
+	// Filter & return
+	return apply_filters( 'sugar_calendar_round_time', $retval, $timestamp, $interval, $timezone1, $timezone2, $direction );
+}
+
+/**
  * Return array of recurrence types
  *
  * @since 2.0

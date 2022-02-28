@@ -253,7 +253,7 @@ function sugar_calendar_human_diff_time( $older_date, $newer_date = false ) {
 /**
  * Round a timestamp to its nearest interval.
  *
- * By default, rounds current time to nearest 15 minute interval.
+ * By default, rounds current time up to nearest 15 minute interval.
  *
  * @since 2.3.0
  *
@@ -263,7 +263,7 @@ function sugar_calendar_human_diff_time( $older_date, $newer_date = false ) {
  * @param string $timezone2 Optional. Default null.
  * @param string $direction Optional. Default "up".
  *
- * @return DateTime Default inside current 15 minute interval.
+ * @return DateTime Default current time up to nearest 15 minute interval.
  */
 function sugar_calendar_round_time( $timestamp = null, $interval = 'PT900S', $timezone1 = null, $timezone2 = null, $direction = 'up' ) {
 

@@ -34,3 +34,6 @@ add_action( 'sc_parse_events_query',   'sugar_calendar_pre_get_events_by_taxonom
 // Default Calendar
 add_filter( 'pre_option_default_sc_event_category',      'sugar_calendar_pre_get_default_calendar_option', 10, 3 );
 add_filter( 'pre_option_default_term_sc_event_category', 'sugar_calendar_pre_get_default_calendar_option', 10, 3 );
+
+// Clean list caches on Event new/update
+add_action( 'save_post', 'sugar_calendar_clean_events_list_cache' );

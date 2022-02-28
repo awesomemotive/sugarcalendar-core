@@ -629,14 +629,14 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 		'spread'   => 'P100Y',    // 100 years
 		'expires'  => 'PT900S',   //  15 minutes
 		'sow'      => sugar_calendar_get_user_preference( 'sc_start_of_week' ),
-		'tz'       => sugar_calendar_get_user_preference( 'sc_timezone' ),
+		'timezone' => sugar_calendar_get_user_preference( 'sc_timezone' ),
 	) );
 
 	// Get the current request time
 	$now = sugar_calendar_get_request_time();
 
 	// Add rounded value to args, for cache key below
-	$r['round'] = sugar_calendar_round_time( $now, $r['expires'], 'UTC', $r['tz'] );
+	$r['round'] = sugar_calendar_round_time( $now, $r['expires'], 'UTC', $r['timezone'] );
 
 	// Turn parsed args into a unique string used as the cache key
 	$key = md5( serialize( $r ) );
@@ -701,7 +701,7 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 			$events,
 			$after,
 			$before,
-			$r['tz'],
+			$r['timezone'],
 			$r['sow']
 		);
 

@@ -600,3 +600,168 @@ function sugar_calendar_get_recurring_date_query_args( $mode = 'month', $start =
 		$end
 	);
 }
+
+/**
+ * Sequence events for use in a list
+ *
+ * @since 2.3.0
+ *
+ * @param array $args
+ *
+ * @return array
+ */
+function sugar_calendar_get_events_list( $args = array() ) {
+
+	// Parse args
+	$r = wp_parse_args( $args, array(
+		'object_type'    => 'post',
+		'object_subtype' => 'sc_event',
+		'status'         => 'publish',
+		'orderby'        => 'start',
+		'order'          => 'DESC',
+		'number'         => 5,
+		'display'        => 'upcoming',
+	) );
+
+	// Turn parsed args into a unique string used as the cache key
+	$key = md5( serialize( $r ) );
+
+	// Get all events list caches
+	$cache = get_option( 'sc_events_list_cache', array() );
+
+	// Try to return value from cache
+	if ( ! empty( $cache[ $key ] ) ) {
+		$retval = $cache[ $key ];
+
+	// Set return value to cache
+	} else {
+
+		// Exclude some keys that are irrelevant to querying for events
+		$query_args = array_diff_key( $r, array(
+			'display',
+			'number',
+			'order'
+		) );
+
+		// Force query to all events, no pagination
+		$query_args['number']        = false;
+		$query_args['no_found_rows'] = true;
+
+		// Query for all events
+		$events = sugar_calendar_get_events( $query_args );
+
+		// Skip if no events
+		if ( empty( $events ) ) {
+			return;
+		}
+
+		// Environment
+		$now  = sugar_calendar_get_request_time();
+		$sow  = sc_get_week_start_day();
+		$tz   = sc_get_timezone();
+		$base = sugar_calendar_get_datetime_object( $now, 'UTC', $tz );
+
+		// Types
+		$past        = ( false !== strpos( $r['display'], 'past' ) );
+		$upcoming    = ( false !== strpos( $r['display'], 'upcoming' ) );
+		$in_progress = ( false !== strpos( $r['display'], 'in-progress' ) );
+
+		// Prevent infinite loop
+		$max = ! empty( $r['number'] )
+			? min( $r['number'], 100 )
+			: 5;
+
+		// Default events list
+		$list = array();
+
+		// Default start/end
+		$after  = clone( $base );
+		$before = clone( $base );
+
+		// Give or take 100 years
+		$interval = new DateInterval( 'P100Y' );
+
+		// Past
+		if ( true === $past ) {
+			$after->sub( $interval );
+		}
+
+		// Upcoming
+		if ( true === $upcoming ) {
+			$before->add( $interval );
+		}
+
+		// Get sequences
+		$sequences = sugar_calendar_get_event_sequences( $events, $after, $before, $tz, $sow );
+
+		// Loop through sequences
+		foreach ( $sequences as $item ) {
+
+			// Past
+			if ( true === $past ) {
+				if ( $item->end_dto <= $base ) {
+					$list[] = $item;
+				}
+			}
+
+			// Upcoming
+			if ( true === $upcoming ) {
+				if ( $item->start_dto >= $base ) {
+					$list[] = $item;
+				}
+			}
+
+			// In-progress
+			if ( true === $in_progress ) {
+				if (
+					( $item->start_dto <= $base )
+					&&
+					( $item->end_dto >= $base )
+				) {
+					$list[] = $item;
+				}
+			}
+		}
+
+		// Sort
+		$list   = wp_list_sort( $list, 'end', $r['order'] );
+
+		// Slice to number
+		$retval = array_slice( $list, 0, $max );
+
+		// Set the cache value
+		$cache[ $key ] = $retval;
+
+		// Update the cache
+		update_option( 'sc_events_list_cache', $cache );
+	}
+
+	// Return
+	return $retval;
+}
+
+/**
+ * Clean the events list cache.
+ *
+ * @since 2.3.0
+ *
+ * @param int $post_id Optional. Default 0.
+ */
+function sugar_calendar_clean_events_list_cache( $post_id = 0 ) {
+
+	// Bail if no post ID
+	if ( empty( $post_id ) ) {
+		return;
+	}
+
+	// Get the post-type of the post being saved
+	$post_type = get_post_type( $post_id );
+
+	// Bail if post-type does not support events
+	if ( ! post_type_supports( $post_type, 'events' ) ) {
+		return;
+	}
+
+	// Delete the entire list cache
+	delete_option( 'sc_events_list_cache' );
+}

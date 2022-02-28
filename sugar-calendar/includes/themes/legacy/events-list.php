@@ -16,17 +16,14 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.0.0
  * @param string $display
- * @param null $category
- * @param int $number
- * @param array $show
+ * @param null   $category
+ * @param int    $number
+ * @param array  $show
  * @param string $order
  *
  * @return string
  */
 function sc_get_events_list( $display = 'upcoming', $category = null, $number = 5, $show = array(), $order = '' ) {
-
-	// Get today, to query before/after
-	$now = sugar_calendar_get_request_time( 'mysql' );
 
 	// Mutate order to uppercase if not empty
 	if ( ! empty( $order ) ) {
@@ -42,62 +39,12 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 		$order = 'ASC';
 	}
 
-	// In-Progress
-	if ( 'in-progress' === $display ) {
-		$args = array(
-			'object_type' => 'post',
-			'status'      => 'publish',
-			'orderby'     => 'start',
-			'order'       => $order,
-			'number'      => $number,
-			'start_query'   => array(
-				'inclusive' => true,
-				'after'     => $now
-			),
-			'end_query'   => array(
-				'inclusive' => true,
-				'before'    => $now
-			)
-		);
-
-	// Upcoming
-	} elseif ( 'upcoming' === $display ) {
-		$args = array(
-			'object_type' => 'post',
-			'status'      => 'publish',
-			'orderby'     => 'start',
-			'order'       => $order,
-			'number'      => $number,
-			'end_query'   => array(
-				'inclusive' => true,
-				'after'     => $now
-			)
-		);
-
-	// Past
-	} elseif ( 'past' === $display ) {
-		$args = array(
-			'object_type' => 'post',
-			'status'      => 'publish',
-			'orderby'     => 'start',
-			'order'       => $order,
-			'number'      => $number,
-			'end_query'   => array(
-				'inclusive' => true,
-				'before'    => $now
-			)
-		);
-
-	// All events
-	} else {
-		$args = array(
-			'object_type' => 'post',
-			'status'      => 'publish',
-			'orderby'     => 'start',
-			'order'       => $order,
-			'number'      => $number
-		);
-	}
+	// Standard arguments
+	$args = array(
+		'order'   => $order,
+		'number'  => $number,
+		'display' => $display
+	);
 
 	// Get the IDs
 	$pt  = sugar_calendar_get_event_post_type_id();
@@ -108,13 +55,8 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 		$args[ $tax ] = $category;
 	}
 
-	// Do not query for all found rows
-	$r = array_merge( $args, array(
-		'no_found_rows' => true
-	) );
-
-	// Query for events
-	$events = sugar_calendar_get_events( $r );
+	// Sequence all events (including recurring!)
+	$events = sugar_calendar_get_events_list( $args );
 
 	// Bail if no events
 	if ( empty( $events ) ) {
@@ -214,9 +156,6 @@ function sc_get_events_list( $display = 'upcoming', $category = null, $number = 
 
 	// Close the list
 	echo '</ul>';
-
-	// Reset post data - we'll be looping through our own
-	wp_reset_postdata();
 
 	do_action( 'sc_after_events_list' );
 

@@ -22,21 +22,31 @@ defined( 'ABSPATH' ) || exit;
  * @param int    $month
  * @param int    $year
  * $param string $category
+ * $param int    $days
  *
  * @return array
  */
-function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970', $category = '' ) {
+function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970', $category = '', $days = 31 ) {
 
 	// Sanitize
 	$day   = str_pad( $day,   2, '0', STR_PAD_LEFT );
 	$month = str_pad( $month, 2, '0', STR_PAD_LEFT );
 	$year  = str_pad( $year,  4, '0', STR_PAD_LEFT );
 
-	// Boundaries
-	$view_start  = "{$year}-{$month}-01 00:00:00";
-	$month_end   = gmdate( 't', strtotime( $view_start ) );
-	$view_end    = "{$year}-{$month}-{$month_end} 23:59:59";
-	$number      = sc_get_number_of_events();
+	// Start
+	$view_start = "{$year}-{$month}-{$day} 00:00:00";
+
+	// End
+	$days       = absint( $days ) - 1;
+	$ts_end     = strtotime( "+{$days} days", strtotime( $view_start ) );
+	$day_end    = gmdate( 'd', $ts_end );
+	$month_end  = gmdate( 'm', $ts_end );
+	$year_end   = gmdate( 'Y', $ts_end );
+	$view_end   = "{$year_end}-{$month_end}-{$day_end} 23:59:59";
+
+	// Extra argument vars
+	$number     = sc_get_number_of_events();
+	$date_query = sugar_calendar_get_date_query_args( 'month', $view_start, $view_end );
 
 	// Default arguments
 	$args = array(
@@ -46,7 +56,7 @@ function sc_get_events_for_calendar( $day = '01', $month = '01', $year = '1970',
 		'status'        => 'publish',
 		'orderby'       => 'start',
 		'order'         => 'ASC',
-		'date_query'    => sugar_calendar_get_date_query_args( 'month', $view_start, $view_end )
+		'date_query'    => $date_query
 	);
 
 	// Maybe add category if non-empty
@@ -598,7 +608,7 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null, $st
 	// Day names
 	$day_names = sc_get_calendar_day_names( $size, $start_of_week );
 
-	//start draw table
+	// Start draw table
 	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
 
@@ -607,33 +617,35 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null, $st
 	}
 	$calendar .= '</tr>';
 
-	//days and weeks vars now
+	// Days and weeks vars now
 	$display_time      = gmmktime( 0, 0, 0, $month, 1, $year );
 	$running_day       = sc_get_calendar_day_offset( $display_time );
-	$days_in_month     = gmdate( 't', $display_time );
 	$days_in_this_week = 1;
 	$day_counter       = 0;
 
-	//get today's date
+	// Get today's date
 	$time        = (int) sugar_calendar_get_request_time();
 	$today_day   = gmdate( 'j', $time );
 	$today_month = gmdate( 'm', $time );
 	$today_year  = gmdate( 'Y', $time );
 
-	// Get the events
-	$all_events = sc_get_events_for_calendar( '01', $month, $year, $category );
+	// Number of days in view
+	$days_in_view = gmdate( 't', $display_time );
 
-	//row for week one */
+	// Row for week one
 	$calendar .= '<tr class="calendar-row">';
 
-	//print "blank" days until the first of the current week
+	// Get the events
+	$all_events = sc_get_events_for_calendar( '01', $month, $year, $category, $days_in_view );
+
+	// Print "blank" days until the first of the current week
 	for ( $x = 0; $x < $running_day; $x++ ) {
 		$calendar .= '<td class="calendar-day-np past" valign="top"></td>';
 		$days_in_this_week++;
 	}
 
-	//keep going with days
-	for ( $list_day = 1; $list_day <= $days_in_month; $list_day++ ) {
+	// Keep going with days
+	for ( $list_day = 1; $list_day <= $days_in_view; $list_day++ ) {
 		$cal_event = '';
 		$today = ( $today_day == $list_day && $today_month == $month && $today_year == $year )
 			? 'today'
@@ -648,14 +660,14 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null, $st
 		$td_style  = sc_get_day_style_attr( $events );
 		$cal_day   = '<td class="' . esc_attr( $class ) . '" valign="top" ' . $td_style . '><div class="sc_day_div">';
 
-		// add in the day numbering
+		// Add in the day numbering
 		$cal_day  .= '<div class="day-number day-' . $list_day . '">' . $list_day . '</div>';
 		$calendar .= $cal_day;
 		$calendar .= $cal_event ? $cal_event : '';
 		$calendar .= '</div></td>';
 
 		if ( $running_day == 6 ) {
-			if ( ( $list_day < $days_in_month ) ) {
+			if ( $list_day < $days_in_view ) {
 				$calendar .= '</tr>';
 				$calendar .= '<tr class="calendar-row">';
 				$running_day = -1;
@@ -668,23 +680,23 @@ function sc_draw_calendar( $month, $year, $size = 'large', $category = null, $st
 		$day_counter++;
 	}
 
-	//finish the rest of the days in the week
+	// Finish the rest of the days in the week
 	if ( $days_in_this_week < 8 ) {
 		for ( $x = 1; $x <= ( 8 - $days_in_this_week ); $x++ ) {
 			$calendar .= '<td class="calendar-day-np upcoming" valign="top"><div class="sc_day_div"></div></td>';
 		}
 	}
 
-	//final row
+	// Final row
 	$calendar .= '</tr>';
 
-	//end the table
+	// End the table
 	$calendar .= '</table>';
 
 	// Clean up
 	wp_reset_postdata();
 
-	//all done, return the completed table
+	// Return the completed table
 	return $calendar;
 }
 
@@ -730,7 +742,7 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 	// Day names
 	$day_names = sc_get_calendar_day_names( $size, $start_of_week );
 
-	//start draw table
+	// Start draw table
 	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
 
@@ -739,27 +751,30 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 	}
 	$calendar .= '</tr>';
 
-	// get the values for the first day of week where $display_time occurs
+	// Get the values for the first day of week where $display_time occurs
 	$day_of_week   = sc_get_calendar_day_offset( $display_time );
-	$display_time  = strtotime( '-' . $day_of_week . ' days', $display_time );
+	$display_time  = strtotime( "-{$day_of_week} days", $display_time );
 	$display_day   = gmdate( 'j', $display_time );
 	$display_month = gmdate( 'n', $display_time );
 	$display_year  = gmdate( 'Y', $display_time );
 
-	//get today's date
+	// Get today's date
 	$time        = (int) sugar_calendar_get_request_time();
 	$today_day   = gmdate( 'j', $time );
 	$today_month = gmdate( 'm', $time );
 	$today_year  = gmdate( 'Y', $time );
 
-	// start row
+	// Number of days in view
+	$days_in_view = 7;
+
+	// Start row
 	$calendar .= '<tr class="calendar-row">';
 
 	// Get the events
-	$all_events = sc_get_events_for_calendar( $display_day, $display_month, $display_year, $category );
+	$all_events = sc_get_events_for_calendar( $display_day, $display_month, $display_year, $category, $days_in_view );
 
-	// output seven days
-	for ( $list_day = 1; $list_day <= 7; $list_day++ ) {
+	// Output seven days
+	for ( $list_day = 1; $list_day <= $days_in_view; $list_day++ ) {
 		$cal_event = '';
 		$today = ( $today_day == $display_day && $today_month == $display_month && $today_year == $display_year )
 			? 'today'
@@ -786,16 +801,16 @@ function sc_draw_calendar_week( $display_time, $size = 'large', $category = null
 		$display_year  = gmdate( 'Y', $display_time );
 	}
 
-	// finish row
+	// Finish row
 	$calendar .= '</tr>';
 
-	// end the calendar
+	// End the calendar
 	$calendar .= '</table>';
 
 	// Clean up
 	wp_reset_postdata();
 
-	//all done, return the completed table
+	// Return the completed table
 	return $calendar;
 }
 
@@ -819,7 +834,7 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 	// Day names
 	$day_names = sc_get_calendar_day_names( $size, $start_of_week );
 
-	//start draw table
+	// Start draw table
 	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
 
@@ -828,27 +843,30 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 	}
 	$calendar .= '</tr>';
 
-	// get the values for the first day of week where $display_time occurs
+	// Get the values for the first day of week where $display_time occurs
 	$day_of_week   = sc_get_calendar_day_offset( $display_time );
-	$display_time  = strtotime( '-' . $day_of_week . ' days', $display_time );
+	$display_time  = strtotime( "-{$day_of_week} days", $display_time );
 	$display_day   = gmdate( 'j', $display_time );
 	$display_month = gmdate( 'n', $display_time );
 	$display_year  = gmdate( 'Y', $display_time );
 
-	//get today's date
+	// Get today's date
 	$time        = (int) sugar_calendar_get_request_time();
 	$today_day   = gmdate( 'j', $time );
 	$today_month = gmdate( 'm', $time );
 	$today_year  = gmdate( 'Y', $time );
 
-	// start row
+	// Number of days in view
+	$days_in_view = 14;
+
+	// Start row
 	$calendar .= '<tr class="calendar-row">';
 
 	// Get the events
-	$all_events = sc_get_events_for_calendar( $display_day, $display_month, $display_year, $category );
+	$all_events = sc_get_events_for_calendar( $display_day, $display_month, $display_year, $category, $days_in_view );
 
-	// output seven days
-	for ( $list_day = 1; $list_day <= 14; $list_day++ ) {
+	// Output fourteen days
+	for ( $list_day = 1; $list_day <= $days_in_view; $list_day++ ) {
 		$cal_event = '';
 		$today = ( $today_day == $display_day && $today_month == $display_month && $today_year == $display_year )
 			? 'today'
@@ -863,7 +881,7 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 		$td_style  = sc_get_day_style_attr( $events );
 		$cal_day   = '<td class="' . esc_attr( $class ) . '" valign="top" ' . $td_style . '><div class="sc_day_div">';
 
-		// add in the day numbering
+		// Add in the day numbering
 		$cal_day  .= '<div class="day-number day-' . $display_day . '">' . $display_day . '</div>';
 		$calendar .= $cal_day;
 		$calendar .= $cal_event ? $cal_event : '';
@@ -880,16 +898,16 @@ function sc_draw_calendar_2week( $display_time, $size = 'large', $category = nul
 		$display_year  = gmdate( 'Y', $display_time );
 	}
 
-	// finish row
+	// Finish row
 	$calendar .= '</tr>';
 
-	// end the calendar
+	// End the calendar
 	$calendar .= '</table>';
 
 	// Clean up
 	wp_reset_postdata();
 
-	//all done, return the completed table
+	// Return the completed table
 	return $calendar;
 }
 
@@ -915,7 +933,7 @@ function sc_draw_calendar_day( $display_time, $size = 'large', $category = null,
 	$day_names     = sc_get_calendar_day_names( $size, $start_of_week );
 	$day_name      = $day_names[ $day_of_week ];
 
-	//start draw table
+	// Start draw table
 	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar">';
 	$calendar .= '<tr class="calendar-row">';
 	$calendar .= '<th class="calendar-day-head">' . esc_html( $day_name ) . '</th>';
@@ -925,19 +943,22 @@ function sc_draw_calendar_day( $display_time, $size = 'large', $category = null,
 	$display_month = gmdate( 'n', $display_time );
 	$display_year  = gmdate( 'Y', $display_time );
 
-	//get today's date
+	// Get today's date
 	$time        = (int) sugar_calendar_get_request_time();
 	$today_day   = gmdate( 'j', $time );
 	$today_month = gmdate( 'm', $time );
 	$today_year  = gmdate( 'Y', $time );
 
-	// start row
+	// Number of days in view
+	$days_in_view = 1;
+
+	// Start row
 	$calendar .= '<tr class="calendar-row">';
 
 	// Get the events
-	$all_events = sc_get_events_for_calendar( $display_day, $display_month, $display_year, $category );
+	$all_events = sc_get_events_for_calendar( $display_day, $display_month, $display_year, $category, $days_in_view );
 
-	// output current day
+	// Output current day
 	$today = ( $today_day == $display_day && $today_month == $display_month && $today_year == $display_year )
 		? 'today'
 		: ( ( $today_day > $display_day && $today_month >= $display_month && $today_year >= $display_year )
@@ -953,22 +974,22 @@ function sc_draw_calendar_day( $display_time, $size = 'large', $category = null,
 	$td_style  = sc_get_day_style_attr( $events );
 	$cal_day   = '<td class="' . esc_attr( $class ) . '" valign="top" ' . $td_style . '><div class="sc_day_div">';
 
-	// add in the day numbering
+	// Add in the day numbering
 	$cal_day  .= '<div class="day-number day-' . $display_day . '">' . $display_day . '</div>';
 	$calendar .= $cal_day;
 	$calendar .= $cal_event;
 	$calendar .= '</div></td>';
 
-	// finish row
+	// Finish row
 	$calendar .= '</tr>';
 
-	// end the calendar
+	// End the calendar
 	$calendar .= '</table>';
 
 	// Clean up
 	wp_reset_postdata();
 
-	//all done, return the completed table
+	// Return the completed table
 	return $calendar;
 }
 
@@ -993,7 +1014,7 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 	$start_of_week = false; // Always override
 	$day_names     = sc_get_calendar_day_names( $size, $start_of_week );
 
-	//start draw table
+	// Start draw table
 	$calendar  = '<table cellpadding="0" cellspacing="0" class="calendar sc-table">';
 	$calendar .= '<tr class="calendar-row">';
 
@@ -1013,20 +1034,23 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 	$display_month = gmdate( 'n', $display_time );
 	$display_year  = gmdate( 'Y', $display_time );
 
-	//get today's date
+	// Get today's date
 	$time        = (int) sugar_calendar_get_request_time();
 	$today_day   = gmdate( 'j', $time );
 	$today_month = gmdate( 'm', $time );
 	$today_year  = gmdate( 'Y', $time );
 
-	// start row
+	// Number of days in view
+	$days_in_view = 4;
+
+	// Start row
 	$calendar .= '<tr class="calendar-row">';
 
 	// Get the events
-	$all_events = sc_get_events_for_calendar( $display_day, $display_month, $display_year, $category );
+	$all_events = sc_get_events_for_calendar( $display_day, $display_month, $display_year, $category, $days_in_view );
 
-	// output four days
-	for ( $list_day = 0; $list_day <= 3; $list_day++ ) {
+	// Output four days
+	for ( $list_day = 1; $list_day <= $days_in_view; $list_day++ ) {
 		$cal_event = '';
 		$today = ( $today_day == $display_day && $today_month == $display_month && $today_year == $display_year )
 			? 'today'
@@ -1041,7 +1065,7 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 		$td_style  = sc_get_day_style_attr( $events );
 		$cal_day   = '<td class="' . esc_attr( $class ) . '" valign="top" ' . $td_style . '><div class="sc_day_div">';
 
-		// add in the day numbering
+		// Add in the day numbering
 		$cal_day  .= '<div class="day-number day-' . $display_day . '">' . $display_day . '</div>';
 		$calendar .= $cal_day;
 		$calendar .= $cal_event ? $cal_event : '';
@@ -1053,16 +1077,16 @@ function sc_draw_calendar_4day( $display_time, $size = 'large', $category = null
 		$display_year  = gmdate( 'Y', $display_time );
 	}
 
-	// finish row
+	// Finish row
 	$calendar .= '</tr>';
 
-	// end the calendar
+	// End the calendar
 	$calendar .= '</table>';
 
 	// Clean up
 	wp_reset_postdata();
 
-	//all done, return the completed table
+	// Return the completed table
 	return $calendar;
 }
 

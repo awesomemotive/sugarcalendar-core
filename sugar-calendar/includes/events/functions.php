@@ -625,6 +625,7 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 
 	// Parse args
 	$r = wp_parse_args( $args, array(
+		'cache_prefix'  => 'sc_',
 		'order'         => 'DESC',
 		'number'        => 5,
 		'display'       => 'upcoming',
@@ -654,110 +655,113 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 	) );
 
 	// Turn all parsed args into a unique string used as the cache key
-	$key = md5( serialize( $r ) . serialize( $qr ) );
+	$key = sanitize_key( $r['cache_prefix'] ) . md5( serialize( $r ) . serialize( $qr ) );
 
 	// Get all events list caches
 	$cache = get_option( 'sc_events_list_cache', array() );
 
-	// Check cache for non-empty results
-	if ( ! empty( $cache[ $key ] ) ) {
+	// Default return value
+	$retval = false;
+
+	// Check cache for key (false is valid)
+	if ( isset( $cache[ $key ] ) ) {
 		$retval = $cache[ $key ];
 
-	// Don't reprocess if explicitly false
-	} elseif ( false !== $cache[ $key ] ) {
+	// Not cached, so reprocess
+	} else {
 
 		// Query for all events
 		$events = sugar_calendar_get_events( $qr );
 
 		// Skip if no events
-		if ( empty( $events ) ) {
-			return;
-		}
+		if ( ! empty( $events ) ) {
 
-		// Types
-		$past        = ( false !== strpos( $r['display'], 'past' ) );
-		$upcoming    = ( false !== strpos( $r['display'], 'upcoming' ) );
-		$in_progress = ( false !== strpos( $r['display'], 'in-progress' ) );
+			// Types
+			$past        = ( false !== strpos( $r['display'], 'past' ) );
+			$upcoming    = ( false !== strpos( $r['display'], 'upcoming' ) );
+			$in_progress = ( false !== strpos( $r['display'], 'in-progress' ) );
 
-		// Prevent infinite loop
-		$max = ! empty( $r['number'] )
-			? min( (int) $r['number'], 100 )
-			: 5;
+			// Prevent infinite loop
+			$max = ! empty( $r['number'] )
+				? min( (int) $r['number'], 100 )
+				: 5;
 
-		// Default start/end
-		$after  = clone( $r['round'] );
-		$before = clone( $r['round'] );
+			// Default start/end
+			$after  = clone( $r['round'] );
+			$before = clone( $r['round'] );
 
-		// Give or take 100 years
-		$interval = new DateInterval( $r['spread'] );
+			// Give or take 100 years
+			$interval = new DateInterval( $r['spread'] );
 
-		// Past
-		if ( true === $past ) {
-			$after->sub( $interval );
-		}
+			// Past
+			if ( true === $past ) {
+				$after->sub( $interval );
+			}
 
-		// Upcoming
-		if ( true === $upcoming ) {
-			$before->add( $interval );
-		}
+			// Upcoming
+			if ( true === $upcoming ) {
+				$before->add( $interval );
+			}
 
-		// Get sequences
-		$sequences = sugar_calendar_get_event_sequences(
-			$events,
-			$after,
-			$before,
-			$r['timezone'],
-			$r['start_of_week']
-		);
+			// Get sequences
+			$sequences = sugar_calendar_get_event_sequences(
+				$events,
+				$after,
+				$before,
+				$r['timezone'],
+				$r['start_of_week']
+			);
 
-		// Default events list
-		$list = array();
+			// Skip if no sequences
+			if ( ! empty( $sequences ) ) {
 
-		// Loop through sequences
-		if ( ! empty( $sequences ) ) {
-			foreach ( $sequences as $item ) {
+				// Default events list
+				$list = array();
 
-				// Past
-				if ( true === $past ) {
-					if ( $item->end_dto <= $r['round'] ) {
-						$list[] = $item;
+				// Loop through sequences
+				foreach ( $sequences as $item ) {
+
+					// Past
+					if ( true === $past ) {
+						if ( $item->end_dto <= $r['round'] ) {
+							$list[] = $item;
+						}
+					}
+
+					// Upcoming
+					if ( true === $upcoming ) {
+						if ( $item->start_dto >= $r['round'] ) {
+							$list[] = $item;
+						}
+					}
+
+					// In-progress
+					if ( true === $in_progress ) {
+						if (
+							( $item->start_dto <= $r['round'] )
+							&&
+							( $item->end_dto >= $r['round'] )
+						) {
+							$list[] = $item;
+						}
 					}
 				}
 
-				// Upcoming
-				if ( true === $upcoming ) {
-					if ( $item->start_dto >= $r['round'] ) {
-						$list[] = $item;
-					}
-				}
+				// Skip if no list
+				if ( ! empty( $list ) ) {
 
-				// In-progress
-				if ( true === $in_progress ) {
-					if (
-						( $item->start_dto <= $r['round'] )
-						&&
-						( $item->end_dto >= $r['round'] )
-					) {
-						$list[] = $item;
-					}
+					// Sort by order
+					$list = wp_list_sort( $list, 'end', $r['order'] );
+
+					// Determine start of array slice, based on order
+					$start = ( 'DESC' === $r['order'] )
+						? ( - $max )
+						: 0;
+
+					// Slice list to get only the number needed
+					$retval = array_slice( $list, $start, $max );
 				}
 			}
-		}
-
-		// Sort by order
-		$list = wp_list_sort( $list, 'end', $r['order'] );
-
-		// Determine start of array slice, based on order
-		$start = ( 'DESC' === $r['order'] )
-			? ( - $max )
-			: 0;
-
-		// Slice list to get only the number needed
-		$retval = array_slice( $list, $start, $max );
-
-		// Set to false if zero results
-		if ( empty( $retval ) ) {
-			$retval = false;
 		}
 
 		// Set the cache value

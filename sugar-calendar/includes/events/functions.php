@@ -661,11 +661,11 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 	$cache = get_option( 'sc_events_list_cache', array() );
 
 	// Default return value
-	$retval = false;
+	$retval = array();
 
 	// Check cache for key (false is valid)
 	if ( isset( $cache[ $key ] ) ) {
-		$retval = $cache[ $key ];
+		$retval = (array) $cache[ $key ];
 
 	// Not cached, so reprocess
 	} else {

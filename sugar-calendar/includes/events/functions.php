@@ -612,6 +612,8 @@ function sugar_calendar_get_recurring_date_query_args( $mode = 'month', $start =
  * -- Automatically expires every 15 minutes (900 seconds) to better support
  *    refreshing for "in progress" lists of events.
  *
+ * @todo convert innards into a class for easier overrides
+ *
  * @since 2.3.0
  *
  * @param array $args       Optional. Display arguments.
@@ -638,28 +640,31 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 	// Add rounded value to args, for cache key below
 	$r['round'] = sugar_calendar_round_time( $now, $r['expires'], 'UTC', $r['timezone'] );
 
-	// Turn parsed args into a unique string used as the cache key
-	$key = md5( serialize( $r ) );
+	// Get supported post type IDs
+	$supported = get_post_types_by_support( array( 'events' ) );
+
+	// Parse query args
+	$qr = wp_parse_args( $query_args, array(
+		'object_type'        => 'post',
+		'object_subtype__in' => $supported,
+		'status'             => 'publish',
+		'orderby'            => 'start',
+		'number'             => false,
+		'no_found_rows'      => true
+	) );
+
+	// Turn all parsed args into a unique string used as the cache key
+	$key = md5( serialize( $r ) . serialize( $qr ) );
 
 	// Get all events list caches
 	$cache = get_option( 'sc_events_list_cache', array() );
 
-	// Try to return value from cache
+	// Check cache for non-empty results
 	if ( ! empty( $cache[ $key ] ) ) {
 		$retval = $cache[ $key ];
 
-	// Set return value to cache
-	} else {
-
-		// Parse query args
-		$qr = wp_parse_args( $query_args, array(
-			'object_type'    => 'post',
-			'object_subtype' => 'sc_event',
-			'status'         => 'publish',
-			'orderby'        => 'start',
-			'number'         => false,
-			'no_found_rows'  => true
-		) );
+	// Don't reprocess if explicitly false
+	} elseif ( false !== $cache[ $key ] ) {
 
 		// Query for all events
 		$events = sugar_calendar_get_events( $qr );
@@ -709,49 +714,56 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 		$list = array();
 
 		// Loop through sequences
-		foreach ( $sequences as $item ) {
+		if ( ! empty( $sequences ) ) {
+			foreach ( $sequences as $item ) {
 
-			// Past
-			if ( true === $past ) {
-				if ( $item->end_dto <= $r['round'] ) {
-					$list[] = $item;
+				// Past
+				if ( true === $past ) {
+					if ( $item->end_dto <= $r['round'] ) {
+						$list[] = $item;
+					}
 				}
-			}
 
-			// Upcoming
-			if ( true === $upcoming ) {
-				if ( $item->start_dto >= $r['round'] ) {
-					$list[] = $item;
+				// Upcoming
+				if ( true === $upcoming ) {
+					if ( $item->start_dto >= $r['round'] ) {
+						$list[] = $item;
+					}
 				}
-			}
 
-			// In-progress
-			if ( true === $in_progress ) {
-				if (
-					( $item->start_dto <= $r['round'] )
-					&&
-					( $item->end_dto >= $r['round'] )
-				) {
-					$list[] = $item;
+				// In-progress
+				if ( true === $in_progress ) {
+					if (
+						( $item->start_dto <= $r['round'] )
+						&&
+						( $item->end_dto >= $r['round'] )
+					) {
+						$list[] = $item;
+					}
 				}
 			}
 		}
 
-		// Sort
+		// Sort by order
 		$list = wp_list_sort( $list, 'end', $r['order'] );
 
-		// Swap slice start based on order
+		// Determine start of array slice, based on order
 		$start = ( 'DESC' === $r['order'] )
 			? ( - $max )
 			: 0;
 
-		// Slice list to get only the number needed, from the correct positions
+		// Slice list to get only the number needed
 		$retval = array_slice( $list, $start, $max );
+
+		// Set to false if zero results
+		if ( empty( $retval ) ) {
+			$retval = false;
+		}
 
 		// Set the cache value
 		$cache[ $key ] = $retval;
 
-		// Update the cache
+		// Update the cache (even if retval is empty)
 		update_option( 'sc_events_list_cache', $cache );
 	}
 

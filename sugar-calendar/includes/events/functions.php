@@ -681,11 +681,6 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 			$upcoming    = ( false !== strpos( $r['display'], 'upcoming' ) );
 			$in_progress = ( false !== strpos( $r['display'], 'in-progress' ) );
 
-			// Prevent infinite loop
-			$max = ! empty( $r['number'] )
-				? min( (int) $r['number'], 100 )
-				: 5;
-
 			// Default start/end
 			$after  = clone( $r['round'] );
 			$before = clone( $r['round'] );
@@ -749,6 +744,11 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 
 				// Skip if no list
 				if ( ! empty( $list ) ) {
+
+					// Prevent infinite loop
+					$max = ! empty( $r['number'] )
+						? min( (int) $r['number'], 100 )
+						: 5;
 
 					// Sort by order
 					$list = wp_list_sort( $list, 'end', $r['order'] );

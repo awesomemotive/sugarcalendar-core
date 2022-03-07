@@ -30,7 +30,7 @@
 		"chosen-js": "^1.8.7"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.16.5",
+		"@babel/core": "^7.17.5",
 		"@wordpress/babel-preset-default": "^4.20.0",
 		"@wordpress/browserslist-config": "^2.7.0",
 		"@wordpress/eslint-plugin": "^2.4.0",

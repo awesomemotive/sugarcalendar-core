@@ -801,7 +801,7 @@ function sugar_calendar_clean_events_list_cache( $post_id = 0 ) {
 	$post_type = get_post_type( $post_id );
 
 	// Bail if post-type does not support events
-	if ( ! post_type_supports( $post_type, 'events' ) ) {
+	if ( ! sugar_calendar_is_supported_type( $post_type ) ) {
 		return;
 	}
 

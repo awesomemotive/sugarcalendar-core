@@ -102,7 +102,7 @@ function updated_messages( $messages = array() ) {
 function hide_quick_bulk_edit() {
 
 	// Bail if not an event post type
-	if ( ! post_type_supports( get_current_screen()->post_type, 'events' ) ) {
+	if ( ! sugar_calendar_is_supported_type( get_current_screen()->post_type ) ) {
 		return;
 	}
 
@@ -145,7 +145,7 @@ function redirect_old_post_type() {
 		$args = array();
 
 		// Get allowed keys
-		$taxos = sugar_calendar_get_object_taxonomies();
+		$taxos = (array) sugar_calendar_get_calendar_taxonomy_id();
 
 		// Loop through taxonomies looking for terms
 		if ( ! empty( $taxos ) ) {

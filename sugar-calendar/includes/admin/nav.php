@@ -246,7 +246,7 @@ function taxonomy_tabs() {
 
 	// Get taxonomies
 	$taxonomy   = sanitize_key( $taxnow );
-	$post_type  = sugar_calendar_allowed_post_types();
+	$post_type  = sugar_calendar_get_event_post_type_id();
 	$taxonomies = sugar_calendar_get_object_taxonomies( $post_type );
 
 	// Bail if current taxonomy is not an event taxonomy

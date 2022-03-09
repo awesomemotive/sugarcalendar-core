@@ -127,16 +127,18 @@ function sc_modify_events_archive_where( $where = '', $query = false ) {
 	$time     = $datetime->format( 'Y-m-d H:i:s' );
 
 	// In-Progress
-	if ( 'in-progress' === $display ) {
+	if ( sugar_calendar_is_display_type( 'in-progress', $display ) ) {
 		$where .= " AND ( {$alias}.start <= '{$time}' AND {$alias}.end >= '{$time}' )";
+	}
 
-	// Upcoming (includes in-progress)
-	} elseif ( 'upcoming' === $display ) {
+	// Past
+	if ( sugar_calendar_is_display_type( 'past', $display ) ) {
+		$where .= " AND {$alias}.start <= '{$time}'";
+	}
+
+	// Upcoming
+	if ( sugar_calendar_is_display_type( 'upcoming', $display ) ) {
 		$where .= " AND {$alias}.end >= '{$time}'";
-
-	// Past (excludes in-progress)
-	} elseif ( 'past' === $display ) {
-		$where .= " AND {$alias}.end <= '{$time}'";
 	}
 
 	// Return new where

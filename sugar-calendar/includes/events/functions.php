@@ -628,7 +628,7 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 		'cache_prefix'  => 'sc_',
 		'order'         => 'DESC',
 		'number'        => 5,
-		'display'       => 'upcoming',
+		'display'       => 'all',
 		'spread'        => 'P100Y',    // 100 years
 		'expires'       => 'PT900S',   //  15 minutes
 		'start_of_week' => sugar_calendar_get_user_preference( 'sc_start_of_week' ),
@@ -677,9 +677,9 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 		if ( ! empty( $events ) ) {
 
 			// Types
-			$past        = ( false !== strpos( $r['display'], 'past' ) );
-			$upcoming    = ( false !== strpos( $r['display'], 'upcoming' ) );
-			$in_progress = ( false !== strpos( $r['display'], 'in-progress' ) );
+			$past        = sugar_calendar_is_display_type( 'past',        $r['display'] );
+			$upcoming    = sugar_calendar_is_display_type( 'upcoming',    $r['display'] );
+			$in_progress = sugar_calendar_is_display_type( 'in-progress', $r['display'] );
 
 			// Default start/end
 			$after  = clone( $r['round'] );
@@ -750,16 +750,24 @@ function sugar_calendar_get_events_list( $args = array(), $query_args = array() 
 						? min( (int) $r['number'], 100 )
 						: 5;
 
-					// Sort by order
+					// Sort descending
 					$list = wp_list_sort( $list, 'end', $r['order'] );
 
+					// Maybe invert
+					$flip = ( true === $upcoming )
+						? 'DESC'
+						: 'ASC';
+
 					// Determine start of array slice, based on order
-					$start = ( 'DESC' === $r['order'] )
+					$start = ( $flip === $r['order'] )
 						? ( - $max )
 						: 0;
 
 					// Slice list to get only the number needed
 					$retval = array_slice( $list, $start, $max );
+
+					// Sort by order
+					$list = wp_list_sort( $list, 'end', $r['order'] );
 				}
 			}
 		}
@@ -799,4 +807,25 @@ function sugar_calendar_clean_events_list_cache( $post_id = 0 ) {
 
 	// Delete the entire list cache
 	delete_option( 'sc_events_list_cache' );
+}
+
+/**
+ * Helper function to determine if an Event display is of a specific type.
+ *
+ * @since 2.3.0
+ *
+ * @param string $type
+ * @param string $display
+ *
+ * @return boolean
+ */
+function sugar_calendar_is_display_type( $type = 'upcoming', $display = 'upcoming' ) {
+
+	// "all" is all types
+	if ( 'all' === $display ) {
+		return true;
+	}
+
+	// Check for existence of type in display
+	return ( false !== strpos( $display, $type ) );
 }

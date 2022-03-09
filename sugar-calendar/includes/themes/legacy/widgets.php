@@ -219,63 +219,68 @@ class sc_events_list_widget extends WP_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args = array(), $instance = array() ) {
-		$before_widget = ! empty( $args[ 'before_widget' ] )
-			? $args[ 'before_widget' ]
-			: '';
-		$before_title = ! empty( $args[ 'before_title' ] )
-			? $args[ 'before_title' ]
-			: '';
-		$after_title = ! empty( $args[ 'after_title' ] )
-			? $args[ 'after_title' ]
-			: '';
-		$after_widget = ! empty( $args[ 'after_widget' ] )
-			? $args[ 'after_widget' ]
-			: '';
-		$title = ! empty( $instance[ 'title' ] )
-			? $instance[ 'title' ]
-			: '';
-		$display = ! empty( $instance[ 'display' ] )
-			? $instance[ 'display' ]
-			: 'all';
-		$order = ! empty( $instance[ 'order' ] )
-			? $instance[ 'order' ]
-			: '';
-		$category = ! empty( $instance[ 'category' ] )
-			? $instance[ 'category' ]
-			: null;
-		$number = ! empty( $instance[ 'number' ] )
-			? $instance[ 'number' ]
-			: null;
-		$show_title = ! empty( $instance[ 'show_title' ] )
-			? $instance[ 'show_title' ]
-			: null;
-		$show_date = ! empty( $instance[ 'show_date' ] )
-			? $instance[ 'show_date' ]
-			: null;
-		$show_time = ! empty( $instance[ 'show_time' ] )
-			? $instance[ 'show_time' ]
-			: null;
-		$show_categories = ! empty( $instance[ 'show_categories' ] )
-			? $instance[ 'show_categories' ]
-			: null;
 
-		$title = apply_filters( 'widget_title', $title );
+		// Parse args
+		$a = wp_parse_args( $args, array(
+			'before_widget'   => '',
+			'before_title'    => '',
+			'after_title'     => '',
+			'after_widget'    => '',
+			'widget_id'       => '',
+			'widget_name'     => '',
+		) );
 
-		echo $before_widget;
+		// Parse instance
+		$i = wp_parse_args( $instance, array(
+			'title'           => '',
+			'display'         => '',
+			'order'           => '',
+			'category'        => null,
+			'number'          => null,
+			'show_title'      => null,
+			'show_date'       => null,
+			'show_time'       => null,
+			'show_categories' => null,
+		) );
 
-		if ( ! empty( $title ) && ! empty( $show_title ) ) {
-			echo $before_title . $title . $after_title;
+		// Combine arguments with instance
+		$r = wp_parse_args( $a, $i );
+
+		// Filter the title
+		$r['title'] = apply_filters( 'widget_title', $r['title'] );
+
+		// Before
+		if ( ! empty( $r['before_widget'] ) ) {
+			echo $r['before_widget'];
+		}
+
+		// Showing title
+		if ( ! empty( $r['title'] ) && ! empty( $r['show_title'] ) ) {
+			echo $r['before_title'] . $r['title'] . $r['after_title'];
 		}
 
 		do_action( 'sc_before_event_list_widget' );
 
+		// Open wrapper
+		// @todo: remove element ID
 		echo '<div id="sc_list_wrap">';
-		echo sc_get_events_list( $display, $category, $number, array('date' => $show_date, 'time' => $show_time, 'categories' => $show_categories), $order );
+
+		// Output events list HTML
+		echo sc_get_events_list( $r['display'], $r['category'], $r['number'], array(
+			'date'       => $r['show_date'],
+			'time'       => $r['show_time'],
+			'categories' => $r['show_categories']
+		), $r['order'] );
+
+		// Close wrapper
 		echo '</div>';
 
 		do_action( 'sc_after_event_list_widget' );
 
-		echo $after_widget;
+		// After
+		if ( ! empty( $r['after_widget'] ) ) {
+			echo $r['after_widget'];
+		}
 	}
 
 	/**
@@ -359,6 +364,7 @@ class sc_events_list_widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'display' ); ?>"><?php esc_html_e( 'Time Period:', 'sugar-calendar' ); ?></label>
 			<select class="widefat <?php echo $this->get_field_name( 'display' ); ?>" name="<?php echo $this->get_field_name( 'display' ); ?>" id="<?php echo $this->get_field_id( 'display' ); ?>">
 				<option value="all" <?php selected( 'all', $display ); ?>><?php esc_html_e( 'All', 'sugar-calendar' ); ?></option>
+				<option value="in-progress" <?php selected( 'in-progress', $display ); ?>><?php esc_html_e( 'In Progress', 'sugar-calendar' ); ?></option>
 				<option value="upcoming" <?php selected( 'upcoming', $display ); ?>><?php esc_html_e( 'Upcoming', 'sugar-calendar' ); ?></option>
 				<option value="past" <?php selected( 'past', $display ); ?>><?php esc_html_e( 'Past', 'sugar-calendar' ); ?></option>
 			</select>
@@ -384,9 +390,10 @@ class sc_events_list_widget extends WP_Widget {
 			?></select>
 		</p>
 		<p>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'number' ); ?>" style="width: 40px;" name="<?php echo $this->get_field_name( 'number' ); ?>" value="<?php echo esc_attr( $number ); ?>">
-			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php esc_html_e( 'Number to show', 'sugar-calendar' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php esc_html_e( 'Number to show:', 'sugar-calendar' ); ?></label>
+			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" value="<?php echo esc_attr( $number ); ?>">
 		</p>
+
 		<p>
 			<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id( 'show_title' ); ?>" name="<?php echo $this->get_field_name( 'show_title' ); ?>" <?php echo checked( $show_title, 1 ); ?>">
 			<label for="<?php echo $this->get_field_id( 'show_title' ); ?>"><?php esc_html_e( 'Show widget title', 'sugar-calendar' ); ?></label>
@@ -573,7 +580,7 @@ class sc_event_filter_widget extends WP_Widget {
 
 		// Filtering?
 		$display = ! empty( $_GET['event-display'] )
-			? sanitize_key( $_GET['event-display'] )
+			? sanitize_text_field( $_GET['event-display'] )
 			: false;
 
 		// Defaults
@@ -586,18 +593,18 @@ class sc_event_filter_widget extends WP_Widget {
 		// Custom
 		} else {
 
-			// Upcoming?
-			$is_upcoming = ( 'upcoming' === $display )
+			// In-progress
+			$is_in_progress = sugar_calendar_is_display_type( 'in-progress', $display )
 				? $current
 				: '';
 
-			// In-progress?
-			$is_in_progress = ( 'in-progress' === $display )
+			// Past
+			$is_past = sugar_calendar_is_display_type( 'past', $display )
 				? $current
 				: '';
 
-			// Past?
-			$is_past = ( 'past' === $display )
+			// Upcoming
+			$is_upcoming = sugar_calendar_is_display_type( 'upcoming', $display )
 				? $current
 				: '';
 

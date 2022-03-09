@@ -39,8 +39,8 @@ function display() {
 	if ( ! empty( $taxonomies ) ) {
 		foreach ( $taxonomies as $tax ) {
 
-			// Skip if private
-			if ( empty( $tax->public ) ) {
+			// Skip if private or invisible
+			if ( empty( $tax->public ) || empty( $tax->show_ui ) ) {
 				continue;
 			}
 
@@ -99,7 +99,7 @@ function get( $navs = array(), $selected = false ) {
 	}
 
 	// Maybe default to first nav item key
-	if ( empty( $selected ) ) {
+	if ( empty( $selected ) || empty( $navs[ $selected ] ) ) {
 		$selected = array_key_first( $navs );
 	}
 
@@ -246,7 +246,7 @@ function taxonomy_tabs() {
 
 	// Get taxonomies
 	$taxonomy   = sanitize_key( $taxnow );
-	$post_type  = sugar_calendar_get_event_post_type_id();
+	$post_type  = sugar_calendar_allowed_post_types();
 	$taxonomies = sugar_calendar_get_object_taxonomies( $post_type );
 
 	// Bail if current taxonomy is not an event taxonomy

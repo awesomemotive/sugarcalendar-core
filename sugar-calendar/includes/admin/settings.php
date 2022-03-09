@@ -119,11 +119,32 @@ function get_sections() {
 		);
 
 		// Filter
-		$retval = apply_filters( 'sugar_calendar_settings_sections', $retval );
+		$retval = (array) apply_filters( 'sugar_calendar_settings_sections', $retval );
 	}
 
 	// Return
 	return $retval;
+}
+
+/**
+ * Get a section
+ *
+ * @since 2.3.0
+ *
+ * @param string $section
+ *
+ * @return array
+ */
+function get_section( $section = 'main' ) {
+
+	// Validate passed section
+	$section  = validate_section( $section );
+
+	// Get sections
+	$sections = get_sections();
+
+	// Return section
+	return $sections[ $section ];
 }
 
 /**
@@ -134,7 +155,63 @@ function get_sections() {
  * @return string
  */
 function get_main_section_id() {
-	return key( get_sections() );
+
+	// Get sections
+	$sections = get_sections();
+
+	// Get first section ID
+	$retval   = ! empty( $sections )
+		? key( $sections )
+		: 'main';
+
+	// Return
+	return $retval;
+}
+
+/**
+ * Validate a section string. Returns the main if not registered.
+ *
+ * @since 2.3.0
+ *
+ * @param string $section
+ *
+ * @return string
+ */
+function validate_section( $section = 'main' ) {
+
+	// Fallback to main if not registered
+	$retval = ! registered_section( $section )
+		? get_main_section_id()
+		: $section;
+
+	// Return
+	return $retval;
+}
+
+/**
+ * Is a section registered?
+ *
+ * @since 2.3.0
+ *
+ * @param string $section
+ *
+ * @return bool
+ */
+function registered_section( $section = 'main' ) {
+
+	// Bail if empty section
+	if ( empty( $section ) ) {
+		return false;
+	}
+
+	// Get all sections
+	$sections = get_sections();
+
+	// Get return value
+	$retval   = ! empty( $sections[ $section ] );
+
+	// Return
+	return $retval;
 }
 
 /**
@@ -175,11 +252,11 @@ function get_subsections( $section = '' ) {
 		);
 
 		// Filter
-		$retval = apply_filters( 'sugar_calendar_settings_subsections', $retval, $section );
+		$retval = (array) apply_filters( 'sugar_calendar_settings_subsections', $retval, $section );
 	}
 
-	// Maybe return a secific set of subsection
-	if ( ! empty( $section ) && isset( $retval[ $section ] ) ) {
+	// Maybe return a secific subsection
+	if ( validate_section( $section ) ) {
 		return $retval[ $section ];
 	}
 
@@ -196,7 +273,18 @@ function get_subsections( $section = '' ) {
  * @return string
  */
 function get_main_subsection_id( $section = '' ) {
-	return key( get_subsections( $section ) );
+
+	// Validate passed section
+	$section = validate_section( $section );
+
+	// Get subsections for section
+	$subs    = get_subsections( $section );
+
+	// Get first subsection ID
+	$retval  = key( $subs );
+
+	// Return
+	return $retval;
 }
 
 /**
@@ -206,28 +294,95 @@ function get_main_subsection_id( $section = '' ) {
  *
  * @param string $section
  * @param string $subsection
+ *
  * @return array
  */
-function get_subsection( $section = 'main', $subsection = '' ) {
-	$subs = get_subsections( $section );
+function get_subsection( $section = 'main', $subsection = 'main' ) {
 
-	// Default
-	$default = array(
+	// Get subsections for section
+	$subs   = get_subsections( $section );
+
+	// Get the subsection
+	$retval = ! registered_subsection( $section, $subsection )
+		? get_default_subsection()
+		: $subs[ $subsection ];
+
+	// Return
+	return $retval;
+}
+
+/**
+ * Return the default subsection
+ *
+ * @since 2.3.0
+ *
+ * @return array
+ */
+function get_default_subsection() {
+	return array(
 		get_main_section_id() => array(
 			'name' => esc_html__( 'General', 'sugar-calendar' )
 		)
 	);
+}
 
-	// Return the subsection
-	return isset( $subs[ $subsection ] )
-		? $subs[ $subsection ]
-		: $default;
+/**
+ * Is a subsection registered?
+ *
+ * @since 2.3.0
+ *
+ * @param string $section
+ * @param string $subsection
+ *
+ * @return bool
+ */
+function registered_subsection( $section = 'main', $subsection = 'main' ) {
+
+	// Bail if empty subsection or no parent section
+	if ( empty( $subsection ) || ! registered_section( $section ) ) {
+		return false;
+	}
+
+	// Get all subsections for a section
+	$subs   = get_subsections( $section );
+
+	// Get return value
+	$retval = ! empty( $subs[ $subsection ] );
+
+	// Return
+	return $retval;
+}
+
+/**
+ * Validate a section string. Returns the main if not registered.
+ *
+ * @since 2.3.0
+ *
+ * @param string $section
+ * @param string $subsection
+ *
+ * @return string
+ */
+function validate_subsection( $section = 'main', $subsection = 'main' ) {
+
+	// Validate section
+	$section = validate_section( $section );
+
+	// Get return value
+	$retval  = ! registered_subsection( $section, $subsection )
+		? get_main_subsection_id( $section )
+		: $subsection;
+
+	// Return
+	return $retval;
 }
 
 /**
  * Get the Settings navigation tabs
  *
  * @since 2.0.0
+ *
+ * @param string $section A valid section
  */
 function primary_nav( $section = 'sc-settings' ) {
 
@@ -246,28 +401,23 @@ function primary_nav( $section = 'sc-settings' ) {
  *
  * @since 2.0.0
  *
- * @param string $section
- * @param array  $subsection
+ * @param string $section    A valid section
+ * @param array  $subsection A valid subsection
  */
 function secondary_nav( $section = 'main', $subsection = 'main' ) {
 
-	// Get all sections
-	$sections = get_subsections( $section );
+	// Get all subsections
+	$subs = get_subsections( $section );
+
+	// Get mains here to remove from query arguments below
+	$main_section    = get_main_section_id();
+	$main_subsection = get_main_subsection_id( $section );
 
 	// Default links array
 	$links = array();
 
-	// Fudge if no main subsection exists
-	$main_section    = get_main_section_id();
-	$main_subsection = get_main_subsection_id( $section );
-
-	// Maybe fallback to main
-	if ( ! isset( $sections[ $subsection ] ) ) {
-		$subsection = $main_subsection;
-	}
-
-	// Loop through sections
-	foreach ( $sections as $subsection_id => $sub ) {
+	// Loop through subsections ($subs should never be empty)
+	foreach ( $subs as $subsection_id => $sub ) {
 
 		// Setup args
 		$args = array(
@@ -307,13 +457,15 @@ function secondary_nav( $section = 'main', $subsection = 'main' ) {
 
 		// Add to links array
 		$links[ $subsection_id ] = '<li class="' . esc_attr( $class ) . '"><a class="' . esc_attr( $class ) . '" href="' . esc_url( $tab_url ) . '">' . $sub['name'] . '</a><li>';
-	} ?>
+	}
 
-	<ul class="subsubsub sc-settings-sub-nav">
-		<?php echo implode( '', $links ); ?>
-	</ul>
+	// Start the HTML
+	?><ul class="subsubsub sc-settings-sub-nav"><?php
 
-	<?php
+		// Output the links
+		echo implode( '', $links );
+
+	?></ul><?php
 }
 
 /**
@@ -346,66 +498,81 @@ function section( $section = '', $subsection = 'main' ) {
  */
 function page() {
 
-	// Get the section & subsection
+	// Get the current section
 	$section = ! empty( $_GET['section'] )
-		? sanitize_key( $_GET['section'] )
+		? validate_section( sanitize_key( $_GET['section'] ) )
 		: get_main_section_id();
 
+	// Get the current subsection
 	$subsection = ! empty( $_GET['subsection'] )
-		? sanitize_key( $_GET['subsection'] )
+		? validate_subsection( $section, sanitize_key( $_GET['subsection'] ) )
 		: get_main_subsection_id( $section );
 
-	// Find out if we're displaying a sidebar
-	$maybe_display_sidebar = maybe_display_sidebar();
-	$wrapper_class         = ( true === $maybe_display_sidebar )
-		? ' sc-has-sidebar'
-		: '';
+	// Filter wrapper class
+	$wrapper_class = apply_filters( 'sugar_calendar_settings_wrapper_class', 'sc-settings-wrap wp-clearfix' );
 
+	// Output the page
+	?><div class="wrap">
+
+		<h1 class="wp-heading-inline"><?php esc_html_e( 'Settings', 'sugar-calendar' ); ?></h1><?php
+
+		// Primary nav
+		primary_nav( $section );
+
+		// Secondary nav
+		secondary_nav( $section, $subsection );
+
+		// Divider
+		?><hr class="wp-header-end">
+
+		<div class="<?php echo esc_attr( $wrapper_class ); ?>"><?php
+
+			// Top action
+			do_action( 'sugar_calendar_settings_page_top' );
+
+			// Content
+			?><div class="sc-settings-content">
+
+				<form method="post" action="options.php"><?php
+
+					// Section output
+					section( $section, $subsection );
+
+					// Submit button
+					submit_button();
+
+					// Settings fields
+					settings_fields( "sc_{$section}_{$subsection}" );
+
+				?></form>
+
+			</div><?php
+
+			// Bottom action
+			do_action( 'sugar_calendar_settings_page_bottom' );
+
+		?></div>
+
+	</div>
+
+<?php
+}
+
+/**
+ * Maybe output the "Settings updated" notice.
+ *
+ * @since 2.3.0
+ */
+function save_notice() {
+
+	// Maybe output a notice
 	if ( ! empty( $_GET['settings-updated'] ) && ( 'true' === $_GET['settings-updated'] ) ) : ?>
 
 		<div class="notice updated fade is-dismissible">
 			<p><strong><?php esc_html_e( 'Settings updated.', 'sugar-calendar' ); ?></strong></p>
 		</div>
 
-	<?php endif; ?>
-
-	<div class="wrap">
-		<h1 class="wp-heading-inline"><?php esc_html_e( 'Settings', 'sugar-calendar' ); ?></h1>
-
-		<?php primary_nav( $section ); ?>
-
-		<?php secondary_nav( $section, $subsection ); ?>
-
-		<hr class="wp-header-end">
-
-		<div class="sc-settings-wrap<?php echo esc_attr( $wrapper_class ); ?> wp-clearfix">
-
-			<div class="sc-settings-content">
-
-				<form method="post" action="options.php">
-
-					<?php section( $section, $subsection ); ?>
-
-					<?php submit_button(); ?>
-
-					<?php settings_fields( "sc_{$section}_{$subsection}" ); ?>
-
-				</form>
-
-			</div>
-
-			<?php
-
-			if ( true === $maybe_display_sidebar ) :
-				display_sidebar();
-			endif;
-
-			?>
-
-		</div>
-	</div>
-
-<?php
+	<?php endif;
 }
 
 /** Sections ******************************************************************/
@@ -852,6 +1019,43 @@ function ajax_time_format() {
 
 	// Output
 	wp_die( $retval );
+}
+
+/** Sidebar *******************************************************************/
+
+/**
+ * Filter the wrapper class, and maybe add the sidebar class.
+ *
+ * @since 2.3.0
+ *
+ * @param string $class
+ *
+ * @return string
+ */
+function filter_wrapper_class( $class = '' ) {
+
+	// Maybe add the sidebar class
+	if ( maybe_display_sidebar() ) {
+		$class .= ' sc-has-sidebar';
+	}
+
+	// Return
+	return $class;
+}
+
+/**
+ * Maybe display the sidebar
+ *
+ * @since 2.3.0
+ */
+function sidebar() {
+
+	// Maybe display sidebar
+	if ( maybe_display_sidebar() ) {
+
+		// Display sidebar
+		display_sidebar();
+	}
 }
 
 /**

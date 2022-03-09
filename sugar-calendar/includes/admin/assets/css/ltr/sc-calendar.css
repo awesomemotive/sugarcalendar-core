@@ -259,8 +259,8 @@ table.calendar:not(.list) tbody td {
 	padding: 0;
 	position: relative;
 	text-align: left;
-	border-bottom: 1px solid #e1e1e1;
-	border-right: 1px solid #e1e1e1;
+	border-bottom: 1px solid #c3c4c7;
+	border-right: 1px solid #c3c4c7;
 }
 
 table.calendar:not(.day) tbody td.saturday,
@@ -269,7 +269,7 @@ table.calendar:not(.day) tbody td.sunday {
 }
 
 table.calendar:not(.list) tbody td:hover {
-	box-shadow: inset 0 0 0 1px #ccc !important;
+	box-shadow: inset 0 0 0 1px #2271b1 !important;
 }
 
 table.calendar a.sugar-calendar,
@@ -446,7 +446,7 @@ table.calendar:not(.trash) strong.status-trash {
 
 	/* Override list-tables.css */
 	table.calendar:not(.list) #the-list tr:last-child td:not(:last-child) {
-		border-bottom: 1px solid #e1e1e1 !important;
+		border-bottom: 1px solid #c3c4c7 !important;
 	}
 
 	/* @hotfix WordPress 5.4 */
@@ -474,23 +474,18 @@ table.month tbody td a.add-event-for-day {
 	font-weight: 600;
 	background-color: rgba(255, 255, 255, 0.8);
 	border: 1px solid transparent;
-	border-bottom: 1px solid #e1e1e1;
+	border-bottom: 1px solid #c3c4c7;
 }
 
 table.month tbody td a.day-number {
-	border-right: 1px solid #e1e1e1;
+	border-right: 1px solid #c3c4c7;
 	border-bottom-right-radius: 5px;
 }
 
 table.month tbody td a.add-event-for-day {
-	border-left: 1px solid #e1e1e1;
+	border-left: 1px solid #c3c4c7;
 	right: 0;
 	visibility: hidden;
-}
-
-table.month tbody td a.add-event-for-day:hover,
-table.month tbody td a.day-number:hover {
-	background: rgba(245, 245, 245, 0.8);
 }
 
 table.month tbody td:hover a.add-event-for-day {
@@ -499,7 +494,14 @@ table.month tbody td:hover a.add-event-for-day {
 
 table.month tbody td:hover a.day-number,
 table.month tbody td:hover a.add-event-for-day {
-	border-color: #ccc;
+	border-color: #2271b1;
+	color: #2271b1;
+	background-color: rgba(34, 113, 177, 0.1);
+}
+
+table.month tbody td a.add-event-for-day:hover,
+table.month tbody td a.day-number:hover {
+	background-color: rgba(34, 113, 177, 0.3);
 }
 
 table.month tbody td {
@@ -509,11 +511,11 @@ table.month tbody td {
 table.month tbody th {
 	height: 80px;
 	background-color: #fff;
-	border-bottom: 1px solid #e1e1e1;
+	border-bottom: 1px solid #c3c4c7;
 }
 
 table.month tbody tr th:last-of-type {
-	border-right: 1px solid #e1e1e1;
+	border-right: 1px solid #c3c4c7;
 }
 
 table.month tbody tr td:nth-child(8) {
@@ -536,7 +538,7 @@ table.month tbody td a i {
 }
 
 table.month th.column-week {
-	border-right: 1px solid #e1e1e1;
+	border-right: 1px solid #c3c4c7;
 }
 
 table.month tbody th.column-week {
@@ -560,7 +562,7 @@ table.month tbody th.column-week a {
 
 table.month tbody th.column-week a:hover {
 	background-color: #f1f1f1;
-	border: 1px solid #e1e1e1;
+	border: 1px solid #c3c4c7;
 }
 
 .wp-pointer-content h3 a {
@@ -608,8 +610,8 @@ table.day th {
 	width: 30px;
 	background-color: #fff;
 	color: #333;
-	border-bottom: 1px solid #e1e1e1;
-	border-right: 1px solid #e1e1e1;
+	border-bottom: 1px solid #c3c4c7;
+	border-right: 1px solid #c3c4c7;
 	text-align: center;
 	cursor: default;
 }
@@ -656,7 +658,7 @@ table.week tr.multi-day th,
 table.week tr.multi-day td,
 table.day tr.multi-day th,
 table.day tr.multi-day td {
-	border-bottom: 2px solid #e1e1e1;
+	border-bottom: 2px solid #c3c4c7;
 }
 
 table.week th.column-hour,
@@ -715,7 +717,7 @@ table.day th.manage-column a:active {
 	table.week tr.multi-day td,
 	table.day tr.multi-day th,
 	table.day tr.multi-day td {
-		border-bottom: 1px solid #e1e1e1;
+		border-bottom: 1px solid #c3c4c7;
 	}
 
 	table.week th.column-monday,

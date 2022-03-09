@@ -104,7 +104,7 @@ function enqueue() {
 	}
 
 	// Events Pages
-	if ( sugar_calendar_admin_is_events_page() ) {
+	if ( sugar_calendar_admin_is_assets_page() ) {
 
 		// General
 		wp_enqueue_script( 'sugar_calendar_admin_general' );

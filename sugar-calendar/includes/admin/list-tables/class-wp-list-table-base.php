@@ -1453,7 +1453,7 @@ class Base_List_Table extends \WP_List_Table {
 	protected function all_query_args( $args = array() ) {
 
 		// Maybe add `post` to to object_type's to query for
-		if ( post_type_supports( $this->get_screen_post_type(), 'events' ) ) {
+		if ( sugar_calendar_is_supported_type( $this->get_screen_post_type() ) ) {
 			$args['object_type'] = ! empty( $args['object_type'] )
 				? array_unshift( $args['object_type'], 'post' )
 				: array( 'post' );

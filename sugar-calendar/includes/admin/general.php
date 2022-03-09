@@ -80,12 +80,7 @@ function sugar_calendar_admin_is_events_page() {
 
 	if (
 
-		// Add if the event post type
-		post_type_supports( $screen->post_type, 'events' )
-
-		||
-
-		// Or if Events pages
+		// If Events pages
 		sugar_calendar_get_admin_page_id() === $screen->id
 	) {
 		return true;
@@ -107,7 +102,7 @@ function sugar_calendar_admin_is_taxonomy_page() {
 	if (
 
 		// Add if the event post type
-		post_type_supports( $screen->post_type, 'events' )
+		sugar_calendar_is_supported_type( $screen->post_type )
 
 		&&
 
@@ -117,12 +112,34 @@ function sugar_calendar_admin_is_taxonomy_page() {
 		&&
 
 		// And is supported Taxonomy
-		in_array( $screen->taxonomy, sugar_calendar_get_object_taxonomies(), true )
+		$screen->taxonomy === sugar_calendar_get_calendar_taxonomy_id()
 	) {
 		return true;
 	}
 
 	return false;
+}
+
+/**
+ * Is this an admin page that requires assets to be enqueued?
+ *
+ * @since 2.3.0
+ *
+ * @return bool
+ */
+function sugar_calendar_admin_is_assets_page() {
+	$screen = get_current_screen();
+
+	return
+		sugar_calendar_admin_is_events_page()
+
+		||
+
+		sugar_calendar_admin_is_taxonomy_page()
+
+		||
+
+		sugar_calendar_is_supported_type( $screen->post_type );
 }
 
 /**

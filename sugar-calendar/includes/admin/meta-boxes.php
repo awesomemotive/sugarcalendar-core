@@ -233,7 +233,7 @@ function can_save_meta_box( $object_id = 0, $object = null ) {
 		$post_type = get_post_type( $object_id );
 
 		// Only save event metadata to supported post types
-		if ( ! post_type_supports( $post_type, 'events' ) ) {
+		if ( sugar_calendar_is_supported_type( $post_type ) ) {
 			return $retval;
 		}
 

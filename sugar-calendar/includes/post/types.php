@@ -47,6 +47,19 @@ function sugar_calendar_allowed_post_types() {
 }
 
 /**
+ * Does a specific Post Type ID support Events?
+ *
+ * @since 2.3.0
+ *
+ * @param string $post_type
+ *
+ * @return bool
+ */
+function sugar_calendar_is_supported_type( $post_type = '' ) {
+	return post_type_supports( $post_type, 'events' );
+}
+
+/**
  * Register the Event post types
  *
  * If you want to manipulate these arguments, use the `register_post_type_args`

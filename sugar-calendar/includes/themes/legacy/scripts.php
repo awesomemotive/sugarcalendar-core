@@ -44,6 +44,20 @@ function sc_register_assets() {
 }
 
 /**
+ * Enqueue front-end assets.
+ *
+ * @since 2.3.0
+ */
+function sc_enqueue_assets() {
+
+	// Scripts
+	sc_enqueue_scripts();
+
+	// Styles
+	sc_enqueue_styles();
+}
+
+/**
  * Load front-end scripts.
  *
  * @since 1.0.0
@@ -60,8 +74,7 @@ function sc_load_front_end_scripts() {
 		||
 		sc_content_has_shortcodes()
 	) {
-		sc_enqueue_scripts();
-		sc_enqueue_styles();
+		sc_enqueue_assets();
 	}
 }
 
@@ -126,8 +139,7 @@ function sc_enqueue_if_block_has_shortcodes( $content = '' ) {
 
 	// Check the block content for a shortcode
 	if ( sc_content_has_shortcodes( $content ) ) {
-		sc_enqueue_scripts();
-		sc_enqueue_styles();
+		sc_enqueue_assets();
 	}
 
 	// Return the content, unchanged

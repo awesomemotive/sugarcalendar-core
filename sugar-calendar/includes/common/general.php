@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Get the updater
  *
- * This function provides an abstraction layer for add-ons, so that they are not
+ * This function provides an abstraction layer for addons, so that they are not
  * required to include their own bespoke copies of it.
  *
  * @since 2.0.12

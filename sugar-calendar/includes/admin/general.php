@@ -10,7 +10,7 @@
  * @todo
  *
  * Namespace all of these functions to Sugar_Calendar\Admin\General before
- * everyone starts using them in add-ons.
+ * everyone starts using them in addons.
  */
 
 // Exit if accessed directly
